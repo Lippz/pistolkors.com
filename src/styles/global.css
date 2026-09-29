@@ -278,6 +278,10 @@ a:hover .frame img {
   @supports (animation-timeline: view()) {
     .reveal {
       animation: reveal linear both;
+    }
+    /* Separate, more specific rule so the minifier can't fold the timeline
+       into the shorthand (browsers reject that and drop the animation). */
+    body .reveal {
       animation-timeline: view();
       animation-range: entry 0% entry 40%;
     }

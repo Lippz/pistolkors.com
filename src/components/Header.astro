@@ -91,6 +91,10 @@ const nav = [
       background: var(--accent);
       transform-origin: 0 50%;
       animation: read-progress linear both;
+    }
+    /* Kept in a separate, more specific rule: the CSS minifier otherwise folds
+       the timeline into the \`animation\` shorthand, which browsers reject. */
+    .header .header__progress {
       animation-timeline: scroll(root);
     }
   }
