@@ -71,11 +71,12 @@ const nav = [
     background: var(--paper);
     border-bottom: 1px solid var(--ink);
   }
-  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  /* Standard property only: with both, the CSS minifier kept just the
+     -webkit- one, which Chrome ignores. */
+  @supports (backdrop-filter: blur(1px)) {
     .header {
       background: color-mix(in srgb, var(--paper) 72%, transparent);
       backdrop-filter: saturate(1.8) blur(20px);
-      -webkit-backdrop-filter: saturate(1.8) blur(20px);
     }
   }
   .header__inner {
