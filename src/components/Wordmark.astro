@@ -1,5 +1,5 @@
 ---
-/** "PYLYP PISTOLK🛡RS" — the brand wordmark with the pistol shield standing in for the "o". */
+/** Brand lockup: the pistol shield followed by "PYLYP PISTOLKORS". */
 import Shield from '../assets/brand/shield.svg';
 
 interface Props {
@@ -9,35 +9,32 @@ const { class: className } = Astro.props;
 ---
 
 <span class:list={['wordmark', className]}>
-  <span>Pylyp Pistolk</span><Shield class="wordmark__o" aria-hidden="true" /><span class="sr-o">o</span><span>rs</span>
+  <Shield class="wordmark__mark" aria-hidden="true" /><span class="wordmark__text">Pylyp Pistolkors</span>
 </span>
 
 <style>
   .wordmark {
     display: inline-flex;
     align-items: center;
+    gap: 0.45em;
     font-family: var(--display);
     font-weight: 800;
-    letter-spacing: 0.22em;
     text-transform: uppercase;
     line-height: 1;
     white-space: nowrap;
   }
+  .wordmark__text {
+    letter-spacing: 0.22em;
+    /* Cancel the tracking after the last letter so the lockup ends flush. */
+    margin-right: -0.22em;
+  }
   /* The SVG component renders outside this component's style scope. */
-  .wordmark :global(.wordmark__o) {
+  .wordmark :global(.wordmark__mark) {
     flex-shrink: 0;
-    width: 1em;
-    height: 1em;
-    margin-right: 0.22em;
+    width: 1.3em;
+    height: 1.3em;
     color: var(--accent);
     /* The shield touches the viewBox edges; don't clip its antialiased rim. */
     overflow: visible;
-  }
-  .sr-o {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
   }
 </style>
