@@ -68,10 +68,15 @@ const nav = [
     position: sticky;
     top: 0;
     z-index: 50;
-    background: color-mix(in srgb, var(--paper) 88%, transparent);
-    backdrop-filter: saturate(1.4) blur(14px);
-    -webkit-backdrop-filter: saturate(1.4) blur(14px);
+    background: var(--paper);
     border-bottom: 1px solid var(--ink);
+  }
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .header {
+      background: color-mix(in srgb, var(--paper) 72%, transparent);
+      backdrop-filter: saturate(1.8) blur(20px);
+      -webkit-backdrop-filter: saturate(1.8) blur(20px);
+    }
   }
   .header__inner {
     height: 88px;
@@ -81,7 +86,10 @@ const nav = [
     gap: 24px;
   }
   .header__brand {
+    display: flex;
+    align-items: center;
     font-size: 22px;
+    line-height: 1;
   }
   .header__brand:hover {
     color: var(--ink);
