@@ -1,0 +1,179 @@
+---
+import Wordmark from './Wordmark.astro';
+import { site, motion } from '../data/site';
+
+interface Props {
+  current?: 'work';
+}
+const { current } = Astro.props;
+// Mirrors MotionLab.astro: the section is hidden live until it has a video.
+const showLab = import.meta.env.DEV || motion.some((m) => m.video);
+
+const nav = [
+  { label: 'Work', href: '/#work', key: 'work' },
+  ...(showLab ? [{ label: 'Motion lab', href: '/#lab', key: 'lab' }] : []),
+  { label: 'About', href: '/#about', key: 'about' },
+  { label: 'Resume', href: site.cv, key: 'cv' },
+];
+---
+
+<header class="header">
+  <div class="container header__inner">
+    <a href="/" class="header__brand" aria-label="Pylyp Pistolkors — home">
+      <Wordmark />
+    </a>
+
+    <button class="header__toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+        <path class="l1" d="M4 8h16"></path>
+        <path class="l2" d="M4 16h16"></path>
+      </svg>
+    </button>
+
+    <nav id="site-nav" class="header__nav" aria-label="Main">
+      {
+        nav.map((item) => (
+          <a href={item.href} aria-current={current === item.key ? 'page' : undefined} target={item.key === 'cv' ? '_blank' : undefined}>
+            {item.label}
+          </a>
+        ))
+      }
+      <a href="/#contact" class="btn btn--ink">Get in touch</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.header__toggle');
+  const nav = document.getElementById('site-nav');
+  const setOpen = (open: boolean) => {
+    toggle?.setAttribute('aria-expanded', String(open));
+    toggle?.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    nav?.classList.toggle('is-open', open);
+    document.documentElement.classList.toggle('menu-open', open);
+  };
+  toggle?.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+  nav?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && nav?.classList.contains('is-open')) {
+      setOpen(false);
+      toggle?.focus();
+    }
+  });
+</script>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: saturate(1.4) blur(14px);
+    -webkit-backdrop-filter: saturate(1.4) blur(14px);
+    border-bottom: 1px solid var(--ink);
+  }
+  .header__inner {
+    height: 88px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .header__brand {
+    font-size: 22px;
+  }
+  .header__brand:hover {
+    color: var(--ink);
+  }
+  .header__nav {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    font-size: 15px;
+  }
+  .header__nav a[aria-current='page'] {
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 2px;
+  }
+  .header__toggle {
+    display: none;
+  }
+
+  @media (max-width: 860px) {
+    .header__inner {
+      height: 64px;
+    }
+    .header__brand {
+      font-size: 17px;
+    }
+    .header__toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      margin-right: -10px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+    }
+    .header__toggle path {
+      transition: transform 0.25s ease;
+      transform-origin: center;
+    }
+    .header__toggle[aria-expanded='true'] .l1 {
+      transform: translateY(4px) rotate(45deg);
+    }
+    .header__toggle[aria-expanded='true'] .l2 {
+      transform: translateY(-4px) rotate(-45deg);
+    }
+    .header__nav {
+      position: fixed;
+      inset: 64px 0 auto 0;
+      height: calc(100dvh - 64px);
+      padding: 32px var(--gutter);
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      background: var(--paper);
+      font-size: 28px;
+      letter-spacing: -0.03em;
+      font-weight: 500;
+      visibility: hidden;
+      opacity: 0;
+      transform: translateY(-8px);
+      transition:
+        opacity 0.2s ease,
+        transform 0.2s ease,
+        visibility 0s linear 0.2s;
+    }
+    .header__nav.is-open {
+      visibility: visible;
+      opacity: 1;
+      transform: none;
+      transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+    }
+    .header__nav a {
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .header__nav a[aria-current='page'] {
+      border-bottom: 1px solid var(--line);
+      color: var(--accent-ink);
+    }
+    .header__nav .btn {
+      margin-top: 32px;
+      min-height: 56px;
+      border: 0;
+      font-size: 17px;
+      letter-spacing: 0;
+    }
+  }
+  :global(html.menu-open) {
+    overflow: hidden;
+  }
+</style>

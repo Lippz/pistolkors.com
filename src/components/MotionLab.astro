@@ -1,0 +1,169 @@
+---
+import { motion } from '../data/site';
+
+const isDev = import.meta.env.DEV;
+// On the live site only tiles with a real video are shown.
+const items = isDev ? motion : motion.filter((m) => m.video);
+---
+
+{
+  items.length > 0 && (
+    <section id="lab" class="lab">
+      <div class="container lab__inner">
+        <div class="lab__head reveal">
+          <div class="lab__title">
+            <p class="eyebrow lab__eyebrow">Motion lab</p>
+            <h2 class="h2">
+              Interfaces that <span class="accent-word">move</span> with intent
+            </h2>
+          </div>
+          <p class="lab__intro">
+            Twenty years of animation, now used where it matters: feedback, state changes and moments that explain
+            themselves. Built in Rive and Framer, handed to engineers as working files.
+          </p>
+        </div>
+        <div class="lab__grid" role="list">
+          {items.map((m) => (
+            <figure class="tile reveal" role="listitem">
+              <div class="tile__media">
+                {m.video ? (
+                  <video src={m.video} poster={m.poster} autoplay muted loop playsinline preload="metadata" aria-label={m.title} />
+                ) : (
+                  <div class="tile__placeholder">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true">
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M10 8.5l5.5 3.5-5.5 3.5z" />
+                    </svg>
+                    <span>Add a loop in src/data/site.ts</span>
+                  </div>
+                )}
+              </div>
+              <figcaption>
+                <span class="tile__title">{m.title}</span>
+                <span class="tile__kind">{m.kind}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<script>
+  // Pause loops for people who prefer reduced motion.
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll<HTMLVideoElement>('.lab video').forEach((v) => {
+      v.removeAttribute('autoplay');
+      v.pause();
+      v.controls = true;
+    });
+  }
+</script>
+
+<style>
+  .lab {
+    margin-top: clamp(96px, 12vw, 144px);
+    background: var(--night);
+    color: #fff;
+  }
+  .lab__inner {
+    padding-block: clamp(56px, 8vw, 96px);
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+  .lab__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px 48px;
+  }
+  .lab__title {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .lab__eyebrow {
+    color: var(--night-muted);
+  }
+  .lab__intro {
+    max-width: 420px;
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--night-text);
+  }
+  .lab__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .tile {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .tile__media {
+    aspect-ratio: 4 / 5;
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--night-2);
+  }
+  .tile__media video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .tile__placeholder {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 16px;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--night-muted);
+  }
+  .tile__placeholder svg {
+    color: var(--accent);
+  }
+  figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .tile__title {
+    font-size: 16px;
+    font-weight: 500;
+  }
+  .tile__kind {
+    font-size: 14px;
+    color: var(--night-muted);
+  }
+  @media (max-width: 1023px) {
+    .lab__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 640px) {
+    .lab__grid {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      margin-inline: calc(-1 * var(--gutter));
+      padding-inline: var(--gutter);
+      scrollbar-width: none;
+    }
+    .lab__grid::-webkit-scrollbar {
+      display: none;
+    }
+    .tile {
+      flex: 0 0 72%;
+      scroll-snap-align: start;
+    }
+  }
+</style>

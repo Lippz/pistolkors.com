@@ -1,0 +1,374 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { Image, getImage } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const cases = (await getCollection('cases')).sort((a, b) => a.data.order - b.data.order);
+  return cases.map((entry, i) => ({
+    params: { slug: entry.id },
+    props: { entry, index: i + 1, next: cases[(i + 1) % cases.length] },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'cases'>;
+  index: number;
+  next: CollectionEntry<'cases'>;
+}
+
+const { entry, index, next } = Astro.props;
+const d = entry.data;
+const { Content, headings } = await render(entry);
+const toc = headings.filter((h) => h.depth === 2);
+const num = String(index).padStart(2, '0');
+
+// Split the title so the accent word(s) get the italic serif treatment.
+const accentAt = d.accent ? d.title.lastIndexOf(d.accent) : -1;
+const titleHead = accentAt >= 0 ? d.title.slice(0, accentAt) : d.title;
+const titleAccent = accentAt >= 0 ? d.accent : undefined;
+
+const facts = [
+  { label: 'Role', value: d.role },
+  { label: 'Timeline', value: `${d.timeline}, ${d.year}` },
+  { label: 'Company', value: d.company },
+  d.team && { label: 'Team', value: d.team },
+  d.platforms && { label: 'Platforms', value: d.platforms },
+].filter(Boolean) as { label: string; value: string }[];
+
+const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
+---
+
+<Base title={d.client} description={d.summary} image={og.src} current="work" compactFooter>
+  <article>
+    <header class="container case-hero">
+      <a href="/#work" class="case-hero__back">← All work</a>
+      <p class="eyebrow">Case study {num} · {d.client} · {d.industry}</p>
+      <h1 class="h1 case-hero__title">
+        {titleHead}{titleAccent && <span class="accent-word">{titleAccent}</span>}
+      </h1>
+      <p class="lead">{d.lead}</p>
+    </header>
+
+    <div class="container">
+      <dl class="case-facts" style={`--cols: ${facts.length}`}>
+        {
+          facts.map((f) => (
+            <div>
+              <dt>{f.label}</dt>
+              <dd>{f.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+
+      {
+        d.stats && (
+          <section class="case-stats" aria-label={d.stats.label}>
+            <p class="eyebrow case-stats__label">{d.stats.label}</p>
+            <div class="case-stats__grid">
+              {d.stats.items.map((s) => (
+                <div>
+                  <span class="case-stats__value">{s.value}</span>
+                  <span class="case-stats__text">{s.label}</span>
+                </div>
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      <div class="case-cover frame">
+        <Image src={d.cover} alt={d.coverAlt} sizes="(min-width: 1440px) 1280px, 100vw" loading="eager" fetchpriority="high" />
+      </div>
+    </div>
+
+    {
+      d.format === 'story' ? (
+        <div class="container case-body">
+          {toc.length > 1 && (
+            <aside class="case-toc">
+              <nav aria-label="On this page">
+                <p class="eyebrow">On this page</p>
+                <ol>
+                  {toc.map((h, i) => (
+                    <li>
+                      <a href={`#${h.slug}`}>
+                        <span>{String(i + 1).padStart(2, '0')}</span>
+                        {h.text}
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            </aside>
+          )}
+          <div class="prose case-prose">
+            <Content />
+          </div>
+        </div>
+      ) : (
+        <div class="container case-slides">
+          <div class="prose case-prose case-prose--intro">
+            <Content />
+          </div>
+          <div class="slides">
+            {d.slides.map((s, i) => (
+              <figure class="slide reveal">
+                <Image src={s.src} alt={s.alt} sizes="(min-width: 1440px) 1280px, 100vw" class="slide__img" />
+                <figcaption class="eyebrow">
+                  {String(i + 1).padStart(2, '0')} — {s.alt}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      )
+    }
+
+    <div class="container">
+      <a href={`/work/${next.id}/`} class="next">
+        <div class="next__text">
+          <p class="eyebrow">Next case · {next.data.industry}</p>
+          <p class="next__title">{next.data.client}: {next.data.title} →</p>
+        </div>
+        <div class="next__media frame">
+          <Image src={next.data.cover} alt="" sizes="(min-width: 1024px) 34vw, 100vw" />
+        </div>
+      </a>
+    </div>
+  </article>
+</Base>
+
+<script>
+  // Highlight the current section in the table of contents.
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('.case-toc a')];
+  const sections = links
+    .map((a) => ({ a, el: document.getElementById(decodeURIComponent(a.hash.slice(1))) }))
+    .filter((s): s is { a: HTMLAnchorElement; el: HTMLElement } => s.el !== null);
+  if (sections.length) {
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const line = window.innerHeight * 0.35;
+      // The active section is the last one whose heading has passed the line.
+      let active = sections[0];
+      for (const s of sections) if (s.el.getBoundingClientRect().top <= line) active = s;
+      sections.forEach((s) => (s === active ? s.a.setAttribute('aria-current', 'true') : s.a.removeAttribute('aria-current')));
+    };
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(update);
+        }
+      },
+      { passive: true },
+    );
+    update();
+  }
+</script>
+
+<style>
+  .case-hero {
+    padding-top: clamp(40px, 6vw, 72px);
+    padding-bottom: clamp(40px, 5vw, 56px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(20px, 2.4vw, 32px);
+  }
+  .case-hero__back {
+    align-self: flex-start;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 15px;
+    color: var(--muted);
+  }
+  .case-hero__title {
+    max-width: 1200px;
+  }
+
+  .case-facts {
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    gap: 20px 24px;
+  }
+  .case-facts div {
+    border-top: 1px solid var(--ink);
+    padding-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .case-facts dt {
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .case-facts dd {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 500;
+  }
+
+  .case-stats {
+    margin-top: 48px;
+    padding: clamp(28px, 4vw, 40px) clamp(24px, 4vw, 48px);
+    border-radius: var(--radius);
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .case-stats__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 32px 48px;
+  }
+  .case-stats__grid div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .case-stats__value {
+    font-size: clamp(3rem, 2rem + 3vw, 4.5rem);
+    line-height: 1;
+    letter-spacing: -0.05em;
+    font-weight: 500;
+  }
+  .case-stats__text {
+    font-size: 16px;
+    line-height: 1.45;
+    color: var(--ink-3);
+  }
+
+  .case-cover {
+    margin-top: clamp(40px, 5vw, 64px);
+  }
+
+  .case-body {
+    margin-top: clamp(72px, 9vw, 120px);
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 24px;
+  }
+  .case-toc {
+    grid-column: span 3;
+  }
+  .case-toc nav {
+    position: sticky;
+    top: 120px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .case-toc ol {
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 15px;
+  }
+  .case-toc a {
+    display: flex;
+    gap: 12px;
+    padding: 6px 0;
+    color: var(--muted);
+  }
+  .case-toc a span {
+    font-family: var(--mono);
+    font-size: 13px;
+  }
+  .case-toc a[aria-current] {
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .case-toc a[aria-current] span {
+    color: var(--accent-ink);
+  }
+  .case-prose {
+    grid-column: 4 / span 9;
+    min-width: 0;
+  }
+
+  .case-slides {
+    margin-top: clamp(72px, 9vw, 120px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(56px, 7vw, 96px);
+  }
+  .slides {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(32px, 4vw, 56px);
+  }
+  .slide {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .slide :global(.slide__img) {
+    width: 100%;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+  }
+
+  .next {
+    margin-top: clamp(96px, 12vw, 144px);
+    padding: 48px 0;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 24px;
+    align-items: center;
+  }
+  .next:hover {
+    color: var(--ink);
+  }
+  .next__text {
+    grid-column: span 7;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .next__title {
+    font-size: clamp(1.75rem, 1.2rem + 2.2vw, 3.25rem);
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    font-weight: 500;
+    text-wrap: balance;
+  }
+  .next:hover .next__title {
+    color: var(--accent-ink);
+  }
+  .next__media {
+    grid-column: 9 / span 4;
+    aspect-ratio: 16 / 10;
+  }
+
+  @media (max-width: 1023px) {
+    .case-facts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .case-body {
+      grid-template-columns: 1fr;
+    }
+    .case-toc {
+      display: none;
+    }
+    .case-prose {
+      grid-column: auto;
+    }
+    .next {
+      grid-template-columns: 1fr;
+    }
+    .next__text,
+    .next__media {
+      grid-column: auto;
+    }
+  }
+</style>

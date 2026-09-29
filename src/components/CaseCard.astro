@@ -1,0 +1,42 @@
+---
+/** Compact home-page card for the 2-column grid. */
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'cases'>;
+  index: number;
+}
+const { entry, index } = Astro.props;
+const d = entry.data;
+const num = String(index).padStart(2, '0');
+---
+
+<article class="card reveal">
+  <a href={`/work/${entry.id}/`} class="card__link">
+    <div class="card__media frame">
+      <Image src={d.cover} alt="" sizes="(min-width: 768px) 50vw, 100vw" />
+    </div>
+    <p class="eyebrow">{num} — {d.client} · {d.industry} · {d.year}</p>
+    <h3 class="card__title">{d.title}</h3>
+  </a>
+</article>
+
+<style>
+  .card__link {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .card__media {
+    aspect-ratio: 16 / 10;
+    margin-bottom: 8px;
+  }
+  .card__title {
+    font-size: clamp(1.375rem, 1.2rem + 0.6vw, 1.75rem);
+    line-height: 1.18;
+    letter-spacing: -0.025em;
+    font-weight: 500;
+    text-wrap: balance;
+  }
+</style>

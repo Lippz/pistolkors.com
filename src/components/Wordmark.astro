@@ -1,0 +1,39 @@
+---
+/** "PYLYP PISTOLK▮RS" — the brand wordmark with the red block standing in for the "o". */
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<span class:list={['wordmark', className]}>
+  <span>Pylyp Pistolk</span><span class="wordmark__o" aria-hidden="true"></span><span class="sr-o">o</span><span>rs</span>
+</span>
+
+<style>
+  .wordmark {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--display);
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .wordmark__o {
+    display: inline-block;
+    width: 0.72em;
+    height: 1em;
+    margin-right: 0.22em;
+    border-radius: 0.22em;
+    background: var(--accent);
+  }
+  .sr-o {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+</style>

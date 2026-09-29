@@ -1,0 +1,332 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import CaseFeature from '../components/CaseFeature.astro';
+import CaseCard from '../components/CaseCard.astro';
+import MotionLab from '../components/MotionLab.astro';
+import { site, facts, experience, earlierWork } from '../data/site';
+import portrait from '../assets/site/portrait.webp';
+
+const cases = (await getCollection('cases')).sort((a, b) => a.data.order - b.data.order);
+const featured = cases.filter((c) => c.data.featured);
+const rest = cases.filter((c) => !c.data.featured);
+const years = cases.map((c) => Number(c.data.year.slice(0, 4)));
+---
+
+<Base>
+  <section class="hero container">
+    <p class="eyebrow hero__status"><span class="dot" aria-hidden="true"></span>{site.availability}</p>
+    <h1 class="h-hero hero__title">I make complex products feel <span class="accent-word">obvious.</span></h1>
+    <p class="lead">
+      Senior Product Designer at Existek. Twenty years in visual and motion design, the last nine in product —
+      legal-tech, healthcare, e-commerce and marketplaces. I run discovery, build the system and sweat the interaction
+      details.
+    </p>
+    <div class="hero__ctas">
+      <a href="#work" class="btn btn--accent">View selected work</a>
+      <a href={site.cv} class="btn btn--outline" target="_blank">Download CV (PDF)</a>
+    </div>
+    <ul class="facts" role="list">
+      {
+        facts.map((f) => (
+          <li>
+            <span class="facts__value">{f.value}</span>
+            <span class="facts__label">{f.label}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section id="work" class="work">
+    <div class="container work__inner">
+      <div class="section-head">
+        <h2 class="h2">Selected work</h2>
+        <p class="eyebrow">{cases.length} case studies · {Math.min(...years)} — {Math.max(...years)}</p>
+      </div>
+
+      {featured.map((entry, i) => <CaseFeature entry={entry} index={i + 1} flip={i % 2 === 1} />)}
+
+      <div class="work__grid">
+        {rest.map((entry, i) => <CaseCard entry={entry} index={featured.length + i + 1} />)}
+      </div>
+
+      <div class="earlier">
+        <h3 class="eyebrow earlier__title">Earlier work</h3>
+        <ul role="list">
+          {
+            earlierWork.map((w) => (
+              <li>
+                <span class="earlier__period">{w.period}</span>
+                <span class="earlier__name">{w.title}</span>
+                <span class="earlier__kind">{w.kind}</span>
+                <a class="earlier__note" href={`mailto:${site.email}?subject=${encodeURIComponent(w.title)}`}>
+                  {w.note}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <MotionLab />
+
+  <section id="about" class="about container">
+    <div class="about__photo frame reveal">
+      <Image src={portrait} alt="Pylyp Pistolkors" sizes="(min-width: 1024px) 40vw, 100vw" />
+    </div>
+    <div class="about__body">
+      <h2 class="h2">About</h2>
+      <p class="about__text">
+        I started in 2005 animating casino games and banner ads, moved into product design at RIA.com, and now lead
+        discovery and design for client products at Existek. The motion background is my edge: I prototype
+        interactions, so engineers get behaviour, not guesses. Off-screen I produce electronic music.
+      </p>
+      <ul class="xp" role="list">
+        {
+          experience.map((x) => (
+            <li>
+              <div>
+                <span class="xp__role">{x.role}</span>
+                <span class="xp__detail">{x.detail}</span>
+              </div>
+              <span class="xp__period">{x.period}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <a href={site.cv} class="link-underline about__cv" target="_blank">Full resume (PDF, 1 page) ↓</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    padding-top: clamp(48px, 9vw, 112px);
+    padding-bottom: clamp(56px, 8vw, 96px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(24px, 3vw, 40px);
+  }
+  .hero__status {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    line-height: 1.5;
+  }
+  .dot {
+    flex-shrink: 0;
+    width: 8px;
+    height: 8px;
+    margin-top: 0.45em;
+    border-radius: 50%;
+    background: var(--ok);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok) 50%, transparent);
+    animation: pulse 2.4s ease-out infinite;
+  }
+  @keyframes pulse {
+    to {
+      box-shadow: 0 0 0 10px transparent;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dot {
+      animation: none;
+    }
+  }
+  .hero__title {
+    max-width: 1180px;
+  }
+  .hero__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .facts {
+    margin-top: clamp(8px, 2vw, 32px);
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px 24px;
+  }
+  .facts li {
+    border-top: 1px solid var(--ink);
+    padding-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .facts__value {
+    font-size: clamp(1.625rem, 1.2rem + 1.2vw, 2.25rem);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+  }
+  .facts__label {
+    font-size: 15px;
+    color: var(--muted);
+  }
+
+  .work {
+    border-top: 1px solid var(--line);
+  }
+  .work__inner {
+    padding-top: clamp(48px, 8vw, 96px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(40px, 5vw, 64px);
+  }
+  .section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px 24px;
+  }
+  .work__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(40px, 5vw, 64px) 24px;
+  }
+
+  .earlier ul {
+    padding: 0;
+    list-style: none;
+  }
+  .earlier__title {
+    margin-bottom: 16px;
+    font-weight: 400;
+  }
+  .earlier li {
+    display: grid;
+    grid-template-columns: 120px 1fr 300px 140px;
+    gap: 8px 24px;
+    align-items: center;
+    min-height: 72px;
+    border-top: 1px solid var(--line);
+    font-size: 17px;
+  }
+  .earlier li:first-child {
+    border-top-color: var(--ink);
+  }
+  .earlier li:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+  .earlier__period,
+  .earlier__kind,
+  .earlier__note {
+    color: var(--muted);
+  }
+  .earlier__name {
+    font-weight: 500;
+  }
+  .earlier__note {
+    text-align: right;
+  }
+
+  .about {
+    margin-top: clamp(96px, 12vw, 144px);
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 24px;
+  }
+  .about__photo {
+    grid-column: span 5;
+    aspect-ratio: 4 / 5;
+    align-self: start;
+  }
+  .about__body {
+    grid-column: 7 / span 6;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+  }
+  .about__text {
+    font-size: var(--step-lead);
+    line-height: 1.5;
+    color: var(--ink-2);
+    text-wrap: pretty;
+  }
+  .xp {
+    padding: 0;
+    list-style: none;
+  }
+  .xp li {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: baseline;
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+  }
+  .xp li:first-child {
+    border-top-color: var(--ink);
+  }
+  .xp li:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+  .xp li > div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .xp__role {
+    font-size: 17px;
+    font-weight: 500;
+  }
+  .xp__detail {
+    font-size: 15px;
+    color: var(--muted);
+  }
+  .xp__period {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .about__cv {
+    align-self: flex-start;
+  }
+
+  @media (max-width: 1023px) {
+    .facts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .earlier li {
+      grid-template-columns: 96px 1fr;
+      padding: 16px 0;
+    }
+    .earlier__kind {
+      grid-column: 2;
+    }
+    .earlier__note {
+      display: none;
+    }
+    .about {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    .about__photo,
+    .about__body {
+      grid-column: auto;
+    }
+    .about__photo {
+      max-width: 520px;
+    }
+  }
+  @media (max-width: 720px) {
+    .work__grid {
+      grid-template-columns: 1fr;
+    }
+    .hero__ctas .btn {
+      flex: 1 1 100%;
+    }
+    .xp li {
+      grid-template-columns: 1fr;
+      gap: 6px;
+    }
+  }
+</style>

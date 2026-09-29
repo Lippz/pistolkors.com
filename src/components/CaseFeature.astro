@@ -1,0 +1,117 @@
+---
+/** Large home-page row: cover on one side, story on the other. */
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'cases'>;
+  index: number;
+  flip?: boolean;
+}
+const { entry, index, flip = false } = Astro.props;
+const d = entry.data;
+const href = `/work/${entry.id}/`;
+const num = String(index).padStart(2, '0');
+---
+
+<article class:list={['feature reveal', { 'feature--flip': flip }]}>
+  <a href={href} class="feature__media frame" tabindex="-1" aria-hidden="true">
+    <Image src={d.cover} alt="" sizes="(min-width: 1024px) 58vw, 100vw" loading={index === 1 ? 'eager' : 'lazy'} />
+  </a>
+  <div class="feature__body">
+    <div class="feature__top">
+      <p class="eyebrow">{num} — {d.client} · {d.industry}</p>
+      <h3 class="h3"><a href={href}>{d.title}</a></h3>
+      <p class="feature__summary">{d.summary}</p>
+      {d.tags.length > 0 && <div class="chips">{d.tags.map((t) => <span class="chip">{t}</span>)}</div>}
+    </div>
+    <div class="feature__meta">
+      <dl>
+        <div><dt>Role</dt><dd>{d.role}</dd></div>
+        <div><dt>Timeline</dt><dd>{d.timeline}</dd></div>
+        <div><dt>Year</dt><dd>{d.year}</dd></div>
+      </dl>
+      <a href={href} class="feature__cta" aria-label={`Read the ${d.client} case study`}>Read case →</a>
+    </div>
+  </div>
+</article>
+
+<style>
+  .feature {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 24px;
+  }
+  .feature__media {
+    grid-column: span 7;
+    aspect-ratio: 16 / 11;
+  }
+  .feature__body {
+    grid-column: span 5;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 32px;
+    padding: 8px 0;
+  }
+  .feature--flip .feature__media {
+    order: 2;
+  }
+  .feature__top {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .feature__summary {
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--ink-3);
+    text-wrap: pretty;
+  }
+  .feature__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    border-top: 1px solid var(--line);
+    padding-top: 20px;
+  }
+  dl {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 32px;
+    font-size: 14px;
+  }
+  dl div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  dt {
+    color: var(--muted);
+  }
+  dd {
+    margin: 0;
+  }
+  .feature__cta {
+    font-size: 15px;
+    font-weight: 500;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  @media (max-width: 1023px) {
+    .feature {
+      grid-template-columns: 1fr;
+    }
+    .feature__media,
+    .feature__body {
+      grid-column: auto;
+    }
+    .feature--flip .feature__media {
+      order: 0;
+    }
+  }
+</style>

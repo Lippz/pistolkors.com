@@ -1,0 +1,150 @@
+---
+import Wordmark from './Wordmark.astro';
+import { site } from '../data/site';
+
+interface Props {
+  /** Compact footer for case pages. */
+  compact?: boolean;
+}
+const { compact = false } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<footer id="contact" class:list={['footer', { 'footer--compact': compact }]}>
+  <div class="container footer__inner">
+    {
+      compact ? (
+        <div class="footer__cta-row">
+          <p class="footer__cta-small">Got a complex product? Let’s talk.</p>
+          <a class="footer__email" href={`mailto:${site.email}`}>{site.email}</a>
+        </div>
+      ) : (
+        <div class="footer__main">
+          <p class="eyebrow footer__eyebrow">Contact</p>
+          <h2 class="h-hero">
+            Got a complex product? Let’s make it <span class="accent-word">clear.</span>
+          </h2>
+          <div class="footer__actions">
+            <a class="footer__email" href={`mailto:${site.email}`}>{site.email}</a>
+            <div class="footer__links">
+              {site.links.map((l) => (
+                <a href={l.href} target="_blank" rel="noopener">
+                  {l.label} ↗
+                </a>
+              ))}
+              <a href={site.cv} target="_blank">
+                Resume ↓
+              </a>
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    {!compact && <Wordmark class="footer__wordmark" />}
+
+    <div class="footer__bottom">
+      <span>© {year} {site.name}</span>
+      {
+        compact ? (
+          <div class="footer__links">
+            {site.links.map((l) => (
+              <a href={l.href} target="_blank" rel="noopener">
+                {l.label} ↗
+              </a>
+            ))}
+            <a href={site.cv} target="_blank">
+              Resume ↓
+            </a>
+          </div>
+        ) : (
+          <span>{site.location} worldwide</span>
+        )
+      }
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    margin-top: clamp(96px, 12vw, 144px);
+    background: var(--night);
+    color: #fff;
+  }
+  .footer a {
+    color: #fff;
+  }
+  .footer a:hover {
+    color: var(--accent);
+  }
+  .footer__inner {
+    padding-top: clamp(64px, 9vw, 120px);
+    padding-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(48px, 7vw, 80px);
+  }
+  .footer--compact .footer__inner {
+    padding-top: 64px;
+    gap: 48px;
+  }
+  .footer__main {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .footer__eyebrow {
+    color: var(--night-muted);
+  }
+  .footer__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 24px 40px;
+  }
+  .footer__email {
+    font-size: clamp(1.25rem, 0.9rem + 1.4vw, 2rem);
+    letter-spacing: -0.02em;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 4px;
+    overflow-wrap: anywhere;
+  }
+  .footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 28px;
+    font-size: 16px;
+  }
+  .footer__links a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .footer__cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .footer__cta-small {
+    font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.75rem);
+    letter-spacing: -0.035em;
+    font-weight: 500;
+  }
+  :global(.footer__wordmark) {
+    font-size: clamp(22px, 9.3vw, 148px);
+    letter-spacing: 0.2em;
+  }
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--night-line);
+    padding-top: 24px;
+    font-size: 14px;
+    color: var(--night-muted);
+  }
+</style>
