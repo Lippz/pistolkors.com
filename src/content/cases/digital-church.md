@@ -13,6 +13,7 @@ platforms: Mobile app
 tags: [MVP, Mobile, Co-founder]
 cover: ../../assets/cases/digital-church/cover.webp
 coverAlt: Three phone screens of the Digital Church app in deep purple
+hover: ../../assets/cases/digital-church/hover.webp
 format: slides
 slides:
   - src: ../../assets/cases/digital-church/01.webp

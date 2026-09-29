@@ -1,7 +1,7 @@
 ---
 /** Large home-page row: cover on one side, story on the other. */
-import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
+import CaseCover from './CaseCover.astro';
 import { url } from '../lib/url';
 
 interface Props {
@@ -16,8 +16,8 @@ const num = String(index).padStart(2, '0');
 ---
 
 <article class:list={['feature reveal', { 'feature--flip': flip }]}>
-  <a href={href} class="feature__media frame" tabindex="-1" aria-hidden="true">
-    <Image src={d.cover} alt="" sizes="(min-width: 1024px) 58vw, 100vw" loading={index === 1 ? 'eager' : 'lazy'} />
+  <a href={href} class="feature__media" tabindex="-1" aria-hidden="true">
+    <CaseCover id={entry.id} cover={d.cover} hover={d.hover} sizes="(min-width: 1024px) 58vw, 100vw" eager={index === 1} class="feature__cover" />
   </a>
   <div class="feature__body">
     <div class="feature__top">
@@ -45,6 +45,8 @@ const num = String(index).padStart(2, '0');
   }
   .feature__media {
     grid-column: span 7;
+  }
+  .feature :global(.feature__cover) {
     aspect-ratio: 16 / 11;
   }
   .feature__body {

@@ -5,8 +5,10 @@ import { url } from '../lib/url';
 
 interface Props {
   current?: 'work';
+  /** Show a reading-progress bar along the bottom edge. */
+  progress?: boolean;
 }
-const { current } = Astro.props;
+const { current, progress = false } = Astro.props;
 // Mirrors MotionLab.astro: the section is hidden live until it has a video.
 const showLab = import.meta.env.DEV || motion.some((m) => m.video);
 
@@ -21,7 +23,7 @@ const nav = [
 <header class="header">
   <div class="container header__inner">
     <a href={url('/')} class="header__brand" aria-label="Pylyp Pistolkors — home">
-      <Wordmark />
+      <Wordmark intro />
     </a>
 
     <button class="header__toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
@@ -42,6 +44,7 @@ const nav = [
       <a href={url('/#contact')} class="btn btn--ink">Get in touch</a>
     </nav>
   </div>
+  {progress && <div class="header__progress" aria-hidden="true"></div>}
 </header>
 
 <script>
@@ -70,6 +73,34 @@ const nav = [
     z-index: 50;
     background: var(--paper);
     border-bottom: 1px solid var(--ink);
+    /* Stays put while the page underneath transitions. */
+    view-transition-name: site-header;
+  }
+  .header__progress {
+    display: none;
+  }
+  /* Reading progress, driven by page scroll. No JS; hidden where unsupported. */
+  @supports (animation-timeline: scroll()) {
+    .header__progress {
+      display: block;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      height: 2px;
+      background: var(--accent);
+      transform-origin: 0 50%;
+      animation: read-progress linear both;
+      animation-timeline: scroll(root);
+    }
+  }
+  @keyframes read-progress {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
   }
   /* Standard property only: with both, the CSS minifier kept just the
      -webkit- one, which Chrome ignores. */

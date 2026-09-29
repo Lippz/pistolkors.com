@@ -29,6 +29,8 @@ const cases = defineCollection({
       tags: z.array(z.string()).default([]),
       cover: image(),
       coverAlt: z.string(),
+      /** Second frame shown when a card is hovered on the home page. */
+      hover: image().optional(),
       /** Headline numbers shown above the cover (results or research). */
       stats: z
         .object({

@@ -13,6 +13,7 @@ platforms: Responsive web
 tags: [E-commerce, Checkout, Design system]
 cover: ../../assets/cases/bbq-ua/40.webp
 coverAlt: BBQ.ua product page for a Weber kettle grill on a laptop and a phone
+hover: ../../assets/cases/bbq-ua/10.webp
 ---
 
 ## Problem

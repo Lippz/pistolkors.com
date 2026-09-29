@@ -13,6 +13,7 @@ platforms: Web app + admin panel
 tags: [Web3, Gamification, Admin panel]
 cover: ../../assets/cases/datanomika/cover.webp
 coverAlt: Datanomika main page — “Join a community of thoughts” with a 3D brain illustration
+hover: ../../assets/cases/datanomika/hover.webp
 format: slides
 slides:
   - src: ../../assets/cases/datanomika/01.webp

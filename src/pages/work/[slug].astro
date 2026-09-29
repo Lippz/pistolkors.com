@@ -40,7 +40,7 @@ const facts = [
 const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
 ---
 
-<Base title={d.client} description={d.summary} image={og.src} current="work" compactFooter>
+<Base title={d.client} description={d.summary} image={og.src} current="work" compactFooter progress>
   <article>
     <header class="container case-hero">
       <a href={url('/#work')} class="case-hero__back">← All work</a>
@@ -79,7 +79,7 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
         )
       }
 
-      <div class="case-cover frame">
+      <div class="case-cover frame" style={`view-transition-name: case-${entry.id}`}>
         <Image src={d.cover} alt={d.coverAlt} sizes="(min-width: 1440px) 1280px, 100vw" loading="eager" fetchpriority="high" />
       </div>
     </div>
@@ -133,7 +133,7 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
           <p class="eyebrow">Next case · {next.data.industry}</p>
           <p class="next__title">{next.data.client}: {next.data.title} →</p>
         </div>
-        <div class="next__media frame">
+        <div class="next__media frame" style={`view-transition-name: case-${next.id}`}>
           <Image src={next.data.cover} alt="" sizes="(min-width: 1024px) 34vw, 100vw" />
         </div>
       </a>
@@ -247,6 +247,7 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
 
   .case-cover {
     margin-top: clamp(40px, 5vw, 64px);
+    view-transition-class: case-cover;
   }
 
   .case-body {
@@ -349,6 +350,7 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
   .next__media {
     grid-column: 9 / span 4;
     aspect-ratio: 16 / 10;
+    view-transition-class: case-cover;
   }
 
   @media (max-width: 1023px) {
