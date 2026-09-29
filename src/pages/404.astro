@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import { url } from '../lib/url';
 ---
 
 <Base title="Page not found" compactFooter>
@@ -8,8 +9,8 @@ import Base from '../layouts/Base.astro';
     <h1 class="h-hero">This page took a <span class="accent-word">different route.</span></h1>
     <p class="lead">The link may be old — the portfolio moved from Framer. Everything is still here.</p>
     <div class="nf__ctas">
-      <a href="/#work" class="btn btn--accent">See the work</a>
-      <a href="/" class="btn btn--outline">Home</a>
+      <a href={url('/#work')} class="btn btn--accent">See the work</a>
+      <a href={url('/')} class="btn btn--outline">Home</a>
     </div>
   </section>
 </Base>

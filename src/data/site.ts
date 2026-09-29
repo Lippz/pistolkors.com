@@ -1,3 +1,5 @@
+import { url } from '../lib/url';
+
 export const site = {
   name: 'Pylyp Pistolkors',
   role: 'Senior Product Designer',
@@ -6,7 +8,7 @@ export const site = {
     'Senior Product Designer with 20 years in visual and motion design and nine in product: legal-tech, healthcare, e-commerce and marketplaces.',
   availability: 'Open to senior product design roles — Remote / Poznań, PL',
   email: 'ppistolkors@gmail.com',
-  cv: '/pylyp-pistolkors-cv.pdf',
+  cv: url('/pylyp-pistolkors-cv.pdf'),
   links: [
     { label: 'LinkedIn', href: 'https://linkedin.com/in/pistolkors' },
     { label: 'Behance', href: 'https://be.net/pistolkors' },

@@ -2,6 +2,7 @@
 /** Large home-page row: cover on one side, story on the other. */
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
+import { url } from '../lib/url';
 
 interface Props {
   entry: CollectionEntry<'cases'>;
@@ -10,7 +11,7 @@ interface Props {
 }
 const { entry, index, flip = false } = Astro.props;
 const d = entry.data;
-const href = `/work/${entry.id}/`;
+const href = url(`/work/${entry.id}/`);
 const num = String(index).padStart(2, '0');
 ---
 

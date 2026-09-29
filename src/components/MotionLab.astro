@@ -1,5 +1,6 @@
 ---
 import { motion } from '../data/site';
+import { url } from '../lib/url';
 
 const isDev = import.meta.env.DEV;
 // On the live site only tiles with a real video are shown.
@@ -27,7 +28,7 @@ const items = isDev ? motion : motion.filter((m) => m.video);
             <figure class="tile reveal" role="listitem">
               <div class="tile__media">
                 {m.video ? (
-                  <video src={m.video} poster={m.poster} autoplay muted loop playsinline preload="metadata" aria-label={m.title} />
+                  <video src={url(m.video)} poster={m.poster && url(m.poster)} autoplay muted loop playsinline preload="metadata" aria-label={m.title} />
                 ) : (
                   <div class="tile__placeholder">
                     <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true">

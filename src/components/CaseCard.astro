@@ -2,6 +2,7 @@
 /** Compact home-page card for the 2-column grid. */
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
+import { url } from '../lib/url';
 
 interface Props {
   entry: CollectionEntry<'cases'>;
@@ -13,7 +14,7 @@ const num = String(index).padStart(2, '0');
 ---
 
 <article class="card reveal">
-  <a href={`/work/${entry.id}/`} class="card__link">
+  <a href={url(`/work/${entry.id}/`)} class="card__link">
     <div class="card__media frame">
       <Image src={d.cover} alt="" sizes="(min-width: 768px) 50vw, 100vw" />
     </div>

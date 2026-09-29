@@ -1,6 +1,7 @@
 ---
 import Wordmark from './Wordmark.astro';
 import { site, motion } from '../data/site';
+import { url } from '../lib/url';
 
 interface Props {
   current?: 'work';
@@ -10,16 +11,16 @@ const { current } = Astro.props;
 const showLab = import.meta.env.DEV || motion.some((m) => m.video);
 
 const nav = [
-  { label: 'Work', href: '/#work', key: 'work' },
-  ...(showLab ? [{ label: 'Motion lab', href: '/#lab', key: 'lab' }] : []),
-  { label: 'About', href: '/#about', key: 'about' },
+  { label: 'Work', href: url('/#work'), key: 'work' },
+  ...(showLab ? [{ label: 'Motion lab', href: url('/#lab'), key: 'lab' }] : []),
+  { label: 'About', href: url('/#about'), key: 'about' },
   { label: 'Resume', href: site.cv, key: 'cv' },
 ];
 ---
 
 <header class="header">
   <div class="container header__inner">
-    <a href="/" class="header__brand" aria-label="Pylyp Pistolkors — home">
+    <a href={url('/')} class="header__brand" aria-label="Pylyp Pistolkors — home">
       <Wordmark />
     </a>
 
@@ -38,7 +39,7 @@ const nav = [
           </a>
         ))
       }
-      <a href="/#contact" class="btn btn--ink">Get in touch</a>
+      <a href={url('/#contact')} class="btn btn--ink">Get in touch</a>
     </nav>
   </div>
 </header>

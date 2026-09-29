@@ -2,6 +2,7 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import { Image, getImage } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
 
 export async function getStaticPaths() {
   const cases = (await getCollection('cases')).sort((a, b) => a.data.order - b.data.order);
@@ -42,7 +43,7 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
 <Base title={d.client} description={d.summary} image={og.src} current="work" compactFooter>
   <article>
     <header class="container case-hero">
-      <a href="/#work" class="case-hero__back">← All work</a>
+      <a href={url('/#work')} class="case-hero__back">← All work</a>
       <p class="eyebrow">Case study {num} · {d.client} · {d.industry}</p>
       <h1 class="h1 case-hero__title">
         {titleHead}{titleAccent && <span class="accent-word">{titleAccent}</span>}
@@ -127,7 +128,7 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
     }
 
     <div class="container">
-      <a href={`/work/${next.id}/`} class="next">
+      <a href={url(`/work/${next.id}/`)} class="next">
         <div class="next__text">
           <p class="eyebrow">Next case · {next.data.industry}</p>
           <p class="next__title">{next.data.client}: {next.data.title} →</p>
