@@ -30,6 +30,8 @@ const { class: className } = Astro.props;
     height: 1em;
     margin-right: 0.22em;
     color: var(--accent);
+    /* The shield touches the viewBox edges; don't clip its antialiased rim. */
+    overflow: visible;
   }
   .sr-o {
     position: absolute;
