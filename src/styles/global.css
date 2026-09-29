@@ -8,8 +8,8 @@
   --line: #e2e0dc;
   --chip-line: #cfccc6;
   --surface: #f2f2f0;
-  --accent: #e8330c; /* large text, fills with dark text, marks only */
-  --accent-ink: #b8280a; /* accent for small text on white (AA) */
+  --accent: #ff2f00; /* brand red, same as the shield. Large text, fills with dark text, marks only */
+  --accent-ink: #c42400; /* same hue, darkened for small text on white (5.8:1) */
   --ok: #1d8a4e;
 
   --night: #0b0b0b;

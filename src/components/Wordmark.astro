@@ -1,5 +1,7 @@
 ---
-/** "PYLYP PISTOLK▮RS" — the brand wordmark with the red block standing in for the "o". */
+/** "PYLYP PISTOLK🛡RS" — the brand wordmark with the pistol shield standing in for the "o". */
+import Shield from '../assets/brand/shield.svg';
+
 interface Props {
   class?: string;
 }
@@ -7,7 +9,7 @@ const { class: className } = Astro.props;
 ---
 
 <span class:list={['wordmark', className]}>
-  <span>Pylyp Pistolk</span><span class="wordmark__o" aria-hidden="true"></span><span class="sr-o">o</span><span>rs</span>
+  <span>Pylyp Pistolk</span><Shield class="wordmark__o" aria-hidden="true" /><span class="sr-o">o</span><span>rs</span>
 </span>
 
 <style>
@@ -21,13 +23,13 @@ const { class: className } = Astro.props;
     line-height: 1;
     white-space: nowrap;
   }
-  .wordmark__o {
-    display: inline-block;
-    width: 0.72em;
+  /* The SVG component renders outside this component's style scope. */
+  .wordmark :global(.wordmark__o) {
+    flex-shrink: 0;
+    width: 1em;
     height: 1em;
     margin-right: 0.22em;
-    border-radius: 0.22em;
-    background: var(--accent);
+    color: var(--accent);
   }
   .sr-o {
     position: absolute;
