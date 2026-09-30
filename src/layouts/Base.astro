@@ -48,12 +48,23 @@ const ogImage = image ? new URL(image, Astro.site).href : undefined;
     {ogImage && <meta property="og:image" content={ogImage} />}
     <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
 
-    <!-- Play the logo intro once per browser tab, not on every page. -->
+    <!-- Before first paint: apply a stored theme choice (no flash of the wrong
+         theme) and play the logo intro once per browser tab, not on every page. -->
     <script is:inline>
-      try {
-        if (sessionStorage.getItem('intro-seen')) document.documentElement.dataset.introSeen = '';
-        else sessionStorage.setItem('intro-seen', '1');
-      } catch (e) {}
+      (function () {
+        var root = document.documentElement;
+        try {
+          var t = localStorage.getItem('theme');
+          if (t === 'light' || t === 'dark') root.dataset.theme = t;
+        } catch (e) {}
+        var dark = root.dataset.theme === 'dark' || (!root.dataset.theme && matchMedia('(prefers-color-scheme: dark)').matches);
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', dark ? '#0f0f0e' : '#ffffff');
+        try {
+          if (sessionStorage.getItem('intro-seen')) root.dataset.introSeen = '';
+          else sessionStorage.setItem('intro-seen', '1');
+        } catch (e) {}
+      })();
     </script>
   </head>
   <body>

@@ -42,7 +42,7 @@ DNS at your domain registrar (remove the old Framer records first):
 | Contacts, facts, experience   | `src/data/site.ts`               |
 | Motion lab tiles              | `motion` in `src/data/site.ts`   |
 | CV                            | `public/pylyp-pistolkors-cv.pdf` |
-| Colours, type, spacing        | `src/styles/global.css` (`:root`) |
+| Colours, type, spacing        | `src/styles/global.css` (`:root`; dark theme in the two blocks below it — keep them identical) |
 
 ### Add a case study
 

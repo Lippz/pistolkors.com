@@ -65,8 +65,9 @@ const items = isDev ? motion : motion.filter((m) => m.video);
 <style>
   .lab {
     margin-top: clamp(96px, 12vw, 144px);
+    border-block: 1px solid var(--night-edge);
     background: var(--night);
-    color: #fff;
+    color: var(--night-fg);
   }
   .lab__inner {
     padding-block: clamp(56px, 8vw, 96px);

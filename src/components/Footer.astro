@@ -53,6 +53,11 @@ const year = new Date().getFullYear();
       <span>
         © <span data-year>{year}</span> {site.name}<span class="footer__clock" data-clock hidden> · <time></time> in Poznań, PL</span>
       </span>
+      <div class="theme-switch" role="group" aria-label="Colour theme" hidden>
+        <button type="button" data-theme-choice="auto" aria-pressed="true">Auto</button>
+        <button type="button" data-theme-choice="light" aria-pressed="false">Light</button>
+        <button type="button" data-theme-choice="dark" aria-pressed="false">Dark</button>
+      </div>
       {
         compact ? (
           <div class="footer__links">
@@ -75,6 +80,20 @@ const year = new Date().getFullYear();
 </footer>
 
 <script>
+  import { getChoice, setChoice, onThemeChange, type ThemeChoice } from '../lib/theme';
+
+  // Theme switch: Auto (follow the system) · Light · Dark.
+  const themeSwitch = document.querySelector<HTMLElement>('.theme-switch');
+  if (themeSwitch) {
+    const buttons = [...themeSwitch.querySelectorAll<HTMLButtonElement>('[data-theme-choice]')];
+    buttons.forEach((b) => b.addEventListener('click', () => setChoice(b.dataset.themeChoice as ThemeChoice)));
+    onThemeChange(() => {
+      const choice = getChoice();
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.themeChoice === choice)));
+    });
+    themeSwitch.hidden = false;
+  }
+
   // Copy the email address. The button only appears where the Clipboard API works.
   const status = document.querySelector('[data-copy-status]');
   if (navigator.clipboard && window.isSecureContext) {
@@ -118,11 +137,12 @@ const year = new Date().getFullYear();
 <style>
   .footer {
     margin-top: clamp(96px, 12vw, 144px);
+    border-top: 1px solid var(--night-edge);
     background: var(--night);
-    color: #fff;
+    color: var(--night-fg);
   }
   .footer a {
-    color: #fff;
+    color: var(--night-fg);
   }
   .footer a:hover {
     color: var(--accent);
@@ -173,7 +193,7 @@ const year = new Date().getFullYear();
     border: 1px solid var(--night-line);
     border-radius: 999px;
     background: transparent;
-    color: #fff;
+    color: var(--night-fg);
     font: inherit;
     font-size: 14px;
     cursor: pointer;
@@ -183,15 +203,45 @@ const year = new Date().getFullYear();
       color 0.2s ease;
   }
   .footer__copy:hover {
-    border-color: #fff;
+    border-color: var(--night-fg);
   }
   .footer__copy.is-done {
     border-color: var(--accent);
     background: var(--accent);
-    color: var(--ink);
+    color: var(--on-accent);
   }
   .footer__copy[hidden] {
     display: none;
+  }
+  .theme-switch {
+    display: inline-flex;
+    padding: 3px;
+    border: 1px solid var(--night-line);
+    border-radius: 999px;
+  }
+  .theme-switch[hidden] {
+    display: none;
+  }
+  .theme-switch button {
+    min-height: 38px;
+    padding: 0 14px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--night-muted);
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+  }
+  .theme-switch button:hover {
+    color: var(--night-fg);
+  }
+  .theme-switch button[aria-pressed='true'] {
+    background: var(--night-fg);
+    color: var(--night);
   }
   .footer__clock time {
     font-variant-numeric: tabular-nums;
