@@ -39,17 +39,18 @@ const { class: className, intro = false } = Astro.props;
     /* The shield touches the viewBox edges; don't clip its antialiased rim. */
     overflow: visible;
     transform-origin: 50% 70%;
+    transition: filter 0.3s ease;
+  }
+  /* Hover or keyboard focus on the logo link: the shield glows, nothing moves. */
+  .wordmark:hover :global(.wordmark__mark),
+  :global(a:focus-visible) .wordmark :global(.wordmark__mark) {
+    filter: brightness(1.08) drop-shadow(0 0 0.28em color-mix(in srgb, var(--accent) 55%, transparent));
   }
 
   @media (prefers-reduced-motion: no-preference) {
     /* Entrance: the shield drops in with a small overshoot, once per tab. */
     :global(html:not([data-intro-seen])) .wordmark--intro :global(.wordmark__mark) {
       animation: shield-in 0.7s cubic-bezier(0.2, 0.8, 0.25, 1.15) 0.15s both;
-    }
-    /* Hover or keyboard focus on the logo link: a short recoil. */
-    .wordmark:hover :global(.wordmark__mark),
-    :global(a:focus-visible) .wordmark :global(.wordmark__mark) {
-      animation: shield-recoil 0.6s cubic-bezier(0.3, 0.7, 0.3, 1);
     }
   }
 
@@ -64,23 +65,6 @@ const { class: className, intro = false } = Astro.props;
     }
     to {
       opacity: 1;
-      transform: none;
-    }
-  }
-  @keyframes shield-recoil {
-    0% {
-      transform: none;
-    }
-    22% {
-      transform: rotate(-12deg) scale(1.08);
-    }
-    50% {
-      transform: rotate(7deg);
-    }
-    75% {
-      transform: rotate(-3deg);
-    }
-    100% {
       transform: none;
     }
   }
