@@ -1,11 +1,11 @@
 import { url } from '../lib/url';
+import { PRODUCT_SINCE, yearsSince, inWords } from '../lib/years';
 
 export const site = {
   name: 'Pylyp Pistolkors',
   role: 'Senior Product Designer',
   location: 'Poznań, PL · Remote',
-  description:
-    'Senior Product Designer with 20 years in visual and motion design and nine in product: legal-tech, healthcare, e-commerce and marketplaces.',
+  description: `Senior Product Designer with over 20 years in visual and motion design and ${inWords(yearsSince(PRODUCT_SINCE))} as a senior product designer: legal-tech, healthcare, e-commerce and marketplaces.`,
   availability: 'Open to senior product design roles — Remote / Poznań, PL',
   email: 'ppistolkors@gmail.com',
   cv: url('/pylyp-pistolkors-cv.pdf'),
@@ -15,11 +15,15 @@ export const site = {
   ],
 };
 
-export const facts = [
-  { value: '20 yrs', label: 'in design, animation and motion' },
-  { value: '9 yrs', label: 'in product design, since 2017' },
-  { value: 'Auto.RIA', label: 'Ukraine’s largest car marketplace' },
-  { value: 'Rive · Framer', label: 'motion that ships, not just mockups' },
+/**
+ * Numbers under the hero. A fact with `since` shows whole years from that
+ * date ("YYYY-MM") and updates itself, so it never needs a yearly edit.
+ */
+export const facts: { value?: string; since?: string; unit?: string; label: string }[] = [
+  { value: '20+ yrs', label: 'in design, animation and motion' },
+  { since: PRODUCT_SINCE, unit: 'yrs', label: 'as Senior Product Designer' },
+  { value: '5 industries', label: 'legal-tech, healthcare, e-commerce, construction, crypto' },
+  { value: 'Mentor', label: 'leading mid-level designers at Existek' },
 ];
 
 export const experience = [

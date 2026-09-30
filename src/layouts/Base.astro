@@ -63,5 +63,24 @@ const ogImage = image ? new URL(image, Astro.site).href : undefined;
       <slot />
     </main>
     <Footer compact={compactFooter} />
+
+    <!-- Keep year counts and the copyright year current between deploys.
+         Mirrors src/lib/years.ts. -->
+    <script is:inline>
+      (function () {
+        var words = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
+          'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
+        var now = new Date();
+        document.querySelectorAll('[data-since]').forEach(function (el) {
+          var p = el.getAttribute('data-since').split('-');
+          var n = now.getFullYear() - Number(p[0]);
+          if (now.getMonth() + 1 < Number(p[1])) n -= 1;
+          el.textContent = el.getAttribute('data-as') === 'word' ? words[n] || String(n) : String(n);
+        });
+        document.querySelectorAll('[data-year]').forEach(function (el) {
+          el.textContent = String(now.getFullYear());
+        });
+      })();
+    </script>
   </body>
 </html>
