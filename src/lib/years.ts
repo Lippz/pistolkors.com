@@ -3,7 +3,7 @@
  * recomputed in the browser (see the inline script in Base.astro), so they stay
  * right between deploys.
  */
-export const PRODUCT_SINCE = '2020-05';
+export const PRODUCT_SINCE = '2020-01';
 
 /** Whole years from a "YYYY-MM" date until `now`. */
 export function yearsSince(since: string, now = new Date()): number {
