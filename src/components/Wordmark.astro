@@ -11,36 +11,36 @@ const { class: className, intro = false } = Astro.props;
 ---
 
 <span class:list={['wordmark', { 'wordmark--intro': intro }, className]}>
-  <Shield class="wordmark__mark" aria-hidden="true" /><span class="wordmark__text">Pylyp Pistolkors</span>
+  <span class="wordmark__mark-zone"><Shield class="wordmark__mark" aria-hidden="true" /></span><span class="wordmark__text">Pylyp Pistolkors</span>
 </span>
 
 <script>
-  // 3D tilt: the shield leans towards the cursor while it moves over the logo
-  // (the whole link in the header, the lockup itself in the footer).
-  const MAX_DEG = 18;
+  // 3D tilt: the shield leans towards the cursor while it moves over the shield.
+  // Events go to a wrapper that never transforms, so the tilted shape can't
+  // slip out from under the pointer at the edges.
+  const MAX_DEG = 25;
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const clamp = (n: number) => Math.max(-1, Math.min(1, n));
 
   document.querySelectorAll<HTMLElement>('.wordmark').forEach((wordmark) => {
     const mark = wordmark.querySelector<SVGSVGElement>('.wordmark__mark');
-    if (!mark) return;
-    const zone: HTMLElement = wordmark.closest('a') ?? wordmark;
+    const zone = wordmark.querySelector<HTMLElement>('.wordmark__mark-zone');
+    if (!mark || !zone) return;
     let rect: DOMRect | null = null;
     let frame = 0;
 
     zone.addEventListener('pointerenter', () => {
-      rect = mark.getBoundingClientRect();
+      rect = zone.getBoundingClientRect();
     });
     zone.addEventListener('pointermove', (e) => {
       if (e.pointerType === 'touch' || !finePointer.matches || reducedMotion.matches) return;
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
-        const r = (rect ??= mark.getBoundingClientRect());
-        // Full tilt is reached about 2.5 shield-widths from its centre.
-        const reach = r.width * 2.5;
-        const dx = clamp((e.clientX - (r.left + r.width / 2)) / reach);
-        const dy = clamp((e.clientY - (r.top + r.height / 2)) / reach);
+        const r = (rect ??= zone.getBoundingClientRect());
+        // -1…1 across the shield: full tilt at its edges.
+        const dx = clamp((e.clientX - (r.left + r.width / 2)) / (r.width / 2));
+        const dy = clamp((e.clientY - (r.top + r.height / 2)) / (r.height / 2));
         mark.classList.add('is-tilting');
         // The edge nearest the cursor dips away, as if pressed.
         mark.style.setProperty('--tilt-y', `${(dx * MAX_DEG).toFixed(2)}deg`);
@@ -73,6 +73,10 @@ const { class: className, intro = false } = Astro.props;
     /* Cancel the tracking after the last letter so the lockup ends flush. */
     margin-right: -0.22em;
   }
+  .wordmark__mark-zone {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
   /* The SVG component renders outside this component's style scope. */
   .wordmark :global(.wordmark__mark) {
     flex-shrink: 0;
@@ -81,7 +85,7 @@ const { class: className, intro = false } = Astro.props;
     color: var(--accent);
     /* The shield touches the viewBox edges; don't clip its antialiased rim. */
     overflow: visible;
-    transform: perspective(5em) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+    transform: perspective(3em) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
     /* Slow settle back to flat when the cursor leaves… */
     transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
