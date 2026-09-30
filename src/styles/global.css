@@ -227,39 +227,48 @@ ul {
   border-radius: 999px;
   font-size: 1rem;
   font-weight: 500;
+  /* Only the fill animates. Swapping text and fill colours at the same time
+     makes them meet mid-way (contrast ~1:1) and the label seems to blink. */
   transition:
     transform 0.2s ease,
     background-color 0.2s ease,
-    color 0.2s ease;
+    border-color 0.2s ease;
 }
 .btn:active {
   transform: scale(0.98);
 }
+.btn--accent,
+.btn--accent:hover {
+  color: var(--on-accent);
+}
 .btn--accent {
   background: var(--accent);
-  color: var(--on-accent);
   font-weight: 600;
 }
 .btn--accent:hover {
-  background: var(--ink);
-  color: var(--paper);
+  background: color-mix(in srgb, var(--accent) 80%, #ffffff);
+}
+.btn--outline,
+.btn--outline:hover {
+  color: var(--ink);
 }
 .btn--outline {
   border: 1px solid var(--ink);
 }
 .btn--outline:hover {
-  background: var(--ink);
+  background: var(--surface);
+}
+.btn--ink,
+.btn--ink:hover {
   color: var(--paper);
 }
 .btn--ink {
   min-height: 44px;
   padding: 0 20px;
   background: var(--ink);
-  color: var(--paper);
 }
 .btn--ink:hover {
-  background: var(--accent);
-  color: var(--on-accent);
+  background: color-mix(in srgb, var(--ink) 80%, var(--paper));
 }
 
 .link-underline {
