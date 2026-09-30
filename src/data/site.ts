@@ -44,21 +44,6 @@ export const experience = [
   },
 ];
 
-export const earlierWork = [
-  {
-    period: '2017–20',
-    title: 'Auto.RIA & Dom.RIA — web and mobile apps',
-    kind: 'Product design · Marketplaces',
-    note: 'On request',
-  },
-  {
-    period: '2005–17',
-    title: 'Games and ads for Big Fish Games, 888.com, bwin',
-    kind: 'Web, ad design · Animation',
-    note: 'On request',
-  },
-];
-
 /**
  * Motion lab tiles. Put files in /public/motion/ and set `video` (mp4/webm loop)
  * and `poster` (first frame). Tiles without a video only show in `npm run dev`;

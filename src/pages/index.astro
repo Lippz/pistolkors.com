@@ -5,7 +5,7 @@ import Base from '../layouts/Base.astro';
 import CaseFeature from '../components/CaseFeature.astro';
 import CaseCard from '../components/CaseCard.astro';
 import MotionLab from '../components/MotionLab.astro';
-import { site, facts, experience, earlierWork } from '../data/site';
+import { site, facts, experience } from '../data/site';
 import { PRODUCT_SINCE, yearsSince, inWords } from '../lib/years';
 import portrait from '../assets/site/portrait.webp';
 
@@ -61,24 +61,6 @@ const years = cases.map((c) => Number(c.data.year.slice(0, 4)));
 
       <div class="work__grid">
         {rest.map((entry, i) => <CaseCard entry={entry} index={featured.length + i + 1} />)}
-      </div>
-
-      <div class="earlier">
-        <h3 class="eyebrow earlier__title">Earlier work</h3>
-        <ul role="list">
-          {
-            earlierWork.map((w) => (
-              <li>
-                <span class="earlier__period">{w.period}</span>
-                <span class="earlier__name">{w.title}</span>
-                <span class="earlier__kind">{w.kind}</span>
-                <a class="earlier__note" href={`mailto:${site.email}?subject=${encodeURIComponent(w.title)}`}>
-                  {w.note}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
       </div>
     </div>
   </section>
@@ -185,10 +167,11 @@ const years = cases.map((c) => Number(c.data.year.slice(0, 4)));
     border-top: 1px solid var(--line);
   }
   .work__inner {
+    --case-gap: clamp(64px, 8vw, 120px);
     padding-top: clamp(48px, 8vw, 96px);
     display: flex;
     flex-direction: column;
-    gap: clamp(40px, 5vw, 64px);
+    gap: var(--case-gap);
   }
   .section-head {
     display: flex;
@@ -196,46 +179,13 @@ const years = cases.map((c) => Number(c.data.year.slice(0, 4)));
     align-items: baseline;
     justify-content: space-between;
     gap: 12px 24px;
+    /* Keep the heading close to its first case despite the wider case gap. */
+    margin-bottom: calc(clamp(40px, 5vw, 64px) - var(--case-gap));
   }
   .work__grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: clamp(40px, 5vw, 64px) 24px;
-  }
-
-  .earlier ul {
-    padding: 0;
-    list-style: none;
-  }
-  .earlier__title {
-    margin-bottom: 16px;
-    font-weight: 400;
-  }
-  .earlier li {
-    display: grid;
-    grid-template-columns: 120px 1fr 300px 140px;
-    gap: 8px 24px;
-    align-items: center;
-    min-height: 72px;
-    border-top: 1px solid var(--line);
-    font-size: 17px;
-  }
-  .earlier li:first-child {
-    border-top-color: var(--ink);
-  }
-  .earlier li:last-child {
-    border-bottom: 1px solid var(--line);
-  }
-  .earlier__period,
-  .earlier__kind,
-  .earlier__note {
-    color: var(--muted);
-  }
-  .earlier__name {
-    font-weight: 500;
-  }
-  .earlier__note {
-    text-align: right;
+    gap: clamp(56px, 7vw, 104px) 24px;
   }
 
   .about {
@@ -305,16 +255,6 @@ const years = cases.map((c) => Number(c.data.year.slice(0, 4)));
   @media (max-width: 1023px) {
     .facts {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    .earlier li {
-      grid-template-columns: 96px 1fr;
-      padding: 16px 0;
-    }
-    .earlier__kind {
-      grid-column: 2;
-    }
-    .earlier__note {
-      display: none;
     }
     .about {
       grid-template-columns: 1fr;
