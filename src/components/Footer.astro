@@ -134,6 +134,15 @@ const year = new Date().getFullYear();
     flex-direction: column;
     gap: clamp(48px, 7vw, 80px);
   }
+  /* The full contact block fills the screen below the sticky header once you
+     reach it; the wordmark and bottom row sit at the bottom. `svh` so mobile
+     browser bars don't make it jump. */
+  .footer:not(.footer--compact) .footer__inner {
+    min-height: calc(100svh - var(--header-h));
+  }
+  .footer:not(.footer--compact) :global(.footer__wordmark) {
+    margin-top: auto;
+  }
   .footer--compact .footer__inner {
     padding-top: 64px;
     gap: 48px;
