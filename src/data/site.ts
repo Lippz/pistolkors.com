@@ -21,7 +21,7 @@ export const site = {
  */
 export const facts: { value?: string; since?: string; unit?: string; label: string }[] = [
   { value: '20+ yrs', label: 'in design, animation and motion' },
-  { since: PRODUCT_SINCE, unit: 'yrs', label: 'as Senior Product Designer' },
+  { since: PRODUCT_SINCE, unit: 'yrs', label: 'in product design, since 2020' },
   { value: '5 industries', label: 'legal-tech, healthcare, e-commerce, construction, crypto' },
   { value: 'Mentor', label: 'leading mid-level designers at Existek' },
 ];
