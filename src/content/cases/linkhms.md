@@ -68,7 +68,7 @@ I grouped the findings in an affinity diagram, graded features by importance and
 
 I started with hand-drawn sketches to decide what each screen needed, then mapped the user flow and built a low-fidelity prototype in Figma. A usability study showed where the task flow broke down; a second round confirmed the fixes before any high-fidelity work.
 
-![User flow covering registration, scheduling, patients and medical records](../../assets/cases/linkhms/07.webp)
+![User flow covering registration, scheduling, patients, medical records and administration](../../assets/cases/linkhms/user-flow.webp)
 
 ![Low-fidelity wireframes of the schedule and patient screens](../../assets/cases/linkhms/09.webp)
 
