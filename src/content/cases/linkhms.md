@@ -48,6 +48,8 @@ I surveyed 12 healthcare professionals, interviewed 5 of them and analysed 4 com
 - Existing tools feel outdated, hard to use and unreliable.
 - A clear dashboard for scheduling and patients is essential for quick decisions.
 
+<div class="quotes">
+
 > The old software we’re using is extremely slow and clunky. It takes forever to update patient records or schedule appointments, and half the time, the system crashes.
 >
 > Abdoulaye B., Doctor
@@ -55,6 +57,8 @@ I surveyed 12 healthcare professionals, interviewed 5 of them and analysed 4 com
 > Handwritten records make managing appointments difficult and time-consuming. A modern system would save time and prevent mistakes.
 >
 > Priya S., Administrative Assistant
+
+</div>
 
 I grouped the findings in an affinity diagram, graded features by importance and built a persona — Kwame, a physical therapist working across several public and private clinics — to test every decision against.
 
