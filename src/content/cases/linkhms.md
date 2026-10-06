@@ -13,8 +13,8 @@ timeline: 3 months
 company: Existek
 platforms: Web app, desktop-first
 tags: [User research, Scheduling, Data privacy]
-cover: ../../assets/cases/linkhms/25.webp
-coverAlt: LinkHMS new patient form and patient list on two desktop monitors
+cover: ../../assets/cases/linkhms/cover.webp
+coverAlt: LinkHMS finance reports and the doctors schedule on two desktop monitors
 stats:
   label: Research
   items:
