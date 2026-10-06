@@ -102,7 +102,13 @@ Registration lets someone set up a whole clinic management flow or just an indiv
 
 Receptionists create an appointment for a specific doctor in just a few clicks, straight from the schedule.
 
-![Schedule grid and new appointment dialog](../../assets/cases/linkhms/19.webp)
+<div class="carousel">
+
+![Doctors schedule grid with colour-coded appointment statuses and a new appointment slot](../../assets/cases/linkhms/schedule.webp "Schedule")
+
+![New Visit dialog with patient details, doctor, date and a service search](../../assets/cases/linkhms/new-visit.webp "New visit")
+
+</div>
 
 #### Patients at the centre, with the right to be forgotten
 
