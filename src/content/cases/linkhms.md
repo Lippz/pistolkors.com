@@ -126,7 +126,13 @@ The patient is the main entity of the system. Every record can be removed comple
 
 The electronic medical record is split into sections and subsections, so a doctor jumps straight to what matters in an emergency.
 
-![Electronic medical record split into sections](../../assets/cases/linkhms/23.webp)
+<div class="carousel">
+
+![Patient summary with recent visits, samples and tests, diagnoses and prescriptions](../../assets/cases/linkhms/patient-summary.webp "Summary")
+
+![Patient records history with a category menu and colour-coded record types](../../assets/cases/linkhms/patient-records.webp "Records")
+
+</div>
 
 ## Visual identity
 
