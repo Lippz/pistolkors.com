@@ -13,8 +13,8 @@ timeline: 5 months
 company: Existek
 platforms: Web app + browser extension
 tags: [Discovery, Multi-role flows, Design system]
-cover: ../../assets/cases/legalfans/01.webp
-coverAlt: LegalFans Magic Vault and uploads screens on a dark and light dashboard
+cover: ../../assets/cases/legalfans/cover.webp
+coverAlt: LegalFans statistics dashboard on a laptop and the admin panel on a desktop, on a blue background
 stats:
   label: Results
   items:
