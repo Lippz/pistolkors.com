@@ -100,7 +100,7 @@ Leaked content means lost income, stress and damage to a creator’s reputation.
 
 ### First wireframes of the core screens
 
-<div class="stack">
+<div class="carousel">
 
 ![Wireframe of the Statistics screen: leak counts, removal rate, a donut chart and upload dynamics](../../assets/cases/legalfans/wf-statistics.webp "Statistics")
 
@@ -122,7 +122,7 @@ Leaked content means lost income, stress and damage to a creator’s reputation.
 
 Fully automatic matching produced false positives, and a wrong takedown damages trust and creates legal risk. We added operator validation between detection and legal action, so every case a lawyer receives has already been checked by a person.
 
-<div class="stack">
+<div class="carousel">
 
 ![Comparison screen where the preview of the suspected copy is unavailable and the operator is asked to use the link](../../assets/cases/legalfans/cmp-unavailable.webp "Preview unavailable")
 

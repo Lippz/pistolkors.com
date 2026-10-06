@@ -90,9 +90,9 @@
       const { url, w } = largest(el);
       const iw = Number(el.getAttribute('width')) || el.naturalWidth || 1;
       const ih = Number(el.getAttribute('height')) || el.naturalHeight || 1;
-      return { el, group: el.closest('[data-lightbox-group], .stack'), full: url, fullW: w || iw, aspect: ih / iw, alt: el.alt, caption: captionOf(el) };
+      return { el, group: el.closest('[data-lightbox-group], .carousel'), full: url, fullW: w || iw, aspect: ih / iw, alt: el.alt, caption: captionOf(el) };
     });
-    // The viewer pages through one group at a time: all loose images of the case, or one stack.
+    // The viewer pages through one group at a time: all loose images of the case, or one carousel.
     let items: Item[] = all;
 
     let index = 0;
@@ -185,9 +185,14 @@
       const run = () => {
         img.style.viewTransitionName = '';
         dlg.close();
-        // In a stack, focus the matching card: that also brings it to the front.
-        const card = thumb.closest('.stack')?.querySelectorAll<HTMLElement>('.stack__card')[index];
-        (card ?? thumb).focus({ preventScroll: true });
+        // In a carousel, scroll to the last viewed slide and focus the track.
+        const car = thumb.closest<HTMLElement>('.carousel');
+        if (car) {
+          car.dispatchEvent(new CustomEvent('goto', { detail: index }));
+          car.querySelector<HTMLElement>('.carousel__track')?.focus({ preventScroll: true });
+        } else {
+          thumb.focus({ preventScroll: true });
+        }
         if (canAnimate()) thumb.style.viewTransitionName = 'lb-img';
       };
       if (canAnimate()) {
@@ -225,7 +230,7 @@
       const el = it.el;
       el.dataset.lb = '';
       el.addEventListener('click', () => open(it));
-      // Images in a stack are operated through the stack's own tab buttons.
+      // Images in a carousel are operated through the carousel itself.
       if (it.group) return;
       el.tabIndex = 0;
       el.setAttribute('role', 'button');
