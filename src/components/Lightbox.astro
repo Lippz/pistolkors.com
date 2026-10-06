@@ -31,7 +31,7 @@
 </dialog>
 
 <script>
-  type Item = { el: HTMLImageElement; full: string; fullW: number; aspect: number; alt: string; caption: string };
+  type Item = { el: HTMLImageElement; group: Element | null; full: string; fullW: number; aspect: number; alt: string; caption: string };
 
   const q = <T extends Element>(root: ParentNode, sel: string) => root.querySelector<T>(sel);
   const dlg = q<HTMLDialogElement>(document, '.lb');
@@ -65,6 +65,8 @@
 
   /** An italic-only paragraph right after the image is its caption; slides use their figcaption. */
   function captionOf(el: HTMLImageElement) {
+    const label = el.dataset.label || el.title;
+    if (label) return label;
     const fig = el.closest('figure')?.querySelector('figcaption');
     if (fig?.textContent) return fig.textContent.trim();
     const next = el.closest('p')?.nextElementSibling;
@@ -84,12 +86,14 @@
     closeBtn: HTMLButtonElement,
   ) {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const items: Item[] = els.map((el) => {
+    const all: Item[] = els.map((el) => {
       const { url, w } = largest(el);
       const iw = Number(el.getAttribute('width')) || el.naturalWidth || 1;
       const ih = Number(el.getAttribute('height')) || el.naturalHeight || 1;
-      return { el, full: url, fullW: w || iw, aspect: ih / iw, alt: el.alt, caption: captionOf(el) };
+      return { el, group: el.closest('[data-lightbox-group], .stack'), full: url, fullW: w || iw, aspect: ih / iw, alt: el.alt, caption: captionOf(el) };
     });
+    // The viewer pages through one group at a time: all loose images of the case, or one stack.
+    let items: Item[] = all;
 
     let index = 0;
     let zoomed = false;
@@ -152,9 +156,12 @@
       if (fade && !reduced.matches) img.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 180, easing: 'ease-out' });
     }
 
-    function open(i: number) {
+    function open(it: Item) {
       if (busy || dlg.open) return;
-      const thumb = items[i].el;
+      items = all.filter((x) => x.group === it.group);
+      const i = items.indexOf(it);
+      dlg.classList.toggle('lb--single', items.length < 2);
+      const thumb = it.el;
       history.pushState({ lb: 1 }, '');
       const run = () => {
         thumb.style.viewTransitionName = '';
@@ -178,7 +185,9 @@
       const run = () => {
         img.style.viewTransitionName = '';
         dlg.close();
-        thumb.focus({ preventScroll: true });
+        // A stack is operated through its tabs: focusing the matching one also brings that card forward.
+        const tab = thumb.closest('.stack')?.querySelectorAll<HTMLElement>('.stack__tab')[index];
+        (tab ?? thumb).focus({ preventScroll: true });
         if (canAnimate()) thumb.style.viewTransitionName = 'lb-img';
       };
       if (canAnimate()) {
@@ -212,17 +221,19 @@
     }
 
     // Triggers: images become keyboard-operable buttons.
-    items.forEach((it, i) => {
+    all.forEach((it) => {
       const el = it.el;
       el.dataset.lb = '';
+      el.addEventListener('click', () => open(it));
+      // Images in a stack are operated through the stack's own tab buttons.
+      if (it.group) return;
       el.tabIndex = 0;
       el.setAttribute('role', 'button');
       el.setAttribute('aria-label', `View larger: ${it.alt || 'image'}`);
-      el.addEventListener('click', () => open(i));
       el.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          open(i);
+          open(it);
         }
       });
     });
@@ -239,7 +250,7 @@
       else if (e.key === 'ArrowRight') step(1);
     });
     window.addEventListener('resize', () => dlg.open && size());
-    if (items.length < 2) dlg.classList.add('lb--single');
+    
 
     // Pointer: drag to pan when zoomed (mouse), swipe to change image (touch/pen), click to zoom or dismiss.
     let drag: { x: number; y: number; sl: number; st: number; moved: boolean } | null = null;

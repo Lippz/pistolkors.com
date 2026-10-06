@@ -98,7 +98,17 @@ Leaked content means lost income, stress and damage to a creator’s reputation.
 
 *Overall flow across the creator app, the browser extension, operators and admins.*
 
-![Low-fidelity wireframes of statistics, account, Magic Vault and a single leak](../../assets/cases/legalfans/07.webp)
+<div class="stack">
+
+![Wireframe of the Statistics screen: leak counts, removal rate, a donut chart and upload dynamics](../../assets/cases/legalfans/wf-statistics.webp "Statistics")
+
+![Wireframe of the My Account screen: profile, account type and password change](../../assets/cases/legalfans/wf-account.webp "My Account")
+
+![Wireframe of the Magic Vault screen: a grid of uploaded media with search toggles](../../assets/cases/legalfans/wf-vault.webp "Magic Vault")
+
+![Wireframe of a single leak: preview, other leaks and details](../../assets/cases/legalfans/wf-leak.webp "Leak details")
+
+</div>
 
 *Low-fidelity wireframes: the first pass focused on making every screen usable for non-technical creators.*
 

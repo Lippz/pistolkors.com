@@ -395,7 +395,7 @@ a:hover .frame img {
 .prose > * + * {
   margin-top: 24px;
 }
-.prose > :is(p:has(> img), .pair, .grid-4, .cards, .persona, ol.flow, blockquote) {
+.prose > :is(p:has(> img), .pair, .grid-4, .cards, .persona, .stack, ol.flow, blockquote) {
   margin-top: 32px;
 }
 .prose > :is(h3, h4) {
