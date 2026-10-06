@@ -98,6 +98,8 @@ Leaked content means lost income, stress and damage to a creator’s reputation.
 
 *Overall flow across the creator app, the browser extension, operators and admins.*
 
+### First wireframes of the core screens
+
 <div class="stack">
 
 ![Wireframe of the Statistics screen: leak counts, removal rate, a donut chart and upload dynamics](../../assets/cases/legalfans/wf-statistics.webp "Statistics")
