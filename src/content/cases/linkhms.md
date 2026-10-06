@@ -114,7 +114,13 @@ Receptionists create an appointment for a specific doctor in just a few clicks, 
 
 The patient is the main entity of the system. Every record can be removed completely on the patient’s request, in line with the data-privacy needs raised in research.
 
-![Patient list and delete-patient confirmation](../../assets/cases/linkhms/21.webp)
+<div class="carousel">
+
+![Patients list with search, filters, CSV upload and a row menu with Edit and Delete](../../assets/cases/linkhms/patients-list.webp "Patients list")
+
+![Delete Patient dialog warning that the action is permanent and asking for confirmation](../../assets/cases/linkhms/delete-patient.webp "Delete patient")
+
+</div>
 
 #### A medical record you can scan in seconds
 
