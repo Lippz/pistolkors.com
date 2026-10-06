@@ -66,7 +66,7 @@ Also available: `<div class="cards">`, `<ol class="flow">`, `<ol class="rows">` 
 
 Images are resized and served as responsive WebP automatically. Keep sources at 2400 px wide or less.
 
-To show several images as one piled stack (hover a card to bring it forward; click opens the viewer with just those images), wrap them in `<div class="stack">` with a blank line before and after each image, and give each a short label as the image title: `![Alt text](path "Label")`. See the wireframes in `legalfans.md`.
+To show several images as one piled stack (hover a card to bring it forward; click opens the viewer with just those images), wrap them in `<div class="stack">` with a blank line before and after each image, and give each a short label as the image title (screen readers and the viewer's caption): `![Alt text](path "Label")`. See the wireframes in `legalfans.md`.
 
 Every image in a case opens in the image viewer (`src/components/Lightbox.astro`) on click: ←/→ and swipe step through the case's images, click toggles fit / 100%, Esc or Back closes. An italic-only line right after an image is shown as its caption; slides use their figcaption. Nothing to configure.
 

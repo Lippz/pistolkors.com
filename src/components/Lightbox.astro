@@ -185,9 +185,9 @@
       const run = () => {
         img.style.viewTransitionName = '';
         dlg.close();
-        // A stack is operated through its tabs: focusing the matching one also brings that card forward.
-        const tab = thumb.closest('.stack')?.querySelectorAll<HTMLElement>('.stack__tab')[index];
-        (tab ?? thumb).focus({ preventScroll: true });
+        // In a stack, focus the matching card: that also brings it to the front.
+        const card = thumb.closest('.stack')?.querySelectorAll<HTMLElement>('.stack__card')[index];
+        (card ?? thumb).focus({ preventScroll: true });
         if (canAnimate()) thumb.style.viewTransitionName = 'lb-img';
       };
       if (canAnimate()) {

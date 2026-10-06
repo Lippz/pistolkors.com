@@ -1,9 +1,9 @@
 ---
 /**
  * Image stack: several images piled almost on top of each other, each a little
- * lower than the one before, so every card's edge shows with its label. The card
- * under the pointer (or focused through its tab below) comes to the front while
- * the others part slightly above and below it. Add it in a case's Markdown as
+ * lower than the one before, filling the width of the column. The card under the
+ * pointer (or focused with the keyboard) comes to the front while the others part
+ * slightly above and below it. Add it in a case's Markdown as
  *
  *   <div class="stack">
  *
@@ -13,15 +13,15 @@
  *
  *   </div>
  *
- * Without JavaScript the images simply follow each other. A click on a card
- * opens the image viewer with just the stack's images.
+ * The label is read by screen readers and shown as the caption in the image
+ * viewer. Without JavaScript the images simply follow each other. A click on a
+ * card opens the viewer with just the stack's images.
  */
 ---
 
 <script>
-  const WIDTH = 78; // card width, % of the stack width
-  const STEP = 6; // vertical offset between neighbouring cards, in % of the stack width
-  const STEP_NARROW = 9; // same, on narrow stacks where 6% would be too thin for a label
+  const STEP = 4.5; // vertical offset between neighbouring cards, in % of the stack width
+  const STEP_NARROW = 7; // same, on narrow stacks where 4.5% would be too thin to see
   const PART = 1.2; // how far the others part from the front card, same unit
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
 
@@ -34,19 +34,13 @@
 
     const deck = document.createElement('div');
     deck.className = 'stack__deck';
-    deck.style.setProperty('--w', String(WIDTH));
-    deck.style.setProperty('--x', String((100 - WIDTH) / 2));
-
-    const tabs = document.createElement('div');
-    tabs.className = 'stack__tabs';
-    tabs.setAttribute('role', 'group');
-    tabs.setAttribute('aria-label', 'Screens');
+    deck.setAttribute('role', 'group');
+    deck.setAttribute('aria-label', 'Screens');
 
     const cards: HTMLElement[] = [];
-    const buttons: HTMLButtonElement[] = [];
     let active = 0;
-    let touchPending = false;
     let step = STEP;
+    let touchPending = false;
     // While the pointer stays inside the card it just activated (measured before the cards
     // parted), neighbours moving under it can't steal the hover.
     let lock: DOMRect | null = null;
@@ -58,20 +52,21 @@
 
       const card = document.createElement('figure');
       card.className = 'stack__card';
-      const tag = document.createElement('span');
-      tag.className = 'stack__label';
-      tag.setAttribute('aria-hidden', 'true');
-      tag.textContent = label;
-      card.append(img, tag);
+      card.tabIndex = 0;
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-label', `View larger: ${label}`);
+      card.append(img);
       deck.append(card);
       cards.push(card);
 
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'stack__tab';
-      btn.textContent = label;
-      tabs.append(btn);
-      buttons.push(btn);
+      // Keyboard: focus brings the card forward, Enter or Space opens the viewer.
+      card.addEventListener('focus', () => setActive(i));
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          img.click();
+        }
+      });
 
       // Touch: the first tap brings a card forward, a second tap opens the viewer.
       card.addEventListener('pointerdown', (e) => {
@@ -88,20 +83,6 @@
         },
         true,
       );
-
-      // Tabs: focus or hover brings the card forward; activating the shown one enlarges it.
-      btn.addEventListener('focus', () => setActive(i));
-      btn.addEventListener('pointerenter', (e) => {
-        if (e.pointerType === 'mouse') setActive(i);
-      });
-      btn.addEventListener('pointerdown', () => {
-        if (i !== active) btn.dataset.fresh = '1';
-      });
-      btn.addEventListener('click', () => {
-        if (i === active && !btn.dataset.fresh) img.click();
-        delete btn.dataset.fresh;
-        setActive(i);
-      });
     });
 
     // Mouse: the card under the pointer takes the front.
@@ -130,22 +111,17 @@
         card.style.setProperty('--y', String(y));
         card.style.zIndex = String(i === a ? 20 : 10 - Math.abs(i - a));
         card.classList.toggle('is-front', i === a);
-        card.dataset.edge = i < a ? 'above' : i > a ? 'below' : 'front';
-      });
-      buttons.forEach((b, i) => {
-        b.setAttribute('aria-pressed', String(i === a));
-        b.setAttribute('aria-label', `${b.textContent}${i === a ? ' (shown). Press to enlarge' : ''}`);
       });
     }
 
-    stack.replaceChildren(deck, tabs);
+    stack.replaceChildren(deck);
 
     // Wider edges on narrow stacks; computed now and again whenever the stack is resized.
     function geometry() {
       const next = stack.clientWidth < 520 ? STEP_NARROW : STEP;
       if (next === step && stack.classList.contains('is-ready')) return;
       step = next;
-      deck.style.aspectRatio = `100 / ${(WIDTH * aspect + (n - 1) * step + 2 * PART).toFixed(2)}`;
+      deck.style.aspectRatio = `100 / ${(100 * aspect + (n - 1) * step + 2 * PART).toFixed(2)}`;
       setActive(active, true);
       stack.classList.add('is-ready');
     }
@@ -166,8 +142,8 @@
   .stack__card {
     position: absolute;
     top: 0;
-    left: calc(var(--x) * 1%);
-    width: calc(var(--w) * 1%);
+    left: 0;
+    width: 100%;
     margin: 0;
     border-radius: 10px;
     overflow: hidden;
@@ -184,11 +160,15 @@
     filter: brightness(0.94);
   }
   .stack__card.is-front {
-    --s: 1.012;
+    --s: 1.008;
     box-shadow:
       0 0 0 1px var(--line),
       0 24px 48px -20px rgb(0 0 0 / 0.45);
     filter: none;
+  }
+  .stack__card:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
   }
   .stack__card img {
     display: block;
@@ -201,76 +181,15 @@
     cursor: inherit;
   }
 
-  /* Label on the visible edge of a background card. */
-  .stack__label {
-    position: absolute;
-    left: 10px;
-    padding: 2px 9px;
-    border-radius: 999px;
-    background: var(--ink);
-    color: var(--paper);
-    font-size: 0.75rem;
-    font-weight: 500;
-    line-height: 1.5;
-    white-space: nowrap;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-  }
-  .stack__card[data-edge='above'] .stack__label {
-    top: 6px;
-  }
-  .stack__card[data-edge='below'] .stack__label {
-    bottom: 6px;
-  }
-  .stack__card[data-edge='front'] .stack__label {
-    top: 6px;
-    opacity: 0;
-  }
-
-  .stack__tabs {
-    margin-top: 28px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px 8px;
-  }
-  .stack__tab {
-    min-height: 44px;
-    padding: 0 14px;
-    border: 0;
-    border-bottom: 2px solid transparent;
-    background: transparent;
-    color: var(--muted);
-    font: inherit;
-    font-size: 0.9375rem;
-    cursor: pointer;
-    transition:
-      color 0.2s ease,
-      border-color 0.2s ease;
-  }
-  .stack__tab:hover,
-  .stack__tab[aria-pressed='true'] {
-    color: var(--ink);
-  }
-  .stack__tab[aria-pressed='true'] {
-    border-bottom-color: var(--accent);
-    font-weight: 500;
-  }
-  .stack__tab:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: -2px;
-    border-radius: 6px;
-  }
-
   /* Caption right after a stack, like the one after a single image. */
   .prose .stack + p:has(> em:only-child) {
-    margin-top: 16px;
+    margin-top: 24px;
     font-size: 0.9375rem;
     color: var(--muted);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .stack__card,
-    .stack__label {
+    .stack__card {
       transition: none;
     }
   }
