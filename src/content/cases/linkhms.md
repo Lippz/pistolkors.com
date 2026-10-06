@@ -152,6 +152,16 @@ A distinct identity set LinkHMS apart from dated competitors. The UI takes its c
 
 *A variety of Google Icons was also used.*
 
+## Design system
+
+### Small pieces, used everywhere
+
+To keep the interface consistent as it grows, I defined a short scale of numeric tokens for spacing and corner radius, then built the basic components on top of it: buttons, tags and statuses in a range of colours and sizes.
+
+![Numeric tokens: a spacing scale from 4 to 96 and corner radii from 4 to 64](../../assets/cases/linkhms/design-tokens.webp)
+
+![Basic components: buttons in several shapes and sizes, tags in twelve colours, record type chips and small status labels](../../assets/cases/linkhms/design-components.webp)
+
 ## Next steps
 
 ### There is no limit to perfection
