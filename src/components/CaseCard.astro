@@ -25,13 +25,14 @@ const num = String(index).padStart(2, '0');
   .card__link {
     display: flex;
     flex-direction: column;
-    gap: 16px;
   }
+  /* Image, then the label and title as one tight group. */
   .card :global(.card__media) {
     aspect-ratio: 16 / 10;
-    margin-bottom: 8px;
+    margin-bottom: 24px;
   }
   .card__title {
+    margin-top: 10px;
     font-size: clamp(1.375rem, 1.2rem + 0.6vw, 1.75rem);
     line-height: 1.18;
     letter-spacing: -0.025em;

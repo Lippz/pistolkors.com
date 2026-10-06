@@ -63,13 +63,20 @@ const num = String(index).padStart(2, '0');
   .feature__top {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+  }
+  /* Label hugs the title, title leads into the summary, tags trail a bit. */
+  .feature__top :global(.h3) {
+    margin-top: 12px;
   }
   .feature__summary {
+    margin-top: 16px;
     font-size: 17px;
     line-height: 1.55;
     color: var(--ink-3);
     text-wrap: pretty;
+  }
+  .feature__top .chips {
+    margin-top: 24px;
   }
   .feature__meta {
     display: flex;

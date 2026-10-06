@@ -102,7 +102,17 @@ const years = cases.map((c) => Number(c.data.year.slice(0, 4)));
     padding-bottom: clamp(56px, 8vw, 96px);
     display: flex;
     flex-direction: column;
-    gap: clamp(24px, 3vw, 40px);
+  }
+  /* Status → title → lead → actions → facts: each step a little further away. */
+  .hero__title {
+    margin-top: 20px;
+    max-width: 1180px;
+  }
+  .hero .lead {
+    margin-top: clamp(24px, 2.5vw, 32px);
+  }
+  .hero__ctas {
+    margin-top: clamp(32px, 3.5vw, 44px);
   }
   .hero__status {
     display: flex;
@@ -130,16 +140,13 @@ const years = cases.map((c) => Number(c.data.year.slice(0, 4)));
       animation: none;
     }
   }
-  .hero__title {
-    max-width: 1180px;
-  }
   .hero__ctas {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
   }
   .facts {
-    margin-top: clamp(8px, 2vw, 32px);
+    margin-top: clamp(56px, 7vw, 88px);
     padding: 0;
     list-style: none;
     display: grid;
@@ -203,17 +210,22 @@ const years = cases.map((c) => Number(c.data.year.slice(0, 4)));
     grid-column: 7 / span 6;
     display: flex;
     flex-direction: column;
-    gap: 36px;
   }
   .about__text {
+    margin-top: 24px;
     font-size: var(--step-lead);
     line-height: 1.5;
     color: var(--ink-2);
     text-wrap: pretty;
   }
   .xp {
+    margin-top: clamp(40px, 4vw, 56px);
     padding: 0;
     list-style: none;
+  }
+  .about__cv {
+    margin-top: 32px;
+    align-self: flex-start;
   }
   .xp li {
     display: grid;
@@ -247,9 +259,6 @@ const years = cases.map((c) => Number(c.data.year.slice(0, 4)));
     font-size: 13px;
     color: var(--muted);
     white-space: nowrap;
-  }
-  .about__cv {
-    align-self: flex-start;
   }
 
   @media (max-width: 1023px) {

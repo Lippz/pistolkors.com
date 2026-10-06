@@ -177,7 +177,16 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
     padding-bottom: clamp(40px, 5vw, 56px);
     display: flex;
     flex-direction: column;
-    gap: clamp(20px, 2.4vw, 32px);
+  }
+  /* Label sits on its title; the lead follows a little further down. */
+  .case-hero .eyebrow {
+    margin-top: clamp(16px, 2vw, 24px);
+  }
+  .case-hero__title {
+    margin-top: 16px;
+  }
+  .case-hero .lead {
+    margin-top: clamp(20px, 2.4vw, 28px);
   }
   .case-hero__back {
     align-self: flex-start;
