@@ -45,6 +45,45 @@ Leaked content means lost income, stress and damage to a creator’s reputation.
 <div><b>Lawyers</b>Receive validated cases and send takedowns at volume.</div>
 </div>
 
+### Meet Emma, the primary user
+
+<div class="persona">
+<dl class="persona__id">
+<div><dt>Name</dt><dd>Emma Carter, 28</dd></div>
+<div><dt>Occupation</dt><dd>Full-time content creator</dd></div>
+<div><dt>Location</dt><dd>Los Angeles, CA</dd></div>
+</dl>
+<p class="persona__bio">Emma has been a content creator for over three years, building a loyal fanbase and generating a stable income through subscriptions. Recently, she discovered her content was being leaked on various websites without her consent, impacting her revenue and personal well-being. She lacks the time and technical knowledge to manually track and report these violations.</p>
+<div class="persona__cols">
+<div>
+<p class="persona__label">Goals</p>
+<ul>
+<li>Protect her content and revenue from unauthorized distribution.</li>
+<li>Find an easy, automated way to detect and remove leaked content.</li>
+<li>Maintain control over her brand and digital presence.</li>
+</ul>
+</div>
+<div>
+<p class="persona__label">Frustrations</p>
+<ul>
+<li>Manual takedown processes are slow and ineffective.</li>
+<li>Many websites ignore her removal requests.</li>
+<li>Emma feels vulnerable and lacks legal resources to fight back.</li>
+</ul>
+</div>
+<div>
+<p class="persona__label">How LegalFans helps</p>
+<ul>
+<li>Automatically scans and detects unauthorized use of her content.</li>
+<li>Provides a seamless way to initiate legal takedown requests.</li>
+<li>Gives her peace of mind by handling the enforcement process.</li>
+</ul>
+</div>
+</div>
+</div>
+
+### Her path through the product
+
 <ol class="flow">
 <li><span>01 · Creator</span>Signs in securely</li>
 <li><span>02 · Creator</span>Links OnlyFans account</li>

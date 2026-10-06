@@ -390,7 +390,7 @@ a:hover .frame img {
 .prose > * + * {
   margin-top: 24px;
 }
-.prose > :is(p:has(> img), .pair, .grid-4, .cards, ol.flow, blockquote) {
+.prose > :is(p:has(> img), .pair, .grid-4, .cards, .persona, ol.flow, blockquote) {
   margin-top: 32px;
 }
 .prose > :is(h3, h4) {
@@ -634,4 +634,58 @@ a:hover .frame img {
   font-size: 0.8125rem;
   color: var(--muted);
   padding-top: 5px;
+}
+
+/* User persona card: <div class="persona"> with dl.persona__id, p.persona__bio and .persona__cols. */
+.prose .persona {
+  max-width: none;
+  padding: clamp(24px, 4vw, 40px);
+  border-radius: var(--radius);
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+.prose .persona__id {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 20px 24px;
+}
+.prose .persona__id dt {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.prose .persona__id dd {
+  margin-top: 6px;
+  font-size: 1.25rem;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+  color: var(--ink);
+}
+.prose .persona__bio {
+  margin: 0;
+  max-width: 62ch;
+  color: var(--ink-2);
+}
+.prose .persona__cols {
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 28px 32px;
+}
+.prose .persona__label {
+  margin: 0 0 12px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.prose .persona ul {
+  gap: 8px;
+  color: var(--ink-2);
 }
