@@ -90,7 +90,13 @@ I started with hand-drawn sketches to decide what each screen needed, then mappe
 
 Registration lets someone set up a whole clinic management flow or just an individual practitioner’s cabinet — a solo doctor never sees clinic-level overhead.
 
-![Registration flow for a clinic or an individual practitioner](../../assets/cases/linkhms/17.webp)
+<div class="carousel">
+
+![Clinic registration form with Google sign-in, clinic details and terms](../../assets/cases/linkhms/clinic-registration.webp "Clinic registration")
+
+![Home screen after sign-up with quick actions, a clinic set-up progress bar and next steps](../../assets/cases/linkhms/clinic-setup.webp "Clinic set-up")
+
+</div>
 
 #### Book an appointment in a few clicks
 
