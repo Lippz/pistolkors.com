@@ -205,11 +205,23 @@ Connecting an account and installing an extension are where people give up. The 
 
 ### The admin panel
 
-![Admin leaks list with a dialog for adding a leak manually](../../assets/cases/legalfans/23.webp)
+<div class="carousel">
+
+![Admin leaks list filtered by status](../../assets/cases/legalfans/ap-leaks.webp "Leaks list")
+
+![Dialog for adding a leak manually, by link or file upload](../../assets/cases/legalfans/ap-leak-add.webp "Add a leak")
+
+</div>
 
 *Leaks — every detected copy in one list, with manual entry for anything the AI missed.*
 
-![Admin documents list with an upload dialog](../../assets/cases/legalfans/25.webp)
+<div class="carousel">
+
+![Admin documents list with download and delete actions](../../assets/cases/legalfans/ap-documents.webp "Documents list")
+
+![Dialog for uploading a document for a user](../../assets/cases/legalfans/ap-document-upload.webp "Upload a document")
+
+</div>
 
 *Documents — the legal paperwork behind each takedown.*
 
