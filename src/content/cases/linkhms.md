@@ -148,7 +148,9 @@ A distinct identity set LinkHMS apart from dated competitors. The UI takes its c
 
 </div>
 
-![Icon sets: an outline set for the product and a duotone set with a soft gradient for the landing page](../../assets/cases/linkhms/brand-icons.webp)
+![Icon sets: an outline set for the product on the left and a duotone set with a soft gradient for the landing page on the right](../../assets/cases/linkhms/brand-icons.webp)
+
+*A variety of Google Icons was also used.*
 
 ## Next steps
 
