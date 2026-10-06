@@ -312,29 +312,13 @@ a:hover .frame img {
   transform: scale(1.025);
 }
 
-/* ---------- Page transitions (cross-document View Transitions) ----------
- * Case covers carry `view-transition-name: case-<id>` on the home page, the
- * case hero and the "next case" thumbnail, so the browser morphs one into the
- * other. Browsers without support simply navigate as usual.
- */
-@view-transition {
-  navigation: auto;
-}
+/* ---------- View Transitions (same-document only: the image viewer) ---------- */
 ::view-transition-group(root) {
   animation-duration: 0.35s;
 }
 ::view-transition-group(lb-img) {
   animation-duration: 0.45s;
   animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-::view-transition-group(.case-cover) {
-  animation-duration: 0.55s;
-  animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-::view-transition-old(.case-cover),
-::view-transition-new(.case-cover) {
-  height: 100%;
-  object-fit: cover;
 }
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*),

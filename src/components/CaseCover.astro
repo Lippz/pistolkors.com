@@ -1,9 +1,7 @@
 ---
 /**
- * A case cover in a rounded frame. It shares a view-transition name with the
- * cover on the case page, so the browser morphs one into the other. While the
- * surrounding link, card or row is hovered or focused, the picture zooms in a
- * touch inside the frame.
+ * A case cover in a rounded frame. While the surrounding link, card or row is
+ * hovered or focused, the picture zooms in a touch inside the frame.
  */
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
@@ -18,14 +16,11 @@ interface Props {
 const { id, cover, sizes, eager = false, class: className } = Astro.props;
 ---
 
-<div class:list={['cover frame', className]} style={`view-transition-name: case-${id}`}>
+<div class:list={['cover frame', className]}>
   <Image src={cover} alt="" sizes={sizes} loading={eager ? 'eager' : 'lazy'} class="cover__img" />
 </div>
 
 <style>
-  .cover {
-    view-transition-class: case-cover;
-  }
   .cover :global(.cover__img) {
     transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
