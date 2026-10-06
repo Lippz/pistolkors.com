@@ -22,7 +22,7 @@ const num = String(index).padStart(2, '0');
   <div class="feature__body">
     <div class="feature__top">
       <p class="eyebrow">{num} — {d.client} · {d.industry}</p>
-      <h3 class="h3"><a href={href}>{d.title}</a></h3>
+      <h3 class="h3"><a href={href} class="feature__link">{d.title}</a></h3>
       <p class="feature__summary">{d.summary}</p>
       {d.tags.length > 0 && <div class="chips">{d.tags.map((t) => <span class="chip">{t}</span>)}</div>}
     </div>
@@ -32,13 +32,14 @@ const num = String(index).padStart(2, '0');
         <div><dt>Timeline</dt><dd>{d.timeline}</dd></div>
         <div><dt>Year</dt><dd>{d.year}</dd></div>
       </dl>
-      <a href={href} class="feature__cta" aria-label={`Read the ${d.client} case study`}>Read case →</a>
+      <span class="feature__cta" aria-hidden="true">Read case <span class="feature__arrow">→</span></span>
     </div>
   </div>
 </article>
 
 <style>
   .feature {
+    position: relative;
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
     gap: 24px;
@@ -105,12 +106,44 @@ const num = String(index).padStart(2, '0');
   dd {
     margin: 0;
   }
+  /* The title link stretches over the whole block, so the entire row is one
+     click target (the media link and the CTA are decorative duplicates). */
+  .feature__link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  .feature:has(.feature__link:focus-visible) {
+    outline: 2px solid var(--accent);
+    outline-offset: 12px;
+    border-radius: var(--radius);
+  }
+  .feature__link:focus-visible {
+    outline: none;
+  }
   .feature__cta {
     font-size: 15px;
     font-weight: 500;
     min-height: 44px;
     display: inline-flex;
     align-items: center;
+    gap: 6px;
+  }
+  .feature__arrow {
+    display: inline-block;
+    transition: transform 0.18s ease-out;
+  }
+  @media (hover: hover) {
+    .feature:hover .feature__arrow,
+    .feature:has(.feature__link:focus-visible) .feature__arrow {
+      transform: translateX(-6px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .feature__arrow {
+      transition: none;
+    }
   }
   @media (max-width: 1023px) {
     .feature {
