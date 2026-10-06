@@ -129,20 +129,35 @@ const num = String(index).padStart(2, '0');
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    transition: color 0.18s ease-out;
   }
   .feature__arrow {
     display: inline-block;
     transition: transform 0.18s ease-out;
   }
+  /* Hovering or focusing anywhere in the row lights the button and nudges its arrow right. */
   @media (hover: hover) {
-    .feature:hover .feature__arrow,
-    .feature:has(.feature__link:focus-visible) .feature__arrow {
-      transform: translateX(-6px);
+    .feature:hover .feature__cta {
+      color: var(--accent-ink);
+    }
+    .feature:hover .feature__arrow {
+      transform: translateX(6px);
     }
   }
+  .feature:has(.feature__link:focus-visible) .feature__cta {
+    color: var(--accent-ink);
+  }
+  .feature:has(.feature__link:focus-visible) .feature__arrow {
+    transform: translateX(6px);
+  }
   @media (prefers-reduced-motion: reduce) {
+    .feature__cta,
     .feature__arrow {
       transition: none;
+    }
+    .feature:hover .feature__arrow,
+    .feature:has(.feature__link:focus-visible) .feature__arrow {
+      transform: none;
     }
   }
   @media (max-width: 1023px) {
