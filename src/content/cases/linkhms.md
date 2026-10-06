@@ -150,13 +150,7 @@ A distinct identity set LinkHMS apart from dated competitors. The UI takes its c
 
 </div>
 
-<div class="pair">
-
-![System icon set in an outline style](../../assets/cases/linkhms/brand-icons-system.webp)
-
-![Landing page icon set in a duotone style with a soft gradient](../../assets/cases/linkhms/brand-icons-landing.webp)
-
-</div>
+![Icon sets: an outline set for the product and a duotone set with a soft gradient for the landing page](../../assets/cases/linkhms/brand-icons.webp)
 
 ## Next steps
 
