@@ -551,6 +551,10 @@ a:hover .frame img {
   border-radius: 14px;
   background: var(--surface);
 }
+/* An image straight after a pair continues the same group: same gap as inside the pair. */
+.prose > :is(.pair, .grid-4) + p:has(> img) {
+  margin-top: 16px;
+}
 @media (max-width: 720px) {
   .prose .pair {
     grid-template-columns: 1fr;
