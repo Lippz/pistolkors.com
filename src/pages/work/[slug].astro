@@ -2,6 +2,7 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import { Image, getImage } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
+import Lightbox from '../../components/Lightbox.astro';
 import { url } from '../../lib/url';
 
 export async function getStaticPaths() {
@@ -126,6 +127,8 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
         </div>
       )
     }
+
+    <Lightbox />
 
     <div class="container">
       <a href={url(`/work/${next.id}/`)} class="next">

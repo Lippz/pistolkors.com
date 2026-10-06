@@ -93,6 +93,7 @@
   box-sizing: border-box;
 }
 html {
+  scrollbar-gutter: stable; /* no layout shift when the image viewer locks scrolling */
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
 }
@@ -321,6 +322,10 @@ a:hover .frame img {
 }
 ::view-transition-group(root) {
   animation-duration: 0.35s;
+}
+::view-transition-group(lb-img) {
+  animation-duration: 0.45s;
+  animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 ::view-transition-group(.case-cover) {
   animation-duration: 0.55s;

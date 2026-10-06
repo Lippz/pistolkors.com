@@ -1,0 +1,440 @@
+---
+/**
+ * Fullscreen image viewer for case pages. Every image inside `.case-prose` and
+ * `.slides` opens in a native <dialog>:
+ *  - the picture grows out of its place on the page (view transition) and
+ *    flies back on close;
+ *  - ← / → keys, buttons and swipe step through the case's images;
+ *  - click toggles between "fit" and 100%; at 100% drag to pan;
+ *  - very tall screens fit by width and scroll;
+ *  - Esc, the close button, a click on the background and the browser's Back
+ *    button all close it.
+ * The full-size file is the largest candidate of the image's own srcset.
+ */
+---
+
+<dialog class="lb" aria-label="Image viewer">
+  <div class="lb__bar">
+    <span class="lb__count" aria-hidden="true"></span>
+    <button type="button" class="lb__btn lb__close" aria-label="Close image viewer">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+    </button>
+  </div>
+  <button type="button" class="lb__btn lb__nav lb__prev" aria-label="Previous image">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+  </button>
+  <button type="button" class="lb__btn lb__nav lb__next" aria-label="Next image">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+  </button>
+  <div class="lb__stage"><img class="lb__img" alt="" draggable="false" /></div>
+  <p class="lb__caption" aria-live="polite"></p>
+</dialog>
+
+<script>
+  type Item = { el: HTMLImageElement; full: string; fullW: number; aspect: number; alt: string; caption: string };
+
+  const q = <T extends Element>(root: ParentNode, sel: string) => root.querySelector<T>(sel);
+  const dlg = q<HTMLDialogElement>(document, '.lb');
+  const els = [...document.querySelectorAll<HTMLImageElement>('.case-prose img, .slides img')];
+
+  if (dlg && els.length) {
+    const stage = q<HTMLElement>(dlg, '.lb__stage')!;
+    const img = q<HTMLImageElement>(dlg, '.lb__img')!;
+    const counter = q<HTMLElement>(dlg, '.lb__count')!;
+    const captionEl = q<HTMLElement>(dlg, '.lb__caption')!;
+    const prevBtn = q<HTMLButtonElement>(dlg, '.lb__prev')!;
+    const nextBtn = q<HTMLButtonElement>(dlg, '.lb__next')!;
+    const closeBtn = q<HTMLButtonElement>(dlg, '.lb__close')!;
+    main(dlg, stage, img, counter, captionEl, prevBtn, nextBtn, closeBtn);
+  }
+
+  /** Largest candidate of an image's srcset (falls back to its src). */
+  function largest(el: HTMLImageElement) {
+    let url = el.currentSrc || el.src;
+    let w = 0;
+    for (const part of (el.getAttribute('srcset') ?? '').split(',')) {
+      const [u, d] = part.trim().split(/\s+/);
+      const n = parseInt(d ?? '', 10);
+      if (u && n > w) {
+        url = u;
+        w = n;
+      }
+    }
+    return { url, w: w || Number(el.getAttribute('width')) || el.naturalWidth };
+  }
+
+  /** An italic-only paragraph right after the image is its caption; slides use their figcaption. */
+  function captionOf(el: HTMLImageElement) {
+    const fig = el.closest('figure')?.querySelector('figcaption');
+    if (fig?.textContent) return fig.textContent.trim();
+    const next = el.closest('p')?.nextElementSibling;
+    const em = next?.children.length === 1 ? next.firstElementChild : null;
+    if (next && em?.tagName === 'EM' && next.textContent?.trim() === em.textContent?.trim()) return em.textContent?.trim() ?? '';
+    return '';
+  }
+
+  function main(
+    dlg: HTMLDialogElement,
+    stage: HTMLElement,
+    img: HTMLImageElement,
+    counter: HTMLElement,
+    captionEl: HTMLElement,
+    prevBtn: HTMLButtonElement,
+    nextBtn: HTMLButtonElement,
+    closeBtn: HTMLButtonElement,
+  ) {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const items: Item[] = els.map((el) => {
+      const { url, w } = largest(el);
+      const iw = Number(el.getAttribute('width')) || el.naturalWidth || 1;
+      const ih = Number(el.getAttribute('height')) || el.naturalHeight || 1;
+      return { el, full: url, fullW: w || iw, aspect: ih / iw, alt: el.alt, caption: captionOf(el) };
+    });
+
+    let index = 0;
+    let zoomed = false;
+    let busy = false;
+
+    const canAnimate = () => !reduced.matches && typeof document.startViewTransition === 'function';
+
+    /** Run a view transition; `busy` is released when it ends, or after 1.5s at the latest. */
+    function transition(run: () => void, done: () => void) {
+      busy = true;
+      let ended = false;
+      const end = () => {
+        if (ended) return;
+        ended = true;
+        busy = false;
+        done();
+      };
+      document.startViewTransition(run).finished.then(end, end);
+      setTimeout(end, 1500);
+    }
+
+    /** Size the picture: fit the stage (or its width, for very tall screens), or 100% when zoomed. */
+    function size() {
+      const it = items[index];
+      const padX = window.matchMedia('(min-width: 900px)').matches ? 72 : 16;
+      const sw = Math.max(stage.clientWidth - padX * 2, 100);
+      const sh = Math.max(stage.clientHeight - 16, 100);
+      // Screens much taller than wide fit by width and scroll; diagrams and slides fit whole.
+      const tall = it.aspect > Math.max(1.5, (sh / sw) * 1.6);
+      const fit = Math.min(tall ? sw : Math.min(sw, sh / it.aspect), it.fullW);
+      const zoomable = it.fullW > fit * 1.05;
+      if (!zoomable) zoomed = false;
+      const w = zoomed ? it.fullW : fit;
+      img.style.width = `${Math.round(w)}px`;
+      img.style.height = `${Math.round(w * it.aspect)}px`;
+      dlg.toggleAttribute('data-zoomable', zoomable);
+      dlg.toggleAttribute('data-zoom', zoomed);
+    }
+
+    function show(i: number, fade = false) {
+      index = i;
+      const it = items[i];
+      zoomed = false;
+      counter.textContent = items.length > 1 ? `${i + 1} / ${items.length}` : '';
+      captionEl.textContent = it.caption || it.alt;
+      img.alt = it.alt;
+      prevBtn.disabled = i === 0;
+      nextBtn.disabled = i === items.length - 1;
+      // Show the already-loaded thumbnail at once, then swap in the full-size file.
+      const first = it.el.complete && it.el.currentSrc ? it.el.currentSrc : it.full;
+      img.src = first;
+      size();
+      stage.scrollTo(0, 0);
+      if (first !== it.full) {
+        const pre = new Image();
+        pre.src = it.full;
+        pre.decode().then(() => items[index] === it && (img.src = it.full)).catch(() => {});
+      }
+      for (const j of [i - 1, i + 1]) if (items[j]) new Image().src = items[j].full;
+      if (fade && !reduced.matches) img.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 180, easing: 'ease-out' });
+    }
+
+    function open(i: number) {
+      if (busy || dlg.open) return;
+      const thumb = items[i].el;
+      history.pushState({ lb: 1 }, '');
+      const run = () => {
+        thumb.style.viewTransitionName = '';
+        dlg.showModal();
+        show(i);
+        if (canAnimate()) img.style.viewTransitionName = 'lb-img';
+      };
+      if (canAnimate()) {
+        thumb.style.viewTransitionName = 'lb-img';
+        transition(run, () => (img.style.viewTransitionName = ''));
+      } else {
+        run();
+      }
+    }
+
+    function doClose() {
+      if (busy || !dlg.open) return;
+      const thumb = items[index].el;
+      const r = thumb.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > window.innerHeight) thumb.scrollIntoView({ block: 'center', behavior: 'instant' });
+      const run = () => {
+        img.style.viewTransitionName = '';
+        dlg.close();
+        thumb.focus({ preventScroll: true });
+        if (canAnimate()) thumb.style.viewTransitionName = 'lb-img';
+      };
+      if (canAnimate()) {
+        img.style.viewTransitionName = 'lb-img';
+        transition(run, () => (thumb.style.viewTransitionName = ''));
+      } else {
+        run();
+      }
+    }
+
+    /** Close through history so the browser's Back button and our close agree. */
+    const closeUI = () => (history.state?.lb ? history.back() : doClose());
+    window.addEventListener('popstate', () => dlg.open && doClose());
+
+    const step = (d: number) => {
+      const next = index + d;
+      if (items[next]) show(next, true);
+    };
+
+    function toggleZoom(cx: number, cy: number) {
+      if (!dlg.hasAttribute('data-zoomable') && !zoomed) return;
+      const before = img.getBoundingClientRect();
+      const fx = (cx - before.left) / before.width;
+      const fy = (cy - before.top) / before.height;
+      zoomed = !zoomed;
+      size();
+      const s = stage.getBoundingClientRect();
+      const after = img.getBoundingClientRect();
+      stage.scrollLeft = fx * after.width - (cx - s.left);
+      stage.scrollTop = fy * after.height - (cy - s.top);
+    }
+
+    // Triggers: images become keyboard-operable buttons.
+    items.forEach((it, i) => {
+      const el = it.el;
+      el.dataset.lb = '';
+      el.tabIndex = 0;
+      el.setAttribute('role', 'button');
+      el.setAttribute('aria-label', `View larger: ${it.alt || 'image'}`);
+      el.addEventListener('click', () => open(i));
+      el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          open(i);
+        }
+      });
+    });
+
+    closeBtn.addEventListener('click', closeUI);
+    prevBtn.addEventListener('click', () => step(-1));
+    nextBtn.addEventListener('click', () => step(1));
+    dlg.addEventListener('cancel', (e) => {
+      e.preventDefault();
+      closeUI();
+    });
+    dlg.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') step(-1);
+      else if (e.key === 'ArrowRight') step(1);
+    });
+    window.addEventListener('resize', () => dlg.open && size());
+    if (items.length < 2) dlg.classList.add('lb--single');
+
+    // Pointer: drag to pan when zoomed (mouse), swipe to change image (touch/pen), click to zoom or dismiss.
+    let drag: { x: number; y: number; sl: number; st: number; moved: boolean } | null = null;
+    let swipe: { x: number; y: number } | null = null;
+    let swallowClick = false;
+
+    stage.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse') {
+        if (e.button === 0 && zoomed) drag = { x: e.clientX, y: e.clientY, sl: stage.scrollLeft, st: stage.scrollTop, moved: false };
+      } else {
+        swipe = { x: e.clientX, y: e.clientY };
+      }
+    });
+    stage.addEventListener('pointermove', (e) => {
+      if (!drag) return;
+      const dx = e.clientX - drag.x;
+      const dy = e.clientY - drag.y;
+      if (!drag.moved && Math.hypot(dx, dy) > 4) {
+        drag.moved = true;
+        stage.setPointerCapture(e.pointerId);
+        dlg.classList.add('is-dragging');
+      }
+      if (drag.moved) {
+        stage.scrollLeft = drag.sl - dx;
+        stage.scrollTop = drag.st - dy;
+      }
+    });
+    const endPointer = (e: PointerEvent) => {
+      if (drag) {
+        if (drag.moved) {
+          swallowClick = true;
+          setTimeout(() => (swallowClick = false), 0);
+        }
+        drag = null;
+        dlg.classList.remove('is-dragging');
+      }
+      if (swipe && e.type === 'pointerup' && !zoomed) {
+        const dx = e.clientX - swipe.x;
+        const dy = e.clientY - swipe.y;
+        if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) step(dx < 0 ? 1 : -1);
+      }
+      swipe = null;
+    };
+    stage.addEventListener('pointerup', endPointer);
+    stage.addEventListener('pointercancel', endPointer);
+    stage.addEventListener('click', (e) => {
+      if (swallowClick) return;
+      if (e.target === img) toggleZoom(e.clientX, e.clientY);
+      else if (e.target === stage) closeUI();
+    });
+  }
+</script>
+
+<style is:global>
+  img[data-lb] {
+    cursor: zoom-in;
+  }
+  img[data-lb]:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+
+  html:has(.lb[open]) {
+    overflow: hidden;
+  }
+
+  .lb {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: rgb(11 11 11 / 0.95);
+    color: #fff;
+    overflow: hidden;
+  }
+  .lb[open] {
+    display: flex;
+    flex-direction: column;
+  }
+  .lb::backdrop {
+    background: transparent;
+  }
+  .lb__bar {
+    flex: none;
+    height: 60px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .lb__count {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: var(--night-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .lb__btn {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(255 255 255 / 0.1);
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  .lb__btn:hover:not(:disabled) {
+    background: rgb(255 255 255 / 0.2);
+  }
+  .lb__btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+  .lb__btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .lb__nav {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    margin-top: -22px;
+  }
+  .lb__prev {
+    left: 16px;
+  }
+  .lb__next {
+    right: 16px;
+  }
+  .lb--single .lb__nav {
+    display: none;
+  }
+  @media (pointer: coarse) {
+    .lb__nav {
+      display: none;
+    }
+  }
+
+  .lb__stage {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    overflow: auto;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+    scrollbar-width: thin;
+  }
+  .lb[data-zoom] .lb__stage {
+    touch-action: auto;
+  }
+  .lb__img {
+    flex: none;
+    display: block;
+    max-width: none;
+    margin: auto;
+    border-radius: 8px;
+    background: var(--surface);
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+  .lb[data-zoomable] .lb__img {
+    cursor: zoom-in;
+  }
+  .lb[data-zoom] .lb__img {
+    cursor: zoom-out;
+    border-radius: 0;
+  }
+  .lb.is-dragging .lb__img {
+    cursor: grabbing;
+  }
+  .lb__caption {
+    flex: none;
+    margin: 0;
+    padding: 12px 72px 20px;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--night-text);
+  }
+  .lb__caption:empty {
+    display: none;
+  }
+  @media (max-width: 899px) {
+    .lb__caption {
+      padding-inline: 16px;
+    }
+  }
+</style>

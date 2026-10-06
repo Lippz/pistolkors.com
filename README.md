@@ -66,6 +66,8 @@ Also available: `<div class="cards">`, `<ol class="flow">`, `<ol class="rows">` 
 
 Images are resized and served as responsive WebP automatically. Keep sources at 2400 px wide or less.
 
+Every image in a case opens in the image viewer (`src/components/Lightbox.astro`) on click: ←/→ and swipe step through the case's images, click toggles fit / 100%, Esc or Back closes. An italic-only line right after an image is shown as its caption; slides use their figcaption. Nothing to configure.
+
 ### Motion lab
 
 Put a short muted loop (MP4, under ~3 MB) and a poster frame in `public/motion/`, then set `video` and `poster` on a tile in `src/data/site.ts`. Tiles without a video only show in `npm run dev`; the section and its menu link stay hidden on the live site until at least one tile has a video.
