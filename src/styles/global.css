@@ -483,6 +483,11 @@ a:hover .frame img {
   line-height: 1.25;
   color: var(--ink);
 }
+.prose > blockquote + blockquote {
+  /* The previous quote's bottom rule already separates them. */
+  margin-top: 0;
+  border-top: 0;
+}
 .prose blockquote p + p {
   margin-top: 12px;
   font-family: var(--sans);
