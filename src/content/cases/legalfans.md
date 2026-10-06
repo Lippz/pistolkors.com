@@ -147,7 +147,17 @@ Creators don’t want to manage cases; they want to know they’re covered. The 
 
 Connecting an account and installing an extension are where people give up. The extension walks creators through it step by step — connect, synchronise, done — and always shows how far along they are.
 
-![Browser extension onboarding: welcome, last synchronisation, sync in progress, success](../../assets/cases/legalfans/19.webp)
+<div class="carousel">
+
+![Extension welcome screen: connect an account or sign up](../../assets/cases/legalfans/ext-connect.webp "Connect or sign up")
+
+![Extension screen showing the date of the last synchronisation and a Start Scan Now button](../../assets/cases/legalfans/ext-last-sync.webp "Last synchronisation")
+
+![Extension screen while synchronising, with a 75% progress bar and a reminder not to close OnlyFans](../../assets/cases/legalfans/ext-progress.webp "Synchronisation in progress")
+
+![Extension success screen: Synchronisation successful, with a Close Extension button](../../assets/cases/legalfans/ext-success.webp "Success")
+
+</div>
 
 ## Final screens
 

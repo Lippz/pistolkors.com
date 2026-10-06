@@ -30,6 +30,10 @@
     const n = imgs.length;
     if (n < 2) return;
 
+    // Small source images: don't stretch a slide beyond the narrowest image's own width.
+    const naturalW = Math.min(...imgs.map((i) => Number(i.getAttribute('width')) || Infinity));
+    if (Number.isFinite(naturalW)) root.style.setProperty('--slide-max', `${naturalW}px`);
+
     const track = document.createElement('div');
     track.className = 'carousel__track';
     track.tabIndex = 0;
@@ -173,7 +177,7 @@
     border-radius: 10px;
   }
   .carousel__slide {
-    flex: 0 0 var(--slide);
+    flex: 0 0 min(var(--slide), var(--slide-max, 100%));
     margin: 0;
     scroll-snap-align: center;
     border-radius: 10px;
