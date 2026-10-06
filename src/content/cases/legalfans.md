@@ -93,7 +93,7 @@ Leaked content means lost income, stress and damage to a creator’s reputation.
 <li><span>07 · Result</span>Leak is removed</li>
 </ol>
 
-![Overall user flow split into creator, extension, operator and admin lanes](../../assets/cases/legalfans/06.webp)
+![Overall user flow split into creator, extension, operator and admin lanes](../../assets/cases/legalfans/user-flow.webp)
 
 *Overall flow across the creator app, the browser extension, operators and admins.*
 
