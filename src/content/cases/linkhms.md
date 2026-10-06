@@ -140,11 +140,9 @@ The electronic medical record is split into sections and subsections, so a docto
 
 A distinct identity set LinkHMS apart from dated competitors. The UI takes its cue from modern healthcare facilities: clean, minimal and patient-centric.
 
-![LinkHMS logo in colour and white, and the app icon on white and blue](../../assets/cases/linkhms/brand-logo.webp)
+![Logo in colour and white with the app icon, and the colour palette: neutrals and ten accent hues](../../assets/cases/linkhms/brand-logo-palette.webp)
 
 ![Typography: Roboto Flex for the interface and Manrope for buttons, with the full size scale](../../assets/cases/linkhms/brand-typography.webp)
-
-![Colour palette: neutrals and ten accent hues, each in twelve steps](../../assets/cases/linkhms/brand-palette.webp)
 
 ![Icon sets: an outline set for the product and a duotone set with a soft gradient for the landing page](../../assets/cases/linkhms/brand-icons.webp)
 
