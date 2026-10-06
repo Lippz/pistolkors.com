@@ -70,7 +70,17 @@ I started with hand-drawn sketches to decide what each screen needed, then mappe
 
 ![User flow covering registration, scheduling, patients, medical records and administration](../../assets/cases/linkhms/user-flow.webp)
 
-![Low-fidelity wireframes of the schedule and patient screens](../../assets/cases/linkhms/09.webp)
+<div class="carousel">
+
+![Low-fidelity wireframe of the doctors schedule grid](../../assets/cases/linkhms/wf-schedule.webp "Schedule")
+
+![Low-fidelity wireframe of the patients list](../../assets/cases/linkhms/wf-patients.webp "Patients")
+
+![Low-fidelity wireframe of a patient summary with recent visits, tests, diagnoses and prescriptions](../../assets/cases/linkhms/wf-patient-summary.webp "Patient summary")
+
+![Low-fidelity wireframe of a patient’s records history with a category menu](../../assets/cases/linkhms/wf-patient-records.webp "Patient records")
+
+</div>
 
 ## Key decisions
 
