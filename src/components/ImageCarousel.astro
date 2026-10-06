@@ -159,8 +159,6 @@
     position: relative;
     display: flex;
     gap: 16px;
-    padding-block: 4px;
-    margin-block: -4px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     overscroll-behavior-x: contain;
@@ -181,7 +179,8 @@
     border-radius: 10px;
     overflow: hidden;
     background: var(--surface);
-    box-shadow: 0 0 0 1px var(--line);
+    /* A real border, not a box-shadow ring: the scroll track would clip a ring at its edges. */
+    border: 1px solid var(--line);
     filter: brightness(0.94);
     cursor: pointer;
     transition: filter 0.3s ease;
