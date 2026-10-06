@@ -15,7 +15,7 @@ const num = String(index).padStart(2, '0');
 
 <article class="card reveal">
   <a href={url(`/work/${entry.id}/`)} class="card__link">
-    <CaseCover id={entry.id} cover={d.cover} hover={d.hover} sizes="(min-width: 768px) 50vw, 100vw" class="card__media" />
+    <CaseCover id={entry.id} cover={d.cover} sizes="(min-width: 768px) 50vw, 100vw" class="card__media" />
     <p class="eyebrow">{num} — {d.client} · {d.industry} · {d.year}</p>
     <h3 class="card__title">{d.title}</h3>
   </a>

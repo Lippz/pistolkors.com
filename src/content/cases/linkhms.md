@@ -15,7 +15,6 @@ platforms: Web app, desktop-first
 tags: [User research, Scheduling, Data privacy]
 cover: ../../assets/cases/linkhms/25.webp
 coverAlt: LinkHMS new patient form and patient list on two desktop monitors
-hover: ../../assets/cases/linkhms/19.webp
 stats:
   label: Research
   items:

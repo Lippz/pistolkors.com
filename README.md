@@ -52,7 +52,6 @@ Copy an existing file in `src/content/cases/`. The frontmatter is validated by `
 - `format: slides` — a short written intro plus presentation slides listed in `slides:`.
 - `featured: true` — shown as a large row on the home page.
 - `order` — position on the home page and in “Next case”.
-- `hover` — optional second frame the home-page card fades to on hover.
 
 Heading convention inside a story:
 

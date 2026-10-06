@@ -13,7 +13,6 @@ platforms: Web app
 tags: [ERP, 3D configurator, Scheduling]
 cover: ../../assets/cases/carolina-carports/cover.webp
 coverAlt: Carport design tool with a 3D building preview and configuration options
-hover: ../../assets/cases/carolina-carports/hover.webp
 stats:
   label: Scope
   items:

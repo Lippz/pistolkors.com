@@ -15,7 +15,6 @@ platforms: Web app + browser extension
 tags: [Discovery, Multi-role flows, Design system]
 cover: ../../assets/cases/legalfans/01.webp
 coverAlt: LegalFans Magic Vault and uploads screens on a dark and light dashboard
-hover: ../../assets/cases/legalfans/09.webp
 stats:
   label: Results
   items:

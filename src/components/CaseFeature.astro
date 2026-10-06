@@ -17,7 +17,7 @@ const num = String(index).padStart(2, '0');
 
 <article class:list={['feature reveal', { 'feature--flip': flip }]}>
   <a href={href} class="feature__media" tabindex="-1" aria-hidden="true">
-    <CaseCover id={entry.id} cover={d.cover} hover={d.hover} sizes="(min-width: 1024px) 58vw, 100vw" eager={index === 1} class="feature__cover" />
+    <CaseCover id={entry.id} cover={d.cover} sizes="(min-width: 1024px) 58vw, 100vw" eager={index === 1} class="feature__cover" />
   </a>
   <div class="feature__body">
     <div class="feature__top">
