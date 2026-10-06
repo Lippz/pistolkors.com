@@ -136,7 +136,13 @@ Fully automatic matching produced false positives, and a wrong takedown damages 
 
 Creators don’t want to manage cases; they want to know they’re covered. The statistics view leads with leaks detected and removed, and keeps the legal detail one level down. Even the empty state explains what will appear there.
 
-![Statistics dashboard shown empty and then filled with detected and removed leaks](../../assets/cases/legalfans/09.webp)
+<div class="carousel">
+
+![Statistics dashboard in its empty state: an illustration and a prompt to add media to the Magic Vault or install the extension](../../assets/cases/legalfans/stats-empty.webp "Empty state")
+
+![Statistics dashboard with data: leaks detected and removed, removal percentage, top creator position, a donut chart and upload dynamics](../../assets/cases/legalfans/stats-filled.webp "Dashboard with data")
+
+</div>
 
 #### Guided setup for non-technical users
 
