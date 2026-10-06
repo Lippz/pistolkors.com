@@ -122,7 +122,13 @@ Leaked content means lost income, stress and damage to a creator’s reputation.
 
 Fully automatic matching produced false positives, and a wrong takedown damages trust and creates legal risk. We added operator validation between detection and legal action, so every case a lawyer receives has already been checked by a person.
 
-![Comparison view: the original next to a suspected leak, before and after the match loads](../../assets/cases/legalfans/27.webp)
+<div class="stack">
+
+![Comparison screen where the preview of the suspected copy is unavailable and the operator is asked to use the link](../../assets/cases/legalfans/cmp-unavailable.webp "Preview unavailable")
+
+![Comparison screen with the original and the suspected copy side by side, and the Pictures match or do not match buttons](../../assets/cases/legalfans/cmp-match.webp "Both images side by side")
+
+</div>
 
 *Comparison view — the operator checks the original against the suspected copy before a case goes to a lawyer.*
 
