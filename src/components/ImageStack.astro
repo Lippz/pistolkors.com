@@ -20,9 +20,9 @@
 ---
 
 <script>
-  const STEP = 4.5; // vertical offset between neighbouring cards, in % of the stack width
-  const STEP_NARROW = 7; // same, on narrow stacks where 4.5% would be too thin to see
-  const PART = 1.2; // how far the others part from the front card, same unit
+  const STEP = 2.6; // vertical offset between neighbouring cards, in % of the stack width
+  const STEP_NARROW = 5; // same, on narrow stacks where 2.6% would be too thin to see
+  const PART = 0.9; // how far the others part from the front card, same unit
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
 
   document.querySelectorAll<HTMLElement>('.stack').forEach((stack) => {
