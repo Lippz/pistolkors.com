@@ -163,19 +163,43 @@ Connecting an account and installing an extension are where people give up. The 
 
 ### The creator view
 
-![Magic Vault, where creators add and manage all their content](../../assets/cases/legalfans/11.webp)
+<div class="carousel">
+
+![Magic Vault grid with thumbnails, filters and a media counter](../../assets/cases/legalfans/cv-vault-grid.webp "Media grid")
+
+![A single item in Magic Vault with its detected leaks](../../assets/cases/legalfans/cv-vault-details.webp "Item details")
+
+</div>
 
 *Magic Vault — where creators add and manage all their content.*
 
-![A single leak and keyword search](../../assets/cases/legalfans/13.webp)
+<div class="carousel">
+
+![A single leak with a preview and other copies of the same content](../../assets/cases/legalfans/cv-leak-details.webp "Leak details")
+
+![Keyword search across Google, Yahoo and Bing](../../assets/cases/legalfans/cv-keyword-search.webp "Keyword search")
+
+</div>
 
 *Leaks and keyword search — one leak in detail, plus search by keyword.*
 
-![My Platforms, listing cam sites and socials that admins monitor](../../assets/cases/legalfans/15.webp)
+<div class="carousel">
+
+![My Platforms, adding a cam site or social](../../assets/cases/legalfans/cv-platforms-add.webp "Add a platform")
+
+![My Platforms with credentials entered and the list of connected platforms](../../assets/cases/legalfans/cv-platforms-credentials.webp "Connected platforms")
+
+</div>
 
 *My Platforms — cam sites and socials the team monitors on the creator’s behalf.*
 
-![My Account with profile and subscription upgrade](../../assets/cases/legalfans/17.webp)
+<div class="carousel">
+
+![My Account with general profile information](../../assets/cases/legalfans/cv-account-info.webp "Profile")
+
+![Subscription plans modal with Basic, Advanced and Premium](../../assets/cases/legalfans/cv-account-plans.webp "Subscription plans")
+
+</div>
 
 *My Account — profile and subscription upgrade.*
 
