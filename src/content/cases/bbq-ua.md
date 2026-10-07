@@ -127,7 +127,7 @@ Guest checkout, multiple payment options and a single clear path to “place ord
 
 A responsive component set, adaptive type scale and a warm palette that feels like an evening by the grill — consistent on desktop and mobile.
 
-![Design system: typography, colours, buttons, inputs and product cards](../../assets/cases/bbq-ua/08.webp)
+![Design system: Geologica and Inter type scale, accent and grayscale colours, buttons, inputs, selection controls and product cards](../../assets/cases/bbq-ua/design-system.webp)
 
 ## Final screens
 
