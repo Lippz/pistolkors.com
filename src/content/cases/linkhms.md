@@ -1,5 +1,5 @@
 ---
-order: 2
+order: 1
 featured: true
 client: LinkHMS
 title: A hospital management system light enough for small clinics

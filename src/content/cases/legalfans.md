@@ -1,5 +1,5 @@
 ---
-order: 1
+order: 2
 featured: true
 client: LegalFans
 title: Automating content-leak takedowns for creators, operators and lawyers
