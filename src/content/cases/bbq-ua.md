@@ -5,9 +5,9 @@ title: Redesigning a grill store — clearer filters, guest checkout, expert adv
 summary: A dated e-commerce site for grills and accessories, rebuilt around faster product discovery, a shorter checkout and trust.
 lead: BBQ.ua runs a chain of grill and barbecue stores in Ukraine. Its website sold the products but felt outdated, cluttered and hard to use on a phone — the redesign had to make buying a grill feel as confident as asking an expert in store.
 industry: E-commerce
-year: '2025'
+year: 2024–2025
 role: UX/UI Designer
-timeline: 3 months
+timeline: 4 months
 company: PYP International
 platforms: Responsive web
 tags: [E-commerce, Checkout, Design system]
