@@ -11,7 +11,7 @@ timeline: 3 months
 company: PYP International
 platforms: Responsive web
 tags: [E-commerce, Checkout, Design system]
-cover: ../../assets/cases/bbq-ua/40.webp
+cover: ../../assets/cases/bbq-ua/cover.webp
 coverAlt: BBQ.ua product page for a Weber kettle grill on a laptop and a phone
 ---
 
