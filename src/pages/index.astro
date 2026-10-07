@@ -277,6 +277,36 @@ const years = cases.map((c) => Number(c.data.year.slice(0, 4)));
       max-width: 520px;
     }
   }
+  /* Hero buttons react clearly to hover: lift, a shadow and a stronger fill. The label colour
+     never changes (it would blink mid-transition), so only fills and borders move. */
+  @media (hover: hover) {
+    .hero__ctas .btn {
+      transition:
+        transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1),
+        background-color 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+    }
+    .hero__ctas .btn--accent:hover {
+      background: color-mix(in srgb, var(--accent) 62%, #ffffff);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px color-mix(in srgb, var(--accent) 42%, transparent);
+    }
+    .hero__ctas .btn--outline:hover {
+      background: color-mix(in srgb, var(--accent) 14%, transparent);
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px color-mix(in srgb, var(--accent) 22%, transparent);
+    }
+    .hero__ctas .btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero__ctas .btn:hover {
+      transform: none;
+    }
+  }
   @media (max-width: 720px) {
     .work__grid {
       grid-template-columns: 1fr;
