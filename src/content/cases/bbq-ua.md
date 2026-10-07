@@ -133,17 +133,22 @@ Guest checkout, multiple payment options and a single clear path to “place ord
 
 ### Desktop and mobile
 
-![Home page with featured category banners and popular categories](../../assets/cases/bbq-ua/10.webp)
+<div class="columns">
+<div>
 
-*Home — featured categories, best sellers and blog in one scroll.*
+![Home page on desktop and mobile: category banners, popular categories, sale and brand carousels, services, articles and footer](../../assets/cases/bbq-ua/final-home.webp)
 
-![Grill cleaning and maintenance service page](../../assets/cases/bbq-ua/29.webp)
+**Home** — a banner for the featured category, popular categories, sales and brands in carousels, video consultation and cleaning service tiles, and fresh articles in one scroll. On mobile the same blocks stack, with swipeable carousels.
 
-*Services — cleaning and maintenance, sold alongside the products.*
+</div>
+<div>
 
-![Mobile screens: home, product, checkout and service](../../assets/cases/bbq-ua/35.webp)
+![Product page on desktop and mobile: gallery, price and buying options, extra services, delivery, payment, description, characteristics and reviews](../../assets/cases/bbq-ua/final-product.webp)
 
-*Mobile — stacked layout, swipeable carousels and large touch targets.*
+**Product page** — the gallery, price, buying and credit options, extra services, delivery and payment sit above the fold, followed by the description, characteristics and reviews. On mobile the buying block moves under the gallery.
+
+</div>
+</div>
 
 ## Testing
 

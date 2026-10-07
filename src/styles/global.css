@@ -379,7 +379,7 @@ a:hover .frame img {
 .prose > * + * {
   margin-top: 24px;
 }
-.prose > :is(p:has(> img), .pair, .grid-4, .cards, .persona, .carousel, .quotes, ol.flow, blockquote) {
+.prose > :is(p:has(> img), .pair, .grid-4, .cards, .persona, .carousel, .quotes, .columns, ol.flow, blockquote) {
   margin-top: 32px;
 }
 .prose > :is(h3, h4) {
@@ -550,6 +550,37 @@ a:hover .frame img {
   width: 100%;
   border-radius: 14px;
   background: var(--surface);
+}
+/* Two columns, each an image with its own description: <div class="columns"><div> image + text </div><div> … </div></div> */
+.prose .columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 24px;
+  max-width: none;
+  align-items: start;
+}
+.prose .columns > div > p:has(> img) {
+  max-width: none;
+}
+.prose .columns img {
+  width: 100%;
+  border-radius: 14px;
+  background: var(--surface);
+}
+.prose .columns > div > p:not(:has(> img)) {
+  margin-top: 16px;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+.prose .columns strong {
+  color: var(--ink);
+}
+@media (max-width: 720px) {
+  .prose .columns {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+  }
 }
 /* An image straight after a pair continues the same group: same gap as inside the pair. */
 .prose > :is(.pair, .grid-4) + p:has(> img) {
