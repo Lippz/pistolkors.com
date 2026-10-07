@@ -7,9 +7,9 @@ accent: small clinics
 summary: Existing HMS tools are heavy and built for big hospitals. Research with 12 healthcare professionals shaped a lean system for clinics and solo practitioners in Central Africa.
 lead: LinkHMS is a cloud platform for hospitals and clinics in Central Africa. Most hospital systems are heavy, outdated and built for large institutions — I designed one that a small clinic or a single doctor can set up and use from day one.
 industry: HealthTech
-year: '2024'
+year: 2024–26
 role: UX/UI Designer
-timeline: 3 months
+timeline: 30 months
 company: Existek
 platforms: Web app, desktop-first
 tags: [User research, Scheduling, Data privacy]
