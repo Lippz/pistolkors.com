@@ -166,7 +166,7 @@ The components follow the atomic approach: small elements first, then the blocks
 
 ![Atoms: buttons, tags, record type chips and small status labels](../../assets/cases/linkhms/design-atoms.webp)
 
-![Molecules and organisms: filters, tabs, page titles, a date picker, a section menu and a list of cards](../../assets/cases/linkhms/design-molecules-organisms.webp)
+![Molecules and organisms: filters, tabs, page titles, a search field, a date picker, a section menu, metric cards and text inputs](../../assets/cases/linkhms/design-molecules-organisms.webp)
 
 </div>
 
