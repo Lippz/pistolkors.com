@@ -77,13 +77,25 @@ I ran interviews with existing customers, a competitive analysis of modern e-com
 </div>
 </div>
 
+### His path through the store
+
+<ol class="flow">
+<li><span>01 · Home</span>Lands on the store</li>
+<li><span>02 · Find</span>Browses categories or searches</li>
+<li><span>03 · Narrow</span>Filters the listing</li>
+<li><span>04 · Item</span>Checks photos, video and details</li>
+<li><span>05 · Cart</span>Adds the grill</li>
+<li class="is-accent"><span>06 · Order</span>Checks out as a guest</li>
+<li><span>07 · Result</span>Order complete</li>
+</ol>
+
 ## Process
 
 ### Flow first, then wireframes
 
 The user flow maps the journey from discovery to order, keeping the path from the home page to checkout as short and direct as possible.
 
-![User flow from home page to order completion](../../assets/cases/bbq-ua/06.webp)
+![User flow from the home page through listing, item and cart to order completion, with profile, blog and brand entry points](../../assets/cases/bbq-ua/user-flow.webp)
 
 ![Wireframes for home, listing, product, cart and profile pages](../../assets/cases/bbq-ua/07.webp)
 
