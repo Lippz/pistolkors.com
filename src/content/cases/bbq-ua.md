@@ -38,6 +38,45 @@ I ran interviews with existing customers, a competitive analysis of modern e-com
 <div><b>Mobile</b>The phone experience was inconsistent and hard to use.</div>
 </div>
 
+## Users
+
+### Meet Andrii, the primary user
+
+<div class="persona">
+<dl class="persona__id">
+<div><dt>Name</dt><dd>Andrii Melnyk, 38</dd></div>
+<div><dt>Occupation</dt><dd>Project manager in an IT company</dd></div>
+<div><dt>Location</dt><dd>Kyiv, UA</dd></div>
+</dl>
+<p class="persona__bio">Andrii is a family-oriented professional living in a suburban house near Kyiv. He enjoys spending weekends grilling with friends and family in his backyard. With a busy work schedule, he prefers online shopping that’s fast, clear and reliable. He values expert advice, quality equipment and services that save him time.</p>
+<div class="persona__cols">
+<div>
+<p class="persona__label">Goals</p>
+<ul>
+<li>Buy a reliable grill and quality accessories with minimal hassle.</li>
+<li>Learn how to properly maintain and clean his grill to make it last longer.</li>
+<li>Get trustworthy advice and recommendations before making a purchase.</li>
+</ul>
+</div>
+<div>
+<p class="persona__label">Frustrations</p>
+<ul>
+<li>Overwhelming or outdated website designs that make it hard to find the right product.</li>
+<li>Lack of detailed, trustworthy information like real reviews or expert tips.</li>
+<li>Complicated checkout processes that require unnecessary steps or registration.</li>
+</ul>
+</div>
+<div>
+<p class="persona__label">How BBQ.ua helps</p>
+<ul>
+<li>Modern, clean design with intuitive navigation and filters to help him find exactly what he needs fast.</li>
+<li>Video consultations and cleaning tips available right on the product page to give him confidence in his purchase and maintenance.</li>
+<li>Streamlined checkout with multiple payment options and guest checkout so he can buy quickly without creating an account.</li>
+</ul>
+</div>
+</div>
+</div>
+
 ## Process
 
 ### Flow first, then wireframes
