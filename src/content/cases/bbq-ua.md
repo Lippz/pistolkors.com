@@ -97,7 +97,7 @@ The user flow maps the journey from discovery to order, keeping the path from th
 
 ![User flow from the home page through listing, item and cart to order completion, with profile, blog and brand entry points](../../assets/cases/bbq-ua/user-flow.webp)
 
-![Wireframes for home, listing, product, cart and profile pages](../../assets/cases/bbq-ua/07.webp)
+![Wireframes for the home page, the product page and the Our Shop page](../../assets/cases/bbq-ua/wireframes.webp)
 
 ## Key decisions
 
