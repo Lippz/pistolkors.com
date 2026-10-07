@@ -99,6 +99,14 @@ The user flow maps the journey from discovery to order, keeping the path from th
 
 ![Wireframes for the home page, the product page and the Our Shop page](../../assets/cases/bbq-ua/wireframes.webp)
 
+## Design system
+
+### Warm, bold and built to scale
+
+A responsive component set, adaptive type scale and a warm palette that feels like an evening by the grill — consistent on desktop and mobile.
+
+![Design system: Geologica and Inter type scale, accent and grayscale colours, buttons, inputs, selection controls and product cards](../../assets/cases/bbq-ua/design-system.webp)
+
 ## Key decisions
 
 ### What changed
@@ -120,14 +128,6 @@ Photos, buying options and extra services sit together, with video consultations
 Guest checkout, multiple payment options and a single clear path to “place order” replaced the old multi-step flow.
 
 ![Checkout with buyer details, delivery and payment](../../assets/cases/bbq-ua/20.webp)
-
-## Design system
-
-### Warm, bold and built to scale
-
-A responsive component set, adaptive type scale and a warm palette that feels like an evening by the grill — consistent on desktop and mobile.
-
-![Design system: Geologica and Inter type scale, accent and grayscale colours, buttons, inputs, selection controls and product cards](../../assets/cases/bbq-ua/design-system.webp)
 
 ## Final screens
 
