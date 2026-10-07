@@ -103,7 +103,7 @@ The user flow maps the journey from discovery to order, keeping the path from th
 
 ### Warm, bold and built to scale
 
-A responsive component set, adaptive type scale and a warm palette that feels like an evening by the grill — consistent on desktop and mobile.
+With the structure set, I moved on to the visual language: a responsive component set, an adaptive type scale and a warm palette that feels like an evening by the grill — consistent on desktop and mobile. The screens that follow are built from it.
 
 ![Design system: Geologica and Inter type scale, accent and grayscale colours, buttons, inputs, selection controls and product cards](../../assets/cases/bbq-ua/design-system.webp)
 
