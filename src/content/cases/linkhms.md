@@ -140,13 +140,7 @@ The electronic medical record is split into sections and subsections, so a docto
 
 A distinct identity set LinkHMS apart from dated competitors. The UI takes its cue from modern healthcare facilities: clean, minimal and patient-centric.
 
-<div class="pair">
-
-![Logo in colour and white with the app icon, and the colour palette: neutrals and ten accent hues](../../assets/cases/linkhms/brand-logo-palette.webp)
-
-![Typography: Roboto Flex for the interface and Manrope for buttons, with the full size scale](../../assets/cases/linkhms/brand-typography.webp)
-
-</div>
+![LinkHMS logo in colour and white, and the app icon on white and blue](../../assets/cases/linkhms/brand-logo.webp)
 
 ![Icon sets: an outline set for the product on the left and a duotone set with a soft gradient for the landing page on the right](../../assets/cases/linkhms/brand-icons.webp)
 
@@ -156,11 +150,25 @@ A distinct identity set LinkHMS apart from dated competitors. The UI takes its c
 
 ### Small pieces, used everywhere
 
-To keep the interface consistent as it grows, I defined a short scale of numeric tokens for spacing and corner radius, then built the basic components on top of it: buttons, tags and statuses in a range of colours and sizes.
+To keep the interface consistent as it grows, I defined design tokens for numeric values, colour and type, and built every component on top of them.
 
-![Numeric tokens: a spacing scale from 4 to 96 and corner radii from 4 to 64](../../assets/cases/linkhms/design-tokens.webp)
+<div class="pair">
 
-![Basic components: buttons in several shapes and sizes, tags in twelve colours, record type chips and small status labels](../../assets/cases/linkhms/design-components.webp)
+![Numeric tokens for spacing and corner radius, and colour tokens: neutrals and ten accent hues in twelve steps](../../assets/cases/linkhms/design-tokens.webp)
+
+![Typography: Roboto Flex for the interface and Manrope for buttons, with the full size scale](../../assets/cases/linkhms/design-typography.webp)
+
+</div>
+
+The components follow the atomic approach: small elements first, then the blocks assembled from them.
+
+<div class="pair">
+
+![Atoms: buttons, tags, record type chips and small status labels](../../assets/cases/linkhms/design-atoms.webp)
+
+![Molecules and organisms: filters, tabs, page titles, a date picker, a section menu and a list of cards](../../assets/cases/linkhms/design-molecules-organisms.webp)
+
+</div>
 
 ## Next steps
 
