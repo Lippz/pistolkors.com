@@ -86,7 +86,7 @@ I started with hand-drawn sketches to decide what each screen needed, then mappe
 
 ### From the front desk to the finance office
 
-LinkHMS covers a clinic’s whole day, from the front desk to the finance office. Before the flows themselves, here is the look and the building blocks every screen shares.
+LinkHMS covers a clinic’s whole day. Before the flows themselves, here is the look and the building blocks every screen shares.
 
 <div class="cards">
 <div><b>Schedule and queue</b>Doctors’ appointments on a timeslot grid and a daily live queue by status: book, edit, cancel, start and complete visits.</div>
