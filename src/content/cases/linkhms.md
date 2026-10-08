@@ -4,8 +4,8 @@ featured: true
 client: LinkHMS
 title: A hospital management system light enough for small clinics
 accent: small clinics
-summary: Existing HMS tools are heavy and built for big hospitals. Research with 12 healthcare professionals shaped a lean system for clinics and solo practitioners in Central Africa.
-lead: LinkHMS is a cloud platform for hospitals and clinics in Central Africa. Most hospital systems are heavy, outdated and built for large institutions — I designed one that a small clinic or a single doctor can set up and use from day one.
+summary: Existing HMS tools are heavy and built for big hospitals. Research with 12 healthcare professionals shaped a lean system in Central Africa that one doctor can run alone or a whole clinic team can share.
+lead: LinkHMS is a cloud platform for hospitals and clinics in Central Africa. Most hospital systems are heavy, outdated and built for large institutions — I designed one that a single doctor can run alone, with every feature, and a whole clinic team can share — set up and in use from day one.
 industry: HealthTech
 year: 2024–26
 role: UX/UI Designer
@@ -102,11 +102,11 @@ LinkHMS covers a clinic’s whole day. The key decisions below zoom in on the fl
 
 ## Key decisions
 
-### Nine flows that run a clinic
+### Ten flows that run a clinic
 
 #### Set up a clinic with a guided tour
 
-After sign-up, a guided tour walks through the first set-up: it creates a department, a service and a user, ticking them off in a “Let’s set up your clinic” checklist, and the home screen keeps the remaining steps in view. The tour can be skipped and restarted at any time from the menu.
+There is one LinkHMS for everyone: a doctor working alone gets every feature, and a clinic team shares the same system with roles. After sign-up, a guided tour walks through the first set-up: it creates a department, a service and a user, ticking them off in a “Let’s set up your clinic” checklist, and the home screen keeps the remaining steps in view. The tour can be skipped and restarted at any time from the menu.
 
 <div class="carousel">
 
@@ -215,6 +215,18 @@ Admins, doctors, nurses, receptionists, lab workers and pharmacists each get the
 ![Settings, Permissions tab: six roles with the number of active users in each](../../assets/cases/linkhms/roles.webp "Roles")
 
 ![Receptionist permissions: sections and sub-sections with separate view and edit checkboxes and a Reset Permissions button](../../assets/cases/linkhms/role-permissions.webp "Receptionist")
+
+</div>
+
+#### A subscription that grows with the team
+
+The price is counted per seat: an administrator, plus every doctor, nurse, receptionist or lab worker added in HR. A doctor working alone pays for one seat and still gets every feature; a clinic adds seats as it hires. The plan screen compares monthly and annual billing side by side, and a notice warns that a newly added user is charged on the next invoice.
+
+<div class="carousel">
+
+![Subscription payment summary: seats per role with totals, a notice that new users are charged on the next invoice and a link to manage users in HR](../../assets/cases/linkhms/subscription-summary.webp "Payment summary")
+
+![Subscription plan: seats per role priced monthly and annually side by side, with the current plan marked and an upgrade to annual billing](../../assets/cases/linkhms/subscription-plan.webp "Monthly or annual")
 
 </div>
 
