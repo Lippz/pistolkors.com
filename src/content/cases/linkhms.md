@@ -194,6 +194,22 @@ The patient is the main entity of the system. Every record can be removed comple
 
 </div>
 
+#### A medical record you can scan in seconds
+
+The electronic medical record is split into sections and subsections, so a doctor jumps straight to what matters in an emergency.
+
+<div class="carousel">
+
+![Patient summary with recent visits, samples and tests, diagnoses and prescriptions](../../assets/cases/linkhms/patient-summary.webp "Summary")
+
+![Patient records history with a category menu and colour-coded record types](../../assets/cases/linkhms/patient-records.webp "Records")
+
+![Prescriptions and drug administration chart: medicines with route, dosage and status, a log of non-prescribed medications and Log Dose buttons](../../assets/cases/linkhms/emr-drug-administration.webp "Drug administration")
+
+![Vaccinations: a schedule grid by age with each vaccine marked completed, scheduled, overdue, refused, excluded or contraindicated](../../assets/cases/linkhms/emr-vaccinations.webp "Vaccinations")
+
+</div>
+
 #### A patient photo without leaving the record
 
 A photo is added right from the patient’s record: upload a file or take one with the device camera, check it, then save. If the file has the wrong format, the dialog says which formats work, and it warns before unsaved changes are lost.
@@ -209,22 +225,6 @@ A photo is added right from the patient’s record: upload a file or take one wi
 ![Patient photo dialog after saving, with a success message](../../assets/cases/linkhms/photo-saved.webp "Saved")
 
 ![Patient photo dialog with an invalid file format error listing the accepted formats](../../assets/cases/linkhms/photo-error.webp "Wrong format")
-
-</div>
-
-#### A medical record you can scan in seconds
-
-The electronic medical record is split into sections and subsections, so a doctor jumps straight to what matters in an emergency.
-
-<div class="carousel">
-
-![Patient summary with recent visits, samples and tests, diagnoses and prescriptions](../../assets/cases/linkhms/patient-summary.webp "Summary")
-
-![Patient records history with a category menu and colour-coded record types](../../assets/cases/linkhms/patient-records.webp "Records")
-
-![Prescriptions and drug administration chart: medicines with route, dosage and status, a log of non-prescribed medications and Log Dose buttons](../../assets/cases/linkhms/emr-drug-administration.webp "Drug administration")
-
-![Vaccinations: a schedule grid by age with each vaccine marked completed, scheduled, overdue, refused, excluded or contraindicated](../../assets/cases/linkhms/emr-vaccinations.webp "Vaccinations")
 
 </div>
 
