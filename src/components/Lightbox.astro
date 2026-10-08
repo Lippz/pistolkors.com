@@ -185,14 +185,17 @@
       const run = () => {
         img.style.viewTransitionName = '';
         dlg.close();
-        // In a carousel, scroll to the last viewed slide and focus the track.
+        // In a carousel, scroll to the last viewed slide. Keyboard position returns to the
+        // carousel without leaving a visible focus ring: focus, then blur, so that Tab and
+        // Shift+Tab carry on from there (the browser keeps that as its starting point).
         const car = thumb.closest<HTMLElement>('.carousel');
+        let back: HTMLElement | null = thumb;
         if (car) {
           car.dispatchEvent(new CustomEvent('goto', { detail: index }));
-          car.querySelector<HTMLElement>('.carousel__track')?.focus({ preventScroll: true });
-        } else {
-          thumb.focus({ preventScroll: true });
+          back = car.querySelector<HTMLElement>('.carousel__track');
         }
+        back?.focus({ preventScroll: true });
+        back?.blur();
         if (canAnimate()) thumb.style.viewTransitionName = 'lb-img';
       };
       if (canAnimate()) {
