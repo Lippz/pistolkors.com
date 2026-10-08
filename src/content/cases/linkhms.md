@@ -86,7 +86,7 @@ I started with hand-drawn sketches to decide what each screen needed, then mappe
 
 ### From the front desk to the finance office
 
-LinkHMS covers a clinic’s whole day. The key decisions below zoom in on the flows where speed mattered most.
+LinkHMS covers a clinic’s whole day, from the front desk to the finance office. Before the flows themselves, here is the look and the building blocks every screen shares.
 
 <div class="cards">
 <div><b>Schedule and queue</b>Doctors’ appointments on a timeslot grid and a daily live queue by status: book, edit, cancel, start and complete visits.</div>
@@ -100,9 +100,47 @@ LinkHMS covers a clinic’s whole day. The key decisions below zoom in on the fl
 <div><b>Settings and permissions</b>Account and clinic details, invoice text, working hours, subscription billing and view and edit permissions for every role.</div>
 </div>
 
+## Visual identity
+
+### Calm, clinical, recognisable
+
+With that much to cover, the product needed a face of its own. A distinct identity set LinkHMS apart from dated competitors. The UI takes its cue from modern healthcare facilities: clean, minimal and patient-centric.
+
+![LinkHMS logo in colour and white, and the app icon on white and blue](../../assets/cases/linkhms/brand-logo.webp)
+
+![Icon sets: an outline set for the product on the left and a duotone set with a soft gradient for the landing page on the right](../../assets/cases/linkhms/brand-icons.webp)
+
+*A variety of Google Icons was also used.*
+
+## Design system
+
+### Small pieces, used everywhere
+
+To keep the interface consistent as it grows, I defined design tokens for numeric values, colour and type, and built every component on top of them.
+
+<div class="pair">
+
+![Numeric tokens for spacing and corner radius, and colour tokens: neutrals and ten accent hues in twelve steps](../../assets/cases/linkhms/design-tokens.webp)
+
+![Typography: Roboto Flex for the interface and Manrope for buttons, with the full size scale](../../assets/cases/linkhms/design-typography.webp)
+
+</div>
+
+The components follow the atomic approach: small elements first, then the blocks assembled from them.
+
+<div class="pair">
+
+![Atoms: buttons, tags, record type chips and small status labels](../../assets/cases/linkhms/design-atoms.webp)
+
+![Molecules and organisms: filters, tabs, page titles, a search field, a date picker, a section menu, metric cards and text inputs](../../assets/cases/linkhms/design-molecules-organisms.webp)
+
+</div>
+
 ## Key decisions
 
 ### Ten flows that run a clinic
+
+With the identity and the components in place, here are the flows where speed mattered most.
 
 #### Set up a clinic with a guided tour
 
@@ -251,42 +289,6 @@ Patients sign in with their email and a six-digit one-time code. The home screen
 ![Book an Appointment: clinic, specialty, doctor and service with price, a choice of day in the next seven days, available timeslots and a summary before sending the request](../../assets/cases/linkhms/portal-booking.webp "Book an appointment")
 
 ![Test result for a basic metabolic panel: patient, order and test info, and a results table with units, reference values and flagged values, with a PDF download](../../assets/cases/linkhms/portal-test-result.webp "Test result")
-
-</div>
-
-## Visual identity
-
-### Calm, clinical, recognisable
-
-A distinct identity set LinkHMS apart from dated competitors. The UI takes its cue from modern healthcare facilities: clean, minimal and patient-centric.
-
-![LinkHMS logo in colour and white, and the app icon on white and blue](../../assets/cases/linkhms/brand-logo.webp)
-
-![Icon sets: an outline set for the product on the left and a duotone set with a soft gradient for the landing page on the right](../../assets/cases/linkhms/brand-icons.webp)
-
-*A variety of Google Icons was also used.*
-
-## Design system
-
-### Small pieces, used everywhere
-
-To keep the interface consistent as it grows, I defined design tokens for numeric values, colour and type, and built every component on top of them.
-
-<div class="pair">
-
-![Numeric tokens for spacing and corner radius, and colour tokens: neutrals and ten accent hues in twelve steps](../../assets/cases/linkhms/design-tokens.webp)
-
-![Typography: Roboto Flex for the interface and Manrope for buttons, with the full size scale](../../assets/cases/linkhms/design-typography.webp)
-
-</div>
-
-The components follow the atomic approach: small elements first, then the blocks assembled from them.
-
-<div class="pair">
-
-![Atoms: buttons, tags, record type chips and small status labels](../../assets/cases/linkhms/design-atoms.webp)
-
-![Molecules and organisms: filters, tabs, page titles, a search field, a date picker, a section menu, metric cards and text inputs](../../assets/cases/linkhms/design-molecules-organisms.webp)
 
 </div>
 
