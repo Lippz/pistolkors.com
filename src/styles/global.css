@@ -379,7 +379,7 @@ a:hover .frame img {
 .prose > * + * {
   margin-top: 24px;
 }
-.prose > :is(p:has(> img), .pair, .grid-4, .cards, .persona, .carousel, .quotes, .columns, ol.flow, blockquote) {
+.prose > :is(p:has(> img), .pair, .grid-4, .cards, .persona, .carousel, .quotes, .columns, .framed, ol.flow, blockquote) {
   margin-top: 32px;
 }
 .prose > :is(h3, h4) {
@@ -515,6 +515,14 @@ a:hover .frame img {
   width: 100%;
   border-radius: 14px;
   background: var(--surface);
+}
+/* A single image with the same thin frame as a carousel slide: <div class="framed"> image </div> */
+.prose .framed {
+  max-width: none;
+}
+.prose .framed img {
+  border: 1px solid var(--line);
+  border-radius: 10px;
 }
 /* An italic-only paragraph right after an image is its caption. */
 .prose > p:has(> img) + p:has(> em:only-child) {

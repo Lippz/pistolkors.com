@@ -240,7 +240,11 @@ Insurance is handled item by item. When a claim is created, everything the patie
 
 Finance reports open on six numbers — billed, collected, outstanding, collection rate, average invoice and denied claims — followed by the trend, revenue by department, the payment mix and the claim pipeline. Clicking a tile or a chart segment filters the “Attention needed” table of flagged invoices below, and each invoice opens in one click.
 
+<div class="framed">
+
 ![Finance overview report: KPI tiles, billed versus collected trend, revenue by department, payment method mix, claim pipeline, top ten rankings and a table of invoices that need attention](../../assets/cases/linkhms/finance-overview.webp)
+
+</div>
 
 #### Six roles, each with the right access
 
