@@ -16,12 +16,16 @@
  *   </div>
  *
  * The label is read by screen readers and shown as the caption in the viewer.
+ * A screen much taller than the shortest one in the carousel is cut at the bottom to
+ * the same proportions (with a soft fade); the viewer still opens the whole screen.
  * Without JavaScript the images simply follow each other.
  */
 ---
 
 <script>
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  /** A slide counts as tall when its height-to-width ratio is this much above the shortest slide's. */
+  const TALL = 1.2;
   const arrow = (d: string) =>
     `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"></path></svg>`;
 
@@ -33,6 +37,12 @@
     // Small source images: don't stretch a slide beyond the narrowest image's own width.
     const naturalW = Math.min(...imgs.map((i) => Number(i.getAttribute('width')) || Infinity));
     if (Number.isFinite(naturalW)) root.style.setProperty('--slide-max', `${naturalW}px`);
+
+    // Screens much taller than the shortest one are cut at the bottom to its proportions,
+    // so the row keeps one height; the viewer still opens the whole screen.
+    const ratios = imgs.map((i) => (Number(i.getAttribute('height')) || 0) / (Number(i.getAttribute('width')) || 1));
+    const base = Math.min(...ratios.filter((r) => r > 0));
+    const isTall = (i: number) => Number.isFinite(base) && ratios[i] > base * TALL;
 
     const track = document.createElement('div');
     track.className = 'carousel__track';
@@ -54,6 +64,10 @@
       slide.setAttribute('role', 'group');
       slide.setAttribute('aria-roledescription', 'slide');
       slide.setAttribute('aria-label', `${i + 1} of ${n}: ${label}`);
+      if (isTall(i)) {
+        slide.classList.add('is-cropped');
+        slide.style.setProperty('--crop', String(1 / base));
+      }
       slide.append(img);
       track.append(slide);
       slides.push(slide);
@@ -200,6 +214,24 @@
     width: 100%;
     height: auto;
     border-radius: 0;
+  }
+  /* A tall screen shows its top part at the row's proportions; a soft fade hints there is more. */
+  .carousel__slide.is-cropped {
+    position: relative;
+    aspect-ratio: var(--crop);
+  }
+  .carousel__slide.is-cropped img {
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+  .carousel__slide.is-cropped::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0;
+    height: 22%;
+    background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--surface) 92%, transparent));
+    pointer-events: none;
   }
   /* The viewer's cursor rule for loose images doesn't apply inside a slide. */
   .carousel__slide img[data-lb] {

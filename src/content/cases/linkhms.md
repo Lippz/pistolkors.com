@@ -162,6 +162,8 @@ A photo is added right from the patient’s record: upload a file or take one wi
 
 <div class="carousel">
 
+![Patient record history with the cursor on the patient’s photo placeholder next to the name](../../assets/cases/linkhms/photo-record.webp "From the record")
+
 ![Patient photo dialog over the record with a placeholder, Upload Photo and Open Camera buttons and a disabled Save](../../assets/cases/linkhms/photo-empty.webp "Empty")
 
 ![Patient photo dialog with a chosen photo, a delete icon, Take New and an active Save button](../../assets/cases/linkhms/photo-selected.webp "Photo chosen")
@@ -182,6 +184,10 @@ The electronic medical record is split into sections and subsections, so a docto
 
 ![Patient records history with a category menu and colour-coded record types](../../assets/cases/linkhms/patient-records.webp "Records")
 
+![Prescriptions and drug administration chart: medicines with route, dosage and status, a log of non-prescribed medications and Log Dose buttons](../../assets/cases/linkhms/emr-drug-administration.webp "Drug administration")
+
+![Vaccinations: a schedule grid by age with each vaccine marked completed, scheduled, overdue, refused, excluded or contraindicated](../../assets/cases/linkhms/emr-vaccinations.webp "Vaccinations")
+
 </div>
 
 #### One visit, two bills
@@ -193,6 +199,8 @@ Insurance is handled item by item. When a claim is created, everything the patie
 ![Billing claims list with filters by status, type and insurance provider, totals and colour-coded statuses](../../assets/cases/linkhms/billing-claims.webp "Claims")
 
 ![New Claim, step two: linking the claim to a visit and adding services and medications, with a note on how covered and not covered items are billed](../../assets/cases/linkhms/billing-new-claim.webp "New claim")
+
+![New Claim with items added: each medication shows its coverage, and not covered items are marked to be billed to the patient on a separate invoice](../../assets/cases/linkhms/billing-claim-items.webp "Coverage per item")
 
 ![Claim details: patient, insurer, visit and dates, items with coverage and the insurer’s decision, and separate insurance and patient invoices](../../assets/cases/linkhms/billing-claim-decision.webp "Insurer’s decision")
 
