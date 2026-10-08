@@ -194,9 +194,9 @@ The electronic medical record is split into sections and subsections, so a docto
 
 ![Patient records history with a category menu and colour-coded record types](../../assets/cases/linkhms/patient-records.webp "Records")
 
-![Vaccinations: a schedule grid by age with each vaccine marked completed, scheduled, overdue, refused, excluded or contraindicated](../../assets/cases/linkhms/emr-vaccinations.webp "Vaccinations")
-
 ![Prescriptions and drug administration chart: medicines with route, dosage and status, a log of non-prescribed medications and Log Dose buttons](../../assets/cases/linkhms/emr-drug-administration.webp "Drug administration")
+
+![Vaccinations: a schedule grid by age with each vaccine marked completed, scheduled, overdue, refused, excluded or contraindicated](../../assets/cases/linkhms/emr-vaccinations.webp "Vaccinations")
 
 </div>
 
