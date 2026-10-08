@@ -150,7 +150,7 @@ There is one LinkHMS for everyone: a doctor working alone gets every feature, an
 
 ![Clinic registration form with Google sign-in, clinic details and terms](../../assets/cases/linkhms/clinic-registration.webp "Clinic registration")
 
-![Home screen after sign-up with quick actions, a clinic set-up progress bar and next steps](../../assets/cases/linkhms/clinic-setup.webp "Clinic set-up")
+![Home screen after sign-up with quick actions, a trial notice, a clinic set-up progress bar and recommended next steps](../../assets/cases/linkhms/clinic-setup.webp "Clinic set-up")
 
 </div>
 
@@ -194,9 +194,9 @@ The electronic medical record is split into sections and subsections, so a docto
 
 ![Patient records history with a category menu and colour-coded record types](../../assets/cases/linkhms/patient-records.webp "Records")
 
-![Prescriptions and drug administration chart: medicines with route, dosage and status, a log of non-prescribed medications and Log Dose buttons](../../assets/cases/linkhms/emr-drug-administration.webp "Drug administration")
-
 ![Vaccinations: a schedule grid by age with each vaccine marked completed, scheduled, overdue, refused, excluded or contraindicated](../../assets/cases/linkhms/emr-vaccinations.webp "Vaccinations")
+
+![Prescriptions and drug administration chart: medicines with route, dosage and status, a log of non-prescribed medications and Log Dose buttons](../../assets/cases/linkhms/emr-drug-administration.webp "Drug administration")
 
 </div>
 
@@ -264,6 +264,8 @@ The price is counted per seat: an administrator, plus every doctor, nurse, recep
 
 ![Subscription plan: seats per role priced monthly and annually side by side, with the current plan marked and an upgrade to annual billing](../../assets/cases/linkhms/subscription-plan.webp "Monthly or annual")
 
+![Add Payment Method dialog over the payment summary: continue to payment with a card or choose an alternative payment method, with ways to get help](../../assets/cases/linkhms/subscription-payment.webp "Payment method")
+
 </div>
 
 ## Patient portal
@@ -274,7 +276,7 @@ Patients sign in with their email and a six-digit one-time code. The home screen
 
 <div class="carousel">
 
-![Patient portal home with cards for prescriptions, conditions, appointments, tests, booking and a consultation feature marked as coming soon](../../assets/cases/linkhms/portal-home.webp "Home")
+![Patient portal home with cards for prescriptions, conditions, appointments, tests, booking, telemedicine and log out](../../assets/cases/linkhms/portal-home.webp "Home")
 
 ![Book an Appointment: clinic, specialty, doctor and service with price, a choice of day in the next seven days, available timeslots and a summary before sending the request](../../assets/cases/linkhms/portal-booking.webp "Book an appointment")
 
@@ -286,4 +288,4 @@ Patients sign in with their email and a six-digit one-time code. The home screen
 
 ### There is no limit to perfection
 
-What started with registration, scheduling, patients and the medical record grew over two and a half years into a full clinic system: a live queue, admissions with beds and discharge, billing and insurance claims, a pharmacy, a laboratory, reports and a patient portal. Next in line is consultation with a doctor right from the portal — its card is already waiting on the portal’s home screen, marked “Coming soon”.
+What started with registration, scheduling, patients and the medical record grew over two and a half years into a full clinic system: a live queue, admissions with beds and discharge, billing and insurance claims, a pharmacy, a laboratory, reports and a patient portal. Next in line is consultation with a doctor right from the portal — its Telemedicine card is already waiting on the portal’s home screen.
