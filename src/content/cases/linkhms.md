@@ -138,7 +138,7 @@ The components follow the atomic approach: small elements first, then the blocks
 
 ## Key decisions
 
-### Ten flows that run a clinic
+### Nine flows that run a clinic
 
 With the identity and the components in place, here are the flows where speed mattered most.
 
@@ -158,9 +158,9 @@ There is one LinkHMS for everyone: a doctor working alone gets every feature, an
 
 *The onboarding tour — departments first, then the services they offer and the people who provide them: twelve screens from the welcome message to “You’re all set”.*
 
-#### Book an appointment in a few clicks
+#### Booking ahead and walk-ins
 
-Receptionists create an appointment for a specific doctor in just a few clicks, straight from the schedule.
+Receptionists create an appointment for a specific doctor in just a few clicks, straight from the schedule. Not every patient books ahead, though: the Live Queue shows the day’s visits by status — waiting, ongoing, completed or cancelled — with urgent cases marked in red, and every row can start or complete a visit, convert it to an admission or open the patient’s profile. A walk-in is added in the same New Visit dialog, which finds the patient by name or phone number.
 
 <div class="carousel">
 
@@ -168,17 +168,7 @@ Receptionists create an appointment for a specific doctor in just a few clicks, 
 
 ![New Visit dialog with patient details, doctor, date and a service search](../../assets/cases/linkhms/new-visit.webp "New visit")
 
-</div>
-
-#### A live queue for walk-in patients
-
-Not every patient books ahead. The Live Queue shows the day’s visits by status — waiting, ongoing, completed or cancelled — with urgent cases marked in red, and every row can start or complete a visit, convert it to an admission or open the patient’s profile. A walk-in is added in one dialog that finds the patient by name or phone number.
-
-<div class="carousel">
-
 ![Live Queue: today’s visits with urgency, doctor, service and status, and a row menu to start or complete a visit, convert it to an admission, edit or cancel it](../../assets/cases/linkhms/live-queue.webp "Live Queue")
-
-![New Visit dialog for a live queue visit: patient details, insurance information, urgency, doctor, service, price and visit type](../../assets/cases/linkhms/live-queue-new-visit.webp "New walk-in visit")
 
 </div>
 
