@@ -102,11 +102,11 @@ LinkHMS covers a clinic’s whole day. The key decisions below zoom in on the fl
 
 ## Key decisions
 
-### Six flows, designed for speed
+### Nine flows that run a clinic
 
-#### Set up a whole clinic or a single practice
+#### Set up a clinic with a guided tour
 
-Registration lets someone set up a whole clinic management flow or just an individual practitioner’s cabinet — a solo doctor never sees clinic-level overhead.
+After sign-up, a guided tour walks through the first set-up: it creates a department, a service and a user, ticking them off in a “Let’s set up your clinic” checklist, and the home screen keeps the remaining steps in view. The tour can be skipped and restarted at any time from the menu.
 
 <div class="carousel">
 
@@ -115,6 +115,10 @@ Registration lets someone set up a whole clinic management flow or just an indiv
 ![Home screen after sign-up with quick actions, a clinic set-up progress bar and next steps](../../assets/cases/linkhms/clinic-setup.webp "Clinic set-up")
 
 </div>
+
+![Clinic onboarding tour: a welcome message, then creating a department, a service and a user with tooltips and a set-up checklist, ending with a congratulations message and a hint on how to restart the tour](../../assets/cases/linkhms/tour-clinic.webp)
+
+*The onboarding tour — departments first, then the services they offer and the people who provide them: twelve screens from the welcome message to “You’re all set”.*
 
 #### Book an appointment in a few clicks
 
@@ -152,6 +156,22 @@ The patient is the main entity of the system. Every record can be removed comple
 
 </div>
 
+#### A patient photo without leaving the record
+
+A photo is added right from the patient’s record: upload a file or take one with the device camera, check it, then save. If the file has the wrong format, the dialog says which formats work, and it warns before unsaved changes are lost.
+
+<div class="carousel">
+
+![Patient photo dialog over the record with a placeholder, Upload Photo and Open Camera buttons and a disabled Save](../../assets/cases/linkhms/photo-empty.webp "Empty")
+
+![Patient photo dialog with a chosen photo, a delete icon, Take New and an active Save button](../../assets/cases/linkhms/photo-selected.webp "Photo chosen")
+
+![Patient photo dialog after saving, with a success message](../../assets/cases/linkhms/photo-saved.webp "Saved")
+
+![Patient photo dialog with an invalid file format error listing the accepted formats](../../assets/cases/linkhms/photo-error.webp "Wrong format")
+
+</div>
+
 #### A medical record you can scan in seconds
 
 The electronic medical record is split into sections and subsections, so a doctor jumps straight to what matters in an emergency.
@@ -164,11 +184,39 @@ The electronic medical record is split into sections and subsections, so a docto
 
 </div>
 
+#### One visit, two bills
+
+Insurance is handled item by item. When a claim is created, everything the patient’s plan covers or needs to authorise goes to the insurer as a single claim, and anything not covered is billed to the patient on a separate invoice. The insurer’s decision is then recorded line by line, and the claim keeps both invoices and a change log in one place.
+
+<div class="carousel">
+
+![Billing claims list with filters by status, type and insurance provider, totals and colour-coded statuses](../../assets/cases/linkhms/billing-claims.webp "Claims")
+
+![New Claim, step two: linking the claim to a visit and adding services and medications, with a note on how covered and not covered items are billed](../../assets/cases/linkhms/billing-new-claim.webp "New claim")
+
+![Claim details: patient, insurer, visit and dates, items with coverage and the insurer’s decision, and separate insurance and patient invoices](../../assets/cases/linkhms/billing-claim-decision.webp "Insurer’s decision")
+
+![Edit Invoice: balance and payments, linked claim, insurance provider, invoice items, discount and the details printed on the invoice](../../assets/cases/linkhms/billing-invoice.webp "Invoice")
+
+</div>
+
 #### Reports that point to the problem
 
 Finance reports open on six numbers — billed, collected, outstanding, collection rate, average invoice and denied claims — followed by the trend, revenue by department, the payment mix and the claim pipeline. Clicking a tile or a chart segment filters the “Attention needed” table of flagged invoices below, and each invoice opens in one click.
 
 ![Finance overview report: KPI tiles, billed versus collected trend, revenue by department, payment method mix, claim pipeline, top ten rankings and a table of invoices that need attention](../../assets/cases/linkhms/finance-overview.webp)
+
+#### Six roles, each with the right access
+
+Admins, doctors, nurses, receptionists, lab workers and pharmacists each get their own set of permissions. Access is set per section and sub-section, with view and edit rights apart, and can always be reset to the defaults.
+
+<div class="carousel">
+
+![Settings, Permissions tab: six roles with the number of active users in each](../../assets/cases/linkhms/roles.webp "Roles")
+
+![Receptionist permissions: sections and sub-sections with separate view and edit checkboxes and a Reset Permissions button](../../assets/cases/linkhms/role-permissions.webp "Receptionist")
+
+</div>
 
 ## Patient portal
 
