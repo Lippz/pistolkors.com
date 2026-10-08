@@ -162,6 +162,8 @@
   .carousel__track {
     position: relative;
     display: flex;
+    /* Slides of different heights share a centre line instead of stretching to the tallest. */
+    align-items: center;
     gap: 16px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;

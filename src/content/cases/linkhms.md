@@ -82,9 +82,27 @@ I started with hand-drawn sketches to decide what each screen needed, then mappe
 
 </div>
 
+## Scope
+
+### From the front desk to the finance office
+
+LinkHMS covers a clinic’s whole day. The key decisions below zoom in on the flows where speed mattered most.
+
+<div class="cards">
+<div><b>Schedule and queue</b>Doctors’ appointments on a timeslot grid and a daily live queue by status: book, edit, cancel, start and complete visits.</div>
+<div><b>Patients and records</b>A searchable patient registry and an electronic record for every patient to view and add clinical entries, with photo upload.</div>
+<div><b>Visits and admissions</b>Document a visit — vitals, diagnoses, prescriptions, analyses, services — convert it to an admission and follow it through discharge.</div>
+<div><b>Billing and claims</b>Itemised invoices, payments, printing and sending, and insurance claims tracked from draft through submission to the insurer’s decision.</div>
+<div><b>Pharmacy</b>Prescription orders dispensed from stock and billed to the patient or the insurer, and a medicine inventory with CSV or Excel upload.</div>
+<div><b>Laboratory</b>Lab orders tracked by status, results entered with attachments and sent to the patient, and custom test templates next to the built-in ones.</div>
+<div><b>Reports</b>Operational reports on admissions, diagnoses, lab tests, patient flow and antenatal care, and finance reports on what was billed, collected and is outstanding.</div>
+<div><b>Administration and HR</b>Departments, services, insurance providers with plan-based pricing, API keys, and staff accounts with roles and weekly schedules.</div>
+<div><b>Settings and permissions</b>Account and clinic details, invoice text, working hours, subscription billing and view and edit permissions for every role.</div>
+</div>
+
 ## Key decisions
 
-### Four flows, designed for speed
+### Six flows, designed for speed
 
 #### Set up a whole clinic or a single practice
 
@@ -110,6 +128,18 @@ Receptionists create an appointment for a specific doctor in just a few clicks, 
 
 </div>
 
+#### A live queue for walk-in patients
+
+Not every patient books ahead. The Live Queue shows the day’s visits by status — waiting, ongoing, completed or cancelled — with urgent cases marked in red, and every row can start or complete a visit, convert it to an admission or open the patient’s profile. A walk-in is added in one dialog that finds the patient by name or phone number.
+
+<div class="carousel">
+
+![Live Queue: today’s visits with urgency, doctor, service and status, and a row menu to start or complete a visit, convert it to an admission, edit or cancel it](../../assets/cases/linkhms/live-queue.webp "Live Queue")
+
+![New Visit dialog for a live queue visit: patient details, insurance information, urgency, doctor, service, price and visit type](../../assets/cases/linkhms/live-queue-new-visit.webp "New walk-in visit")
+
+</div>
+
 #### Patients at the centre, with the right to be forgotten
 
 The patient is the main entity of the system. Every record can be removed completely on the patient’s request, in line with the data-privacy needs raised in research.
@@ -131,6 +161,28 @@ The electronic medical record is split into sections and subsections, so a docto
 ![Patient summary with recent visits, samples and tests, diagnoses and prescriptions](../../assets/cases/linkhms/patient-summary.webp "Summary")
 
 ![Patient records history with a category menu and colour-coded record types](../../assets/cases/linkhms/patient-records.webp "Records")
+
+</div>
+
+#### Reports that point to the problem
+
+Finance reports open on six numbers — billed, collected, outstanding, collection rate, average invoice and denied claims — followed by the trend, revenue by department, the payment mix and the claim pipeline. Clicking a tile or a chart segment filters the “Attention needed” table of flagged invoices below, and each invoice opens in one click.
+
+![Finance overview report: KPI tiles, billed versus collected trend, revenue by department, payment method mix, claim pipeline, top ten rankings and a table of invoices that need attention](../../assets/cases/linkhms/finance-overview.webp)
+
+## Patient portal
+
+### The same record, from the patient’s side
+
+Patients sign in with their email and a six-digit one-time code. The home screen gathers their prescriptions, conditions, appointments and test results, and booking takes a single page: clinic, specialty, doctor and service with its price, then a day in the coming week and a free timeslot. A test result lists every parameter against its reference range, flags what is out of range and downloads as a PDF. The portal works on phones too.
+
+<div class="carousel">
+
+![Patient portal home with cards for prescriptions, conditions, appointments, tests, booking and a consultation feature marked as coming soon](../../assets/cases/linkhms/portal-home.webp "Home")
+
+![Book an Appointment: clinic, specialty, doctor and service with price, a choice of day in the next seven days, available timeslots and a summary before sending the request](../../assets/cases/linkhms/portal-booking.webp "Book an appointment")
+
+![Test result for a basic metabolic panel: patient, order and test info, and a results table with units, reference values and flagged values, with a PDF download](../../assets/cases/linkhms/portal-test-result.webp "Test result")
 
 </div>
 
@@ -174,4 +226,4 @@ The components follow the atomic approach: small elements first, then the blocks
 
 ### There is no limit to perfection
 
-The first release covers the essentials. Next in line: bed management, a notification centre, internal messaging and a billing module.
+What started with registration, scheduling, patients and the medical record grew over two and a half years into a full clinic system: a live queue, admissions with beds and discharge, billing and insurance claims, a pharmacy, a laboratory, reports and a patient portal. Next in line is consultation with a doctor right from the portal — its card is already waiting on the portal’s home screen, marked “Coming soon”.
