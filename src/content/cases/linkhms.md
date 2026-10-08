@@ -288,4 +288,10 @@ Patients sign in with their email and a six-digit one-time code. The home screen
 
 ### There is no limit to perfection
 
-What started with registration, scheduling, patients and the medical record grew over two and a half years into a full clinic system: a live queue, admissions with beds and discharge, billing and insurance claims, a pharmacy, a laboratory, reports and a patient portal. Next in line is consultation with a doctor right from the portal — its Telemedicine card is already waiting on the portal’s home screen.
+What started with registration, scheduling, patients and the medical record grew over two and a half years into a full clinic system: a live queue, admissions with beds and discharge, billing and insurance claims, a pharmacy, a laboratory, reports and a patient portal. The product can grow in several directions:
+
+- **Reminders and online payments** — appointment reminders for patients, and invoices paid from the portal instead of at the front desk.
+- **Insurers connected directly** — claims sent to the insurer and decisions received inside LinkHMS, without retyping them by hand.
+- **Stock that watches itself** — low-stock alerts and reorder suggestions based on what the pharmacy actually dispenses.
+- **Insight beyond reports** — trends in patient flow, revenue and diagnoses, with an early warning when something drifts.
+- **Chains of clinics** — one account for several branches, with shared patients, per-branch schedules and consolidated reports.
