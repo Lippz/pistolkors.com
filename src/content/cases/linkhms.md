@@ -154,9 +154,31 @@ There is one LinkHMS for everyone: a doctor working alone gets every feature, an
 
 </div>
 
-![Clinic onboarding tour: a welcome message, then creating a department, a service and a user with tooltips and a set-up checklist, ending with a congratulations message and a hint on how to restart the tour](../../assets/cases/linkhms/tour-clinic.webp)
+<div class="carousel">
 
-*The onboarding tour — departments first, then the services they offer and the people who provide them: twelve screens from the welcome message to “You’re all set”.*
+![Welcome message of the onboarding tour with a Start Tour button](../../assets/cases/linkhms/tour-01.webp "Welcome")
+
+![Administration with an empty departments list: a tooltip points at New Department, next to the Let’s set up your clinic checklist and a Skip Tour button](../../assets/cases/linkhms/tour-02.webp "New department")
+
+![New Department form with a tooltip about naming the department and setting its status](../../assets/cases/linkhms/tour-03.webp "Department form")
+
+![The checklist now has Create Department ticked, and a tooltip points at the Services tab](../../assets/cases/linkhms/tour-04.webp "Services tab")
+
+![An empty services list with a tooltip pointing at New Service](../../assets/cases/linkhms/tour-05.webp "New service")
+
+![New Service form: name, status, type, departments, price and duration, with a tooltip explaining that a service can belong to several departments](../../assets/cases/linkhms/tour-06.webp "Service form")
+
+![A tooltip points at the Human Resources section in the side menu, with departments and services ticked in the checklist](../../assets/cases/linkhms/tour-07.webp "Human resources")
+
+![Empty Human Resources list with a tooltip pointing at New User and the available roles](../../assets/cases/linkhms/tour-08.webp "New user")
+
+![New User form with a note that the user is charged on the next subscription invoice and a tooltip about the email invitation](../../assets/cases/linkhms/tour-09.webp "User form")
+
+![Congratulations message at the end of the tour, with all three checklist items ticked and an End Tour button](../../assets/cases/linkhms/tour-10.webp "All set")
+
+</div>
+
+*The onboarding tour — departments first, then the services they offer and the people who provide them: from the welcome message to “You’re all set”.*
 
 #### Booking ahead and walk-ins
 
