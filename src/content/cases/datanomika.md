@@ -12,7 +12,12 @@ company: Existek
 platforms: Web app + admin panel
 tags: [Web3, Gamification, Admin panel]
 cover: ../../assets/cases/datanomika/cover.webp
-coverAlt: Datanomika main page on a laptop screen, with the Datanomika logo over it
+coverAlt: Datanomika logo over a blurred photo of a thoughtful man at his office desk with a laptop
+coverLayers:
+  background: ../../assets/cases/datanomika/cover-bg.webp
+  logo: ../../assets/cases/datanomika/logo.svg
+  logoWidth: 48
+  themed: true
 ---
 
 ## Overview
