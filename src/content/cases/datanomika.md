@@ -12,7 +12,7 @@ company: Existek
 platforms: Web app + admin panel
 tags: [Web3, Gamification, Admin panel]
 cover: ../../assets/cases/datanomika/cover.webp
-coverAlt: Datanomika main page — “Join a community of thoughts” with a 3D brain illustration
+coverAlt: Datanomika main page on a laptop screen, with the Datanomika logo over it
 ---
 
 ## Overview
