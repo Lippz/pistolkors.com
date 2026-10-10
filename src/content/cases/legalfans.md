@@ -14,7 +14,12 @@ company: Existek
 platforms: Web app + browser extension
 tags: [Discovery, Multi-role flows, Design system]
 cover: ../../assets/cases/legalfans/cover.webp
-coverAlt: LegalFans statistics dashboard on a laptop and the admin panel on a desktop, on a blue background
+coverAlt: LegalFans logo over a blurred photo of a content creator talking to her phone camera in front of a ring light
+coverLayers:
+  background: ../../assets/cases/legalfans/cover-bg.webp
+  logo: ../../assets/cases/legalfans/logo.svg
+  logoWidth: 44
+  themed: true
 stats:
   label: Results
   items:
