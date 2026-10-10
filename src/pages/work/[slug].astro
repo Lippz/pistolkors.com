@@ -4,6 +4,7 @@ import { Image, getImage } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import Lightbox from '../../components/Lightbox.astro';
 import ImageCarousel from '../../components/ImageCarousel.astro';
+import CaseCover from '../../components/CaseCover.astro';
 import { url } from '../../lib/url';
 
 export async function getStaticPaths() {
@@ -138,9 +139,13 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
           <p class="eyebrow">Next case · {next.data.industry}</p>
           <p class="next__title">{next.data.client}: {next.data.title} →</p>
         </div>
-        <div class="next__media frame">
-          <Image src={next.data.cover} alt="" sizes="(min-width: 1024px) 34vw, 100vw" />
-        </div>
+        <CaseCover
+          id={next.id}
+          cover={next.data.cover}
+          layers={next.data.coverLayers}
+          sizes="(min-width: 1024px) 34vw, 100vw"
+          class="next__media"
+        />
       </a>
     </div>
   </article>
@@ -360,7 +365,7 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
   .next:hover .next__title {
     color: var(--accent-ink);
   }
-  .next__media {
+  .next :global(.next__media) {
     grid-column: 9 / span 4;
     aspect-ratio: 16 / 10;
   }
@@ -382,7 +387,7 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
       grid-template-columns: 1fr;
     }
     .next__text,
-    .next__media {
+    .next :global(.next__media) {
       grid-column: auto;
     }
   }

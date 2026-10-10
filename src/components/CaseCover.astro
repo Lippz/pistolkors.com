@@ -2,6 +2,12 @@
 /**
  * A case cover in a rounded frame. While the surrounding link, card or row is
  * hovered or focused, the picture zooms in a touch inside the frame.
+ *
+ * With `layers` the cover is two pieces instead: a darkened background that settles from
+ * 1.05 to 1 while blurring a little more, and a logo that grows from 1 to 1.05. Moving the
+ * pointer away plays it back. With `themed` the cover also follows the site theme: a translucent
+ * veil over the background (white in the light theme, black in the dark one) and a black or
+ * white logo.
  */
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
@@ -9,16 +15,40 @@ import type { ImageMetadata } from 'astro';
 interface Props {
   id: string;
   cover: ImageMetadata;
+  layers?: { background: ImageMetadata; logo: ImageMetadata; logoWidth: number; themed: boolean; veilLight: number };
   sizes: string;
   eager?: boolean;
   class?: string;
 }
-const { id, cover, sizes, eager = false, class: className } = Astro.props;
+const { id, cover, layers, sizes, eager = false, class: className } = Astro.props;
+const loading = eager ? 'eager' : 'lazy';
 ---
 
-<div class:list={['cover frame', className]}>
-  <Image src={cover} alt="" sizes={sizes} loading={eager ? 'eager' : 'lazy'} class="cover__img" />
-</div>
+{
+  layers ? (
+    <div
+      class:list={['cover cover--layers frame', { 'cover--themed': layers.themed }, className]}
+      style={layers.themed ? `--veil-light: ${layers.veilLight}` : undefined}
+    >
+      <Image src={layers.background} alt="" sizes={sizes} loading={loading} class="cover__bg" />
+      {layers.themed && <div class="cover__veil" />}
+      <img
+        src={layers.logo.src}
+        width={layers.logo.width}
+        height={layers.logo.height}
+        alt=""
+        loading={loading}
+        decoding="async"
+        class="cover__logo"
+        style={`--logo-width: ${layers.logoWidth}%`}
+      />
+    </div>
+  ) : (
+    <div class:list={['cover frame', className]}>
+      <Image src={cover} alt="" sizes={sizes} loading={loading} class="cover__img" />
+    </div>
+  )
+}
 
 <style>
   .cover :global(.cover__img) {
@@ -29,9 +59,90 @@ const { id, cover, sizes, eager = false, class: className } = Astro.props;
       transform: scale(1.04);
     }
   }
+
+  .cover--layers {
+    position: relative;
+    isolation: isolate; /* keeps the moving layers from leaking past the rounded corners */
+  }
+  /* A touch larger than the frame, so the blur never feathers the picture's edges into the frame. */
+  .cover--layers :global(.cover__bg) {
+    position: absolute;
+    inset: -4%;
+    width: 108%;
+    max-width: none; /* the image layout's max-width: 100% would clamp it and push it left */
+    height: 108%;
+    transform: scale(1.05);
+    filter: blur(0) var(--bg-adjust, brightness(1));
+    transition:
+      transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+      filter 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .cover--layers :global(.cover__logo) {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: var(--logo-width);
+    height: auto;
+    object-fit: contain;
+    transform: scale(1);
+    transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  /*
+   * Themed: the veil lightens or darkens the picture, the logo is flattened to black or white.
+   * --bg-adjust gives the picture some contrast and colour back, so the veil does not wash it out.
+   */
+  .cover--themed {
+    --veil: rgb(255 255 255 / var(--veil-light, 0.7));
+    --bg-adjust: contrast(1.3) saturate(1.35);
+    --logo-filter: brightness(0);
+  }
+  .cover--themed .cover__veil {
+    position: absolute;
+    inset: 0;
+    background: var(--veil);
+    pointer-events: none;
+  }
+  .cover--themed :global(.cover__logo) {
+    filter: var(--logo-filter);
+  }
+  :global(:root[data-theme='dark']) .cover--themed {
+    --veil: rgb(0 0 0 / 0.55);
+    --bg-adjust: contrast(1.15) saturate(1.2);
+    --logo-filter: brightness(0) invert(1);
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .cover--themed {
+      --veil: rgb(0 0 0 / 0.55);
+      --bg-adjust: contrast(1.15) saturate(1.2);
+      --logo-filter: brightness(0) invert(1);
+    }
+  }
+
+  @media (hover: hover) {
+    :global(:is(a, article):is(:hover, :has(:focus-visible))) .cover--layers :global(.cover__bg) {
+      transform: scale(1);
+      filter: blur(6px) var(--bg-adjust, brightness(1));
+    }
+    :global(:is(a, article):is(:hover, :has(:focus-visible))) .cover--layers :global(.cover__logo) {
+      transform: scale(1.05);
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .cover :global(.cover__img) {
       transition: none;
+      transform: none !important;
+    }
+    .cover--layers :global(.cover__bg),
+    .cover--layers :global(.cover__logo) {
+      transition: none;
+    }
+    .cover--layers :global(.cover__bg) {
+      transform: scale(1.05) !important;
+      filter: blur(0) var(--bg-adjust, brightness(1)) !important;
+    }
+    .cover--layers :global(.cover__logo) {
       transform: none !important;
     }
   }

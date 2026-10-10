@@ -29,6 +29,24 @@ const cases = defineCollection({
       tags: z.array(z.string()).default([]),
       cover: image(),
       coverAlt: z.string(),
+      /**
+       * Optional layers for a livelier cover on the home page: a blurred background and a
+       * vector logo that move against each other on hover. `cover` stays the static composite
+       * (case page, social image). `logoWidth` is the logo's share of the cover width, in %.
+       * `themed` makes the cover follow the site theme: the background gets a translucent white
+       * veil and the logo turns black in the light theme, a black veil and a white logo in the
+       * dark one. Give it a raw background then, with no darkening or lightening baked in.
+       * `veilLight` is the opacity of the white veil; raise it for a background that is very dark.
+       */
+      coverLayers: z
+        .object({
+          background: image(),
+          logo: image(),
+          logoWidth: z.number().default(50),
+          themed: z.boolean().default(false),
+          veilLight: z.number().min(0).max(1).default(0.7),
+        })
+        .optional(),
       /** Headline numbers shown above the cover (results or research). */
       stats: z
         .object({
