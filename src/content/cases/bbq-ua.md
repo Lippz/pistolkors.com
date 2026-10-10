@@ -12,7 +12,12 @@ company: PYP International
 platforms: Responsive web
 tags: [E-commerce, Checkout, Design system]
 cover: ../../assets/cases/bbq-ua/cover.webp
-coverAlt: BBQ.ua product page for a Weber kettle grill on a laptop and a phone
+coverAlt: BBQ.ua logo over a blurred photo of a family grilling skewers in a garden
+coverLayers:
+  background: ../../assets/cases/bbq-ua/cover-bg.webp
+  logo: ../../assets/cases/bbq-ua/logo.svg
+  logoWidth: 42
+  themed: true
 ---
 
 ## Problem
