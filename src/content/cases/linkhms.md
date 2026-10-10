@@ -14,7 +14,12 @@ company: Existek
 platforms: Web app, desktop-first
 tags: [User research, Scheduling, Data privacy]
 cover: ../../assets/cases/linkhms/cover.webp
-coverAlt: LinkHMS finance reports and the doctors schedule on two desktop monitors
+coverAlt: LinkHMS logo over a blurred photo of a doctor talking to a patient in a clinic office
+coverLayers:
+  background: ../../assets/cases/linkhms/cover-bg.webp
+  logo: ../../assets/cases/linkhms/logo.svg
+  logoWidth: 40
+  themed: true
 stats:
   label: Research
   items:
