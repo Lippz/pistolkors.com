@@ -12,7 +12,12 @@ company: Independent
 platforms: Mobile app
 tags: [MVP, Mobile, Co-founder]
 cover: ../../assets/cases/digital-church/cover.webp
-coverAlt: Three phone screens of the Digital Church app in deep purple
+coverAlt: Digital Church logo over a blurred photo of five friends laughing and walking down a city street
+coverLayers:
+  background: ../../assets/cases/digital-church/cover-bg.webp
+  logo: ../../assets/cases/digital-church/logo.svg
+  logoWidth: 16
+  themed: true
 format: slides
 slides:
   - src: ../../assets/cases/digital-church/01.webp
