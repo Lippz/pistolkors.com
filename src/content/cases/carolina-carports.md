@@ -12,7 +12,12 @@ company: Existek
 platforms: Web app
 tags: [ERP, 3D configurator, Scheduling]
 cover: ../../assets/cases/carolina-carports/cover.webp
-coverAlt: CCI ERP order pricing screen on a desktop monitor, with the Carolina Carports logo
+coverAlt: Carolina Carports logo over a blurred photo of a crew building a metal carport
+coverLayers:
+  background: ../../assets/cases/carolina-carports/cover-bg.webp
+  logo: ../../assets/cases/carolina-carports/logo.svg
+  logoWidth: 48
+  themed: true
 stats:
   label: Scope
   items:
