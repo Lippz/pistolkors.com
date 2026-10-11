@@ -50,8 +50,28 @@ export const experience = [
  * the whole section stays hidden on the live site until at least one has one.
  */
 export const motion: { title: string; kind: string; video?: string; poster?: string }[] = [
-  { title: 'Micro-interactions for Auto.RIA', kind: 'Product · Marketplace' },
-  { title: 'BBQ.ua cart and checkout states', kind: 'Product · E-commerce' },
-  { title: 'LegalFans sync onboarding', kind: 'Product · B2B SaaS' },
-  { title: 'Game and ad animation, 2005–2017', kind: 'Archive reel' },
+  {
+    title: 'LinkHMS schedule: book and confirm a visit',
+    kind: 'Product · Healthcare',
+    video: '/motion/linkhms-schedule.mp4',
+    poster: '/motion/linkhms-schedule.jpg',
+  },
+  {
+    title: 'LinkHMS finance overview: charts that answer',
+    kind: 'Product · Healthcare',
+    video: '/motion/linkhms-finance.mp4',
+    poster: '/motion/linkhms-finance.jpg',
+  },
+  {
+    title: 'LinkHMS patient photo: upload, error, save',
+    kind: 'Product · Healthcare',
+    video: '/motion/linkhms-photo.mp4',
+    poster: '/motion/linkhms-photo.jpg',
+  },
+  {
+    title: 'BBQ.ua add to cart: price, buy, mini cart',
+    kind: 'Product · E-commerce',
+    video: '/motion/bbq-cart.mp4',
+    poster: '/motion/bbq-cart.jpg',
+  },
 ];

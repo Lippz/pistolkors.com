@@ -10,6 +10,10 @@
  *  - Esc, the close button, a click on the background and the browser's Back
  *    button all close it.
  * The full-size file is the largest candidate of the image's own srcset.
+ *
+ * The same viewer opens the Motion lab loops (`.lab video`) on the home page: the video
+ * grows out of its tile, keeps playing from the same frame, a click pauses it, and
+ * ← / → step through the tiles. Videos have no zoom.
  */
 ---
 
@@ -26,30 +30,36 @@
   <button type="button" class="lb__btn lb__nav lb__next" aria-label="Next image">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
   </button>
-  <div class="lb__stage"><img class="lb__img" alt="" draggable="false" /></div>
+  <div class="lb__stage">
+    <img class="lb__img" alt="" draggable="false" />
+    <video class="lb__img lb__video" muted loop playsinline hidden></video>
+  </div>
   <p class="lb__caption" aria-live="polite"></p>
 </dialog>
 
 <script>
-  type Item = { el: HTMLImageElement; group: Element | null; full: string; fullW: number; aspect: number; alt: string; caption: string };
+  type Media = HTMLImageElement | HTMLVideoElement;
+  type Item = { el: Media; video: boolean; group: Element | null; full: string; fullW: number; aspect: number; alt: string; caption: string };
 
   const q = <T extends Element>(root: ParentNode, sel: string) => root.querySelector<T>(sel);
   const dlg = q<HTMLDialogElement>(document, '.lb');
-  const els = [...document.querySelectorAll<HTMLImageElement>('.case-prose img, .slides img')];
+  const els = [...document.querySelectorAll<Media>('.case-prose img, .slides img, .lab video')];
 
   if (dlg && els.length) {
     const stage = q<HTMLElement>(dlg, '.lb__stage')!;
-    const img = q<HTMLImageElement>(dlg, '.lb__img')!;
+    const img = q<HTMLImageElement>(dlg, 'img.lb__img')!;
+    const vid = q<HTMLVideoElement>(dlg, 'video.lb__img')!;
     const counter = q<HTMLElement>(dlg, '.lb__count')!;
     const captionEl = q<HTMLElement>(dlg, '.lb__caption')!;
     const prevBtn = q<HTMLButtonElement>(dlg, '.lb__prev')!;
     const nextBtn = q<HTMLButtonElement>(dlg, '.lb__next')!;
     const closeBtn = q<HTMLButtonElement>(dlg, '.lb__close')!;
-    main(dlg, stage, img, counter, captionEl, prevBtn, nextBtn, closeBtn);
+    main(dlg, stage, img, vid, counter, captionEl, prevBtn, nextBtn, closeBtn);
   }
 
   /** Largest candidate of an image's srcset (falls back to its src). */
-  function largest(el: HTMLImageElement) {
+  function largest(el: Media) {
+    if (el instanceof HTMLVideoElement) return { url: el.currentSrc || el.src, w: el.videoWidth };
     let url = el.currentSrc || el.src;
     let w = 0;
     for (const part of (el.getAttribute('srcset') ?? '').split(',')) {
@@ -64,7 +74,7 @@
   }
 
   /** An italic-only paragraph right after the image is its caption; slides use their figcaption. */
-  function captionOf(el: HTMLImageElement) {
+  function captionOf(el: Media) {
     const label = el.dataset.label || el.title;
     if (label) return label;
     const fig = el.closest('figure')?.querySelector('figcaption');
@@ -79,6 +89,7 @@
     dlg: HTMLDialogElement,
     stage: HTMLElement,
     img: HTMLImageElement,
+    vid: HTMLVideoElement,
     counter: HTMLElement,
     captionEl: HTMLElement,
     prevBtn: HTMLButtonElement,
@@ -88,9 +99,12 @@
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
     const all: Item[] = els.map((el) => {
       const { url, w } = largest(el);
-      const iw = Number(el.getAttribute('width')) || el.naturalWidth || 1;
-      const ih = Number(el.getAttribute('height')) || el.naturalHeight || 1;
-      return { el, group: el.closest('[data-lightbox-group], .carousel'), full: url, fullW: w || iw, aspect: ih / iw, alt: el.alt, caption: captionOf(el) };
+      const video = el instanceof HTMLVideoElement;
+      // Videos report their size once metadata has loaded; the tile's own box is the fallback.
+      const iw = video ? el.videoWidth || el.clientWidth || 1 : Number(el.getAttribute('width')) || (el as HTMLImageElement).naturalWidth || 1;
+      const ih = video ? el.videoHeight || el.clientHeight || 1 : Number(el.getAttribute('height')) || (el as HTMLImageElement).naturalHeight || 1;
+      const alt = video ? el.getAttribute('aria-label') || '' : (el as HTMLImageElement).alt;
+      return { el, video, group: el.closest('[data-lightbox-group], .carousel'), full: url, fullW: w || iw, aspect: ih / iw, alt, caption: captionOf(el) };
     });
     // The viewer pages through one group at a time: all loose images of the case, or one carousel.
     let items: Item[] = all;
@@ -98,6 +112,13 @@
     let index = 0;
     let zoomed = false;
     let busy = false;
+    /** The element currently showing the item: the <img>, or the <video> for a motion tile. */
+    const cur = () => (items[index]?.video ? vid : img);
+    /**
+     * The browser pauses a video that is not on screen while a view transition covers the page,
+     * so the viewer's loop is started again once the viewer is fully open.
+     */
+    const playViewer = () => reduced.matches || !vid.paused || vid.play().catch(() => {});
 
     const canAnimate = () => !reduced.matches && typeof document.startViewTransition === 'function';
 
@@ -124,11 +145,12 @@
       // Screens much taller than wide fit by width and scroll; diagrams and slides fit whole.
       const tall = it.aspect > Math.max(1.5, (sh / sw) * 1.6);
       const fit = Math.min(tall ? sw : Math.min(sw, sh / it.aspect), it.fullW);
-      const zoomable = it.fullW > fit * 1.05;
+      const zoomable = !it.video && it.fullW > fit * 1.05;
       if (!zoomable) zoomed = false;
       const w = zoomed ? it.fullW : fit;
-      img.style.width = `${Math.round(w)}px`;
-      img.style.height = `${Math.round(w * it.aspect)}px`;
+      const box = cur();
+      box.style.width = `${Math.round(w)}px`;
+      box.style.height = `${Math.round(w * it.aspect)}px`;
       dlg.toggleAttribute('data-zoomable', zoomable);
       dlg.toggleAttribute('data-zoom', zoomed);
     }
@@ -137,13 +159,18 @@
       index = i;
       const it = items[i];
       zoomed = false;
+      img.hidden = it.video;
+      vid.hidden = !it.video;
       counter.textContent = items.length > 1 ? `${i + 1} / ${items.length}` : '';
       captionEl.textContent = it.caption || it.alt;
-      img.alt = it.alt;
       prevBtn.disabled = i === 0;
       nextBtn.disabled = i === items.length - 1;
+      if (it.video) return showVideo(it, fade);
+      vid.pause();
+      img.alt = it.alt;
       // Show the already-loaded thumbnail at once, then swap in the full-size file.
-      const first = it.el.complete && it.el.currentSrc ? it.el.currentSrc : it.full;
+      const thumb = it.el as HTMLImageElement;
+      const first = thumb.complete && thumb.currentSrc ? thumb.currentSrc : it.full;
       img.src = first;
       size();
       stage.scrollTo(0, 0);
@@ -154,6 +181,31 @@
       }
       for (const j of [i - 1, i + 1]) if (items[j]) new Image().src = items[j].full;
       if (fade && !reduced.matches) img.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 180, easing: 'ease-out' });
+    }
+
+    /** A motion tile: play the same loop from the frame the tile is on, and pause the tile. */
+    function showVideo(it: Item, fade: boolean) {
+      const tile = it.el as HTMLVideoElement;
+      if (tile.videoWidth) {
+        it.fullW = tile.videoWidth;
+        it.aspect = tile.videoHeight / tile.videoWidth;
+      }
+      // The tile rests behind the viewer; the home page decides when its loop plays again.
+      tile.pause();
+      const at = tile.currentTime;
+      vid.poster = tile.poster;
+      vid.controls = reduced.matches;
+      if (vid.getAttribute('src') !== it.full) vid.src = it.full;
+      const go = () => {
+        vid.currentTime = at;
+        if (!reduced.matches) vid.play().catch(() => {});
+      };
+      if (vid.readyState >= 1) go();
+      else vid.addEventListener('loadedmetadata', go, { once: true });
+      size();
+      stage.scrollTo(0, 0);
+      for (const j of [index - 1, index + 1]) if (items[j]?.video) fetch(items[j].full).catch(() => {});
+      if (fade && !reduced.matches) vid.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 180, easing: 'ease-out' });
     }
 
     function open(it: Item) {
@@ -167,11 +219,14 @@
         thumb.style.viewTransitionName = '';
         dlg.showModal();
         show(i);
-        if (canAnimate()) img.style.viewTransitionName = 'lb-img';
+        if (canAnimate()) cur().style.viewTransitionName = 'lb-img';
       };
       if (canAnimate()) {
         thumb.style.viewTransitionName = 'lb-img';
-        transition(run, () => (img.style.viewTransitionName = ''));
+        transition(run, () => {
+          cur().style.viewTransitionName = '';
+          if (items[index].video) playViewer();
+        });
       } else {
         run();
       }
@@ -183,7 +238,13 @@
       const r = thumb.getBoundingClientRect();
       if (r.bottom < 0 || r.top > window.innerHeight) thumb.scrollIntoView({ block: 'center', behavior: 'instant' });
       const run = () => {
-        img.style.viewTransitionName = '';
+        const shown = cur();
+        shown.style.viewTransitionName = '';
+        if (items[index].video) {
+          vid.pause();
+          // The tile stays on the frame the viewer stopped at, so it flies back seamlessly.
+          (thumb as HTMLVideoElement).currentTime = vid.currentTime;
+        }
         dlg.close();
         // In a carousel, scroll to the last viewed slide. Keyboard position returns to the
         // carousel without leaving a visible focus ring: focus, then blur, so that Tab and
@@ -199,7 +260,7 @@
         if (canAnimate()) thumb.style.viewTransitionName = 'lb-img';
       };
       if (canAnimate()) {
-        img.style.viewTransitionName = 'lb-img';
+        cur().style.viewTransitionName = 'lb-img';
         transition(run, () => (thumb.style.viewTransitionName = ''));
       } else {
         run();
@@ -209,6 +270,8 @@
     /** Close through history so the browser's Back button and our close agree. */
     const closeUI = () => (history.state?.lb ? history.back() : doClose());
     window.addEventListener('popstate', () => dlg.open && doClose());
+
+    const togglePlay = () => (vid.paused ? vid.play().catch(() => {}) : vid.pause());
 
     const step = (d: number) => {
       const next = index + d;
@@ -230,14 +293,14 @@
 
     // Triggers: images become keyboard-operable buttons.
     all.forEach((it) => {
-      const el = it.el;
+      const el: HTMLElement = it.el;
       el.dataset.lb = '';
       el.addEventListener('click', () => open(it));
       // Images in a carousel are operated through the carousel itself.
-      if (it.group) return;
+      if (it.group && !it.video) return;
       el.tabIndex = 0;
       el.setAttribute('role', 'button');
-      el.setAttribute('aria-label', `View larger: ${it.alt || 'image'}`);
+      el.setAttribute('aria-label', `View larger: ${it.alt || (it.video ? 'animation' : 'image')}`);
       el.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
@@ -256,6 +319,10 @@
     dlg.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowLeft') step(-1);
       else if (e.key === 'ArrowRight') step(1);
+      else if (e.key === ' ' && items[index].video && !vid.controls) {
+        e.preventDefault();
+        togglePlay();
+      }
     });
     window.addEventListener('resize', () => dlg.open && size());
     
@@ -307,16 +374,19 @@
     stage.addEventListener('click', (e) => {
       if (swallowClick) return;
       if (e.target === img) toggleZoom(e.clientX, e.clientY);
+      else if (e.target === vid) vid.controls || togglePlay();
       else if (e.target === stage) closeUI();
     });
   }
 </script>
 
 <style is:global>
-  img[data-lb] {
+  img[data-lb],
+  video[data-lb] {
     cursor: zoom-in;
   }
-  img[data-lb]:focus-visible {
+  img[data-lb]:focus-visible,
+  video[data-lb]:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 4px;
   }
@@ -428,6 +498,12 @@
     background: var(--surface);
     user-select: none;
     -webkit-user-drag: none;
+  }
+  .lb__img[hidden] {
+    display: none;
+  }
+  .lb__video {
+    cursor: pointer;
   }
   .lb[data-zoomable] .lb__img {
     cursor: zoom-in;

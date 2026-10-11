@@ -19,12 +19,12 @@ const items = isDev ? motion : motion.filter((m) => m.video);
             </h2>
           </div>
         </div>
-        <div class="lab__grid" role="list">
+        <div class="lab__grid" role="list" data-lightbox-group>
           {items.map((m) => (
             <figure class="tile reveal" role="listitem">
               <div class="tile__media">
                 {m.video ? (
-                  <video src={url(m.video)} poster={m.poster && url(m.poster)} autoplay muted loop playsinline preload="metadata" aria-label={m.title} />
+                  <video src={url(m.video)} poster={m.poster && url(m.poster)} muted loop playsinline preload="metadata" aria-label={m.title} data-label={m.title} />
                 ) : (
                   <div class="tile__placeholder">
                     <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true">
@@ -79,13 +79,45 @@ const items = isDev ? motion : motion.filter((m) => m.video);
 }
 
 <script>
-  // Pause loops for people who prefer reduced motion.
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    document.querySelectorAll<HTMLVideoElement>('.lab video').forEach((v) => {
-      v.removeAttribute('autoplay');
-      v.pause();
-      v.controls = true;
-    });
+  // Loops stay on their poster until asked for. With a mouse a tile plays while it is hovered
+  // (or has keyboard focus); on touch screens the tile that is most in view plays, one at a time.
+  // People who prefer reduced motion get the poster only: the full-screen viewer has controls.
+  const tiles = [...document.querySelectorAll<HTMLVideoElement>('.lab video')];
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const hoverable = window.matchMedia('(hover: hover) and (pointer: fine)');
+  const play = (v: HTMLVideoElement) => !reduced.matches && v.play().catch(() => {});
+  const viewerOpen = () => !!document.querySelector('dialog.lb[open]');
+
+  if (hoverable.matches) {
+    for (const v of tiles) {
+      const start = () => !viewerOpen() && play(v);
+      v.addEventListener('pointerenter', start);
+      v.addEventListener('pointerleave', () => v.pause());
+      v.addEventListener('focus', start);
+      v.addEventListener('blur', () => v.pause());
+    }
+  } else if ('IntersectionObserver' in window) {
+    const ratio = new Map<HTMLVideoElement, number>();
+    const pick = () => {
+      if (viewerOpen()) return;
+      let best: HTMLVideoElement | null = null;
+      let top = 0.5;
+      for (const [v, r] of ratio) if (r > top) [best, top] = [v, r];
+      for (const v of tiles) {
+        if (v === best) play(v);
+        else v.pause();
+      }
+    };
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) ratio.set(e.target as HTMLVideoElement, e.intersectionRatio);
+        pick();
+      },
+      { threshold: [0, 0.25, 0.5, 0.75, 1] },
+    );
+    tiles.forEach((v) => io.observe(v));
+    // The viewer pauses the tiles behind it; pick again once it is closed.
+    document.addEventListener('close', (e) => (e.target as Element).classList?.contains('lb') && pick(), true);
   }
 </script>
 

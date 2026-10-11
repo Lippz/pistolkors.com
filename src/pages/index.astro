@@ -5,6 +5,7 @@ import Base from '../layouts/Base.astro';
 import CaseFeature from '../components/CaseFeature.astro';
 import CaseCard from '../components/CaseCard.astro';
 import MotionLab from '../components/MotionLab.astro';
+import Lightbox from '../components/Lightbox.astro';
 import { site, facts, experience } from '../data/site';
 import { PRODUCT_SINCE, yearsSince, inWords } from '../lib/years';
 import portrait from '../assets/site/portrait.webp';
@@ -27,7 +28,7 @@ const years = cases.map((c) => Number(c.data.year.slice(0, 4)));
       details.
     </p>
     <div class="hero__ctas">
-      <a href="#work" class="btn btn--accent">View selected work</a>
+      <a href="#work" class="btn btn--accent">View Selected Works</a>
       <a href={site.cv} class="btn btn--outline" target="_blank">Download CV (PDF)</a>
     </div>
     <ul class="facts" role="list">
@@ -53,7 +54,7 @@ const years = cases.map((c) => Number(c.data.year.slice(0, 4)));
   <section id="work" class="work">
     <div class="container work__inner">
       <div class="section-head">
-        <h2 class="h2">Selected work</h2>
+        <h2 class="h2">Selected Works</h2>
         <p class="eyebrow">{cases.length} case studies · {Math.min(...years)} — {Math.max(...years)}</p>
       </div>
 
@@ -94,6 +95,8 @@ const years = cases.map((c) => Number(c.data.year.slice(0, 4)));
       <a href={site.cv} class="link-underline about__cv" target="_blank">Full resume (PDF, 1 page) ↓</a>
     </div>
   </section>
+
+  <Lightbox />
 </Base>
 
 <style>
