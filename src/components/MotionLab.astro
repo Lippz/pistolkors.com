@@ -18,10 +18,6 @@ const items = isDev ? motion : motion.filter((m) => m.video);
               Interfaces that <span class="accent-word">move</span> with intent
             </h2>
           </div>
-          <p class="lab__intro">
-            Twenty years of animation, now used where it matters: feedback, state changes and moments that explain
-            themselves. Prototyped and handed to engineers as working files, not guesses.
-          </p>
         </div>
         <div class="lab__grid" role="list">
           {items.map((m) => (
@@ -45,6 +41,37 @@ const items = isDev ? motion : motion.filter((m) => m.video);
               </figcaption>
             </figure>
           ))}
+        </div>
+        <div class="note reveal">
+          <h3 class="note__title">
+            A micro-interaction in <span class="accent-word">minutes</span>, not days
+          </h3>
+          <ol class="note__list">
+            <li>
+              <span class="note__idx">01</span>
+              <div>
+                <p class="note__head">Minutes to a working draft</p>
+                <p class="note__text">New agentic tools turn an idea into a live micro-interaction in a matter of minutes.</p>
+              </div>
+            </li>
+            <li>
+              <span class="note__idx">02</span>
+              <div>
+                <p class="note__head">Yours to tweak</p>
+                <p class="note__text">
+                  Then adjust it to your taste, instead of spending days polishing every motion tween in Figma, Rive or
+                  After Effects.
+                </p>
+              </div>
+            </li>
+            <li>
+              <span class="note__idx">03</span>
+              <div>
+                <p class="note__head">Far easier to ship</p>
+                <p class="note__text">Deploying got significantly simpler too.</p>
+              </div>
+            </li>
+          </ol>
         </div>
       </div>
     </section>
@@ -90,9 +117,58 @@ const items = isDev ? motion : motion.filter((m) => m.video);
   .lab__eyebrow {
     color: var(--night-muted);
   }
-  .lab__intro {
-    max-width: 420px;
-    font-size: 17px;
+  .note {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 32px clamp(32px, 6vw, 96px);
+    padding: clamp(28px, 4vw, 56px);
+    border: 1px solid var(--night-line);
+    border-radius: 20px;
+    background: linear-gradient(135deg, var(--night-2), var(--night) 70%);
+  }
+  .note__title {
+    align-self: start;
+    max-width: 14ch;
+    font-size: clamp(30px, 3.6vw, 48px);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  .note__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .note__list li {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 16px;
+    padding-block: 22px;
+    border-top: 1px solid var(--night-line);
+  }
+  .note__list li:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+  .note__list li:last-child {
+    padding-bottom: 0;
+  }
+  .note__idx {
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.9;
+    color: var(--accent);
+  }
+  .note__head {
+    font-size: 18px;
+    font-weight: 500;
+  }
+  .note__text {
+    margin-top: 6px;
+    font-size: 16px;
     line-height: 1.55;
     color: var(--night-text);
   }
@@ -149,6 +225,12 @@ const items = isDev ? motion : motion.filter((m) => m.video);
   @media (max-width: 1023px) {
     .lab__grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .note {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .note__title {
+      max-width: 20ch;
     }
   }
   @media (max-width: 640px) {
