@@ -94,3 +94,9 @@ The whole app is three screens on one canvas: advices on the left, the ritual in
 </div>
 
 The final design keeps the same three screens. Pressing the ritual button is followed by a short shining animation of the church’s symbol, and every other interaction is slightly animated too.
+
+### Back to it in 2026
+
+For years the app stayed a design. In 2026 I finally came back to it, this time to build it myself. I’m vibe coding it with Cursor, Codex and Claude: I describe the screens, the swipe canvas and the ritual flow, and the tools write the code while I review it, steer it and fix whatever doesn’t feel right.
+
+The user flow, the wireframes and the final design from back then now work as the brief. It’s a very different way of making a product than in 2020, when an MVP needed a team — and the idea that was shelved is moving again.
