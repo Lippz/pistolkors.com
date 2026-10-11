@@ -82,9 +82,16 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
         )
       }
 
-      <div class="case-cover frame">
-        <Image src={d.cover} alt={d.coverAlt} sizes="(min-width: 1440px) 1280px, 100vw" loading="eager" fetchpriority="high" />
-      </div>
+      <CaseCover
+        id={entry.id}
+        cover={d.cover}
+        layers={d.coverLayers}
+        alt={d.coverAlt}
+        sizes="(min-width: 1440px) 1280px, 100vw"
+        eager
+        still
+        class="case-cover"
+      />
     </div>
 
     {
@@ -266,8 +273,9 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
     color: var(--ink-3);
   }
 
-  .case-cover {
+  :global(.case-cover) {
     margin-top: clamp(40px, 5vw, 64px);
+    aspect-ratio: 3 / 2; /* the layered cover is all absolutely placed, so it has no height of its own */
   }
 
   .case-body {
