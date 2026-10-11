@@ -18,6 +18,8 @@
  * The label is read by screen readers and shown as the caption in the viewer.
  * A screen much taller than the shortest one in the carousel is cut at the bottom to
  * the same proportions (with a soft fade); the viewer still opens the whole screen.
+ * Narrow slides (several in view at once) are paged from the left edge instead, one slide per
+ * step, and the counter shows the range in view (1–3 / 8).
  * Without JavaScript the images simply follow each other.
  */
 ---
@@ -26,6 +28,10 @@
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
   /** A slide counts as tall when its height-to-width ratio is this much above the shortest slide's. */
   const TALL = 1.2;
+  /** A slide's shown height stays within this part of the viewport height. */
+  const MAX_H = '70vh';
+  /** Slides narrower than this share of the row are paged from the left edge instead of centred one by one. */
+  const NARROW_BELOW = 0.5;
   const arrow = (d: string) =>
     `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"></path></svg>`;
 
@@ -34,15 +40,21 @@
     const n = imgs.length;
     if (n < 2) return;
 
-    // Small source images: don't stretch a slide beyond the narrowest image's own width.
-    const naturalW = Math.min(...imgs.map((i) => Number(i.getAttribute('width')) || Infinity));
-    if (Number.isFinite(naturalW)) root.style.setProperty('--slide-max', `${naturalW}px`);
-
     // Screens much taller than the shortest one are cut at the bottom to its proportions,
     // so the row keeps one height; the viewer still opens the whole screen.
     const ratios = imgs.map((i) => (Number(i.getAttribute('height')) || 0) / (Number(i.getAttribute('width')) || 1));
     const base = Math.min(...ratios.filter((r) => r > 0));
     const isTall = (i: number) => Number.isFinite(base) && ratios[i] > base * TALL;
+
+    // A slide is no wider than the narrowest image itself (small sources aren't stretched)
+    // and no taller than MAX_H of the viewport, so a row of phone screens fits a small display.
+    const naturalW = Math.min(...imgs.map((i) => Number(i.getAttribute('width')) || Infinity));
+    const shownRatio = Math.max(...ratios.map((r, i) => (isTall(i) ? base : r)));
+    const caps = [
+      Number.isFinite(naturalW) && `${naturalW}px`,
+      shownRatio > 0 && `${MAX_H} / ${shownRatio}`,
+    ].filter(Boolean);
+    if (caps.length) root.style.setProperty('--slide-max', `min(${caps.join(', ')})`);
 
     const track = document.createElement('div');
     track.className = 'carousel__track';
@@ -52,7 +64,9 @@
     track.setAttribute('aria-label', 'Screens. Use the arrow keys to move, Enter to enlarge');
 
     const slides: HTMLElement[] = [];
+    /** The centred slide; in narrow mode, the first one fully in view. */
     let active = 0;
+    let narrow = false;
 
     imgs.forEach((img, i) => {
       const label = img.title || img.alt;
@@ -73,10 +87,11 @@
       slides.push(slide);
 
       // A click on a neighbour brings it to the centre; a click on the centred slide opens the viewer.
+      // Narrow slides are all in view, so a click always opens the viewer.
       slide.addEventListener(
         'click',
         (e) => {
-          if (i === active) return;
+          if (narrow || i === active) return;
           e.stopPropagation();
           goTo(i);
         },
@@ -105,7 +120,7 @@
     function goTo(i: number, smooth = true) {
       const s = slides[Math.max(0, Math.min(n - 1, i))];
       track.scrollTo({
-        left: s.offsetLeft + s.offsetWidth / 2 - track.clientWidth / 2,
+        left: narrow ? s.offsetLeft : s.offsetLeft + s.offsetWidth / 2 - track.clientWidth / 2,
         behavior: smooth && !reduced.matches ? 'smooth' : 'auto',
       });
     }
@@ -129,6 +144,20 @@
     }
 
     function update() {
+      if (narrow) {
+        // Several slides are in view: the row moves by one slide and the counter shows the range in view.
+        const left = track.scrollLeft;
+        const right = left + track.clientWidth;
+        const inView = slides.map((s) => s.offsetLeft >= left - 2 && s.offsetLeft + s.offsetWidth <= right + 2);
+        const first = Math.max(0, inView.indexOf(true));
+        const last = Math.max(first, inView.lastIndexOf(true));
+        active = first;
+        slides.forEach((s, i) => s.classList.toggle('is-active', i >= first && i <= last));
+        count.textContent = `${first + 1}–${last + 1} / ${n}`;
+        prev.disabled = left <= 2;
+        next.disabled = left >= track.scrollWidth - track.clientWidth - 2;
+        return;
+      }
       active = nearest();
       slides.forEach((s, i) => s.classList.toggle('is-active', i === active));
       count.textContent = `${active + 1} / ${n}`;
@@ -145,7 +174,17 @@
       },
       { passive: true },
     );
-    new ResizeObserver(update).observe(track);
+    function fit() {
+      const isNarrow = slides[0].offsetWidth < track.clientWidth * NARROW_BELOW;
+      if (isNarrow === narrow) return;
+      narrow = isNarrow;
+      track.classList.toggle('is-narrow', narrow);
+      goTo(active, false);
+    }
+    new ResizeObserver(() => {
+      fit();
+      update();
+    }).observe(track);
 
     prev.addEventListener('click', () => goTo(active - 1));
     next.addEventListener('click', () => goTo(active + 1));
@@ -164,6 +203,7 @@
     // The image viewer asks the carousel to follow the image it was last showing.
     root.addEventListener('goto', (e) => goTo((e as CustomEvent<number>).detail, false));
 
+    fit();
     update();
   });
 </script>
@@ -186,6 +226,10 @@
   }
   .carousel__track::-webkit-scrollbar {
     display: none;
+  }
+  /* Narrow slides: the row moves by one slide from the left edge, no empty room before the first. */
+  .carousel__track.is-narrow .carousel__slide {
+    scroll-snap-align: start;
   }
   .carousel__track:focus-visible {
     outline: 2px solid var(--accent);

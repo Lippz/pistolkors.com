@@ -116,16 +116,18 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
           <div class="prose case-prose case-prose--intro">
             <Content />
           </div>
-          <div class="slides">
-            {d.slides.map((s, i) => (
-              <figure class="slide reveal">
-                <Image src={s.src} alt={s.alt} sizes="(min-width: 1440px) 1280px, 100vw" class="slide__img" />
-                <figcaption class="eyebrow">
-                  {String(i + 1).padStart(2, '0')} — {s.alt}
-                </figcaption>
-              </figure>
-            ))}
-          </div>
+          {d.slides.length > 0 && (
+            <div class="slides">
+              {d.slides.map((s, i) => (
+                <figure class="slide reveal">
+                  <Image src={s.src} alt={s.alt} sizes="(min-width: 1440px) 1280px, 100vw" class="slide__img" />
+                  <figcaption class="eyebrow">
+                    {String(i + 1).padStart(2, '0')} — {s.alt}
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          )}
         </div>
       )
     }
