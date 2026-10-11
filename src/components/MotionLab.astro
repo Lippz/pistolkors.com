@@ -42,6 +42,15 @@ const items = isDev ? motion : motion.filter((m) => m.video);
             </figure>
           ))}
         </div>
+        <div class="lab__bar" role="group" aria-label="Browse the loops">
+          <button type="button" class="lab__btn" data-dir="-1" aria-label="Previous loop">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+          </button>
+          <span class="lab__count" aria-live="polite"></span>
+          <button type="button" class="lab__btn" data-dir="1" aria-label="Next loop">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+          </button>
+        </div>
         <div class="note reveal">
           <h3 class="note__title">
             A micro-interaction in <span class="accent-word">minutes</span>, not days
@@ -82,14 +91,14 @@ const items = isDev ? motion : motion.filter((m) => m.video);
   // Loops stay on their poster until asked for. With a mouse a tile plays while it is hovered
   // (or has keyboard focus); on touch screens the tile that is most in view plays, one at a time.
   // People who prefer reduced motion get the poster only: the full-screen viewer has controls.
-  const tiles = [...document.querySelectorAll<HTMLVideoElement>('.lab video')];
+  const videos = [...document.querySelectorAll<HTMLVideoElement>('.lab video')];
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
   const hoverable = window.matchMedia('(hover: hover) and (pointer: fine)');
   const play = (v: HTMLVideoElement) => !reduced.matches && v.play().catch(() => {});
   const viewerOpen = () => !!document.querySelector('dialog.lb[open]');
 
   if (hoverable.matches) {
-    for (const v of tiles) {
+    for (const v of videos) {
       const start = () => !viewerOpen() && play(v);
       v.addEventListener('pointerenter', start);
       v.addEventListener('pointerleave', () => v.pause());
@@ -97,13 +106,16 @@ const items = isDev ? motion : motion.filter((m) => m.video);
       v.addEventListener('blur', () => v.pause());
     }
   } else if ('IntersectionObserver' in window) {
+    // Intersection is measured through the scrolling row too, so on a phone the tile in the
+    // middle of the carousel is the most visible one: it plays, and the next one starts as the
+    // row is swiped.
     const ratio = new Map<HTMLVideoElement, number>();
     const pick = () => {
       if (viewerOpen()) return;
       let best: HTMLVideoElement | null = null;
       let top = 0.5;
       for (const [v, r] of ratio) if (r > top) [best, top] = [v, r];
-      for (const v of tiles) {
+      for (const v of videos) {
         if (v === best) play(v);
         else v.pause();
       }
@@ -115,9 +127,79 @@ const items = isDev ? motion : motion.filter((m) => m.video);
       },
       { threshold: [0, 0.25, 0.5, 0.75, 1] },
     );
-    tiles.forEach((v) => io.observe(v));
+    videos.forEach((v) => io.observe(v));
     // The viewer pauses the tiles behind it; pick again once it is closed.
     document.addEventListener('close', (e) => (e.target as Element).classList?.contains('lb') && pick(), true);
+  }
+
+  // Phones: the tiles form a swipeable row (scroll-snap, the neighbours peek in). The centred
+  // tile is the active one; a tap on a neighbour brings it to the centre, a tap on the active
+  // tile opens the full-screen viewer.
+  const track = document.querySelector<HTMLElement>('.lab__grid');
+  const slides = [...document.querySelectorAll<HTMLElement>('.lab .tile')];
+  const prev = document.querySelector<HTMLButtonElement>('.lab__btn[data-dir="-1"]');
+  const next = document.querySelector<HTMLButtonElement>('.lab__btn[data-dir="1"]');
+  const count = document.querySelector<HTMLElement>('.lab__count');
+  const phone = window.matchMedia('(max-width: 640px)');
+
+  if (track && prev && next && count && slides.length > 1) {
+    let active = 0;
+
+    const goTo = (i: number, smooth = true) => {
+      const s = slides[Math.max(0, Math.min(slides.length - 1, i))];
+      track.scrollTo({
+        left: s.offsetLeft + s.offsetWidth / 2 - track.clientWidth / 2,
+        behavior: smooth && !reduced.matches ? 'smooth' : 'auto',
+      });
+    };
+
+    /** The tile nearest the row's centre (the first and last win at the ends of the row). */
+    const nearest = () => {
+      const max = track.scrollWidth - track.clientWidth;
+      if (track.scrollLeft <= 2) return 0;
+      if (track.scrollLeft >= max - 2) return slides.length - 1;
+      const mid = track.scrollLeft + track.clientWidth / 2;
+      let best = 0;
+      let dist = Infinity;
+      slides.forEach((s, i) => {
+        const d = Math.abs(s.offsetLeft + s.offsetWidth / 2 - mid);
+        if (d < dist) [best, dist] = [i, d];
+      });
+      return best;
+    };
+
+    const update = () => {
+      active = phone.matches ? nearest() : 0;
+      slides.forEach((s, i) => s.classList.toggle('is-active', phone.matches && i === active));
+      count.textContent = `${active + 1} / ${slides.length}`;
+      prev.disabled = active === 0;
+      next.disabled = active === slides.length - 1;
+    };
+
+    let frame = 0;
+    track.addEventListener(
+      'scroll',
+      () => {
+        cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(update);
+      },
+      { passive: true },
+    );
+    new ResizeObserver(update).observe(track);
+    prev.addEventListener('click', () => goTo(active - 1));
+    next.addEventListener('click', () => goTo(active + 1));
+    slides.forEach((s, i) =>
+      s.addEventListener(
+        'click',
+        (e) => {
+          if (!phone.matches || i === active) return;
+          e.stopPropagation();
+          goTo(i);
+        },
+        true,
+      ),
+    );
+    update();
   }
 </script>
 
@@ -265,11 +347,53 @@ const items = isDev ? motion : motion.filter((m) => m.video);
       max-width: 20ch;
     }
   }
+  .lab__bar {
+    display: none;
+  }
+  .lab__btn {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(255 255 255 / 0.1);
+    color: var(--night-fg);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  .lab__btn:hover:not(:disabled) {
+    background: rgb(255 255 255 / 0.2);
+  }
+  .lab__btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+  .lab__btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .lab__count {
+    min-width: 56px;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: var(--night-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  /* Phones: a swipeable row. Tiles snap to the centre, so the first one sits at the column's left
+     edge (the row cannot scroll further) and the next one peeks in from the right. */
   @media (max-width: 640px) {
     .lab__grid {
+      position: relative;
       display: flex;
+      gap: 12px;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
+      overscroll-behavior-x: contain;
       margin-inline: calc(-1 * var(--gutter));
       padding-inline: var(--gutter);
       scrollbar-width: none;
@@ -278,8 +402,28 @@ const items = isDev ? motion : motion.filter((m) => m.video);
       display: none;
     }
     .tile {
-      flex: 0 0 72%;
-      scroll-snap-align: start;
+      flex: 0 0 min(calc(100% - 56px), 320px);
+      scroll-snap-align: center;
+    }
+    .tile__media {
+      transition: filter 0.3s ease;
+    }
+    .tile:not(.is-active) .tile__media {
+      filter: brightness(0.7);
+    }
+    .lab__bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      /* Closer to the row than the section's usual gap. */
+      margin-top: -24px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tile__media,
+    .lab__btn {
+      transition: none;
     }
   }
 </style>
