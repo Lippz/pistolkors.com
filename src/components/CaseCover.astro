@@ -108,13 +108,13 @@ const loading = eager ? 'eager' : 'lazy';
   }
   :global(:root[data-theme='dark']) .cover--themed {
     --veil: rgb(0 0 0 / 0.55);
-    --bg-adjust: contrast(1.15) saturate(1.2);
+    --bg-adjust: contrast(1) saturate(1);
     --logo-filter: brightness(0) invert(1);
   }
   @media (prefers-color-scheme: dark) {
     :global(:root:not([data-theme='light'])) .cover--themed {
       --veil: rgb(0 0 0 / 0.55);
-      --bg-adjust: contrast(1.15) saturate(1.2);
+      --bg-adjust: contrast(1) saturate(1);
       --logo-filter: brightness(0) invert(1);
     }
   }
