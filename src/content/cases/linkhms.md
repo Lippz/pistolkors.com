@@ -67,6 +67,47 @@ I surveyed 12 healthcare professionals, interviewed 5 of them and analysed 4 com
 
 I grouped the findings in an affinity diagram, graded features by importance and built a persona — Kwame, a physical therapist working across several public and private clinics — to test every decision against.
 
+### Meet Kwame, the primary user
+
+<div class="persona">
+<dl class="persona__id">
+<div><dt>Name</dt><dd>Kwame, 36</dd></div>
+<div><dt>Occupation</dt><dd>Physical therapist</dd></div>
+<div><dt>Location</dt><dd>Central Africa</dd></div>
+<div><dt>Archetype</dt><dd>The Efficient Caregiver</dd></div>
+<div><dt>Environment</dt><dd>Multiple public and private clinics</dd></div>
+<div><dt>Tech</dt><dd>100% desktop</dd></div>
+</dl>
+<p class="persona__bio">“Managing patient records and appointments was a constant struggle with slow software and endless paperwork. It took time away from patient care.”</p>
+<div class="persona__cols">
+<div>
+<p class="persona__label">Goals</p>
+<ul>
+<li>Faster access to medical records.</li>
+<li>Streamlined appointment scheduling.</li>
+<li>Less administrative workload.</li>
+<li>Better communication with other staff.</li>
+</ul>
+</div>
+<div>
+<p class="persona__label">Frustrations</p>
+<ul>
+<li>Outdated systems that delay access to patient data.</li>
+<li>Difficulty managing large volumes of paperwork.</li>
+<li>Lack of integration between different departments.</li>
+</ul>
+</div>
+<div>
+<p class="persona__label">Personality</p>
+<ul>
+<li>Conscientious and reliable.</li>
+<li>Organized and open-minded.</li>
+<li>Empathetic and adaptable.</li>
+</ul>
+</div>
+</div>
+</div>
+
 ## Process
 
 ### From sketches to a tested flow
