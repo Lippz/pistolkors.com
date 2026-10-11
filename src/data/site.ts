@@ -8,7 +8,7 @@ export const site = {
   description: `Senior Product Designer with over 20 years in visual and motion design and ${inWords(yearsSince(PRODUCT_SINCE))} as a senior product designer: legal-tech, healthcare, e-commerce and marketplaces.`,
   availability: 'Open to senior product design roles — Remote / Poznań, PL',
   email: 'ppistolkors@gmail.com',
-  cv: url('/pylyp-pistolkors-cv.pdf'),
+  cv: url('/CV-Pylyp_Pistolkors-Senior_Product_Designer.pdf'),
   links: [
     { label: 'LinkedIn', href: 'https://linkedin.com/in/pistolkors' },
     { label: 'Behance', href: 'https://be.net/pistolkors' },
