@@ -250,7 +250,12 @@ Receptionists create an appointment for a specific doctor in just a few clicks, 
 
 #### Patients at the centre, with the right to be forgotten
 
-The patient is the main entity of the system. Every record can be removed completely on the patient’s request, in line with the data-privacy needs raised in research.
+The patient is the main entity of the system, and the clinic owns its patients’ data — data privacy came up in research as a need, not a nice-to-have.
+
+<div class="cards cards--answer">
+<div><b>Whose call it is</b>The clinic answers for its patients’ records and how long they are kept. LinkHMS holds them on the clinic’s behalf, so deleting a patient is the clinic’s decision, not ours.</div>
+<div><b>What LinkHMS gives</b>A record removed completely on the patient’s request, by the roles or people the admin allows, behind a warning that it cannot be undone. A clinic that leaves gets its patients’ data exported on request, and then it is deleted.</div>
+</div>
 
 <div class="carousel">
 
