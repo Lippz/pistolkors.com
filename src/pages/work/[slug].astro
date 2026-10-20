@@ -69,13 +69,16 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
 
       {
         d.part?.length > 0 && (
-          <section class="case-part" aria-label="My part">
-            <p class="eyebrow">My part</p>
-            <ul role="list">
-              {d.part.map((p) => (
-                <li>{p}</li>
+          <section class="case-part" aria-labelledby="my-part">
+            <h2 id="my-part" class="case-part__title">My part</h2>
+            <ol class="case-part__list" role="list">
+              {d.part.map((p, i) => (
+                <li>
+                  <span class="case-part__num">{String(i + 1).padStart(2, '0')}</span>
+                  <span>{p}</span>
+                </li>
               ))}
-            </ul>
+            </ol>
           </section>
         )
       }
@@ -291,25 +294,50 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
     font-weight: 500;
   }
 
-  /* "My part": two columns of short lines, ruled like the facts above. */
+  /* "My part": the title on the left, numbered rows on the right, ruled like the
+     experience list on the home page — a strong rule on top, light ones between. */
   .case-part {
-    margin-top: 48px;
+    margin-top: clamp(56px, 7vw, 88px);
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 24px;
   }
-  .case-part ul {
-    margin: 16px 0 0;
+  .case-part__title {
+    grid-column: span 4;
+    margin: 0;
+    font-size: var(--step-h3);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+  }
+  .case-part__list {
+    grid-column: 5 / span 8;
+    margin: 0;
     padding: 0;
     list-style: none;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0 24px;
   }
-  .case-part li {
-    padding: 14px 0;
+  .case-part__list li {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 16px;
+    align-items: baseline;
+    padding: 18px 0;
     border-top: 1px solid var(--line);
-    font-size: 16px;
+    font-size: 17px;
     line-height: 1.5;
     color: var(--ink-2);
     text-wrap: pretty;
+  }
+  .case-part__list li:first-child {
+    border-top-color: var(--rule);
+  }
+  .case-part__list li:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+  .case-part__num {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent-ink);
   }
 
   .case-stats {
@@ -454,8 +482,17 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
     .case-facts {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-    .case-part ul {
-      grid-template-columns: 1fr;
+    .case-part {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 20px;
+    }
+    .case-part__title,
+    .case-part__list {
+      grid-column: auto;
+    }
+    .case-part__list li {
+      grid-template-columns: 32px minmax(0, 1fr);
+      gap: 12px;
     }
     .case-body {
       grid-template-columns: 1fr;
