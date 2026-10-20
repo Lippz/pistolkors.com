@@ -45,10 +45,10 @@ I ran interviews with existing customers, a competitive analysis of modern e-com
 ### Four problems to solve
 
 <div class="cards">
-<div><b>Navigation</b>Poor filtering and categorisation made products hard to find.</div>
-<div><b>Checkout friction</b>A lengthy purchase flow led to drop-offs.</div>
-<div><b>Trust</b>Reviews, testimonials and video guides were buried.</div>
-<div><b>Mobile</b>The phone experience was inconsistent and hard to use.</div>
+<div data-icon="filter"><b>Navigation</b>Poor filtering and categorisation made products hard to find.</div>
+<div data-icon="cart"><b>Checkout friction</b>A lengthy purchase flow led to drop-offs.</div>
+<div data-icon="star"><b>Trust</b>Reviews, testimonials and video guides were buried.</div>
+<div data-icon="phone"><b>Mobile</b>The phone experience was inconsistent and hard to use.</div>
 </div>
 
 ## Users

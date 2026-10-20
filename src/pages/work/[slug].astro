@@ -5,6 +5,7 @@ import Base from '../../layouts/Base.astro';
 import Lightbox from '../../components/Lightbox.astro';
 import ImageCarousel from '../../components/ImageCarousel.astro';
 import CaseCover from '../../components/CaseCover.astro';
+import ArrowCircle from '../../components/ArrowCircle.astro';
 import { url } from '../../lib/url';
 
 export async function getStaticPaths() {
@@ -46,7 +47,7 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
 <Base title={d.client} description={d.summary} image={og.src} current="work" compactFooter progress>
   <article>
     <header class="container case-hero">
-      <a href={url('/#work')} class="case-hero__back">← All work</a>
+      <a href={url('/#work')} class="case-hero__back arrow-trigger"><ArrowCircle dir="left" />Back</a>
       <p class="eyebrow">Case study {num} · {d.client} · {d.industry}</p>
       <h1 class="h1 case-hero__title">
         {titleHead}{titleAccent && <span class="accent-word">{titleAccent}</span>}
@@ -230,8 +231,25 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
     min-height: 44px;
     display: inline-flex;
     align-items: center;
+    gap: 12px;
     font-size: 15px;
+    font-weight: 500;
     color: var(--muted);
+    transition: color 0.18s ease-out;
+  }
+  /* Same hover as "Read case": the label lights up, the arrow circle draws its ring (global.css). */
+  @media (hover: hover) {
+    .case-hero__back:hover {
+      color: var(--accent-ink);
+    }
+  }
+  .case-hero__back:focus-visible {
+    color: var(--accent-ink);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .case-hero__back {
+      transition: none;
+    }
   }
   .case-hero__title {
     max-width: 1200px;

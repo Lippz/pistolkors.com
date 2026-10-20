@@ -5,12 +5,13 @@
  * or keyboard focus; the styles live in global.css.
  */
 interface Props {
-  /** right: a page on this site · out: another site · down: a file */
-  dir?: 'right' | 'out' | 'down';
+  /** right: a page on this site · left: back to a previous page · out: another site · down: a file */
+  dir?: 'right' | 'left' | 'out' | 'down';
 }
 const { dir = 'right' } = Astro.props;
 const paths = {
   right: 'M5 12h14M13 6l6 6-6 6',
+  left: 'M19 12H5M11 6l-6 6 6 6',
   out: 'M7 17 17 7M8 7h9v9',
   down: 'M12 5v14M6 13l6 6 6-6',
 };

@@ -301,7 +301,7 @@ dd {
 /* ---------- Arrow in a circle (ArrowCircle.astro) ----------
  * Hovering or focusing the `.arrow-trigger` around it draws a 2px accent ring and
  * turns the arrow accent. The ring starts where the arrow points (3 o'clock for →,
- * half past one for ↗, 6 for ↓), runs both ways and closes on the opposite side.
+ * 9 for ←, half past one for ↗, 6 for ↓), runs both ways and closes on the opposite side.
  * Set --arrow-line on a dark section for a resting ring that stays visible there. */
 .arrow-circle {
   position: relative;
@@ -325,6 +325,9 @@ dd {
   width: calc(100% + 2px);
   height: calc(100% + 2px);
   pointer-events: none;
+}
+.arrow-circle--left .arrow-circle__ring {
+  rotate: 180deg;
 }
 .arrow-circle--out .arrow-circle__ring {
   rotate: -45deg;
@@ -762,6 +765,63 @@ a:hover .frame img {
   font-size: 1.125rem;
   font-weight: 500;
   color: var(--ink);
+}
+/* A small line icon over the title: <div data-icon="pill">. The SVGs in assets/icons
+ * are masks, so the icon takes the accent colour in either theme. */
+.prose .cards > [data-icon]::before {
+  content: '';
+  width: 22px;
+  height: 22px;
+  margin-bottom: 6px;
+  background: var(--accent-ink);
+  mask: var(--icon) center / contain no-repeat;
+}
+.prose [data-icon='calendar'] { --icon: url(../assets/icons/calendar.svg); }
+.prose [data-icon='record'] { --icon: url(../assets/icons/record.svg); }
+.prose [data-icon='stethoscope'] { --icon: url(../assets/icons/stethoscope.svg); }
+.prose [data-icon='receipt'] { --icon: url(../assets/icons/receipt.svg); }
+.prose [data-icon='pill'] { --icon: url(../assets/icons/pill.svg); }
+.prose [data-icon='flask'] { --icon: url(../assets/icons/flask.svg); }
+.prose [data-icon='chart'] { --icon: url(../assets/icons/chart.svg); }
+.prose [data-icon='users'] { --icon: url(../assets/icons/users.svg); }
+.prose [data-icon='sliders'] { --icon: url(../assets/icons/sliders.svg); }
+.prose [data-icon='wallet'] { --icon: url(../assets/icons/wallet.svg); }
+.prose [data-icon='syringe'] { --icon: url(../assets/icons/syringe.svg); }
+.prose [data-icon='pulse'] { --icon: url(../assets/icons/pulse.svg); }
+.prose [data-icon='clipboard'] { --icon: url(../assets/icons/clipboard.svg); }
+.prose [data-icon='filter'] { --icon: url(../assets/icons/filter.svg); }
+.prose [data-icon='cart'] { --icon: url(../assets/icons/cart.svg); }
+.prose [data-icon='star'] { --icon: url(../assets/icons/star.svg); }
+.prose [data-icon='phone'] { --icon: url(../assets/icons/phone.svg); }
+.prose [data-icon='user'] { --icon: url(../assets/icons/user.svg); }
+.prose [data-icon='scan'] { --icon: url(../assets/icons/scan.svg); }
+.prose [data-icon='scale'] { --icon: url(../assets/icons/scale.svg); }
+/* A problem and its answer (<div class="cards cards--answer">): the last card is the
+ * answer, outlined and labelled in the accent. */
+.prose .cards--answer > div:last-child {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+}
+.prose .cards--answer > div:last-child b {
+  color: var(--accent-ink);
+}
+/* Cards rise in one after another as they scroll in: each card in a row of three
+ * starts its reveal a little later in its own entry range. Same keyframes as .reveal. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .prose .cards > div {
+      animation: reveal linear both;
+    }
+    body .prose .cards > div {
+      animation-timeline: view();
+      animation-range: entry calc(var(--step, 0) * 12%) entry calc(40% + var(--step, 0) * 12%);
+    }
+    .prose .cards > div:nth-child(3n + 2) {
+      --step: 1;
+    }
+    .prose .cards > div:nth-child(3n + 3) {
+      --step: 2;
+    }
+  }
 }
 
 /* Step flow: <ol class="flow"> with <li><span>01 · Who</span>What</li>. */

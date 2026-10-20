@@ -45,9 +45,9 @@ Leaked content means lost income, stress and damage to a creator’s reputation.
 ### Three roles, one pipeline
 
 <div class="cards">
-<div><b>Creators and agencies</b>Protect content and revenue without technical skills or spare time.</div>
-<div><b>Operators</b>Review AI matches and remove false positives before anything goes legal.</div>
-<div><b>Lawyers</b>Receive validated cases and send takedowns at volume.</div>
+<div data-icon="user"><b>Creators and agencies</b>Protect content and revenue without technical skills or spare time.</div>
+<div data-icon="scan"><b>Operators</b>Review AI matches and remove false positives before anything goes legal.</div>
+<div data-icon="scale"><b>Lawyers</b>Receive validated cases and send takedowns at volume.</div>
 </div>
 
 ### Meet Emma, the primary user
