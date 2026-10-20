@@ -68,7 +68,7 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
       </dl>
 
       {
-        d.part.length > 0 && (
+        d.part?.length > 0 && (
           <section class="case-part" aria-label="My part">
             <p class="eyebrow">My part</p>
             <ul role="list">
