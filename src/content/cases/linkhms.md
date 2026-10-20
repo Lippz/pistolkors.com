@@ -186,9 +186,16 @@ To keep the interface consistent as it grows, I defined design tokens for numeri
 
 With the identity and the components in place, here are the flows where speed mattered most.
 
-#### Set up a clinic with a guided tour
+#### One account type, set up with a guided tour
 
-There is one LinkHMS for everyone: a doctor working alone gets every feature, and a clinic team shares the same system with roles. After sign-up, a guided tour walks through the first set-up: it creates a department, a service and a user, ticking them off in a “Let’s set up your clinic” checklist, and the home screen keeps the remaining steps in view. The tour can be skipped and restarted at any time from the menu.
+LinkHMS launched with two account types: an individual practice for a doctor working alone, and a clinic for a team.
+
+<div class="cards cards--answer">
+<div><b>What we found</b>In several small clinics, a few people were working in one individual account from a shared computer. No restriction we added stopped it, and keeping two account types meant maintaining two versions of the same flows for a line users did not respect.</div>
+<div><b>What we chose</b>We dropped the individual practice. A doctor working alone is now a clinic with one seat and keeps every feature, and a team shares the same system with roles — one product to maintain instead of two.</div>
+</div>
+
+After sign-up, a guided tour walks through the first set-up: it creates a department, a service and a user, ticking them off in a “Let’s set up your clinic” checklist, and the home screen keeps the remaining steps in view. The tour can be skipped and restarted at any time from the menu.
 
 <div class="carousel">
 
