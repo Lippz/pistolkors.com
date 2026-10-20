@@ -22,19 +22,19 @@ coverLayers:
 stats:
   label: Results
   items:
-    - value: Hundreds
-      label: of dealers and staff work in the platform
+    - value: 300+
+      label: dealers and staff work in the platform
     - value: 20+ yrs
       label: of Excel workflows replaced
-    - value: 100+
-      label: screens and pop-ups designed
+    - value: 4 roles
+      label: manufacturers, retailers, installers and their customers in one system
 ---
 
 ## Overview
 
 ### From spreadsheets to one platform
 
-CCI ERP is a web platform that covers the whole life of a carport building — creating, selling and installing it. It is made for carport manufacturers, retailers and installers, and it re-creates the Excel tables the client had used for over 20 years.
+CCI ERP is a web platform that covers the whole life of a carport building — creating, selling and installing it. It is made for carport manufacturers, retailers and installers, and it re-creates the Excel tables the client had used for over 20 years. The client is no small shop: Carolina Carports has built steel carports, garages and barns since 1997, with seven manufacturing locations and a network of over 1,500 representatives, per carolinacarportsinc.com.
 
 I joined the discovery phase alongside business analysts, then designed more than 100 screens and pop-ups while the requirements kept evolving, working closely with developers through implementation. The work covered user research, wireframing and prototyping, visual design and iterative usability testing.
 
@@ -153,7 +153,7 @@ Everything that keeps the system running sits behind the same navigation.
 
 ### One platform for the whole business
 
-- **In use across the business** — hundreds of dealers and staff now work in one platform instead of separate Excel tables.
+- **In use across the business** — 300+ dealers and staff now work in one platform instead of separate Excel tables.
 - **One record per order** — design, price, payments and installation live in the same order, so nothing is retyped from table to table.
 - **Prices without lookups** — the price recalculates as the building changes, so a quote no longer means searching a pricing sheet.
 - **Crews on a calendar** — confirmed orders are grouped into runs on a map and placed on the crew calendar, instead of being planned by hand.
