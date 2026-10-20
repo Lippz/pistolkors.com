@@ -42,6 +42,7 @@ DNS at your domain registrar (remove the old Framer records first):
 | Contacts, facts, experience   | `src/data/site.ts`               |
 | Motion lab tiles              | `motion` in `src/data/site.ts`   |
 | “How I work” cards            | `capabilities` in `src/data/site.ts` |
+| “AI in my pipeline” block     | `ai` in `src/data/site.ts`       |
 | CV                            | `public/CV-Pylyp_Pistolkors-Senior_Product_Designer.pdf` |
 | Colours, type, spacing        | `src/styles/global.css` (`:root`; dark theme in the two blocks below it — keep them identical) |
 

@@ -23,7 +23,7 @@ export const facts: { value?: string; since?: string; unit?: string; label: stri
   { value: '20+ yrs', label: 'in design, animation and motion' },
   { since: PRODUCT_SINCE, unit: 'yrs', label: 'in product design, since 2020' },
   { value: '5 industries', label: 'healthcare, legal-tech, e-commerce, construction, crypto' },
-  { value: 'Mentor', label: 'leading mid-level designers at Existek' },
+  { value: 'AI-native', label: 'agents at almost every step, from first draft to code' },
 ];
 
 export const experience = [
@@ -85,6 +85,8 @@ export const capabilities: {
   text: string;
   skills: string[];
   deliverables: string[];
+  /** One line on where AI agents come in. */
+  ai: string;
   proof: { label: string; href: string };
 }[] = [
   {
@@ -98,6 +100,7 @@ export const capabilities: {
       'Information architecture',
     ],
     deliverables: ['Research summary', 'Personas', 'User flows', 'Wireframes'],
+    ai: 'Faster first drafts: several flows and layouts to test against the research, not one.',
     proof: { label: 'LinkHMS', href: '/work/linkhms/' },
   },
   {
@@ -111,6 +114,7 @@ export const capabilities: {
       'Responsive web and mobile',
     ],
     deliverables: ['High-fidelity UI', 'Design system', 'Clickable prototypes', 'Dev-ready Figma'],
+    ai: 'Figma MCP and coding agents carry design-system changes into code without a front-end developer.',
     proof: { label: 'LegalFans', href: '/work/legalfans/' },
   },
   {
@@ -120,10 +124,48 @@ export const capabilities: {
       'Micro-interactions',
       'Interactive prototypes',
       'Motion design and animation',
-      'Prototypes in code with AI tools',
       'Hand-off with working behaviour',
     ],
     deliverables: ['Interaction prototypes', 'Motion loops', 'Coded demos'],
+    ai: 'Prototypes are built in real code with Cursor, Claude Code and Codex, not only linked frames.',
     proof: { label: 'Motion lab', href: '/#lab' },
   },
 ];
+
+/**
+ * "AI in my pipeline" block on the home page: the steps where agents work,
+ * then the proof (a case and this site).
+ */
+export const ai = {
+  steps: [
+    {
+      title: 'Explore',
+      text: 'Agents draft layout and flow variants, so I compare more options before committing to one.',
+      tools: ['Claude', 'ChatGPT', 'Figma Make'],
+    },
+    {
+      title: 'Prototype',
+      text: 'Interactions run in real code, so the team tests how the product behaves, not how it looks.',
+      tools: ['Cursor', 'Claude Code', 'Codex'],
+    },
+    {
+      title: 'Design system ↔ code',
+      text: 'Through Figma MCP, tokens and components move between Figma and code without a front-end sprint.',
+      tools: ['Figma MCP', 'Claude Code'],
+    },
+    {
+      title: 'Document',
+      text: 'Specs, hand-off notes and component docs are drafted by AI and edited by me.',
+      tools: ['Claude', 'ChatGPT'],
+    },
+  ],
+  caseStudy: {
+    label: 'LinkHMS',
+    href: '/work/linkhms/#ai-in-the-process',
+    stats: [
+      { value: '~50%', label: 'of the work done with AI agents, from coded prototypes to the design system' },
+      { value: 'Tens of hours', label: 'of front-end work saved: the reworked design system was implemented by AI' },
+    ],
+  },
+  site: 'Designed by me, built and maintained with Claude Code — from the case layouts to the animated arrows on this page.',
+};

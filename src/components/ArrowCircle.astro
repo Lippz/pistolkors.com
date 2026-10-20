@@ -1,16 +1,14 @@
 ---
 /**
  * Arrow in a thin circle at the end of a link or a clickable row. Put the
- * `arrow-trigger` class on the element that should light it up on hover or
- * keyboard focus; the styles live in global.css.
+ * `arrow-trigger` class on the element that should draw its red ring on hover
+ * or keyboard focus; the styles live in global.css.
  */
 interface Props {
   /** right: a page on this site · out: another site · down: a file */
   dir?: 'right' | 'out' | 'down';
-  /** fill: the circle fills with red · ring: a red ring draws itself round the circle */
-  variant?: 'fill' | 'ring';
 }
-const { dir = 'right', variant = 'fill' } = Astro.props;
+const { dir = 'right' } = Astro.props;
 const paths = {
   right: 'M5 12h14M13 6l6 6-6 6',
   out: 'M7 17 17 7M8 7h9v9',
@@ -18,15 +16,11 @@ const paths = {
 };
 ---
 
-<span class:list={['arrow-circle', `arrow-circle--${dir}`, `arrow-circle--${variant}`]} aria-hidden="true">
-  {
-    variant === 'ring' && (
-      <svg class="arrow-circle__ring" viewBox="0 0 40 40" fill="none">
-        <path d="M39 20A19 19 0 0 1 1 20" pathLength="100" />
-        <path d="M39 20A19 19 0 0 0 1 20" pathLength="100" />
-      </svg>
-    )
-  }
+<span class:list={['arrow-circle', `arrow-circle--${dir}`]} aria-hidden="true">
+  <svg class="arrow-circle__ring" viewBox="0 0 40 40" fill="none">
+    <path d="M39 20A19 19 0 0 1 1 20" pathLength="100" />
+    <path d="M39 20A19 19 0 0 0 1 20" pathLength="100" />
+  </svg>
   <svg class="arrow-circle__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
     <path d={paths[dir]}></path>
   </svg>

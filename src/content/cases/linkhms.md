@@ -356,6 +356,28 @@ Patients sign in with their email and a six-digit one-time code. The home screen
 
 </div>
 
+## AI in the process
+
+### About half of the work went through AI agents
+
+AI tools became part of the process as the project went on. Agents did not replace the design work: I made the decisions, they took on the slow parts between a design and working code.
+
+#### The densest sections, prototyped in code
+
+The heaviest sections were prototyped in code with AI agents (Cursor, Claude Code and Codex) instead of linked Figma frames, so the team could try them as working interfaces before development started.
+
+<div class="cards">
+<div><b>Reports</b>Operational reports on admissions, diagnoses, lab tests, patient flow and antenatal care.</div>
+<div><b>Finance reports</b>Billed, collected and outstanding, with charts that filter the invoices that need attention.</div>
+<div><b>Vaccinations</b>A schedule grid by age with a status for every vaccine.</div>
+<div><b>Partograph</b>The labour progress chart in the Pregnancies section.</div>
+<div><b>Prescriptions and drug administration</b>Medicines with route, dosage and status, and a log of every dose given.</div>
+</div>
+
+#### A design system reworked in Figma, implemented by AI
+
+I first built the design system by hand in Figma, and later reworked it there too. This time the changes went into the code base through AI agents rather than front-end developers: no one was taken off the roadmap, and the rework saved tens of hours of development.
+
 ## Next steps
 
 ### There is no limit to perfection

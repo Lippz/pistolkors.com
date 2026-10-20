@@ -1,0 +1,211 @@
+---
+/** "AI in my pipeline": the steps where agents work, then the proof — a case and this site. */
+import ArrowCircle from './ArrowCircle.astro';
+import { ai } from '../data/site';
+import { url } from '../lib/url';
+---
+
+<section id="ai" class="ai container">
+  <div class="ai__head reveal">
+    <p class="eyebrow">AI in my pipeline</p>
+    <h2 class="h2">AI drafts, I <span class="accent-word">decide</span></h2>
+    <p class="lead">
+      I work with agentic tools every day. They explore variants, build prototypes in code and keep the design system in
+      step with the code base. I set the direction, check every result and make the calls.
+    </p>
+  </div>
+
+  <ol class="ai__steps" role="list">
+    {
+      ai.steps.map((s, i) => (
+        <li class="step reveal">
+          <p class="eyebrow step__idx">{String(i + 1).padStart(2, '0')}</p>
+          <h3 class="step__title">{s.title}</h3>
+          <p class="step__text">{s.text}</p>
+          <ul class="step__tools" role="list" aria-label="Tools">
+            {s.tools.map((t) => <li>{t}</li>)}
+          </ul>
+        </li>
+      ))
+    }
+  </ol>
+
+  <div class="ai__proof">
+    <a href={url(ai.caseStudy.href)} class="proof proof--case arrow-trigger reveal">
+      <p class="eyebrow proof__label">In practice · {ai.caseStudy.label}</p>
+      <dl class="proof__stats">
+        {
+          ai.caseStudy.stats.map((st) => (
+            <div>
+              <dt>{st.value}</dt>
+              <dd>{st.label}</dd>
+            </div>
+          ))
+        }
+      </dl>
+      <span class="proof__cta">
+        Read the {ai.caseStudy.label} case
+        <ArrowCircle />
+      </span>
+    </a>
+    <div class="proof proof--site reveal">
+      <p class="eyebrow proof__label">This site</p>
+      <p class="proof__site">{ai.site}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ai {
+    margin-top: clamp(96px, 12vw, 144px);
+  }
+  .ai__head {
+    display: flex;
+    flex-direction: column;
+  }
+  .ai__head .h2 {
+    margin-top: 16px;
+  }
+  .ai__head .lead {
+    margin-top: 24px;
+  }
+
+  /* Steps read left to right like a pipeline: a strong rule on top, the number in red. */
+  .ai__steps {
+    margin-top: clamp(40px, 5vw, 64px);
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 32px 24px;
+  }
+  .step {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--rule);
+    padding-top: 16px;
+  }
+  .step__idx {
+    color: var(--accent-ink);
+  }
+  .step__title {
+    margin-top: 12px;
+    font-size: 20px;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+  }
+  .step__text {
+    margin-top: 10px;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink-3);
+    text-wrap: pretty;
+  }
+  .step__tools {
+    margin-top: auto;
+    padding: 20px 0 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .step__tools li {
+    padding: 4px 10px;
+    border: 1px solid var(--chip-line);
+    border-radius: 999px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .ai__proof {
+    margin-top: clamp(48px, 6vw, 72px);
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: 16px;
+  }
+  .proof {
+    display: flex;
+    flex-direction: column;
+    padding: clamp(24px, 2.5vw, 32px);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .proof__label {
+    font-size: 0.75rem;
+  }
+  .proof__stats {
+    margin: 20px 0 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 24px;
+  }
+  .proof__stats div {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .proof__stats dt {
+    font-size: clamp(1.625rem, 1.2rem + 1.2vw, 2.25rem);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+  .proof__stats dd {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  .proof__cta {
+    margin-top: 28px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    font-size: 15px;
+    font-weight: 500;
+  }
+  /* The whole card is the link; keep its text in ink and light only the label. */
+  .proof--case,
+  .proof--case:hover {
+    color: var(--ink);
+  }
+  @media (hover: hover) {
+    .proof--case .proof__cta {
+      transition: color 0.18s ease-out;
+    }
+    .proof--case:hover .proof__cta {
+      color: var(--accent-ink);
+    }
+  }
+  .proof--case:focus-visible {
+    outline-offset: 4px;
+    border-radius: var(--radius);
+  }
+  .proof__site {
+    margin-top: 20px;
+    font-size: var(--step-lead);
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+    color: var(--ink-2);
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 1023px) {
+    .ai__steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .ai__proof {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  @media (max-width: 560px) {
+    .ai__steps,
+    .proof__stats {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

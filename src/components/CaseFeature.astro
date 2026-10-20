@@ -33,7 +33,7 @@ const num = String(index).padStart(2, '0');
         <div><dt>Timeline</dt><dd>{d.timeline}</dd></div>
         <div><dt>Year</dt><dd>{d.year}</dd></div>
       </dl>
-      <span class="feature__cta" aria-hidden="true">Read case <ArrowCircle variant="ring" /></span>
+      <span class="feature__cta" aria-hidden="true">Read case <ArrowCircle /></span>
     </div>
   </div>
 </article>
@@ -132,7 +132,7 @@ const num = String(index).padStart(2, '0');
     gap: 12px;
     transition: color 0.18s ease-out;
   }
-  /* Hovering or focusing anywhere in the row lights the label; the arrow circle fills (global.css). */
+  /* Hovering or focusing anywhere in the row lights the label; the arrow circle draws its ring (global.css). */
   @media (hover: hover) {
     .feature:hover .feature__cta {
       color: var(--accent-ink);
