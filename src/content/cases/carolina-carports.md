@@ -20,14 +20,14 @@ coverLayers:
   logoWidth: 48
   themed: true
 stats:
-  label: Scope
+  label: Results
   items:
-    - value: 100+
-      label: screens and pop-ups designed
+    - value: Hundreds
+      label: of dealers and staff work in the platform
     - value: 20+ yrs
       label: of Excel workflows replaced
-    - value: '3'
-      label: audiences — manufacturers, retailers and installers
+    - value: 100+
+      label: screens and pop-ups designed
 ---
 
 ## Overview
@@ -153,12 +153,10 @@ Everything that keeps the system running sits behind the same navigation.
 
 ### One platform for the whole business
 
-- **Efficiency** — streamlines the design-to-installation process, reducing lead times and increasing productivity.
-- **Customer satisfaction** — enhances customer experience with real-time updates and a user-friendly interface.
-- **Cost savings** — optimizes resource allocation and reduces travel time for installation crews.
-- **Scalability** — supports businesses of all sizes, from small retailers to large manufacturers.
-
-CCI ERP is designed to be a robust solution, addressing the needs of the carport industry by integrating design, sales and installation management into a single, cohesive platform.
+- **In use across the business** — hundreds of dealers and staff now work in one platform instead of separate Excel tables.
+- **One record per order** — design, price, payments and installation live in the same order, so nothing is retyped from table to table.
+- **Prices without lookups** — the price recalculates as the building changes, so a quote no longer means searching a pricing sheet.
+- **Crews on a calendar** — confirmed orders are grouped into runs on a map and placed on the crew calendar, instead of being planned by hand.
 
 <div class="framed">
 

@@ -2,13 +2,13 @@
 order: 3
 client: BBQ.ua
 title: Redesigning a grill store — clearer filters, guest checkout, expert advice on every product page
-summary: A dated e-commerce site for grills and accessories, rebuilt around faster product discovery, a shorter checkout and trust.
+summary: A dated e-commerce site for grills and accessories, rebuilt around faster product discovery, a shorter checkout and trust — conversion up 23% after the 2025 launch.
 lead: BBQ.ua runs a chain of grill and barbecue stores in Ukraine. Its website sold the products but felt outdated, cluttered and hard to use on a phone — the redesign had to make buying a grill feel as confident as asking an expert in store.
 industry: E-commerce
 year: 2024–25
 role: Senior Product Designer
 timeline: 4 months
-company: PYP International
+company: PYP International (freelance)
 team: 2 developers
 platforms: Responsive web
 tags: [E-commerce, Checkout, Design system]
@@ -19,6 +19,13 @@ coverLayers:
   logo: ../../assets/cases/bbq-ua/logo.svg
   logoWidth: 42
   themed: true
+stats:
+  label: Results
+  items:
+    - value: +23%
+      label: conversion after launch
+    - value: '2025'
+      label: in production since
 ---
 
 ## Problem
@@ -161,3 +168,5 @@ Guest checkout, multiple payment options and a single clear path to “place ord
 ### What users told us
 
 In usability testing with a small group, people found the new layout easier to navigate, found products faster with the new filters, and got through checkout with fewer drop-offs. Two things came back for another round: more hierarchy in product descriptions and a more visible customer-service section — both fixed in the final design, along with contrast and micro-interaction polish.
+
+The new store went live in 2025, and conversion rose by 23%.
