@@ -1,11 +1,11 @@
 import { url } from '../lib/url';
-import { PRODUCT_SINCE, SENIOR_SINCE, yearsSince, inWords } from '../lib/years';
+import { PRODUCT_SINCE, yearsSince, inWords } from '../lib/years';
 
 export const site = {
   name: 'Pylyp Pistolkors',
   role: 'Senior Product Designer',
   location: 'Poznań, PL · Remote',
-  description: `Senior Product Designer with over 20 years in visual and motion design and ${inWords(yearsSince(SENIOR_SINCE))} as a senior product designer: healthcare, legal-tech, e-commerce and construction.`,
+  description: `Senior Product Designer with ${inWords(yearsSince(PRODUCT_SINCE))} years in product design, coming from motion design: healthcare, legal-tech, e-commerce and construction.`,
   availability: 'Open to senior product design roles — Remote / Poznań, PL',
   email: 'ppistolkors@gmail.com',
   cv: url('/CV-Pylyp_Pistolkors-Senior_Product_Designer.pdf'),
@@ -14,6 +14,7 @@ export const site = {
     { label: 'English', value: 'B2', short: 'English B2' },
     { label: 'Time zone', value: 'Warsaw (CET/CEST)', short: 'Warsaw time' },
     { label: 'Work authorisation', value: 'EU, no sponsorship needed', short: 'EU work authorisation' },
+    { label: 'Contract', value: 'B2B or employment contract', short: 'B2B or employment' },
   ],
   links: [
     { label: 'LinkedIn', href: 'https://linkedin.com/in/pistolkors' },
@@ -26,9 +27,8 @@ export const site = {
  * date ("YYYY-MM") and updates itself, so it never needs a yearly edit.
  */
 export const facts: { value?: string; since?: string; unit?: string; label: string }[] = [
-  { value: '20+ yrs', label: 'in design, animation and motion' },
   { since: PRODUCT_SINCE, unit: 'yrs', label: 'in product design, since 2017' },
-  { value: '4 industries', label: 'healthcare, legal-tech, e-commerce, construction' },
+  { value: '+23%', label: 'BBQ.ua conversion rate, 1.7% → 2.1% year over year' },
   { value: '30+ clinics', label: 'run on LinkHMS, a hospital system I designed' },
 ];
 

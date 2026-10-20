@@ -2,7 +2,7 @@
 order: 3
 client: BBQ.ua
 title: Redesigning a grill store — clearer filters, guest checkout, expert advice on every product page
-summary: A dated e-commerce site for grills and accessories, rebuilt around faster product discovery, a shorter checkout and trust — conversion up 23% after the 2025 launch.
+summary: A dated e-commerce site for grills and accessories, rebuilt around faster product discovery, a shorter checkout and trust — conversion rate up from 1.7% to 2.1% after the 2025 launch.
 lead: BBQ.ua runs a chain of grill and barbecue stores in Ukraine. Its website sold the products but felt outdated, cluttered and hard to use on a phone — the redesign had to make buying a grill feel as confident as asking an expert in store.
 industry: E-commerce
 year: 2024–25
@@ -20,10 +20,10 @@ coverLayers:
   logoWidth: 42
   themed: true
 stats:
-  label: Results
+  label: Results · per the client
   items:
     - value: +23%
-      label: conversion after launch
+      label: conversion rate, 1.7% → 2.1%, same season year over year
     - value: '2025'
       label: in production since
 ---
@@ -169,4 +169,4 @@ Guest checkout, multiple payment options and a single clear path to “place ord
 
 In usability testing with a small group, people found the new layout easier to navigate, found products faster with the new filters, and got through checkout with fewer drop-offs. Two things came back for another round: more hierarchy in product descriptions and a more visible customer-service section — both fixed in the final design, along with contrast and micro-interaction polish.
 
-The new store went live in 2025, and conversion rose by 23%.
+The new store went live in 2025. Against the same season a year before, the conversion rate rose from 1.7% to 2.1% — a 23% lift, according to the client.

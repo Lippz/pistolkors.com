@@ -9,7 +9,7 @@ import Capabilities from '../components/Capabilities.astro';
 import AiPipeline from '../components/AiPipeline.astro';
 import Lightbox from '../components/Lightbox.astro';
 import { site, facts, experience } from '../data/site';
-import { SENIOR_SINCE, yearsSince, inWords } from '../lib/years';
+import { PRODUCT_SINCE, yearsSince, inWords } from '../lib/years';
 import portrait from '../assets/site/portrait.webp';
 
 const cases = (await getCollection('cases', (c) => !c.data.hidden)).sort((a, b) => a.data.order - b.data.order);
@@ -50,11 +50,10 @@ const mess = [
       </span>
     </h1>
     <p class="lead">
-      Senior Product Designer at Existek. Over twenty years in visual and motion design, the last{' '}
-      <span data-since={SENIOR_SINCE} data-as="word">{inWords(yearsSince(SENIOR_SINCE))}</span> as a senior product
-      designer —
-      healthcare, legal-tech, e-commerce and construction. I run discovery, build the system and sweat the interaction
-      details.
+      Senior Product Designer at Existek, with{' '}
+      <span data-since={PRODUCT_SINCE} data-as="word">{inWords(yearsSince(PRODUCT_SINCE))}</span> years in product
+      design across healthcare, legal-tech, e-commerce and construction. I came to it from motion design: I run
+      discovery, build the system and sweat the interaction details.
     </p>
     <div class="hero__ctas">
       <a href="#work" class="btn btn--accent">View Selected Works</a>
@@ -316,7 +315,7 @@ const mess = [
     padding: 0;
     list-style: none;
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 20px 24px;
   }
   .facts li {
@@ -430,7 +429,7 @@ const mess = [
   .details {
     margin: 32px 0 0;
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 16px 24px;
   }
   .details div {
@@ -455,9 +454,6 @@ const mess = [
   }
 
   @media (max-width: 1023px) {
-    .facts {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
     .about {
       grid-template-columns: 1fr;
       gap: 32px;
@@ -521,6 +517,9 @@ const mess = [
     .hero__ctas .btn,
     .btn-split {
       flex: 1 1 100%;
+    }
+    .facts {
+      grid-template-columns: 1fr;
     }
     .xp li {
       grid-template-columns: 1fr;
