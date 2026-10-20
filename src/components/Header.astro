@@ -99,11 +99,11 @@ const nav = [
     const update = () => {
       ticking = false;
       const line = window.innerHeight * 0.35;
+      // The last section whose top has passed the line stays active through the gap before
+      // the next one; nothing is active above the first section or below the last.
       let active: HTMLAnchorElement | undefined;
-      for (const { a, el } of spyLinks) {
-        const r = el.getBoundingClientRect();
-        if (r.top <= line && r.bottom > line) active = a;
-      }
+      for (const { a, el } of spyLinks) if (el.getBoundingClientRect().top <= line) active = a;
+      if (spyLinks[spyLinks.length - 1].el.getBoundingClientRect().bottom <= line) active = undefined;
       spyLinks.forEach(({ a }) => a.classList.toggle('is-active', a === active));
     };
     const onScroll = () => {
