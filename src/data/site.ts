@@ -11,7 +11,7 @@ export const site = {
   cv: url('/CV-Pylyp_Pistolkors-Senior_Product_Designer.pdf'),
   /** Practical details recruiters ask first. */
   details: [
-    { label: 'English', value: 'B2', short: 'English B2' },
+    { label: 'English', value: 'Professional working proficiency', short: 'Professional English' },
     { label: 'Time zone', value: 'Warsaw (CET/CEST)', short: 'Warsaw time' },
     { label: 'Work authorisation', value: 'EU, no sponsorship needed', short: 'EU work authorisation' },
     { label: 'Contract', value: 'B2B or employment contract', short: 'B2B or employment' },
@@ -37,6 +37,11 @@ export const experience = [
     role: 'Senior Product Designer — Existek',
     detail: 'Client discovery, mentoring mid-level designers, internal brand',
     period: '2020 — now',
+  },
+  {
+    role: 'Freelance Product Designer — PYP International',
+    detail: 'BBQ.ua e-commerce redesign, alongside Existek',
+    period: '2024 — 2025',
   },
   {
     role: 'Product Designer — RIA.com',

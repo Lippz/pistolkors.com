@@ -8,7 +8,7 @@ industry: E-commerce
 year: 2024–25
 role: Senior Product Designer
 timeline: 4 months
-company: PYP International (freelance)
+company: PYP International, freelance alongside Existek
 team: 2 developers
 platforms: Responsive web
 tags: [E-commerce, Checkout, Design system]
