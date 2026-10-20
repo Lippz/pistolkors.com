@@ -7,6 +7,13 @@ import { url } from '../lib/url';
 const isDev = import.meta.env.DEV;
 // On the live site only real quotes are shown; placeholders stay in `npm run dev`.
 const items = isDev ? testimonials : testimonials.filter((t) => !t.placeholder);
+
+// Splits the role around the case name ("Product Manager, LinkHMS"), so that part can
+// light up on hover; a role that doesn't name the case stays whole.
+const splitRole = (role: string, label?: string) => {
+  const at = label ? role.lastIndexOf(label) : -1;
+  return at < 0 ? { head: role } : { head: role.slice(0, at), label, tail: role.slice(at + label!.length) };
+};
 ---
 
 {
@@ -20,25 +27,38 @@ const items = isDev ? testimonials : testimonials.filter((t) => !t.placeholder);
       </div>
 
       <ul class="words__grid" role="list">
-        {items.map((t) => (
-          <li class:list={['quote reveal', { 'quote--placeholder': t.placeholder }]}>
-            {t.placeholder && <p class="eyebrow quote__flag">Placeholder · hidden on the live site</p>}
-            <blockquote class="quote__text">
-              <p>{t.quote}</p>
-            </blockquote>
-            <div class="quote__foot">
-              <p class="quote__who">
-                <span class="quote__name">{t.name}</span>
-                <span class="quote__role">{t.role}</span>
-              </p>
-              {t.proof && (
-                <a href={url(t.proof.href)} class="quote__proof arrow-trigger" aria-label={`Read the ${t.proof.label} case`}>
+        {items.map((t) => {
+          const role = splitRole(t.role, t.proof?.label);
+          return (
+            <li class:list={['quote reveal', { 'quote--placeholder': t.placeholder }]}>
+              {t.placeholder && <p class="eyebrow quote__flag">Placeholder · hidden on the live site</p>}
+              <blockquote class="quote__text">
+                <p>{t.quote}</p>
+              </blockquote>
+              {t.proof ? (
+                <a href={url(t.proof.href)} class="quote__foot quote__foot--link arrow-trigger">
+                  <span class="quote__who">
+                    <span class="quote__name">{t.name}</span>
+                    <span class="quote__role">
+                      {role.head}
+                      {role.label && <span class="quote__case">{role.label}</span>}
+                      {role.tail}
+                    </span>
+                    <span class="sr-only">Read the {t.proof.label} case</span>
+                  </span>
                   <ArrowCircle />
                 </a>
+              ) : (
+                <div class="quote__foot">
+                  <span class="quote__who">
+                    <span class="quote__name">{t.name}</span>
+                    <span class="quote__role">{t.role}</span>
+                  </span>
+                </div>
               )}
-            </div>
-          </li>
-        ))}
+            </li>
+          );
+        })}
       </ul>
     </section>
   )
@@ -108,8 +128,19 @@ const items = isDev ? testimonials : testimonials.filter((t) => !t.placeholder);
     justify-content: space-between;
     gap: 16px;
   }
+  /* With a case behind the quote the whole row is the link: the arrow draws its
+     ring and the case name inside the role turns accent on hover or focus. */
+  .quote__foot--link {
+    color: inherit;
+  }
+  .quote__foot--link:focus-visible {
+    outline: none;
+  }
+  .quote:has(.quote__foot--link:focus-visible) {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
   .quote__who {
-    margin: 0;
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -122,8 +153,24 @@ const items = isDev ? testimonials : testimonials.filter((t) => !t.placeholder);
     font-size: 14px;
     color: var(--muted);
   }
-  .quote__proof {
-    flex-shrink: 0;
+  .quote__case {
+    transition: color 0.2s ease;
+  }
+  @media (hover: hover) {
+    .quote__foot--link:hover .quote__case {
+      color: var(--accent-ink);
+    }
+  }
+  .quote__foot--link:focus-visible .quote__case {
+    color: var(--accent-ink);
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 
   @media (max-width: 1023px) {
