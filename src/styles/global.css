@@ -12,7 +12,6 @@
   --surface: #f2f2f0;
   --accent: #ff2f00; /* brand red, same as the shield. Large text, fills with dark text, marks only */
   --accent-ink: #c42400; /* same hue, darkened for small text on white (5.8:1) */
-  --accent-text: #c42400; /* red for pill labels: darkened on white, the brand red itself on dark (5:1) */
   --on-accent: #0b0b0b; /* text on red fills, in both themes */
   --ok: #1d8a4e;
 
@@ -61,8 +60,7 @@
   --chip-line: #45423d;
   --rule: #45423d;
   --surface: #1b1a19;
-  --accent-ink: #ff6b40;
-  --accent-text: var(--accent);
+  --accent-ink: var(--accent); /* the brand red reads at 5:1 on the dark paper */
   --ok: #3fbf74;
   --night: #070707;
   --night-2: #161615;
@@ -80,8 +78,7 @@
     --chip-line: #45423d;
     --rule: #45423d;
     --surface: #1b1a19;
-    --accent-ink: #ff6b40;
-    --accent-text: var(--accent);
+    --accent-ink: var(--accent); /* the brand red reads at 5:1 on the dark paper */
     --ok: #3fbf74;
     --night: #070707;
     --night-2: #161615;
@@ -493,7 +490,7 @@ a:hover .frame img {
   font: inherit;
   font-size: 15px;
   font-weight: 500;
-  color: var(--accent-text);
+  color: var(--accent-ink);
   cursor: pointer;
   list-style: none;
   transition: background-color 0.2s ease;
