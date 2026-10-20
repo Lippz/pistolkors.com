@@ -140,7 +140,7 @@ const mess = [
           ))
         }
       </dl>
-      <a href={site.cv} class="link-underline about__cv" download>Full resume (PDF, 1 page) ↓</a>
+      <a href={site.cv} class="btn btn--outline about__cv" download>Download CV (PDF)</a>
     </div>
   </section>
 
@@ -371,12 +371,13 @@ const mess = [
     grid-template-columns: repeat(12, minmax(0, 1fr));
     gap: 24px;
   }
-  /* The photo fills the full height of the text column; the image is taken out of the flow
-     so its own height never stretches the row. */
+  /* A square photo pinned to the top of the row; the image is taken out of the flow and
+     cropped to fill the square. */
   .about__photo {
     grid-column: span 5;
+    align-self: start;
     position: relative;
-    min-height: 480px;
+    aspect-ratio: 1;
   }
   .about__photo :global(img) {
     position: absolute;
@@ -400,7 +401,7 @@ const mess = [
     list-style: none;
   }
   .about__cv {
-    margin-top: 32px;
+    margin-top: 48px;
     align-self: flex-start;
   }
   .xp li {
@@ -468,14 +469,13 @@ const mess = [
     }
     .about__photo {
       max-width: 520px;
-      min-height: 0;
-      aspect-ratio: 4 / 5;
     }
   }
   /* Hero buttons react clearly to hover: lift, a shadow and a stronger fill. The label colour
      never changes (it would blink mid-transition), so only fills and borders move. */
   @media (hover: hover) {
-    .hero__ctas .btn {
+    .hero__ctas .btn,
+    .about__cv {
       transition:
         transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1),
         background-color 0.25s ease,
@@ -487,13 +487,15 @@ const mess = [
       transform: translateY(-3px);
       box-shadow: 0 12px 28px color-mix(in srgb, var(--accent) 42%, transparent);
     }
-    .hero__ctas .btn--outline:hover {
+    .hero__ctas .btn--outline:hover,
+    .about__cv:hover {
       background: color-mix(in srgb, var(--accent) 14%, transparent);
       border-color: var(--accent);
       transform: translateY(-3px);
       box-shadow: 0 12px 28px color-mix(in srgb, var(--accent) 22%, transparent);
     }
-    .hero__ctas .btn:active {
+    .hero__ctas .btn:active,
+    .about__cv:active {
       transform: translateY(0) scale(0.98);
     }
     .btn-split__part:hover {
@@ -508,6 +510,7 @@ const mess = [
   }
   @media (prefers-reduced-motion: reduce) {
     .hero__ctas .btn:hover,
+    .about__cv:hover,
     .btn-split__part:hover {
       transform: none;
     }
