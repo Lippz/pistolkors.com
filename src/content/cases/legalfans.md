@@ -14,6 +14,11 @@ company: Existek
 team: 4 developers
 platforms: Web app + browser extension
 tags: [Discovery, Multi-role flows, Design system]
+part:
+  - Discovery — three roles, creators, operators and lawyers, mapped into one pipeline from detection to takedown
+  - Persona, user flow and low-fidelity wireframes tuned for non-technical creators
+  - The operator check between AI detection and legal action, with a side-by-side comparison view
+  - Creator app, guided browser-extension setup and the admin panel, end to end
 cover: ../../assets/cases/legalfans/cover.webp
 coverAlt: LegalFans logo over a blurred photo of a content creator talking to her phone camera in front of a ring light
 coverLayers:
