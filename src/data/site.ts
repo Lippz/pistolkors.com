@@ -5,7 +5,7 @@ export const site = {
   name: 'Pylyp Pistolkors',
   role: 'Senior Product Designer',
   location: 'Poznań, PL · Remote',
-  description: `Senior Product Designer with over 20 years in visual and motion design and ${inWords(yearsSince(SENIOR_SINCE))} as a senior product designer: legal-tech, healthcare, e-commerce and marketplaces.`,
+  description: `Senior Product Designer with over 20 years in visual and motion design and ${inWords(yearsSince(SENIOR_SINCE))} as a senior product designer: healthcare, legal-tech, e-commerce and construction.`,
   availability: 'Open to senior product design roles — Remote / Poznań, PL',
   email: 'ppistolkors@gmail.com',
   cv: url('/CV-Pylyp_Pistolkors-Senior_Product_Designer.pdf'),
@@ -163,10 +163,7 @@ export const ai = {
   caseStudy: {
     label: 'LinkHMS',
     href: '/work/linkhms/#ai-in-the-process',
-    stats: [
-      { value: '~50%', label: 'of the hands-on production sped up by agents: coded prototypes and design-system updates' },
-      { value: 'Tens of hours', label: 'of developer time kept for the roadmap: the design-system rework reached code through agents' },
-    ],
+    text: 'The densest sections were prototyped in code, and the reworked design system reached the code base through agents, so developers stayed on the roadmap.',
   },
   site: 'Designed by me, built and maintained with Claude Code — from the case layouts to the animated arrows on this page.',
 };

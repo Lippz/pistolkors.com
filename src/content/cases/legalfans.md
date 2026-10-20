@@ -22,14 +22,14 @@ coverLayers:
   logoWidth: 44
   themed: true
 stats:
-  label: Results
+  label: The product today · per legalfans.com
   items:
-    - value: 10,000+
-      label: leaks detected in the first six months
-    - value: 80%+
-      label: successful takedown rate
-    - value: 95%
-      label: user satisfaction score
+    - value: 2,000+
+      label: creators protected
+    - value: 9.5M+
+      label: leaks removed for clients
+    - value: 35+
+      label: platforms monitored
 ---
 
 ## Problem

@@ -4,9 +4,9 @@
  * right between deploys.
  */
 /** First product design role (RIA.com). */
-export const PRODUCT_SINCE = '2017-01';
+export const PRODUCT_SINCE = '2017-10';
 /** Senior product designer at Existek. */
-export const SENIOR_SINCE = '2020-01';
+export const SENIOR_SINCE = '2020-05';
 
 /** Whole years from a "YYYY-MM" date until `now`. */
 export function yearsSince(since: string, now = new Date()): number {
