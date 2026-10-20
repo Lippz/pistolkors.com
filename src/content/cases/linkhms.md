@@ -167,23 +167,17 @@ With that much to cover, the product needed a face of its own. A distinct identi
 
 ### Small pieces, used everywhere
 
-To keep the interface consistent as it grows, I defined design tokens for numeric values, colour and type, and built every component on top of them.
+To keep the interface consistent as it grows, I defined design tokens for numeric values, colour and type, and built every component on top of them. The components follow the atomic approach: small elements first, then the blocks assembled from them.
 
-<div class="pair">
+<div class="carousel">
 
-![Numeric tokens for spacing and corner radius, and colour tokens: neutrals and ten accent hues in twelve steps](../../assets/cases/linkhms/design-tokens.webp)
+![Numeric tokens for spacing and corner radius, and colour tokens: neutrals and ten accent hues in twelve steps](../../assets/cases/linkhms/design-tokens.webp "Tokens")
 
-![Typography: Roboto Flex for the interface and Manrope for buttons, with the full size scale](../../assets/cases/linkhms/design-typography.webp)
+![Typography: Roboto Flex for the interface and Manrope for buttons, with the full size scale](../../assets/cases/linkhms/design-typography.webp "Typography")
 
-</div>
+![Atoms: buttons, tags, record type chips and small status labels](../../assets/cases/linkhms/design-atoms.webp "Atoms")
 
-The components follow the atomic approach: small elements first, then the blocks assembled from them.
-
-<div class="pair">
-
-![Atoms: buttons, tags, record type chips and small status labels](../../assets/cases/linkhms/design-atoms.webp)
-
-![Molecules and organisms: filters, tabs, page titles, a search field, a date picker, a section menu, metric cards and text inputs](../../assets/cases/linkhms/design-molecules-organisms.webp)
+![Molecules and organisms: filters, tabs, page titles, a search field, a date picker, a section menu, metric cards and text inputs](../../assets/cases/linkhms/design-molecules-organisms.webp "Molecules and organisms")
 
 </div>
 
