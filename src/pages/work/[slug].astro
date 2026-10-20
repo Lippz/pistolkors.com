@@ -161,6 +161,24 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
 </Base>
 
 <script>
+  // A collapsed block gets a second "hide" pill at its end, so a reader who has scrolled
+  // through the opened items can close them without going back up. Closing brings the
+  // top pill back into view and gives it focus.
+  document.querySelectorAll<HTMLDetailsElement>('.prose details.more').forEach((details) => {
+    const summary = details.querySelector('summary');
+    if (!summary) return;
+    const close = document.createElement('button');
+    close.type = 'button';
+    close.className = 'more__close';
+    close.textContent = details.querySelector('.more__hide')?.textContent ?? 'Hide';
+    close.addEventListener('click', () => {
+      details.open = false;
+      summary.scrollIntoView({ block: 'center', behavior: 'instant' });
+      summary.focus({ preventScroll: true });
+    });
+    details.append(close);
+  });
+
   // Highlight the current section in the table of contents.
   const links = [...document.querySelectorAll<HTMLAnchorElement>('.case-toc a')];
   const sections = links

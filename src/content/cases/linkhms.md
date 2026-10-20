@@ -245,6 +245,9 @@ Receptionists create an appointment for a specific doctor in just a few clicks, 
 
 </div>
 
+<details class="more">
+<summary><span class="more__show">Show the other 7 flows</span><span class="more__hide">Hide the other 7 flows</span></summary>
+
 #### Patients at the centre, with the right to be forgotten
 
 The patient is the main entity of the system. Every record can be removed completely on the patient’s request, in line with the data-privacy needs raised in research.
@@ -344,6 +347,8 @@ The price is counted per seat: an administrator, plus every doctor, nurse, recep
 ![Add Payment Method dialog over the payment summary: continue to payment with a card or choose an alternative payment method, with ways to get help](../../assets/cases/linkhms/subscription-payment.webp "Payment method")
 
 </div>
+
+</details>
 
 ## Patient portal
 

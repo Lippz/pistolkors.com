@@ -438,34 +438,105 @@ a:hover .frame img {
   line-height: 1.6;
   color: var(--ink-2);
 }
-.prose > * {
+.prose > *,
+.prose > .more > * {
   max-width: 900px;
 }
-.prose > * + * {
+.prose > * + *,
+.prose > .more > * + * {
   margin-top: 24px;
 }
-.prose > :is(p:has(> img), .pair, .grid-4, .cards, .persona, .carousel, .quotes, .columns, .framed, ol.flow, blockquote) {
+.prose > :is(p:has(> img), .pair, .grid-4, .cards, .persona, .carousel, .quotes, .columns, .framed, ol.flow, blockquote),
+.prose > .more > :is(p:has(> img), .pair, .grid-4, .cards, .persona, .carousel, .quotes, .columns, .framed, ol.flow, blockquote) {
   margin-top: 32px;
 }
-.prose > :is(h3, h4) {
+.prose > :is(h3, h4),
+.prose > .more > :is(h3, h4) {
   margin-top: var(--space-sub);
 }
-.prose > h2 {
+.prose > h2,
+.prose > .more > h2 {
   margin-top: var(--space-section);
 }
-.prose > h2:first-child {
+.prose > h2:first-child,
+.prose > .more > h2:first-child {
   margin-top: 0;
 }
-.prose > h2 + h3 {
+.prose > h2 + h3,
+.prose > .more > h2 + h3 {
   margin-top: 12px;
 }
 /* A section title followed straight by its first decision. */
-.prose > h3 + h4 {
+.prose > h3 + h4,
+.prose > .more > h3 + h4 {
   margin-top: 40px;
 }
-.prose > :is(h3, h4) + * {
+.prose > :is(h3, h4) + *,
+.prose > .more > :is(h3, h4) + * {
   margin-top: 20px;
 }
+/* Collapsed rest of a long section: a pill under the first items opens the others in place,
+   and a second pill at the end (added by the case page script) closes them again. */
+.prose > .more > summary,
+.prose > .more > .more__close {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 22px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: none;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--accent-ink);
+  cursor: pointer;
+  list-style: none;
+  transition: background-color 0.2s ease;
+}
+.prose > .more > summary::-webkit-details-marker {
+  display: none;
+}
+.prose > .more > summary::after,
+.prose > .more > .more__close::after {
+  content: '';
+  width: 7px;
+  height: 7px;
+  margin-top: -3px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.2s ease, margin 0.2s ease;
+}
+.prose > .more[open] > summary::after,
+.prose > .more > .more__close::after {
+  margin-top: 3px;
+  transform: rotate(-135deg);
+}
+.prose > .more > summary:hover,
+.prose > .more > .more__close:hover {
+  background: var(--surface);
+}
+.prose > .more > summary:focus-visible,
+.prose > .more > .more__close:focus-visible {
+  outline-offset: 4px;
+}
+.more__hide,
+.more[open] .more__show {
+  display: none;
+}
+.more[open] .more__hide {
+  display: inline;
+}
+.prose > .more {
+  margin-top: 40px;
+}
+.prose > .more > summary + *,
+.prose > .more > .more__close {
+  margin-top: 40px;
+}
+
 /*
  * Markdown heading convention:
  *   ## Problem                      → section eyebrow "01 — Problem" + TOC entry
@@ -590,7 +661,8 @@ a:hover .frame img {
   border-radius: 10px;
 }
 /* An italic-only paragraph right after an image is its caption. */
-.prose > p:has(> img) + p:has(> em:only-child) {
+.prose > p:has(> img) + p:has(> em:only-child),
+.prose > .more > p:has(> img) + p:has(> em:only-child) {
   margin-top: 12px;
   font-size: 0.9375rem;
   color: var(--muted);
@@ -656,7 +728,8 @@ a:hover .frame img {
   }
 }
 /* An image straight after a pair continues the same group: same gap as inside the pair. */
-.prose > :is(.pair, .grid-4) + p:has(> img) {
+.prose > :is(.pair, .grid-4) + p:has(> img),
+.prose > .more > :is(.pair, .grid-4) + p:has(> img) {
   margin-top: 16px;
 }
 @media (max-width: 720px) {
