@@ -393,6 +393,16 @@ The heaviest sections were prototyped in code with AI agents (Cursor, Claude Cod
 
 I first built the design system by hand in Figma, and later reworked it there too. This time the changes went into the code base through AI agents rather than front-end developers: no one was taken off the roadmap, and the rework saved tens of hours of development.
 
+## Lessons
+
+### What I’d do differently
+
+<ol class="rows">
+<li>Watch clinics at work, not only ask them. Surveys and interviews never showed that in a small clinic two or three people share one computer — production did, and it cost a whole account type. A few days on site would have got the account model right the first time.</li>
+<li>Measure the key flows from day one. Clarity was in place, but no funnels: there is still no number for how many clinics finish the onboarding tour, or where booking is dropped.</li>
+<li>Build the design system in step with the code from the start. It lived in Figma first and later had to be reworked and carried into the code base by AI agents — a second pass that shared tokens and components would have saved.</li>
+</ol>
+
 ## Next steps
 
 ### There is no limit to perfection
