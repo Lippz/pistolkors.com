@@ -57,7 +57,7 @@ const mess = [
       discovery, build the system and sweat the interaction details.
     </p>
     <div class="hero__ctas">
-      <a href="#work" class="btn btn--accent">View Selected Works</a>
+      <a href="#work" class="btn btn--accent">View case studies</a>
       <div class="btn-split" role="group" aria-label="CV (PDF)">
         <a href={site.cv} class="btn-split__part" download>Download CV (PDF)</a>
         <a href={site.cv} class="btn-split__part" target="_blank" rel="noopener">View CV</a>
@@ -86,8 +86,8 @@ const mess = [
   <section id="work" class="work">
     <div class="container work__inner">
       <div class="section-head">
-        <h2 class="h2">Selected Works</h2>
-        <p class="eyebrow">{cases.length} case studies · {firstYear} — {lastYear}</p>
+        <h2 class="h2">Case studies</h2>
+        <p class="eyebrow">{cases.length} projects · {firstYear} — {lastYear}</p>
       </div>
 
       {featured.map((entry, i) => <CaseFeature entry={entry} index={i + 1} flip={i % 2 === 1} />)}

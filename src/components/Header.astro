@@ -1,6 +1,6 @@
 ---
 import Wordmark from './Wordmark.astro';
-import { site, motion } from '../data/site';
+import { motion, testimonials } from '../data/site';
 import { url } from '../lib/url';
 
 interface Props {
@@ -11,14 +11,16 @@ interface Props {
 const { current, progress = false } = Astro.props;
 // Mirrors MotionLab.astro: the section is hidden live until it has a video.
 const showLab = import.meta.env.DEV || motion.some((m) => m.video);
+// Mirrors Testimonials.astro: the section is hidden live until it has a real quote.
+const showWords = import.meta.env.DEV || testimonials.some((t) => !t.placeholder);
 
 const nav = [
-  { label: 'Case Studies', href: url('/#work'), key: 'work' },
+  { label: 'Case studies', href: url('/#work'), key: 'work' },
+  ...(showWords ? [{ label: 'Their words', href: url('/#words'), key: 'words' }] : []),
   { label: 'How I work', href: url('/#how'), key: 'how' },
-  { label: 'AI Pipeline', href: url('/#ai'), key: 'ai' },
+  { label: 'AI pipeline', href: url('/#ai'), key: 'ai' },
   ...(showLab ? [{ label: 'Motion lab', href: url('/#lab'), key: 'lab' }] : []),
   { label: 'About', href: url('/#about'), key: 'about' },
-  { label: 'Resume ↓', href: site.cv, key: 'cv' },
 ];
 ---
 
@@ -38,7 +40,7 @@ const nav = [
     <nav id="site-nav" class="header__nav" aria-label="Main">
       {
         nav.map((item) => (
-          <a href={item.href} aria-current={current === item.key ? 'page' : undefined} download={item.key === 'cv' ? '' : undefined}>
+          <a href={item.href} aria-current={current === item.key ? 'page' : undefined}>
             {item.label}
           </a>
         ))

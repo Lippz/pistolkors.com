@@ -156,7 +156,7 @@ export const capabilities: {
 ];
 
 /**
- * "AI in my pipeline" block on the home page: the steps where agents work,
+ * "AI pipeline" block on the home page: the steps where agents work,
  * then the proof (a case and this site).
  */
 export const ai = {
