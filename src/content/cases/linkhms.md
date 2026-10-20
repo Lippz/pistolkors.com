@@ -14,6 +14,12 @@ company: Existek
 team: 5–6 developers, 1 designer I mentored
 platforms: Web app, desktop-first
 tags: [User research, Scheduling, Data privacy]
+part:
+  - Research — surveyed 12 healthcare professionals, interviewed 5, analysed 4 competitors
+  - Flows, wireframes and two rounds of usability testing before high fidelity
+  - Visual identity, design system and the UI of every section
+  - Mentored a mid-level designer and reviewed their screens before hand-off
+  - Prototyped the densest sections in code with AI agents
 cover: ../../assets/cases/linkhms/cover.webp
 coverAlt: LinkHMS logo over a blurred photo of a doctor talking to a patient in a clinic office
 coverLayers:
@@ -75,7 +81,6 @@ I grouped the findings in an affinity diagram, graded features by importance and
 <div><dt>Name</dt><dd>Kwame, 36</dd></div>
 <div><dt>Occupation</dt><dd>Physical therapist</dd></div>
 <div><dt>Location</dt><dd>Central Africa</dd></div>
-<div><dt>Archetype</dt><dd>The Efficient Caregiver</dd></div>
 <div><dt>Environment</dt><dd>Multiple public and private clinics</dd></div>
 <div><dt>Tech</dt><dd>100% desktop</dd></div>
 </dl>
@@ -96,14 +101,6 @@ I grouped the findings in an affinity diagram, graded features by importance and
 <li>Outdated systems that delay access to patient data.</li>
 <li>Difficulty managing large volumes of paperwork.</li>
 <li>Lack of integration between different departments.</li>
-</ul>
-</div>
-<div>
-<p class="persona__label">Personality</p>
-<ul>
-<li>Conscientious and reliable.</li>
-<li>Organized and open-minded.</li>
-<li>Empathetic and adaptable.</li>
 </ul>
 </div>
 </div>

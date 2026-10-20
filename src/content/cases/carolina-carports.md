@@ -12,6 +12,11 @@ company: Existek
 team: 3 developers
 platforms: Web app
 tags: [ERP, 3D configurator, Scheduling]
+part:
+  - Discovery alongside the client's business analysts
+  - User research, wireframes, prototypes and iterative usability testing
+  - 100+ screens and pop-ups designed while the requirements kept evolving
+  - Worked with the developers through implementation
 cover: ../../assets/cases/carolina-carports/cover.webp
 coverAlt: Carolina Carports logo over a blurred photo of a crew building a metal carport
 coverLayers:

@@ -29,11 +29,6 @@ const showLab = import.meta.env.DEV || motion.some((m) => m.video);
             <h3 class="cap__title">{c.title}</h3>
             <p class="cap__text">{c.text}</p>
 
-            <p class="eyebrow cap__label">What I do</p>
-            <ul class="cap__skills" role="list">
-              {c.skills.map((s) => <li>{s}</li>)}
-            </ul>
-
             <p class="eyebrow cap__label">Deliverables</p>
             <p class="cap__deliverables">{c.deliverables.join(' · ')}</p>
 
@@ -79,7 +74,7 @@ const showLab = import.meta.env.DEV || motion.some((m) => m.video);
   /* Subgrid: titles, lists and links line up across the three cards even when a title wraps. */
   .cap {
     display: grid;
-    grid-row: span 9;
+    grid-row: span 7;
     grid-template-rows: subgrid;
     align-content: start;
     padding: clamp(24px, 2.5vw, 32px);
@@ -104,21 +99,12 @@ const showLab = import.meta.env.DEV || motion.some((m) => m.video);
     color: var(--ink-3);
     text-wrap: pretty;
   }
-  /* Each list sits under its own small label, a clear step away from the text above. */
+  /* The deliverables sit under a small label, a clear step away from the text above. */
   .cap__label {
     margin-top: 32px;
     padding-bottom: 12px;
     border-bottom: 1px solid var(--line);
     font-size: 0.75rem;
-  }
-  .cap__skills {
-    padding: 0;
-    list-style: none;
-  }
-  .cap__skills li {
-    padding-block: 10px;
-    border-bottom: 1px solid var(--line);
-    font-size: 15px;
   }
   .cap__deliverables {
     margin-top: 12px;

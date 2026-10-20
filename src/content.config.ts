@@ -29,6 +29,8 @@ const cases = defineCollection({
       team: z.string().optional(),
       platforms: z.string().optional(),
       tags: z.array(z.string()).default([]),
+      /** "My part": what I did myself, one short line each, shown under the facts. */
+      part: z.array(z.string()).default([]),
       cover: image(),
       coverAlt: z.string(),
       /**

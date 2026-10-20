@@ -12,6 +12,11 @@ company: PYP International (freelance)
 team: 2 developers
 platforms: Responsive web
 tags: [E-commerce, Checkout, Design system]
+part:
+  - Customer interviews, competitive analysis and usability tests of the old store
+  - User flow and wireframes for the path from home page to checkout
+  - Responsive component set, type scale and palette
+  - Final desktop and mobile screens, revised after usability testing
 cover: ../../assets/cases/bbq-ua/cover.webp
 coverAlt: BBQ.ua logo over a blurred photo of a family grilling skewers in a garden
 coverLayers:

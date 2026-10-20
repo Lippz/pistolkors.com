@@ -68,6 +68,19 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
       </dl>
 
       {
+        d.part.length > 0 && (
+          <section class="case-part" aria-label="My part">
+            <p class="eyebrow">My part</p>
+            <ul role="list">
+              {d.part.map((p) => (
+                <li>{p}</li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      {
         d.stats && (
           <section class="case-stats" aria-label={d.stats.label}>
             <p class="eyebrow case-stats__label">{d.stats.label}</p>
@@ -278,6 +291,27 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
     font-weight: 500;
   }
 
+  /* "My part": two columns of short lines, ruled like the facts above. */
+  .case-part {
+    margin-top: 48px;
+  }
+  .case-part ul {
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 24px;
+  }
+  .case-part li {
+    padding: 14px 0;
+    border-top: 1px solid var(--line);
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--ink-2);
+    text-wrap: pretty;
+  }
+
   .case-stats {
     margin-top: 48px;
     padding: clamp(28px, 4vw, 40px) clamp(24px, 4vw, 48px);
@@ -419,6 +453,9 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
   @media (max-width: 1023px) {
     .case-facts {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .case-part ul {
+      grid-template-columns: 1fr;
     }
     .case-body {
       grid-template-columns: 1fr;

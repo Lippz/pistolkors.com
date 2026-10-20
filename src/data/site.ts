@@ -89,45 +89,24 @@ export const motion: { title: string; kind: string; video?: string; poster?: str
 export const capabilities: {
   title: string;
   text: string;
-  skills: string[];
   deliverables: string[];
   proof: { label: string; href: string };
 }[] = [
   {
     title: 'Discovery & research',
     text: 'I start with the people who will use the product, not with screens.',
-    skills: [
-      'Surveys and user interviews',
-      'Competitor analysis',
-      'Personas and user journeys',
-      'Business analysis with the client',
-      'Information architecture',
-    ],
     deliverables: ['Research summary', 'Personas', 'User flows', 'Wireframes'],
     proof: { label: 'LinkHMS', href: '/work/linkhms/' },
   },
   {
     title: 'Product UI & systems',
     text: 'Complex, multi-role workflows made clear, on a system that scales.',
-    skills: [
-      'B2B SaaS, ERP and dashboards',
-      'Several user roles in one product',
-      'E-commerce and checkout',
-      'Design tokens and component libraries',
-      'Responsive web and mobile',
-    ],
     deliverables: ['High-fidelity UI', 'Design system', 'Clickable prototypes', 'Dev-ready Figma'],
     proof: { label: 'LegalFans', href: '/work/legalfans/' },
   },
   {
     title: 'Motion & prototyping',
     text: 'Twenty years of animation, so interactions are shown, not described.',
-    skills: [
-      'Micro-interactions',
-      'Interactive prototypes',
-      'Motion design and animation',
-      'Hand-off with working behaviour',
-    ],
     deliverables: ['Interaction prototypes', 'Motion loops', 'Coded demos'],
     proof: { label: 'Motion lab', href: '/#lab' },
   },
