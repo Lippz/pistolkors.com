@@ -35,7 +35,7 @@ export const facts: { value?: string; since?: string; unit?: string; label: stri
 export const experience = [
   {
     role: 'Senior Product Designer — Existek',
-    detail: 'Client discovery, mentoring mid-level designers, internal brand',
+    detail: 'LinkHMS, our own product; client discovery, mentoring mid-level designers, internal brand',
     period: '2020 — now',
   },
   {

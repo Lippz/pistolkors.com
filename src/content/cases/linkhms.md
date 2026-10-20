@@ -10,7 +10,7 @@ industry: HealthTech
 year: 2024–26
 role: Senior Product Designer
 timeline: 30 months
-company: Existek
+company: Existek, our own product
 team: 5–6 developers, 1 designer I mentored
 platforms: Web app, desktop-first
 tags: [User research, Scheduling, Data privacy]
