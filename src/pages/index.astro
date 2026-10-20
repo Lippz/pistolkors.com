@@ -271,47 +271,48 @@ const mess = [
     flex-wrap: wrap;
     gap: 12px;
   }
-  /* One outline pill, two links: download the file or open it in a new tab. */
+  /* One outline pill cut in two: download the file or open it in a new tab. Each half
+     has its own border so it can lift on its own; the second overlaps the first by 1px,
+     so the seam stays a single line. */
   .btn-split {
     display: inline-flex;
-    min-height: 56px;
-    border: 1px solid var(--ink);
-    border-radius: 999px;
-    overflow: hidden;
-    transition:
-      transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1),
-      border-color 0.25s ease,
-      box-shadow 0.25s ease;
   }
   .btn-split__part {
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    min-height: 56px;
     padding: 0 22px;
+    border: 1px solid var(--ink);
     font-size: 1rem;
     font-weight: 500;
     color: var(--ink);
-    transition: background-color 0.2s ease;
+    transition:
+      transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1),
+      background-color 0.25s ease,
+      border-color 0.25s ease,
+      box-shadow 0.25s ease;
   }
   .btn-split__part:first-child {
     flex: 1;
     padding-left: 28px;
+    border-radius: 999px 0 0 999px;
   }
   .btn-split__part + .btn-split__part {
+    margin-left: -1px;
     padding-right: 26px;
-    border-left: 1px solid var(--ink);
-    transition:
-      background-color 0.2s ease,
-      border-color 0.25s ease;
+    border-radius: 0 999px 999px 0;
+  }
+  .btn-split__part:hover,
+  .btn-split__part:focus-visible {
+    z-index: 1;
   }
   .btn-split__part:hover {
     background: var(--surface);
   }
-  .btn-split__part:focus-visible {
-    outline-offset: -4px;
-  }
   .btn-split__part:active {
-    background: color-mix(in srgb, var(--accent) 22%, transparent);
+    transform: scale(0.98);
   }
   .facts {
     margin-top: clamp(56px, 7vw, 88px);
@@ -495,21 +496,19 @@ const mess = [
     .hero__ctas .btn:active {
       transform: translateY(0) scale(0.98);
     }
-    .btn-split:hover {
+    .btn-split__part:hover {
+      background: color-mix(in srgb, var(--accent) 14%, transparent);
       border-color: var(--accent);
       transform: translateY(-3px);
       box-shadow: 0 12px 28px color-mix(in srgb, var(--accent) 22%, transparent);
     }
-    .btn-split:hover .btn-split__part + .btn-split__part {
-      border-left-color: var(--accent);
-    }
-    .btn-split__part:hover {
-      background: color-mix(in srgb, var(--accent) 14%, transparent);
+    .btn-split__part:active {
+      transform: translateY(0) scale(0.98);
     }
   }
   @media (prefers-reduced-motion: reduce) {
     .hero__ctas .btn:hover,
-    .btn-split:hover {
+    .btn-split__part:hover {
       transform: none;
     }
   }
