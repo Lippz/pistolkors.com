@@ -16,12 +16,34 @@ const cases = (await getCollection('cases')).sort((a, b) => a.data.order - b.dat
 const featured = cases.filter((c) => c.data.featured);
 const rest = cases.filter((c) => !c.data.featured);
 const years = cases.map((c) => Number(c.data.year.slice(0, 4)));
+
+// Hero: the letters of "complex" start out of line — shifted, tilted, too light or too
+// heavy — and settle into an even word while "obvious." is written in. Fixed values, so
+// the start frame is the same on every load and matches the server HTML.
+const mess = [
+  { c: 'c', y: -0.09, r: -6, w: 400 },
+  { c: 'o', y: 0.07, r: 5, w: 650 },
+  { c: 'm', y: -0.03, r: -3, w: 450 },
+  { c: 'p', y: 0.11, r: 7, w: 600 },
+  { c: 'l', y: -0.12, r: -4, w: 375 },
+  { c: 'e', y: 0.05, r: 6, w: 625 },
+  { c: 'x', y: -0.07, r: -8, w: 425 },
+];
 ---
 
 <Base>
   <section class="hero container">
     <p class="eyebrow hero__status"><span class="dot" aria-hidden="true"></span>{site.availability}</p>
-    <h1 class="h-hero hero__title">I make complex products feel <span class="accent-word">obvious.</span></h1>
+    <h1 class="h-hero hero__title">
+      <span class="sr-only">I make complex products feel obvious.</span>
+      <span aria-hidden="true">
+        I make{' '}
+        <span class="mess">
+          {mess.map((l, i) => <span style={`--y:${l.y}em;--r:${l.r}deg;--w:${l.w};--i:${i}`}>{l.c}</span>)}
+        </span>{' '}
+        products feel <span class="accent-word hero__accent">obvious.</span>
+      </span>
+    </h1>
     <p class="lead">
       Senior Product Designer at Existek. Over twenty years in visual and motion design, the last{' '}
       <span data-since={PRODUCT_SINCE} data-as="word">{inWords(yearsSince(PRODUCT_SINCE))}</span> as a senior product
@@ -116,6 +138,68 @@ const years = cases.map((c) => Number(c.data.year.slice(0, 4)));
   .hero__title {
     margin-top: 20px;
     max-width: 1180px;
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  /* "complex" stays one word on one line while its letters move. */
+  .mess {
+    white-space: nowrap;
+  }
+  .mess > span {
+    display: inline-block;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    /* Hold the messy frame for a moment, then let the letters settle one after another
+       with a slight overshoot. Weight is animated too (Geist is variable), so the word
+       evens out in thickness as well as in line.
+       Fill is `backwards` only: once settled, the letters fall back to their own styles,
+       so the hover below can move them with a transition. */
+    .mess > span {
+      animation: settle 0.8s cubic-bezier(0.2, 0.9, 0.3, 1.15) calc(0.25s + var(--i) * 45ms) backwards;
+      transition:
+        transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.15),
+        font-weight 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.15);
+      transition-delay: calc(var(--i) * 25ms);
+    }
+    /* Hovering "complex" throws its letters back out of line; leaving lets them settle again. */
+    @media (hover: hover) {
+      .mess:hover > span {
+        transform: translateY(var(--y)) rotate(var(--r));
+        font-weight: var(--w);
+      }
+    }
+    /* "obvious." is written in from the left while the letters settle. The clip runs a
+       little past the box so the italic overhang and descenders are never cut. */
+    .hero__accent {
+      display: inline-block;
+      animation: write-in 0.7s cubic-bezier(0.45, 0, 0.2, 1) 0.25s both;
+    }
+  }
+  @keyframes settle {
+    from {
+      transform: translateY(var(--y)) rotate(var(--r));
+      font-weight: var(--w);
+    }
+    to {
+      transform: none;
+      font-weight: 500;
+    }
+  }
+  @keyframes write-in {
+    from {
+      clip-path: inset(-0.2em 100% -0.3em -0.1em);
+      transform: translateX(-0.08em);
+    }
+    to {
+      clip-path: inset(-0.2em -0.3em -0.3em -0.1em);
+      transform: none;
+    }
   }
   .hero .lead {
     margin-top: clamp(24px, 2.5vw, 32px);
