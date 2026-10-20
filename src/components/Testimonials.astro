@@ -1,0 +1,134 @@
+---
+/** Testimonials: one card per quote, each ending in a link to the case it is about. */
+import ArrowCircle from './ArrowCircle.astro';
+import { testimonials } from '../data/site';
+import { url } from '../lib/url';
+
+const isDev = import.meta.env.DEV;
+// On the live site only real quotes are shown; placeholders stay in `npm run dev`.
+const items = isDev ? testimonials : testimonials.filter((t) => !t.placeholder);
+---
+
+{
+  items.length > 0 && (
+    <section id="words" class="words container">
+      <div class="words__head reveal">
+        <p class="eyebrow">In their words</p>
+        <h2 class="h2">
+          What the people I work with <span class="accent-word">say</span>
+        </h2>
+      </div>
+
+      <ul class="words__grid" role="list">
+        {items.map((t) => (
+          <li class:list={['quote reveal', { 'quote--placeholder': t.placeholder }]}>
+            {t.placeholder && <p class="eyebrow quote__flag">Placeholder · hidden on the live site</p>}
+            <blockquote class="quote__text">
+              <p>{t.quote}</p>
+            </blockquote>
+            <div class="quote__foot">
+              <p class="quote__who">
+                <span class="quote__name">{t.name}</span>
+                <span class="quote__role">{t.role}</span>
+              </p>
+              {t.proof && (
+                <a href={url(t.proof.href)} class="quote__proof arrow-trigger" aria-label={`Read the ${t.proof.label} case`}>
+                  <ArrowCircle />
+                </a>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+<style>
+  .words {
+    margin-top: clamp(96px, 12vw, 144px);
+    scroll-margin-top: clamp(32px, 5vw, 56px);
+  }
+  .words__head .h2 {
+    margin-top: 16px;
+    max-width: 18ch;
+  }
+  .words__grid {
+    margin-top: clamp(40px, 5vw, 64px);
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .quote {
+    display: flex;
+    flex-direction: column;
+    padding: clamp(24px, 2.5vw, 32px);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  /* Placeholders are dashed and flagged, so they are never mistaken for a real quote. */
+  .quote--placeholder {
+    border-style: dashed;
+    border-color: var(--chip-line);
+  }
+  .quote__flag {
+    margin-bottom: 16px;
+    color: var(--accent-ink);
+  }
+  .quote__text {
+    margin: 0;
+    flex: 1;
+  }
+  /* An opening mark in the italic serif accent, hung above the text. */
+  .quote__text::before {
+    content: '“';
+    display: block;
+    height: 0.55em;
+    font-family: var(--serif);
+    font-size: 4rem;
+    line-height: 1;
+    color: var(--accent);
+  }
+  .quote__text p {
+    margin: 0;
+    font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+    line-height: 1.55;
+    color: var(--ink-2);
+    text-wrap: pretty;
+  }
+  .quote__foot {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .quote__who {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .quote__name {
+    font-size: 16px;
+    font-weight: 500;
+  }
+  .quote__role {
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .quote__proof {
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 1023px) {
+    .words__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

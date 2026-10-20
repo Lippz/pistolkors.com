@@ -88,6 +88,44 @@ export const motion: { title: string; kind: string; video?: string; poster?: str
 ];
 
 /**
+ * Testimonials on the home page. An entry with `placeholder: true` only shows in
+ * `npm run dev`; the whole section stays hidden on the live site until at least one
+ * real quote is in. Replace a placeholder with the real words and drop the flag.
+ */
+export const testimonials: {
+  quote: string;
+  name: string;
+  role: string;
+  proof?: { label: string; href: string };
+  placeholder?: boolean;
+}[] = [
+  {
+    quote:
+      'Placeholder. What the LinkHMS product manager says about working together goes here: two or three sentences, in their own words.',
+    name: 'Name Surname',
+    role: 'Product Manager, LinkHMS',
+    proof: { label: 'LinkHMS', href: '/work/linkhms/' },
+    placeholder: true,
+  },
+  {
+    quote:
+      'Placeholder. A quote from the LegalFans client goes here: what changed for them, and what it was like to work with me.',
+    name: 'Name Surname',
+    role: 'Founder, LegalFans',
+    proof: { label: 'LegalFans', href: '/work/legalfans/' },
+    placeholder: true,
+  },
+  {
+    quote:
+      'Placeholder. A quote from the Carolina Carports side goes here, or from a developer or designer on one of the teams.',
+    name: 'Name Surname',
+    role: 'Project Manager, Carolina Carports',
+    proof: { label: 'Carolina Carports', href: '/work/carolina-carports/' },
+    placeholder: true,
+  },
+];
+
+/**
  * "How I work" block on the home page: one card per discipline. `proof` links
  * to the case (or section) where the discipline shows best.
  */
