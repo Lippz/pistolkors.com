@@ -87,7 +87,7 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
         d.stats && (
           <section class="case-stats" aria-label={d.stats.label}>
             <p class="eyebrow case-stats__label">{d.stats.label}</p>
-            <div class="case-stats__grid">
+            <div class:list={['case-stats__grid', { 'case-stats__grid--four': d.stats.items.length === 4 }]}>
               {d.stats.items.map((s) => (
                 <div>
                   <span class="case-stats__value">{s.value}</span>
@@ -353,6 +353,17 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 32px 48px;
+  }
+  /* Four numbers go two by two until they fit in one row, so none is left alone. */
+  @media (max-width: 1199px) {
+    .case-stats__grid--four {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 560px) {
+    .case-stats__grid--four {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
   .case-stats__grid div {
     display: flex;

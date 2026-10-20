@@ -4,8 +4,8 @@ featured: true
 client: LinkHMS
 title: A hospital management system light enough for small clinics
 accent: small clinics
-summary: Existing HMS tools are heavy and built for big hospitals. Research with 12 healthcare professionals shaped a lean system in Central Africa that one doctor can run alone or a whole clinic team can share — live since 2025 and used by 30+ clinics.
-lead: LinkHMS is a cloud platform for hospitals and clinics in Central Africa. Most hospital systems are heavy, outdated and built for large institutions — I designed one that a single doctor can run alone, with every feature, and a whole clinic team can share — set up and in use from day one.
+summary: Existing HMS tools are heavy and built for big hospitals. Research with 12 healthcare professionals shaped a lean system in West Africa that one doctor can run alone or a whole clinic team can share — live since 2025 and used by 30+ clinics.
+lead: LinkHMS is a cloud platform for hospitals and clinics in West Africa. Most hospital systems are heavy, outdated and built for large institutions — I designed one that a single doctor can run alone, with every feature, and a whole clinic team can share — set up and in use from day one.
 industry: HealthTech
 year: 2024–26
 role: Senior Product Designer
@@ -28,14 +28,16 @@ coverLayers:
   logoWidth: 40
   themed: true
 stats:
-  label: Results
+  label: Results · usage per Microsoft Clarity, 30 days to October 2026, Nigeria and Ghana
   items:
     - value: 30+
       label: clinics connected so far
-    - value: '2025'
-      label: in production since
-    - value: '12'
-      label: healthcare professionals surveyed before the first screen
+    - value: '275'
+      label: unique users in 30 days
+    - value: 95%
+      label: of sessions from returning users
+    - value: 14.6 min
+      label: active time per session
 ---
 
 ## Problem
@@ -80,7 +82,7 @@ I grouped the findings in an affinity diagram, graded features by importance and
 <dl class="persona__id">
 <div><dt>Name</dt><dd>Kwame, 36</dd></div>
 <div><dt>Occupation</dt><dd>Physical therapist</dd></div>
-<div><dt>Location</dt><dd>Central Africa</dd></div>
+<div><dt>Location</dt><dd>West Africa</dd></div>
 <div><dt>Environment</dt><dd>Multiple public and private clinics</dd></div>
 <div><dt>Tech</dt><dd>100% desktop</dd></div>
 </dl>
@@ -383,7 +385,7 @@ I first built the design system by hand in Figma, and later reworked it there to
 
 ### There is no limit to perfection
 
-What started with registration, scheduling, patients and the medical record grew over two and a half years into a full clinic system, in production since 2025 and used by more than 30 clinics: a live queue, admissions with beds and discharge, billing and insurance claims, a pharmacy, a laboratory, reports and a patient portal. The product can grow in several directions:
+What started with registration, scheduling, patients and the medical record grew over two and a half years into a full clinic system, in production since 2025 and used by more than 30 clinics. Clinic staff keep coming back to it — 95% of sessions are from returning users — and 86% of sessions are on desktop, as the research predicted. It now covers a live queue, admissions with beds and discharge, billing and insurance claims, a pharmacy, a laboratory, reports and a patient portal. The product can grow in several directions:
 
 - **Reminders and online payments** — appointment reminders for patients, and invoices paid from the portal instead of at the front desk.
 - **Insurers connected directly** — claims sent to the insurer and decisions received inside LinkHMS, without retyping them by hand.
