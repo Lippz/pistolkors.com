@@ -296,6 +296,100 @@ dd {
   gap: 8px;
 }
 
+/* ---------- Arrow in a circle (ArrowCircle.astro) ----------
+ * Hovering or focusing the `.arrow-trigger` around it lights the circle up:
+ *   fill  the circle fills with the accent and the arrow nudges 3px the way it points
+ *   ring  a 2px accent ring draws itself both ways from 3 o'clock and closes at 9; the arrow turns accent
+ * Set --arrow-line on a dark section for a ring that stays visible there. */
+.arrow-circle {
+  --arrow-x: 3px;
+  --arrow-y: 0px;
+  position: relative;
+  flex-shrink: 0;
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--arrow-line, var(--chip-line));
+  border-radius: 50%;
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
+}
+.arrow-circle--out {
+  --arrow-x: 2px;
+  --arrow-y: -2px;
+}
+.arrow-circle--down {
+  --arrow-x: 0px;
+  --arrow-y: 3px;
+}
+.arrow-circle__arrow {
+  transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+@media (hover: hover) {
+  .arrow-trigger:hover .arrow-circle--fill {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+  .arrow-trigger:hover .arrow-circle--fill .arrow-circle__arrow {
+    transform: translate(var(--arrow-x), var(--arrow-y));
+  }
+}
+.arrow-trigger:is(:focus-visible, :has(:focus-visible)) .arrow-circle--fill {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.arrow-trigger:is(:focus-visible, :has(:focus-visible)) .arrow-circle--fill .arrow-circle__arrow {
+  transform: translate(var(--arrow-x), var(--arrow-y));
+}
+
+/* The ring sits over the 1px border (inset -1px covers it). It is two half-circle arcs,
+ * both starting at 3 o'clock — one runs down, the other up — and each is drawn with a
+ * dash (pathLength 100, dash offset 100 → 0), so they meet at 9 o'clock. */
+.arrow-circle__ring {
+  position: absolute;
+  inset: -1px;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  pointer-events: none;
+}
+.arrow-circle__ring path {
+  stroke: var(--accent);
+  stroke-width: 2;
+  /* The gap is longer than the arc: with a 100 gap the arc's end would touch the
+   * next dash and show a red dot at 9 o'clock while the ring is hidden. */
+  stroke-dasharray: 100 200;
+  stroke-dashoffset: 100;
+  transition: stroke-dashoffset 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@media (hover: hover) {
+  .arrow-trigger:hover .arrow-circle--ring {
+    color: var(--accent);
+  }
+  .arrow-trigger:hover .arrow-circle--ring path {
+    stroke-dashoffset: 0;
+  }
+}
+.arrow-trigger:is(:focus-visible, :has(:focus-visible)) .arrow-circle--ring {
+  color: var(--accent);
+}
+.arrow-trigger:is(:focus-visible, :has(:focus-visible)) .arrow-circle--ring path {
+  stroke-dashoffset: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow-circle__arrow {
+    transform: none !important;
+  }
+  .arrow-circle__ring path {
+    transition: none;
+  }
+}
+
 /* ---------- Media frames ---------- */
 .frame {
   border-radius: var(--radius);

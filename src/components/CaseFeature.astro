@@ -2,6 +2,7 @@
 /** Large home-page row: cover on one side, story on the other. */
 import type { CollectionEntry } from 'astro:content';
 import CaseCover from './CaseCover.astro';
+import ArrowCircle from './ArrowCircle.astro';
 import { url } from '../lib/url';
 
 interface Props {
@@ -15,7 +16,7 @@ const href = url(`/work/${entry.id}/`);
 const num = String(index).padStart(2, '0');
 ---
 
-<article class:list={['feature reveal', { 'feature--flip': flip }]}>
+<article class:list={['feature reveal arrow-trigger', { 'feature--flip': flip }]}>
   <a href={href} class="feature__media" tabindex="-1" aria-hidden="true">
     <CaseCover id={entry.id} cover={d.cover} layers={d.coverLayers} sizes="(min-width: 1024px) 58vw, 100vw" eager={index === 1} class="feature__cover" />
   </a>
@@ -32,7 +33,7 @@ const num = String(index).padStart(2, '0');
         <div><dt>Timeline</dt><dd>{d.timeline}</dd></div>
         <div><dt>Year</dt><dd>{d.year}</dd></div>
       </dl>
-      <span class="feature__cta" aria-hidden="true">Read case <span class="feature__arrow">→</span></span>
+      <span class="feature__cta" aria-hidden="true">Read case <ArrowCircle variant="ring" /></span>
     </div>
   </div>
 </article>
@@ -128,36 +129,21 @@ const num = String(index).padStart(2, '0');
     min-height: 44px;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 12px;
     transition: color 0.18s ease-out;
   }
-  .feature__arrow {
-    display: inline-block;
-    transition: transform 0.18s ease-out;
-  }
-  /* Hovering or focusing anywhere in the row lights the button and nudges its arrow 4px right. */
+  /* Hovering or focusing anywhere in the row lights the label; the arrow circle fills (global.css). */
   @media (hover: hover) {
     .feature:hover .feature__cta {
       color: var(--accent-ink);
-    }
-    .feature:hover .feature__arrow {
-      transform: translateX(4px);
     }
   }
   .feature:has(.feature__link:focus-visible) .feature__cta {
     color: var(--accent-ink);
   }
-  .feature:has(.feature__link:focus-visible) .feature__arrow {
-    transform: translateX(4px);
-  }
   @media (prefers-reduced-motion: reduce) {
-    .feature__cta,
-    .feature__arrow {
+    .feature__cta {
       transition: none;
-    }
-    .feature:hover .feature__arrow,
-    .feature:has(.feature__link:focus-visible) .feature__arrow {
-      transform: none;
     }
   }
   @media (max-width: 1023px) {

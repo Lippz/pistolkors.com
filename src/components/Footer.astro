@@ -1,5 +1,6 @@
 ---
 import Wordmark from './Wordmark.astro';
+import ArrowCircle from './ArrowCircle.astro';
 import { site } from '../data/site';
 
 interface Props {
@@ -29,20 +30,26 @@ const year = new Date().getFullYear();
           </h2>
           <div class="footer__actions">
             <div class="footer__email-group">
-            <a class="footer__email" href={`mailto:${site.email}`}>{site.email}</a>
-            <button type="button" class="footer__copy" data-copy={site.email} hidden>Copy</button>
-          </div>
-            <div class="footer__links">
-              {site.links.map((l) => (
-                <a href={l.href} target="_blank" rel="noopener">
-                  {l.label} ↗
-                </a>
-              ))}
-              <a href={site.cv} target="_blank">
-                Resume ↓
-              </a>
+              <a class="footer__email" href={`mailto:${site.email}`}>{site.email}</a>
+              <button type="button" class="footer__copy" data-copy={site.email} hidden>Copy</button>
             </div>
           </div>
+          <ul class="footer__tiles" role="list">
+            {site.links.map((l) => (
+              <li>
+                <a href={l.href} target="_blank" rel="noopener" class="footer__tile arrow-trigger">
+                  {l.label}
+                  <ArrowCircle dir="out" />
+                </a>
+              </li>
+            ))}
+            <li>
+              <a href={site.cv} target="_blank" class="footer__tile arrow-trigger">
+                Resume (PDF)
+                <ArrowCircle dir="down" />
+              </a>
+            </li>
+          </ul>
         </div>
       )
     }
@@ -263,6 +270,44 @@ const year = new Date().getFullYear();
     border-bottom: 2px solid var(--accent);
     padding-bottom: 4px;
     overflow-wrap: anywhere;
+  }
+  /* Contact links as tiles: the ring brightens and the arrow circle fills (global.css) on hover. */
+  .footer__tiles {
+    --arrow-line: var(--night-line);
+    margin-top: clamp(40px, 5vw, 64px);
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .footer .footer__tile {
+    min-height: 72px;
+    padding: 0 16px 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    border: 1px solid var(--night-line);
+    border-radius: var(--radius);
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--night-fg);
+    transition:
+      border-color 0.25s ease,
+      background-color 0.25s ease;
+  }
+  @media (hover: hover) {
+    .footer .footer__tile:hover {
+      border-color: var(--night-muted);
+      background: var(--night-2);
+      color: var(--night-fg);
+    }
+  }
+  @media (max-width: 720px) {
+    .footer__tiles {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
   .footer__links {
     display: flex;

@@ -1,0 +1,160 @@
+---
+/** "How I work": one card per discipline, each ending in a link to the work that proves it. */
+import ArrowCircle from './ArrowCircle.astro';
+import { capabilities, motion } from '../data/site';
+import { url } from '../lib/url';
+
+// The Motion lab link only makes sense while the section is on the page (see MotionLab.astro).
+const showLab = import.meta.env.DEV || motion.some((m) => m.video);
+---
+
+<section id="how" class="how container">
+  <div class="how__head reveal">
+    <p class="eyebrow">How I work</p>
+    <h2 class="h2">From research to <span class="accent-word">behaviour</span>, not guesses</h2>
+    <p class="lead">
+      Discovery, product UI and motion in one pair of hands: I find out what people need, build the system around it
+      and prototype the interactions, so engineers get working behaviour, not a description of it.
+    </p>
+  </div>
+
+  <ol class="how__grid" role="list">
+    {
+      capabilities.map((c, i) => {
+        const proof = c.proof.href !== '/#lab' || showLab;
+        return (
+          <li class="cap reveal">
+            <p class="eyebrow cap__idx">{String(i + 1).padStart(2, '0')}</p>
+            <h3 class="cap__title">{c.title}</h3>
+            <p class="cap__text">{c.text}</p>
+
+            <p class="eyebrow cap__label">What I do</p>
+            <ul class="cap__skills" role="list">
+              {c.skills.map((s) => <li>{s}</li>)}
+            </ul>
+
+            <p class="eyebrow cap__label">What you get</p>
+            <p class="cap__deliverables">{c.deliverables.join(' · ')}</p>
+
+            {proof && (
+              <a href={url(c.proof.href)} class="cap__proof arrow-trigger">
+                <span>
+                  <span class="cap__proof-pre">See it in</span> {c.proof.label}
+                </span>
+                <ArrowCircle />
+              </a>
+            )}
+          </li>
+        );
+      })
+    }
+  </ol>
+</section>
+
+<style>
+  .how {
+    margin-top: clamp(96px, 12vw, 144px);
+  }
+  .how__head {
+    display: flex;
+    flex-direction: column;
+  }
+  .how__head .h2 {
+    margin-top: 16px;
+    max-width: 18ch;
+  }
+  .how__head .lead {
+    margin-top: 24px;
+  }
+  .how__grid {
+    margin-top: clamp(40px, 5vw, 64px);
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0 16px;
+  }
+  /* Subgrid: titles, lists and links line up across the three cards even when a title wraps. */
+  .cap {
+    display: grid;
+    grid-row: span 8;
+    grid-template-rows: subgrid;
+    align-content: start;
+    padding: clamp(24px, 2.5vw, 32px);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .cap__idx {
+    color: var(--accent-ink);
+  }
+  .cap__title {
+    margin-top: 16px;
+    font-size: clamp(1.375rem, 1.2rem + 0.6vw, 1.75rem);
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+    font-weight: 500;
+  }
+  .cap__text {
+    margin-top: 12px;
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--ink-3);
+    text-wrap: pretty;
+  }
+  /* Each list sits under its own small label, a clear step away from the text above. */
+  .cap__label {
+    margin-top: 32px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.75rem;
+  }
+  .cap__skills {
+    padding: 0;
+    list-style: none;
+  }
+  .cap__skills li {
+    padding-block: 10px;
+    border-bottom: 1px solid var(--line);
+    font-size: 15px;
+  }
+  .cap__deliverables {
+    margin-top: 12px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink-3);
+  }
+  /* Pinned to the bottom, so the links line up across cards of different length. */
+  .cap__proof {
+    align-self: end;
+    padding-top: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 44px;
+    font-weight: 500;
+  }
+  .cap__proof-pre {
+    color: var(--muted);
+    font-weight: 400;
+  }
+  .cap__proof:focus-visible {
+    outline: none;
+  }
+  .cap:has(.cap__proof:focus-visible) {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+
+  @media (max-width: 1023px) {
+    .how__grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 16px;
+    }
+    .cap {
+      grid-row: auto;
+      grid-template-rows: none;
+    }
+  }
+</style>
