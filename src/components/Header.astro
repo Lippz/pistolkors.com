@@ -13,10 +13,12 @@ const { current, progress = false } = Astro.props;
 const showLab = import.meta.env.DEV || motion.some((m) => m.video);
 
 const nav = [
-  { label: 'Work', href: url('/#work'), key: 'work' },
+  { label: 'Case Studies', href: url('/#work'), key: 'work' },
+  { label: 'How I work', href: url('/#how'), key: 'how' },
+  { label: 'AI Pipeline', href: url('/#ai'), key: 'ai' },
   ...(showLab ? [{ label: 'Motion lab', href: url('/#lab'), key: 'lab' }] : []),
   { label: 'About', href: url('/#about'), key: 'about' },
-  { label: 'Resume', href: site.cv, key: 'cv' },
+  { label: 'Resume ↓', href: site.cv, key: 'cv' },
 ];
 ---
 
@@ -36,7 +38,7 @@ const nav = [
     <nav id="site-nav" class="header__nav" aria-label="Main">
       {
         nav.map((item) => (
-          <a href={item.href} aria-current={current === item.key ? 'page' : undefined} target={item.key === 'cv' ? '_blank' : undefined}>
+          <a href={item.href} aria-current={current === item.key ? 'page' : undefined} download={item.key === 'cv' ? '' : undefined}>
             {item.label}
           </a>
         ))
@@ -85,6 +87,33 @@ const nav = [
       toggle?.focus();
     }
   });
+
+  // Scroll spy: underline the menu item whose section sits under the header.
+  const spyLinks = [...(nav?.querySelectorAll<HTMLAnchorElement>('a[href*="#"]:not(.btn)') ?? [])]
+    .map((a) => ({ a, el: document.getElementById(a.hash.slice(1)) }))
+    .filter((l): l is { a: HTMLAnchorElement; el: HTMLElement } => !!l.el && l.a.pathname === location.pathname);
+  if (spyLinks.length) {
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const line = window.innerHeight * 0.35;
+      let active: HTMLAnchorElement | undefined;
+      for (const { a, el } of spyLinks) {
+        const r = el.getBoundingClientRect();
+        if (r.top <= line && r.bottom > line) active = a;
+      }
+      spyLinks.forEach(({ a }) => a.classList.toggle('is-active', a === active));
+    };
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+  }
 </script>
 
 <style>
@@ -193,15 +222,42 @@ const nav = [
       display: none;
     }
   }
-  .header__nav a[aria-current='page'] {
-    border-bottom: 2px solid var(--accent);
-    padding-bottom: 2px;
+  /* Underline grows out from the centre; a pseudo-element, so the text never shifts. */
+  .header__nav a:not(.btn) {
+    position: relative;
+  }
+  .header__nav a:not(.btn)::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -4px;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .header__nav a[aria-current='page']::after,
+  .header__nav a.is-active::after {
+    transform: scaleX(1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .header__nav a:not(.btn)::after {
+      transition: none;
+    }
   }
   .header__toggle {
     display: none;
   }
 
-  @media (max-width: 860px) {
+  /* Six menu items: tighten the spacing before the bar runs out of room. */
+  @media (max-width: 1280px) {
+    .header__nav {
+      gap: 24px;
+    }
+  }
+
+  @media (max-width: 1100px) {
     .header__inner {
       gap: 4px;
     }
@@ -270,7 +326,11 @@ const nav = [
       padding: 14px 0;
       border-bottom: 1px solid var(--line);
     }
-    .header__nav a[aria-current='page'] {
+    .header__nav a:not(.btn)::after {
+      display: none;
+    }
+    .header__nav a[aria-current='page'],
+    .header__nav a.is-active {
       border-bottom: 1px solid var(--line);
       color: var(--accent-ink);
     }

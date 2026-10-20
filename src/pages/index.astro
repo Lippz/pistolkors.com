@@ -31,7 +31,7 @@ const years = cases.map((c) => Number(c.data.year.slice(0, 4)));
     </p>
     <div class="hero__ctas">
       <a href="#work" class="btn btn--accent">View Selected Works</a>
-      <a href={site.cv} class="btn btn--outline" target="_blank">Download CV (PDF)</a>
+      <a href={site.cv} class="btn btn--outline" download>Download CV (PDF)</a>
     </div>
     <ul class="facts" role="list">
       {
@@ -98,7 +98,7 @@ const years = cases.map((c) => Number(c.data.year.slice(0, 4)));
           ))
         }
       </ul>
-      <a href={site.cv} class="link-underline about__cv" target="_blank">Full resume (PDF, 1 page) ↓</a>
+      <a href={site.cv} class="link-underline about__cv" download>Full resume (PDF, 1 page) ↓</a>
     </div>
   </section>
 
@@ -206,6 +206,7 @@ const years = cases.map((c) => Number(c.data.year.slice(0, 4)));
 
   .about {
     margin-top: clamp(96px, 12vw, 144px);
+    scroll-margin-top: clamp(32px, 5vw, 56px);
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
     gap: 24px;

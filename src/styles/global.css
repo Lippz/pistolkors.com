@@ -96,6 +96,8 @@ html {
   scrollbar-gutter: stable; /* no layout shift when the image viewer locks scrolling */
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  /* Anchors land just below the sticky header, not under it. */
+  scroll-padding-top: calc(var(--header-h) + 1px); /* + its bottom border */
 }
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -480,7 +482,7 @@ a:hover .frame img {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--muted);
-  scroll-margin-top: 104px;
+  scroll-margin-top: 16px; /* on top of the header's scroll-padding */
 }
 .prose h2::before {
   content: counter(section, decimal-leading-zero) ' — ';
