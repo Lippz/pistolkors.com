@@ -165,5 +165,5 @@ export const ai = {
     href: '/work/linkhms/#ai-in-the-process',
     text: 'The densest sections were prototyped in code, and the reworked design system reached the code base through agents, so developers stayed on the roadmap.',
   },
-  site: 'Designed by me, built and maintained with Claude Code — from the case layouts to the animated arrows on this page.',
+  site: 'Designed by me, built and maintained with Claude Code — from the case layouts to the micro-interactions: a headline that comes apart under the cursor, hover states and carousels that react to every move.',
 };

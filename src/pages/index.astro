@@ -23,9 +23,8 @@ const lastYear = Math.max(
   }),
 );
 
-// Hero: the letters of "complex" start out of line — shifted, tilted, too light or too
-// heavy — and settle into an even word while "obvious." is written in. Fixed values, so
-// the start frame is the same on every load and matches the server HTML.
+// Hero: hovering "complex" throws its letters out of line — shifted, tilted, too light or
+// too heavy — and they settle back into an even word when the pointer leaves.
 const mess = [
   { c: 'c', y: -0.09, r: -6, w: 400 },
   { c: 'o', y: 0.07, r: 5, w: 650 },
@@ -146,6 +145,14 @@ const mess = [
   <Lightbox />
 </Base>
 
+<script>
+  // "obvious." glint: start on pointer enter, let it finish on its own, and ignore new
+  // hovers until it has. The CSS only runs it where hover and motion are welcome.
+  const accent = document.querySelector<HTMLElement>('.hero__accent');
+  accent?.addEventListener('pointerenter', () => accent.classList.add('is-glinting'));
+  accent?.addEventListener('animationend', () => accent.classList.remove('is-glinting'));
+</script>
+
 <style>
   .hero {
     padding-top: clamp(48px, 9vw, 112px);
@@ -174,50 +181,55 @@ const mess = [
     display: inline-block;
   }
   @media (prefers-reduced-motion: no-preference) {
-    /* Hold the messy frame for a moment, then let the letters settle one after another
-       with a slight overshoot. Weight is animated too (Geist is variable), so the word
-       evens out in thickness as well as in line.
-       Fill is `backwards` only: once settled, the letters fall back to their own styles,
-       so the hover below can move them with a transition. */
+    /* Letters move one after another with a slight overshoot. Weight is animated too
+       (Geist is variable), so the word changes in thickness as well as in line. */
     .mess > span {
-      animation: settle 0.8s cubic-bezier(0.2, 0.9, 0.3, 1.15) calc(0.25s + var(--i) * 45ms) backwards;
       transition:
         transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.15),
         font-weight 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.15);
       transition-delay: calc(var(--i) * 25ms);
     }
-    /* Hovering "complex" throws its letters back out of line; leaving lets them settle again. */
+    /* Hovering "complex" throws its letters out of line; leaving lets them settle again. */
     @media (hover: hover) {
       .mess:hover > span {
         transform: translateY(var(--y)) rotate(var(--r));
         font-weight: var(--w);
       }
     }
-    /* "obvious." is written in from the left while the letters settle. The clip runs a
-       little past the box so the italic overhang and descenders are never cut. */
-    .hero__accent {
-      display: inline-block;
-      animation: write-in 0.7s cubic-bezier(0.45, 0, 0.2, 1) 0.25s both;
+  }
+  /* Hovering "obvious." sends a glint across the word, once per hover: the red is painted as
+     a background clipped to the letters, with a light band that slides from right to left.
+     The padding lets the italic overhang keep its paint; the negative margin cancels it. */
+  @supports (background-clip: text) or (-webkit-background-clip: text) {
+    @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+      .hero__accent {
+        display: inline-block;
+        padding: 0 0.12em;
+        margin: 0 -0.12em;
+        background: linear-gradient(
+            105deg,
+            var(--accent) 42%,
+            color-mix(in srgb, var(--accent) 25%, #ffffff) 50%,
+            var(--accent) 58%
+          )
+          100% 0 / 300% 100% no-repeat;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      /* Set by the script below on pointer enter and cleared when the glint ends, so it
+         always plays to the end even if the pointer leaves halfway. */
+      .hero__accent.is-glinting {
+        animation: glint 1.8s cubic-bezier(0.45, 0, 0.2, 1);
+      }
     }
   }
-  @keyframes settle {
+  @keyframes glint {
     from {
-      transform: translateY(var(--y)) rotate(var(--r));
-      font-weight: var(--w);
+      background-position: 100% 0;
     }
     to {
-      transform: none;
-      font-weight: 500;
-    }
-  }
-  @keyframes write-in {
-    from {
-      clip-path: inset(-0.2em 100% -0.3em -0.1em);
-      transform: translateX(-0.08em);
-    }
-    to {
-      clip-path: inset(-0.2em -0.3em -0.3em -0.1em);
-      transform: none;
+      background-position: 0% 0;
     }
   }
   .hero .lead {
