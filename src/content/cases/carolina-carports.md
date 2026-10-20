@@ -6,9 +6,10 @@ summary: An ERP that replaced two decades of Excel tables — from 3D design and
 lead: CCI ERP is a web platform for carport manufacturers, retailers and installers. It replaced Excel tables the client had used for over 20 years with one workflow — from designing a building in 3D to scheduling the crew that installs it.
 industry: Construction
 year: '2022'
-role: UX/UI Designer
+role: Senior Product Designer
 timeline: 6 months
 company: Existek
+team: 3 developers
 platforms: Web app
 tags: [ERP, 3D configurator, Scheduling]
 cover: ../../assets/cases/carolina-carports/cover.webp

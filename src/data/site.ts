@@ -1,14 +1,20 @@
 import { url } from '../lib/url';
-import { PRODUCT_SINCE, yearsSince, inWords } from '../lib/years';
+import { PRODUCT_SINCE, SENIOR_SINCE, yearsSince, inWords } from '../lib/years';
 
 export const site = {
   name: 'Pylyp Pistolkors',
   role: 'Senior Product Designer',
   location: 'Poznań, PL · Remote',
-  description: `Senior Product Designer with over 20 years in visual and motion design and ${inWords(yearsSince(PRODUCT_SINCE))} as a senior product designer: legal-tech, healthcare, e-commerce and marketplaces.`,
+  description: `Senior Product Designer with over 20 years in visual and motion design and ${inWords(yearsSince(SENIOR_SINCE))} as a senior product designer: legal-tech, healthcare, e-commerce and marketplaces.`,
   availability: 'Open to senior product design roles — Remote / Poznań, PL',
   email: 'ppistolkors@gmail.com',
   cv: url('/CV-Pylyp_Pistolkors-Senior_Product_Designer.pdf'),
+  /** Practical details recruiters ask first. */
+  details: [
+    { label: 'English', value: 'B2', short: 'English B2' },
+    { label: 'Time zone', value: 'Warsaw (CET/CEST)', short: 'Warsaw time' },
+    { label: 'Work authorisation', value: 'EU, no sponsorship needed', short: 'EU work authorisation' },
+  ],
   links: [
     { label: 'LinkedIn', href: 'https://linkedin.com/in/pistolkors' },
     { label: 'Behance', href: 'https://be.net/pistolkors' },
@@ -21,9 +27,9 @@ export const site = {
  */
 export const facts: { value?: string; since?: string; unit?: string; label: string }[] = [
   { value: '20+ yrs', label: 'in design, animation and motion' },
-  { since: PRODUCT_SINCE, unit: 'yrs', label: 'in product design, since 2020' },
-  { value: '5 industries', label: 'healthcare, legal-tech, e-commerce, construction, crypto' },
-  { value: 'AI-native', label: 'agents at almost every step, from first draft to code' },
+  { since: PRODUCT_SINCE, unit: 'yrs', label: 'in product design, since 2017' },
+  { value: '4 industries', label: 'healthcare, legal-tech, e-commerce, construction' },
+  { value: '30+ clinics', label: 'run on LinkHMS, a hospital system I designed' },
 ];
 
 export const experience = [
@@ -85,8 +91,6 @@ export const capabilities: {
   text: string;
   skills: string[];
   deliverables: string[];
-  /** One line on where AI agents come in. */
-  ai: string;
   proof: { label: string; href: string };
 }[] = [
   {
@@ -100,7 +104,6 @@ export const capabilities: {
       'Information architecture',
     ],
     deliverables: ['Research summary', 'Personas', 'User flows', 'Wireframes'],
-    ai: 'Faster first drafts: several flows and layouts to test against the research, not one.',
     proof: { label: 'LinkHMS', href: '/work/linkhms/' },
   },
   {
@@ -114,7 +117,6 @@ export const capabilities: {
       'Responsive web and mobile',
     ],
     deliverables: ['High-fidelity UI', 'Design system', 'Clickable prototypes', 'Dev-ready Figma'],
-    ai: 'Figma MCP and coding agents carry design-system changes into code without a front-end developer.',
     proof: { label: 'LegalFans', href: '/work/legalfans/' },
   },
   {
@@ -127,7 +129,6 @@ export const capabilities: {
       'Hand-off with working behaviour',
     ],
     deliverables: ['Interaction prototypes', 'Motion loops', 'Coded demos'],
-    ai: 'Prototypes are built in real code with Cursor, Claude Code and Codex, not only linked frames.',
     proof: { label: 'Motion lab', href: '/#lab' },
   },
 ];
@@ -150,7 +151,7 @@ export const ai = {
     },
     {
       title: 'Design system ↔ code',
-      text: 'Through Figma MCP, tokens and components move between Figma and code without a front-end sprint.',
+      text: 'Through Figma MCP, tokens and components stay in step between Figma and code, and developers stay on the roadmap.',
       tools: ['Figma MCP', 'Claude Code'],
     },
     {
@@ -163,8 +164,8 @@ export const ai = {
     label: 'LinkHMS',
     href: '/work/linkhms/#ai-in-the-process',
     stats: [
-      { value: '~50%', label: 'of the work done with AI agents, from coded prototypes to the design system' },
-      { value: 'Tens of hours', label: 'of front-end work saved: the reworked design system was implemented by AI' },
+      { value: '~50%', label: 'of the hands-on production sped up by agents: coded prototypes and design-system updates' },
+      { value: 'Tens of hours', label: 'of developer time kept for the roadmap: the design-system rework reached code through agents' },
     ],
   },
   site: 'Designed by me, built and maintained with Claude Code — from the case layouts to the animated arrows on this page.',

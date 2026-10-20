@@ -9,13 +9,19 @@ import Capabilities from '../components/Capabilities.astro';
 import AiPipeline from '../components/AiPipeline.astro';
 import Lightbox from '../components/Lightbox.astro';
 import { site, facts, experience } from '../data/site';
-import { PRODUCT_SINCE, yearsSince, inWords } from '../lib/years';
+import { SENIOR_SINCE, yearsSince, inWords } from '../lib/years';
 import portrait from '../assets/site/portrait.webp';
 
-const cases = (await getCollection('cases')).sort((a, b) => a.data.order - b.data.order);
+const cases = (await getCollection('cases', (c) => !c.data.hidden)).sort((a, b) => a.data.order - b.data.order);
 const featured = cases.filter((c) => c.data.featured);
 const rest = cases.filter((c) => !c.data.featured);
-const years = cases.map((c) => Number(c.data.year.slice(0, 4)));
+const firstYear = Math.min(...cases.map((c) => Number(c.data.year.slice(0, 4))));
+const lastYear = Math.max(
+  ...cases.map((c) => {
+    const end = c.data.year.match(/(\d+)$/)![1];
+    return Number(end.length === 2 ? c.data.year.slice(0, 2) + end : end);
+  }),
+);
 
 // Hero: the letters of "complex" start out of line — shifted, tilted, too light or too
 // heavy — and settle into an even word while "obvious." is written in. Fixed values, so
@@ -46,7 +52,7 @@ const mess = [
     </h1>
     <p class="lead">
       Senior Product Designer at Existek. Over twenty years in visual and motion design, the last{' '}
-      <span data-since={PRODUCT_SINCE} data-as="word">{inWords(yearsSince(PRODUCT_SINCE))}</span> as a senior product
+      <span data-since={SENIOR_SINCE} data-as="word">{inWords(yearsSince(SENIOR_SINCE))}</span> as a senior product
       designer —
       legal-tech, healthcare, e-commerce and marketplaces. I run discovery, build the system and sweat the interaction
       details.
@@ -55,7 +61,7 @@ const mess = [
       <a href="#work" class="btn btn--accent">View Selected Works</a>
       <div class="btn-split" role="group" aria-label="CV (PDF)">
         <a href={site.cv} class="btn-split__part" download>Download CV (PDF)</a>
-        <a href={site.cv} class="btn-split__part" target="_blank" rel="noopener">Show it</a>
+        <a href={site.cv} class="btn-split__part" target="_blank" rel="noopener">View CV</a>
       </div>
     </div>
     <ul class="facts" role="list">
@@ -82,7 +88,7 @@ const mess = [
     <div class="container work__inner">
       <div class="section-head">
         <h2 class="h2">Selected Works</h2>
-        <p class="eyebrow">{cases.length} case studies · {Math.min(...years)} — {Math.max(...years)}</p>
+        <p class="eyebrow">{cases.length} case studies · {firstYear} — {lastYear}</p>
       </div>
 
       {featured.map((entry, i) => <CaseFeature entry={entry} index={i + 1} flip={i % 2 === 1} />)}
@@ -108,7 +114,7 @@ const mess = [
       <p class="about__text">
         I started in 2005 animating casino games and banner ads, moved into product design at RIA.com, and now lead
         discovery and design for client products at Existek. The motion background is my edge: I prototype
-        interactions, so engineers get behaviour, not guesses. Off-screen I produce electronic music.
+        interactions, so engineers get behaviour, not guesses. Off-screen I produce electronic music and games.
       </p>
       <ul class="xp" role="list">
         {
@@ -123,6 +129,16 @@ const mess = [
           ))
         }
       </ul>
+      <dl class="details">
+        {
+          site.details.map((d) => (
+            <div>
+              <dt>{d.label}</dt>
+              <dd>{d.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
       <a href={site.cv} class="link-underline about__cv" download>Full resume (PDF, 1 page) ↓</a>
     </div>
   </section>
@@ -340,10 +356,16 @@ const mess = [
     grid-template-columns: repeat(12, minmax(0, 1fr));
     gap: 24px;
   }
+  /* The photo fills the full height of the text column; the image is taken out of the flow
+     so its own height never stretches the row. */
   .about__photo {
     grid-column: span 5;
-    aspect-ratio: 4 / 5;
-    align-self: start;
+    position: relative;
+    min-height: 480px;
+  }
+  .about__photo :global(img) {
+    position: absolute;
+    inset: 0;
   }
   .about__body {
     grid-column: 7 / span 6;
@@ -393,6 +415,26 @@ const mess = [
     font-size: 15px;
     color: var(--muted);
   }
+  .details {
+    margin: 32px 0 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px 24px;
+  }
+  .details div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .details dt {
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .details dd {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+  }
   .xp__period {
     font-family: var(--mono);
     font-size: 13px;
@@ -414,6 +456,8 @@ const mess = [
     }
     .about__photo {
       max-width: 520px;
+      min-height: 0;
+      aspect-ratio: 4 / 5;
     }
   }
   /* Hero buttons react clearly to hover: lift, a shadow and a stronger fill. The label colour
@@ -469,6 +513,9 @@ const mess = [
     .xp li {
       grid-template-columns: 1fr;
       gap: 6px;
+    }
+    .details {
+      grid-template-columns: 1fr;
     }
   }
 </style>

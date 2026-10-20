@@ -1,4 +1,5 @@
 ---
+hidden: true
 order: 6
 client: Digital Church
 title: A space for discussion and learning around humanism, science and personal growth

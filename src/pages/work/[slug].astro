@@ -8,7 +8,7 @@ import CaseCover from '../../components/CaseCover.astro';
 import { url } from '../../lib/url';
 
 export async function getStaticPaths() {
-  const cases = (await getCollection('cases')).sort((a, b) => a.data.order - b.data.order);
+  const cases = (await getCollection('cases', (c) => !c.data.hidden)).sort((a, b) => a.data.order - b.data.order);
   return cases.map((entry, i) => ({
     params: { slug: entry.id },
     props: { entry, index: i + 1, next: cases[(i + 1) % cases.length] },

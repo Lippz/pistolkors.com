@@ -10,6 +10,8 @@ const cases = defineCollection({
       order: z.number(),
       /** Featured cases get the large row layout on the home page. */
       featured: z.boolean().default(false),
+      /** Hidden cases get no page and are left out of the home page and "next case" links. */
+      hidden: z.boolean().default(false),
       client: z.string(),
       /** Outcome-style title: what was done and for whom. */
       title: z.string(),

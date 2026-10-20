@@ -13,7 +13,7 @@ const showLab = import.meta.env.DEV || motion.some((m) => m.video);
     <p class="eyebrow">How I work</p>
     <h2 class="h2">From research to <span class="accent-word">behaviour</span>, not guesses</h2>
     <p class="lead">
-      Discovery, product UI and motion in one pair of hands, with AI agents at every step: I find out what people
+      Discovery, product UI and motion in one pair of hands: I find out what people
       need, build the system around it and prototype the interactions in code, so engineers get working behaviour,
       not a description of it.
     </p>
@@ -36,11 +36,6 @@ const showLab = import.meta.env.DEV || motion.some((m) => m.video);
 
             <p class="eyebrow cap__label">What you get</p>
             <p class="cap__deliverables">{c.deliverables.join(' · ')}</p>
-
-            <p class="cap__ai">
-              <span class="eyebrow cap__ai-label">With AI</span>
-              {c.ai}
-            </p>
 
             {proof && (
               <a href={url(c.proof.href)} class="cap__proof arrow-trigger">
@@ -130,23 +125,6 @@ const showLab = import.meta.env.DEV || motion.some((m) => m.video);
     font-size: 15px;
     line-height: 1.6;
     color: var(--ink-3);
-  }
-  /* AI line: a quiet tinted strip, so it reads as part of each discipline, not a fourth list. */
-  .cap__ai {
-    margin-top: 24px;
-    padding: 14px 16px;
-    border-radius: 10px;
-    background: color-mix(in srgb, var(--accent) 7%, transparent);
-    font-size: 15px;
-    line-height: 1.55;
-    color: var(--ink-2);
-    text-wrap: pretty;
-  }
-  .cap__ai-label {
-    display: block;
-    margin-bottom: 6px;
-    font-size: 0.75rem;
-    color: var(--accent-ink);
   }
   /* Pinned to the bottom, so the links line up across cards of different length. */
   .cap__proof {

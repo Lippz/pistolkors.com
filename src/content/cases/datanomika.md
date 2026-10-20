@@ -1,4 +1,5 @@
 ---
+hidden: true
 order: 5
 client: Datanomika
 title: A community platform that collects how everyday people see the world

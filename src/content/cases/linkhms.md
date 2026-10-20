@@ -4,13 +4,14 @@ featured: true
 client: LinkHMS
 title: A hospital management system light enough for small clinics
 accent: small clinics
-summary: Existing HMS tools are heavy and built for big hospitals. Research with 12 healthcare professionals shaped a lean system in Central Africa that one doctor can run alone or a whole clinic team can share.
+summary: Existing HMS tools are heavy and built for big hospitals. Research with 12 healthcare professionals shaped a lean system in Central Africa that one doctor can run alone or a whole clinic team can share — live since 2025 and used by 30+ clinics.
 lead: LinkHMS is a cloud platform for hospitals and clinics in Central Africa. Most hospital systems are heavy, outdated and built for large institutions — I designed one that a single doctor can run alone, with every feature, and a whole clinic team can share — set up and in use from day one.
 industry: HealthTech
 year: 2024–26
-role: UX/UI Designer
+role: Senior Product Designer
 timeline: 30 months
 company: Existek
+team: 5–6 developers, 1 designer I mentored
 platforms: Web app, desktop-first
 tags: [User research, Scheduling, Data privacy]
 cover: ../../assets/cases/linkhms/cover.webp
@@ -21,14 +22,14 @@ coverLayers:
   logoWidth: 40
   themed: true
 stats:
-  label: Research
+  label: Results
   items:
+    - value: 30+
+      label: clinics connected so far
+    - value: '2025'
+      label: in production since
     - value: '12'
-      label: healthcare professionals surveyed
-    - value: '5'
-      label: in-depth interviews
-    - value: '4'
-      label: competing products analysed
+      label: healthcare professionals surveyed before the first screen
 ---
 
 ## Problem
@@ -113,6 +114,10 @@ I grouped the findings in an affinity diagram, graded features by importance and
 ### From sketches to a tested flow
 
 I started with hand-drawn sketches to decide what each screen needed, then mapped the user flow and built a low-fidelity prototype in Figma. A usability study showed where the task flow broke down; a second round confirmed the fixes before any high-fidelity work.
+
+#### Mentoring on the project
+
+A mid-level designer worked on LinkHMS with me, and I trained them on the project itself: the clinic domain, the design system and how a flow goes from sketch to developer hand-off. I reviewed their screens before they went to the developers, so the product kept one design language while two people worked on it.
 
 ![User flow covering registration, scheduling, patients, medical records and administration](../../assets/cases/linkhms/user-flow.webp)
 
@@ -358,7 +363,7 @@ Patients sign in with their email and a six-digit one-time code. The home screen
 
 ## AI in the process
 
-### About half of the work went through AI agents
+### Agents took on the slow parts, about half of the hands-on work
 
 AI tools became part of the process as the project went on. Agents did not replace the design work: I made the decisions, they took on the slow parts between a design and working code.
 
@@ -382,7 +387,7 @@ I first built the design system by hand in Figma, and later reworked it there to
 
 ### There is no limit to perfection
 
-What started with registration, scheduling, patients and the medical record grew over two and a half years into a full clinic system: a live queue, admissions with beds and discharge, billing and insurance claims, a pharmacy, a laboratory, reports and a patient portal. The product can grow in several directions:
+What started with registration, scheduling, patients and the medical record grew over two and a half years into a full clinic system, in production since 2025 and used by more than 30 clinics: a live queue, admissions with beds and discharge, billing and insurance claims, a pharmacy, a laboratory, reports and a patient portal. The product can grow in several directions:
 
 - **Reminders and online payments** — appointment reminders for patients, and invoices paid from the portal instead of at the front desk.
 - **Insurers connected directly** — claims sent to the insurer and decisions received inside LinkHMS, without retyping them by hand.

@@ -34,6 +34,7 @@ const year = new Date().getFullYear();
               <button type="button" class="footer__copy" data-copy={site.email} hidden>Copy</button>
             </div>
           </div>
+          <p class="footer__details">{site.details.map((d) => d.short).join(' · ')}</p>
           <ul class="footer__tiles" role="list">
             {site.links.map((l) => (
               <li>
@@ -185,6 +186,12 @@ const year = new Date().getFullYear();
     margin-top: clamp(32px, 4vw, 48px);
   }
   .footer__eyebrow {
+    color: var(--night-muted);
+  }
+  .footer__details {
+    margin-top: 16px;
+    font-family: var(--mono);
+    font-size: 13px;
     color: var(--night-muted);
   }
   .footer__actions {
