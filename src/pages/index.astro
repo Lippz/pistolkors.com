@@ -150,6 +150,85 @@ const mess = [
   const accent = document.querySelector<HTMLElement>('.hero__accent');
   accent?.addEventListener('pointerenter', () => accent.classList.add('is-glinting'));
   accent?.addEventListener('animationend', () => accent.classList.remove('is-glinting'));
+
+  // "complex" shows off once by itself: 1.5s after the page loads its letters fall out of
+  // line, hold for a moment and settle back — a hint that the word reacts to the pointer.
+  // The CSS only moves them where motion is welcome.
+  const mess = document.querySelector<HTMLElement>('.mess');
+  if (mess) {
+    setTimeout(() => {
+      mess.classList.add('is-messy');
+      setTimeout(() => mess.classList.remove('is-messy'), 900);
+    }, 1500);
+  }
+
+  // Soft section snap. When scrolling comes to rest close to the start of a section — within
+  // a fifth of the screen — the page glides the rest of the way so the section sits right
+  // under the header; the footer glides to the bottom the same way. It only ever glides on
+  // in the direction you were scrolling: a little way down into a section stays where you
+  // left it instead of being pulled back to the section's start. CSS snapping
+  // does this too, but with a quick jump that can't be slowed down. Any new scroll input
+  // stops the glide; with reduced motion the page just steps into place.
+  const scenes = [
+    ...document.querySelectorAll<HTMLElement>('main :is(.hero, .intro, #work, #words, #how, #ai, #lab, #about)'),
+  ];
+  const header = document.querySelector<HTMLElement>('.header');
+  const calm = matchMedia('(prefers-reduced-motion: reduce)');
+  let glide = 0;
+  let lastY = scrollY;
+  let heading = 0; // 1 while scrolling down, -1 up
+
+  const stopGlide = () => {
+    cancelAnimationFrame(glide);
+    glide = 0;
+  };
+  const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
+
+  function settle() {
+    if (glide) return;
+    const top = header?.offsetHeight ?? 0;
+    const end = document.documentElement.scrollHeight - innerHeight;
+    const stops = [...scenes.map((el) => el.getBoundingClientRect().top + scrollY - top), end];
+    const ahead = stops.filter((y) => (y - scrollY) * heading > 2);
+    if (!ahead.length) return;
+    const near = ahead.reduce((a, b) => (Math.abs(b - scrollY) < Math.abs(a - scrollY) ? b : a));
+    const distance = near - scrollY;
+    if (Math.abs(distance) > innerHeight * 0.2) return;
+    if (calm.matches) {
+      window.scrollTo({ top: near, behavior: 'instant' });
+      return;
+    }
+    // Slower the further it has to go: 600ms for a nudge, up to a second.
+    const duration = Math.min(1000, 600 + Math.abs(distance) * 1.5);
+    const from = scrollY;
+    const start = performance.now();
+    const step = (now: number) => {
+      const t = Math.min(1, (now - start) / duration);
+      window.scrollTo({ top: from + distance * ease(t), behavior: 'instant' });
+      glide = t < 1 ? requestAnimationFrame(step) : 0;
+    };
+    glide = requestAnimationFrame(step);
+  }
+
+  if (scenes.length) {
+    window.addEventListener('scroll', () => {
+      if (!glide && scrollY !== lastY) heading = Math.sign(scrollY - lastY);
+      lastY = scrollY;
+    }, { passive: true });
+    // scrollend where supported; elsewhere, a short pause after the last scroll event.
+    if ('onscrollend' in document.documentElement) {
+      window.addEventListener('scrollend', settle);
+    } else {
+      let idle = 0;
+      window.addEventListener('scroll', () => {
+        clearTimeout(idle);
+        idle = window.setTimeout(settle, 150);
+      }, { passive: true });
+    }
+    for (const type of ['wheel', 'touchstart', 'keydown', 'pointerdown'] as const) {
+      window.addEventListener(type, stopGlide, { passive: true });
+    }
+  }
 </script>
 
 <style>
@@ -208,7 +287,12 @@ const mess = [
         font-weight 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.15);
       transition-delay: calc(var(--i) * 25ms);
     }
-    /* Hovering "complex" throws its letters out of line; leaving lets them settle again. */
+    /* Hovering "complex" throws its letters out of line; leaving lets them settle again.
+       The script below does the same once, on its own, shortly after the page opens. */
+    .mess.is-messy > span {
+      transform: translateY(var(--y)) rotate(var(--r));
+      font-weight: var(--w);
+    }
     @media (hover: hover) {
       .mess:hover > span {
         transform: translateY(var(--y)) rotate(var(--r));
@@ -369,43 +453,70 @@ const mess = [
      screen; when its end reaches the top half of the screen it falls behind — moving slower
      than the page — blurring and fading out, so the next section slides over it. Only the
      end of a tall section like Recent works takes part.
+     The section itself stays put — it is what scrolling snaps to — and its blocks do the
+     moving, on the section's timeline. The timeline starts under the header, so a section
+     is fully gone once its end slides under it.
      The out-animation fills forwards only, so it never overrides the in-animation early. */
   @media (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) {
-      :global(:is(.hero, .intro, #work, #words, #how, #ai, #lab, #about)) {
+      :global(main :is(.hero, .intro, #work, #words, #how, #ai, #lab, #about)) {
+        view-timeline: --scene block;
+        view-timeline-inset: calc(var(--header-h) + 1px) 0px;
+      }
+      :global(:is(.hero, .intro, #work, #words, #how, #ai, #lab, #about) > *) {
         animation:
           scene-in linear both,
           scene-out linear forwards;
       }
       /* Timelines in a rule of their own, apart from the shorthand, so the CSS minifier
          can't fold them into it (browsers reject that and drop the animation). */
-      :global(main :is(.hero, .intro, #work, #words, #how, #ai, #lab, #about)) {
-        animation-timeline: view(), view();
+      :global(main :is(.hero, .intro, #work, #words, #how, #ai, #lab, #about) > *) {
+        animation-timeline: --scene, --scene;
         animation-range:
           entry 0% entry 30vh,
           exit calc(100% - 50vh) exit 100%;
       }
       /* The hero leaves sooner, faster and with less lag, so it is gone before the intro
          text takes its place instead of hanging over it. */
-      :global(main#main) .hero {
-        --lag: 6vh;
+      :global(main#main) .hero > * {
+        --lag: 9vh;
         animation-range:
           entry 0% entry 30vh,
           exit calc(100% - 70vh) exit calc(100% - 20vh);
       }
-      /* The section already moves as a whole, so its blocks no longer rise in on their own.
-         Recent works keeps them: it is many screens tall, and its later cases would
-         otherwise arrive with no motion at all. */
-      :global(main :is(#words, #how, #ai, #lab, #about) .reveal) {
+      /* The section already moves as a whole, so the blocks inside it no longer rise in on
+         their own. Recent works keeps them: it is many screens tall, and its later cases
+         would otherwise arrive with no motion at all. */
+      :global(main :is(#words, #how, #ai, #lab, #about) > * .reveal) {
         animation: none;
       }
     }
   }
+  /* One section per screen. Every section is at least a full screen tall (under the
+     header) with its content centred, and scrolling that stops near a section's start
+     glides it into place (the script above), so neither the one before nor the one after
+     shows. Sections taller than the screen scroll freely inside. The space between
+     sections moves inside them, as padding, so no gap is left on screen. */
+  :global(main :is(.hero, .intro, #work, #words, #how, #ai, #lab, #about)) {
+    scroll-margin-top: 0;
+  }
+  :global(main :is(.intro, #work, #words, #how, #ai, #lab, #about)) {
+    min-height: calc(100svh - var(--header-h) - 1px);
+    margin-top: 0;
+    align-content: center;
+  }
+  :global(main :is(#words, #how, #ai, #about)) {
+    padding-block: clamp(48px, 6vw, 96px);
+  }
+  :global(main #work) {
+    padding-bottom: clamp(48px, 6vw, 96px);
+  }
+
   @keyframes scene-in {
     from {
       opacity: 0;
       filter: blur(6px);
-      translate: 0 8vh;
+      translate: 0 12vh;
     }
     to {
       opacity: 1;
@@ -422,7 +533,7 @@ const mess = [
     to {
       opacity: 0;
       filter: blur(12px);
-      translate: 0 var(--lag, 20vh);
+      translate: 0 var(--lag, 28vh);
     }
   }
 

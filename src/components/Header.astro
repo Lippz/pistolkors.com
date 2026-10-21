@@ -83,6 +83,17 @@ const nav = [
   };
   toggle?.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
   nav?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+  // The logo on the home page scrolls back to the top, like the menu items scroll to their
+  // sections, instead of reloading the page. Elsewhere it is a plain link home.
+  const brand = document.querySelector<HTMLAnchorElement>('.header__brand');
+  brand?.addEventListener('click', (e) => {
+    if (brand.pathname !== location.pathname || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    setOpen(false);
+    if (location.hash) history.pushState(null, '', brand.pathname + location.search);
+    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: calm ? 'instant' : 'smooth' });
+  });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && nav?.classList.contains('is-open')) {
       setOpen(false);
