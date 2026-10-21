@@ -34,13 +34,13 @@ const mess = [
   <section class="hero container">
     <p class="eyebrow hero__status"><span class="dot" aria-hidden="true"></span>{site.availability}</p>
     <h1 class="h-hero hero__title">
-      <span class="sr-only">I make complex products feel obvious.</span>
+      <span class="sr-only">I make complex products feel obvious</span>
       <span aria-hidden="true">
         I make{' '}
         <span class="mess">
           {mess.map((l, i) => <span style={`--y:${l.y}em;--r:${l.r}deg;--w:${l.w};--i:${i}`}>{l.c}</span>)}
         </span>{' '}
-        products feel <span class="accent-word hero__accent">obvious.</span>
+        products feel <span class="accent-word hero__accent">obvious</span>
       </span>
     </h1>
     <p class="lead">
@@ -140,7 +140,7 @@ const mess = [
 </Base>
 
 <script>
-  // "obvious." glint: start on pointer enter, let it finish on its own, and ignore new
+  // "obvious" glint: start on pointer enter, let it finish on its own, and ignore new
   // hovers until it has. The CSS only runs it where hover and motion are welcome.
   const accent = document.querySelector<HTMLElement>('.hero__accent');
   accent?.addEventListener('pointerenter', () => accent.classList.add('is-glinting'));
@@ -191,7 +191,7 @@ const mess = [
       }
     }
   }
-  /* Hovering "obvious." sends a glint across the word, once per hover: the red is painted as
+  /* Hovering "obvious" sends a glint across the word, once per hover: the red is painted as
      a background clipped to the letters, with a light band that slides from right to left.
      The padding lets the italic overhang keep its paint; the negative margin cancels it. */
   @supports (background-clip: text) or (-webkit-background-clip: text) {
