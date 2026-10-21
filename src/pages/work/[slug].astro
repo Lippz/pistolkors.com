@@ -35,7 +35,7 @@ const titleAccent = accentAt >= 0 ? d.accent : undefined;
 
 const facts = [
   { label: 'Role', value: d.role },
-  { label: 'Timeline', value: `${d.timeline}, ${d.year}` },
+  { label: 'Timeline', value: d.timeline },
   { label: 'Company', value: d.company },
   d.team && { label: 'Team', value: d.team },
   d.platforms && { label: 'Platforms', value: d.platforms },

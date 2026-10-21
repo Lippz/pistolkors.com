@@ -7,7 +7,6 @@ accent: lawyers
 summary: Three user groups, one workflow — detect stolen media, validate matches, launch legal action — without creators tracking leaks by hand.
 lead: LegalFans helps creators and agencies protect their content. It finds stolen media across the web, has a human confirm every match, and turns each one into a legal takedown — so creators stop chasing leaks by hand.
 industry: B2B SaaS
-year: 2024–25
 role: Senior Product Designer
 timeline: 5 months
 company: Existek

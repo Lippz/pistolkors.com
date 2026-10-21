@@ -5,7 +5,6 @@ title: Redesigning a grill store — clearer filters, guest checkout, expert adv
 summary: A dated e-commerce site for grills and accessories, rebuilt around faster product discovery, a shorter checkout and trust — conversion rate up from 1.7% to 2.1% after the 2025 launch.
 lead: BBQ.ua runs a chain of grill and barbecue stores in Ukraine. Its website sold the products but felt outdated, cluttered and hard to use on a phone — the redesign had to make buying a grill feel as confident as asking an expert in store.
 industry: E-commerce
-year: 2024–25
 role: Senior Product Designer
 timeline: 4 months
 company: PYP International, freelance alongside Existek

@@ -22,7 +22,6 @@ const cases = defineCollection({
       /** Opening paragraph on the case page. */
       lead: z.string(),
       industry: z.string(),
-      year: z.string(),
       role: z.string(),
       timeline: z.string(),
       company: z.string(),

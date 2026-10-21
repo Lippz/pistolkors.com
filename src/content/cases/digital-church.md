@@ -6,7 +6,6 @@ title: A space for discussion and learning around humanism, science and personal
 summary: A side project with two friends — and a lesson in cutting an idea down to an MVP.
 lead: In 2020 two friends and I set out to build a digital church around our own philosophy — a place to connect, share knowledge and have meaningful conversations. We had big ideas and no users, funding or structure, so we started with an MVP.
 industry: Co-founder project
-year: '2020'
 role: Co-founder, UX/UI
 timeline: 2 months
 company: Independent

@@ -16,13 +16,6 @@ import portrait from '../assets/site/portrait.webp';
 const cases = (await getCollection('cases', (c) => !c.data.hidden)).sort((a, b) => a.data.order - b.data.order);
 const featured = cases.filter((c) => c.data.featured);
 const rest = cases.filter((c) => !c.data.featured);
-const firstYear = Math.min(...cases.map((c) => Number(c.data.year.slice(0, 4))));
-const lastYear = Math.max(
-  ...cases.map((c) => {
-    const end = c.data.year.match(/(\d+)$/)![1];
-    return Number(end.length === 2 ? c.data.year.slice(0, 2) + end : end);
-  }),
-);
 
 // Hero: hovering "complex" throws its letters out of line — shifted, tilted, too light or
 // too heavy — and they settle back into an even word when the pointer leaves.
@@ -87,7 +80,7 @@ const mess = [
     <div class="container work__inner">
       <div class="section-head">
         <h2 class="h2">Case studies</h2>
-        <p class="eyebrow">{cases.length} projects · {firstYear} — {lastYear}</p>
+        <p class="eyebrow">{cases.length} projects</p>
       </div>
 
       {featured.map((entry, i) => <CaseFeature entry={entry} index={i + 1} flip={i % 2 === 1} />)}

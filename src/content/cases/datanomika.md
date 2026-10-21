@@ -6,7 +6,6 @@ title: A community platform that collects how everyday people see the world
 summary: Anonymous polls meet crypto raffles — answer questions, earn tokens, win daily to annual draws.
 lead: Datanomika is a poll platform that pairs traditional polling with cryptocurrency raffles. People answer anonymously by connecting a wallet, earn free tokens for every response and raise their chances in daily, weekly, monthly and annual draws.
 industry: Community / Crypto
-year: '2022'
 role: UX/UI Designer, business analysis
 timeline: 3 months
 company: Existek

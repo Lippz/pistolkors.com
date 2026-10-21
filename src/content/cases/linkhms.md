@@ -4,10 +4,9 @@ featured: true
 client: LinkHMS
 title: A hospital management system light enough for small clinics
 accent: small clinics
-summary: Existing HMS tools are heavy and built for big hospitals. Research with 12 healthcare professionals shaped a lean system in West Africa that one doctor can run alone or a whole clinic team can share — live since 2025 and used by 30+ clinics.
+summary: Existing HMS tools are heavy and built for big hospitals. Research with 12 healthcare professionals shaped a lean system in West Africa that one doctor can run alone or a whole clinic team can share — now used by 30+ clinics.
 lead: LinkHMS is a cloud platform for hospitals and clinics in West Africa. Most hospital systems are heavy, outdated and built for large institutions — I designed one that a single doctor can run alone, with every feature, and a whole clinic team can share — set up and in use from day one.
 industry: HealthTech
-year: 2024–26
 role: Senior Product Designer
 timeline: 30 months
 company: Existek, our own product

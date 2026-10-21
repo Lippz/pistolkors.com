@@ -5,7 +5,6 @@ title: A sales system and configurator for carports, garages and barns
 summary: A B2B SaaS ERP with a B2C module that replaced two decades of Excel tables — from 3D design and ordering to installation scheduling.
 lead: CCI ERP is a B2B SaaS platform for carport manufacturers, retailers and installers, with a B2C module for their customers. It replaced Excel tables the client had used for over 20 years with one workflow — from designing a building in 3D to scheduling the crew that installs it.
 industry: Construction
-year: 2022–23
 role: Senior Product Designer
 timeline: 9 months
 company: Existek
