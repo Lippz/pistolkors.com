@@ -31,7 +31,7 @@ const mess = [
 ---
 
 <Base>
-  <section class="hero">
+  <section class="hero container">
     <p class="eyebrow hero__status"><span class="dot" aria-hidden="true"></span>{site.availability}</p>
     <div class="hero__main">
       <h1 class="h-hero hero__title">
@@ -44,12 +44,6 @@ const mess = [
           products feel <span class="accent-word hero__accent">obvious</span>
         </span>
       </h1>
-      <p class="lead">
-        Senior Product Designer at Existek, with{' '}
-        <span data-since={PRODUCT_SINCE} data-as="word">{inWords(yearsSince(PRODUCT_SINCE))}</span> years in product
-        design across healthcare, legal-tech, e-commerce and construction. I run discovery, build the system and sweat
-        the interaction details.
-      </p>
     </div>
     <div class="hero__ctas">
       <a href="#work" class="btn btn--accent">View recent works</a>
@@ -60,7 +54,13 @@ const mess = [
     </div>
   </section>
 
-  <section class="facts-band container">
+  <section class="intro container">
+    <p class="intro__text">
+      Senior Product Designer at Existek, with{' '}
+      <span data-since={PRODUCT_SINCE} data-as="word">{inWords(yearsSince(PRODUCT_SINCE))}</span> years in product design
+      across healthcare, legal-tech, e-commerce and construction. I run discovery, build the system and sweat the
+      interaction details.
+    </p>
     <ul class="facts" role="list">
       {
         facts.map((f) => (
@@ -154,10 +154,10 @@ const mess = [
 
 <style>
   /* The hero always fills the screen under the sticky header (its height + 1px border):
-     svh, not vh, so mobile browser bars never cut the bottom off. It runs the full width
-     of the screen, held in by the site gutter on all four sides. The status sits at the top, the
-     buttons at the bottom with the title and its lead just above them; the gap is the
-     least room between the three when content is taller than the screen. */
+     svh, not vh, so mobile browser bars never cut the bottom off. It sits in the site
+     container like the header and the sections below, with the gutter above and below it
+     too. The status sits at the top, the buttons at the bottom with the title just above
+     them; the gap is the least room between the three when content is taller than the screen. */
   .hero {
     min-height: calc(100svh - var(--header-h) - 1px);
     padding: var(--gutter);
@@ -165,20 +165,22 @@ const mess = [
     flex-direction: column;
     gap: 24px;
   }
-  /* The title and its lead drop to the buttons, leaving the free space above them. */
+  /* The title drops to the buttons, leaving the free space above it. */
   .hero__main {
     margin-top: auto;
     margin-bottom: calc(clamp(32px, 3.5vw, 44px) - 24px);
   }
-  /* The title grows with the screen width with no upper limit (10.8vw is 156px at 1440, one
-     and a half times the site's hero size there), from 72px on phones. The screen height
-     caps it: what is left of the hero after the gutters and about 280px for the status,
-     lead, buttons and gaps, shared by three lines at 0.95 — so even a title broken into
-     three lines fits. Set a little tighter. */
+  /* The title grows with the screen width from 72px on phones up to 156px, one and a half
+     times the site's hero size, which it reaches at 1440 as the container stops growing
+     (10.8vw). The screen height
+     caps it: what is left of the hero after the gutters and about 160px for the status,
+     buttons and gaps, shared by three lines at 0.95 — so even a title broken into three
+     lines fits. Set a little tighter. */
   .hero__title {
     font-size: min(
       max(4.5rem, 10.8vw),
-      calc((100svh - var(--header-h) - 1px - 2 * var(--gutter) - 280px) / 2.85)
+      9.75rem,
+      calc((100svh - var(--header-h) - 1px - 2 * var(--gutter) - 160px) / 2.85)
     );
     line-height: 0.95;
   }
@@ -248,9 +250,6 @@ const mess = [
     to {
       background-position: 0% 0;
     }
-  }
-  .hero .lead {
-    margin-top: 24px;
   }
   .hero__status {
     display: flex;
@@ -326,12 +325,21 @@ const mess = [
   .btn-split__part:active {
     transform: scale(0.98);
   }
-  /* Facts open the page below the fold, right after the hero. */
-  .facts-band {
-    padding-bottom: clamp(56px, 8vw, 96px);
+  /* Who I am, in a sentence and three numbers: the first section below the hero. */
+  .intro {
+    padding-top: clamp(64px, 9vw, 120px);
+    padding-bottom: clamp(64px, 8vw, 96px);
+  }
+  .intro__text {
+    max-width: 24em;
+    font-size: var(--step-h3);
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    color: var(--ink-2);
+    text-wrap: pretty;
   }
   .facts {
-    margin: 0;
+    margin: clamp(40px, 5vw, 64px) 0 0;
     padding: 0;
     list-style: none;
     display: grid;
@@ -355,9 +363,69 @@ const mess = [
     color: var(--muted);
   }
 
-  .work {
-    border-top: 1px solid var(--line);
+  /* The hero and the sections after it move as scenes (the hero is already in place when
+     the page opens, so it only leaves). Each one rises out of a light blur a little faster
+     than the page scrolls and is sharp by the time its top is a third of the way up the
+     screen; when its end reaches the top half of the screen it falls behind — moving slower
+     than the page — blurring and fading out, so the next section slides over it. Only the
+     end of a tall section like Recent works takes part.
+     The out-animation fills forwards only, so it never overrides the in-animation early. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      :global(:is(.hero, .intro, #work, #words, #how, #ai, #lab, #about)) {
+        animation:
+          scene-in linear both,
+          scene-out linear forwards;
+      }
+      /* Timelines in a rule of their own, apart from the shorthand, so the CSS minifier
+         can't fold them into it (browsers reject that and drop the animation). */
+      :global(main :is(.hero, .intro, #work, #words, #how, #ai, #lab, #about)) {
+        animation-timeline: view(), view();
+        animation-range:
+          entry 0% entry 30vh,
+          exit calc(100% - 50vh) exit 100%;
+      }
+      /* The hero leaves sooner, faster and with less lag, so it is gone before the intro
+         text takes its place instead of hanging over it. */
+      :global(main#main) .hero {
+        --lag: 6vh;
+        animation-range:
+          entry 0% entry 30vh,
+          exit calc(100% - 70vh) exit calc(100% - 20vh);
+      }
+      /* The section already moves as a whole, so its blocks no longer rise in on their own.
+         Recent works keeps them: it is many screens tall, and its later cases would
+         otherwise arrive with no motion at all. */
+      :global(main :is(#words, #how, #ai, #lab, #about) .reveal) {
+        animation: none;
+      }
+    }
   }
+  @keyframes scene-in {
+    from {
+      opacity: 0;
+      filter: blur(6px);
+      translate: 0 8vh;
+    }
+    to {
+      opacity: 1;
+      filter: none;
+      translate: none;
+    }
+  }
+  @keyframes scene-out {
+    from {
+      opacity: 1;
+      filter: none;
+      translate: none;
+    }
+    to {
+      opacity: 0;
+      filter: blur(12px);
+      translate: 0 var(--lag, 20vh);
+    }
+  }
+
   .work__inner {
     --case-gap: clamp(64px, 8vw, 120px);
     padding-top: clamp(48px, 8vw, 96px);
