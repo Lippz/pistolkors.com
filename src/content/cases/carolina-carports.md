@@ -1,5 +1,6 @@
 ---
 order: 4
+featured: true
 client: Carolina Carports Inc.
 title: A sales system and configurator for carports, garages and barns
 summary: A B2B SaaS ERP with a B2C module that replaced two decades of Excel tables — from 3D design and ordering to installation scheduling.
