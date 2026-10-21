@@ -6,17 +6,15 @@ import { url } from '../lib/url';
 
 interface Props {
   entry: CollectionEntry<'cases'>;
-  index: number;
 }
-const { entry, index } = Astro.props;
+const { entry } = Astro.props;
 const d = entry.data;
-const num = String(index).padStart(2, '0');
 ---
 
 <article class="card reveal">
   <a href={url(`/work/${entry.id}/`)} class="card__link">
     <CaseCover id={entry.id} cover={d.cover} layers={d.coverLayers} sizes="(min-width: 768px) 50vw, 100vw" class="card__media" />
-    <p class="eyebrow">{num} — {d.client} · {d.industry}</p>
+    <p class="eyebrow">{d.client} · {d.industry}</p>
     <h3 class="card__title">{d.title}</h3>
   </a>
 </article>

@@ -12,21 +12,19 @@ export async function getStaticPaths() {
   const cases = (await getCollection('cases', (c) => !c.data.hidden)).sort((a, b) => a.data.order - b.data.order);
   return cases.map((entry, i) => ({
     params: { slug: entry.id },
-    props: { entry, index: i + 1, next: cases[(i + 1) % cases.length] },
+    props: { entry, next: cases[(i + 1) % cases.length] },
   }));
 }
 
 interface Props {
   entry: CollectionEntry<'cases'>;
-  index: number;
   next: CollectionEntry<'cases'>;
 }
 
-const { entry, index, next } = Astro.props;
+const { entry, next } = Astro.props;
 const d = entry.data;
 const { Content, headings } = await render(entry);
 const toc = headings.filter((h) => h.depth === 2);
-const num = String(index).padStart(2, '0');
 
 // Split the title so the accent word(s) get the italic serif treatment.
 const accentAt = d.accent ? d.title.lastIndexOf(d.accent) : -1;
@@ -48,7 +46,7 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
   <article>
     <header class="container case-hero">
       <a href={url('/#work')} class="case-hero__back arrow-trigger"><ArrowCircle dir="left" />Back</a>
-      <p class="eyebrow">Case study {num} · {d.client} · {d.industry}</p>
+      <p class="eyebrow">Case study · {d.client} · {d.industry}</p>
       <h1 class="h1 case-hero__title">
         {titleHead}{titleAccent && <span class="accent-word">{titleAccent}</span>}
       </h1>

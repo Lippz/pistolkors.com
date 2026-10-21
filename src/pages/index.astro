@@ -80,13 +80,12 @@ const mess = [
     <div class="container work__inner">
       <div class="section-head">
         <h2 class="h2">Case studies</h2>
-        <p class="eyebrow">{cases.length} projects</p>
       </div>
 
       {featured.map((entry, i) => <CaseFeature entry={entry} index={i + 1} flip={i % 2 === 1} />)}
 
       <div class="work__grid">
-        {rest.map((entry, i) => <CaseCard entry={entry} index={featured.length + i + 1} />)}
+        {rest.map((entry) => <CaseCard entry={entry} />)}
       </div>
     </div>
   </section>
