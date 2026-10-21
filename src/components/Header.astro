@@ -15,7 +15,7 @@ const showLab = import.meta.env.DEV || motion.some((m) => m.video);
 const showWords = import.meta.env.DEV || testimonials.some((t) => !t.placeholder);
 
 const nav = [
-  { label: 'Case studies', href: url('/#work'), key: 'work' },
+  { label: 'Recent works', href: url('/#work'), key: 'work' },
   ...(showWords ? [{ label: 'Their words', href: url('/#words'), key: 'words' }] : []),
   { label: 'How I work', href: url('/#how'), key: 'how' },
   { label: 'AI pipeline', href: url('/#ai'), key: 'ai' },
