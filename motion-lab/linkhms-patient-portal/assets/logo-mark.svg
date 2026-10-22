@@ -1,0 +1,13 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="Frame 669">
+<path id="Vector 6" d="M12 0C12 6.62742 6.62742 12 0 12" stroke-width="8" stroke="#3B69FF"/>
+<rect id="Rectangle 861" y="8" width="24" height="8" fill="#01AFF1"/>
+<g id="Vector 7">
+<use xlink:href="#stroke0_0_156" stroke="#3B69FF"/>
+<use xlink:href="#stroke0_0_156" stroke="#3B69FF"/>
+</g>
+</g>
+<defs>
+<path id="stroke0_0_156" d="M12 24C12 17.3726 17.3726 12 24 12" stroke-width="8"/>
+</defs>
+</svg>

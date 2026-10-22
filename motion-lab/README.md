@@ -28,6 +28,10 @@ show the same thing.
   main menu stay). Hover across KPIs and charts, scroll to Attention Needed, INV-1188 opens Edit Invoice
   (Figma 180:40861, its items add up to the row's Net Total), then Reports in the main menu brings the page
   back at the top. Each click cuts to a skeleton of the next screen (SK seconds) before it fades in. `?figma&s=870` shows every Figma hover state at that scroll for D.
+- `linkhms-patient-portal/`: Patient portal, five screens (Figma 151:11645 and the four next to it). Home → My Tests
+  (rows, the BMP's View) → the result (a short look at the flagged glucose) → the logo → Home → Book an Appointment (doctor
+  dropdown, Tue 18, 14:00, the summary opens) → request received (the check draws itself) → Back to Home. Skeletons
+  are built from the real layout of the next screen; hover is one registry, `HOV`, measured once from the DOM.
 
 ## Workflow
 

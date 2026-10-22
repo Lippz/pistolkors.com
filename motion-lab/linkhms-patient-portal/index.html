@@ -1,0 +1,775 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LinkHMS · Patient portal — motion draft</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700&family=Roboto:wght@400;500&display=block" rel="stylesheet">
+<link rel="stylesheet" href="../_lib/player.css">
+<style>
+  /*
+   * LinkHMS · Patient portal (Figma 151:11645 Home, 171:39867 My Tests, 151:11705 test result,
+   * 151:11808 Book an Appointment (1591 tall), 171:40073 request received). The stage is 1920×1080:
+   * the header stays, each screen scrolls under it. Numbers are Figma pixels.
+   */
+  * { box-sizing: border-box; }
+  .stage {
+    background: #f5f5f5; overflow: hidden;
+    font-family: Roboto, sans-serif; color: #000; -webkit-font-smoothing: antialiased;
+    font-size: 14px; line-height: 20px; letter-spacing: .25px;
+  }
+  .nowrap { white-space: nowrap; }
+
+  /* Header (fixed) */
+  .header { position: absolute; left: 0; top: 0; width: 1920px; height: 64px; background: #fff; box-shadow: inset 0 -1px rgba(0,0,0,.08); z-index: 10; }
+  .logo { position: absolute; left: 20px; top: 12px; width: 184px; height: 40px; opacity: calc(1 - .25 * var(--h, 0)); }
+  .logout { position: absolute; left: 1872px; top: 20px; width: 24px; height: 24px; }
+
+  /* Screens: one view each, the page inside it scrolls */
+  .view { position: absolute; left: 0; top: 64px; width: 1920px; height: 1016px; overflow: hidden; background: #f5f5f5; }
+  .page { position: absolute; left: 0; top: 0; width: 1920px; padding: 24px 0; }
+  .card { position: relative; width: 1190px; margin: 0 auto; padding: 64px; background: #fff; border-radius: 32px; display: flex; flex-direction: column; gap: 48px; }
+
+  .back {
+    position: relative; align-self: flex-start; height: 24px; padding: 0 12px; border-radius: 24px; display: flex; gap: 8px; align-items: center;
+    font-family: Manrope, sans-serif; font-weight: 500; font-size: 14px; line-height: 1.4; letter-spacing: .25px; white-space: nowrap;
+  }
+  .back img { width: 16px; height: 16px; }
+  .pill-a { background: rgba(28,99,237,calc(.08 + .07 * var(--h, 0))); color: #1c63ed; }
+  .pill-b { background: color-mix(in srgb, #e0e7ff calc(var(--h, 0) * 100%), #f0f3ff); color: #3b69ff; }
+
+  .ptitle { position: relative; display: flex; gap: 10px; align-items: flex-start; }
+  .ptitle__h { flex: 1 0 0; display: flex; flex-direction: column; gap: 8px; }
+  .ptitle__row { display: flex; gap: 12px; align-items: center; font-size: 34px; line-height: 40px; letter-spacing: .25px; white-space: nowrap; }
+  .ptitle__row img { width: 36px; height: 36px; }
+  .ptitle__sub { padding-left: 48px; color: rgba(0,0,0,.42); white-space: nowrap; }
+  .btn-light {
+    position: relative; height: 40px; padding: 0 16px; border-radius: 24px; display: flex; gap: 12px; align-items: center; justify-content: center;
+    font-family: Manrope, sans-serif; font-weight: 700; font-size: 14px; line-height: 16px; letter-spacing: .75px; text-transform: uppercase; white-space: nowrap;
+  }
+  .btn-light img { width: 20px; height: 20px; }
+  .t16 { font-size: 16px; line-height: 24px; letter-spacing: .15px; }
+
+  /* Home */
+  .hello { display: flex; gap: 8px; }
+  .hello b { font-weight: 400; color: #3b69ff; }
+  .grid { display: flex; flex-direction: column; gap: 24px; }
+  .line { display: flex; gap: 24px; }
+  .blk {
+    --h: 0; position: relative; flex: 1 0 0; min-width: 0; height: 254px; border-radius: 8px; background: #fff; overflow: hidden;
+    padding: 48px; display: flex; flex-direction: column; justify-content: flex-end; gap: 24px;
+    box-shadow: 0 2px 4px rgba(0,0,0,calc(.16 * var(--h))), 0 4px 8px rgba(0,0,0,calc(.08 * var(--h))), 0 8px 12px rgba(0,0,0,calc(.04 * var(--h)));
+  }
+  /* Figma clips the 4 px bar together with the 1 px stroke */
+  .blk::after { content: ''; position: absolute; inset: 0; border: 1px solid #d9dfe4; border-radius: 8px; pointer-events: none; }
+  .blk::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 4px; background: #3b69ff; z-index: 1; }
+  .blk--out { height: 152px; flex-direction: row; align-items: center; justify-content: flex-start; padding: 36px 48px; }
+  .blk--out::before { background: rgba(0,0,0,.6); }
+  .ic { width: 80px; height: 80px; flex-shrink: 0; border-radius: 40px; background: #f0f3ff; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 0 calc(3px * var(--h)) #3b69ff; }
+  .blk--out .ic { background: #ebebeb; box-shadow: 0 0 0 calc(3px * var(--h)) rgba(0,0,0,.6); }
+  .ic img { width: 36px; height: 36px; }
+  .blk__txt { display: flex; flex-direction: column; gap: 8px; white-space: nowrap; }
+  .blk--out .blk__txt { flex: 1 0 0; }
+  .blk__t { font-size: 22px; line-height: 26px; letter-spacing: 0; }
+  .blk__s { color: rgba(0,0,0,.42); }
+
+  /* Text field (outlined, label on the border) */
+  .tf { position: relative; }
+  .tf__box { position: absolute; left: 0; right: 0; border: 1px solid rgba(0,0,0,calc(.08 + .3 * var(--h, 0))); border-radius: 4px; background: #fff; }
+  .tf__label { position: absolute; left: 6px; top: 0; padding: 0 4px; background: #fff; font-size: 10px; line-height: normal; letter-spacing: .4px; white-space: nowrap; }
+  .tf__val { position: absolute; left: 10px; white-space: nowrap; }
+  .tf__icon { position: absolute; right: 12px; width: 24px; height: 24px; }
+
+  /* My Tests */
+  .group { display: flex; flex-direction: column; gap: 24px; }
+  .range { display: flex; gap: 12px; height: 62px; }
+  .range .tf { flex: 1 0 0; height: 62px; }
+  .range .tf__box { top: 5px; height: 52px; }
+  .range .tf__val { top: 21px; }
+  .range .tf__icon { top: 19px; }
+  .reset {
+    position: relative; width: 72px; height: 48px; margin-top: 7px; border-radius: 4px; display: flex; align-items: center; justify-content: center;
+    background: rgba(28,99,237,calc(.08 + .07 * var(--h, 0))); color: #1c63ed;
+    font-family: Manrope, sans-serif; font-weight: 700; font-size: 14px; line-height: 16px; letter-spacing: .75px; text-transform: uppercase;
+  }
+  .tbl { position: relative; border-radius: 8px; overflow: hidden; background: #fff; }
+  /* Figma strokes sit inside and don't push the layout: draw them over the content */
+  .tbl::after, .box::after { content: ''; position: absolute; inset: 0; border: 1px solid #d9dfe4; border-radius: inherit; pointer-events: none; z-index: 3; }
+  .tr { position: relative; height: 48px; box-shadow: inset 0 -1px #d9dfe4; }
+  .tr--z { background: rgba(0,0,0,.02); }
+  .tr--hv::before { content: ''; position: absolute; left: 0; right: 0; top: 0; bottom: 1px; background: rgba(59,105,255,calc(.08 * var(--h, 0))); }
+  .tr > span { position: absolute; top: 14px; white-space: nowrap; }
+  .th { font-weight: 500; letter-spacing: 0; }
+  .tag {
+    position: absolute; left: 860px; top: 16px; height: 16px; padding: 0 4px; border: 1px solid; border-radius: 4px; display: flex; align-items: center;
+    font-weight: 500; font-size: 10px; line-height: 14px; letter-spacing: .25px; white-space: nowrap;
+  }
+  .tag--ready { background: rgba(43,176,31,.08); border-color: rgba(43,176,31,.16); color: #2bb01f; }
+  .tag--fail { background: rgba(237,28,36,.08); border-color: rgba(237,28,36,.16); color: #ed1c24; }
+  .tag--pending { background: rgba(237,128,28,.08); border-color: rgba(237,128,28,.16); color: #ed801c; }
+  .view-btn {
+    position: absolute; right: 12px; top: 12px; height: 24px; padding: 0 12px; border-radius: 16px; display: flex; gap: 8px; align-items: center;
+    font-family: Manrope, sans-serif; font-weight: 500; font-size: 14px; line-height: 1.4; letter-spacing: .25px; white-space: nowrap;
+  }
+  .view-btn img { width: 16px; height: 16px; }
+  .pg { position: relative; height: 64px; font-size: 12px; line-height: 16px; letter-spacing: .4px; color: rgba(0,0,0,.6); }
+  .pg > * { position: absolute; }
+  .pg span { top: 24px; white-space: nowrap; }
+  .pg img { top: 20px; width: 24px; height: 24px; }
+  .pg i { top: 43px; height: 1px; width: 73px; background: rgba(0,0,0,.6); }
+
+  /* Test result */
+  .info { display: flex; gap: 24px; align-items: stretch; }
+  .box { position: relative; border-radius: 8px; }
+  .info .box { flex: 1 0 0; min-width: 0; padding: 24px; display: flex; flex-direction: column; gap: 24px; }
+  .info .box--16 { gap: 16px; }
+  .fields { display: flex; flex-direction: column; gap: 16px; }
+  .fl { display: flex; flex-direction: column; align-items: flex-start; white-space: nowrap; }
+  .fl small { font-weight: 500; font-size: 10px; line-height: 16px; letter-spacing: .5px; text-transform: uppercase; color: rgba(0,0,0,.24); }
+  .fl span { font-size: 16px; line-height: 24px; letter-spacing: .15px; color: rgba(0,0,0,.6); }
+  .fl .ok { color: #0b8400; }
+  .res { padding-top: 24px; display: flex; flex-direction: column; gap: 24px; }
+  .res__t { padding: 0 24px; }
+  .res .tbl { border-radius: 4px; }
+  .rr { position: relative; display: flex; gap: 16px; align-items: center; height: 48px; padding: 0 24px; box-shadow: inset 0 -1px #d9dfe4; white-space: nowrap; }
+  .rr > span { position: relative; }
+  .rr .c1, .rr .c4 { flex: 1 0 0; }
+  .rr .c2, .rr .c3 { width: 140px; }
+  .rr .c5 { width: 50px; display: flex; justify-content: center; }
+  .rr--h { font-weight: 500; letter-spacing: 0; }
+  .rr--h .c5 { justify-content: flex-start; }
+  .flag { width: 8px; height: 8px; border-radius: 50%; background: #ed1c3f; margin: 6px 0; }
+
+  /* Book an appointment */
+  .det { padding: 24px 24px 8px; display: flex; flex-direction: column; gap: 24px; }
+  .flds { display: flex; flex-direction: column; gap: 4px; }
+  .fld { height: 72px; }
+  .fld .tf__box { top: 4px; height: 52px; }
+  .fld .tf__val { top: 20px; }
+  .fld .tf__icon { top: 18px; }
+  .fld--muted .tf__label { color: rgba(0,0,0,.42); }
+  .fld--open { z-index: 5; }
+  .menu {
+    position: absolute; left: 0; right: 0; top: 60px; padding: 8px 0; background: #fff; border-radius: 4px; z-index: 6; transform-origin: 50% 0;
+    box-shadow: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px rgba(0,0,0,.14), 0 1px 10px rgba(0,0,0,.12);
+  }
+  .opt { position: relative; height: 48px; padding: 0 16px; display: flex; align-items: center; background: rgba(0,0,0,calc(.04 * var(--h, 0))); }
+  .opt small { margin-left: 12px; color: rgba(0,0,0,.42); font-size: 12px; letter-spacing: .4px; }
+  .dt { padding: 24px; display: flex; flex-direction: column; gap: 24px; }
+  .sect { display: flex; flex-direction: column; gap: 16px; }
+  .sect__t { color: rgba(0,0,0,.6); }
+  .days { display: flex; gap: 12px; }
+  .day { position: relative; flex: 1 0 0; min-width: 0; height: 125px; border: 1px solid #f0f3ff; border-radius: 8px; background: #fff;
+    font-family: Manrope, sans-serif; font-weight: 500; letter-spacing: .25px; text-align: center; }
+  .day b { position: absolute; left: 0; right: 0; top: 26px; font-weight: 500; font-size: 14px; line-height: 20px; }
+  .day strong { position: absolute; left: 0; right: 0; top: 45px; font-weight: 500; font-size: 48px; line-height: 56px; }
+  .day strong { color: #3b69ff; }
+  .day--off strong { color: inherit; }
+  .day--off { background: rgba(0,0,0,.04); border-color: transparent; color: rgba(0,0,0,.24); }
+  .slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .slot { position: relative; height: 58px; border: 1px solid #f0f3ff; border-radius: 8px; background: #fff; display: flex; align-items: center; justify-content: center;
+    font-family: Manrope, sans-serif; font-weight: 700; font-size: 14px; line-height: 1.4; letter-spacing: .25px; }
+  .toastWrap { overflow: hidden; flex-shrink: 0; }
+  .toast { display: flex; height: 116px; background: #dae6fc; border-radius: 8px; overflow: hidden; }
+  .toast__bar { width: 8px; flex-shrink: 0; background: #3b69ff; }
+  .toast__main { flex: 1 0 0; display: flex; gap: 16px; padding: 16px; align-items: flex-start; }
+  .toast__main img { width: 24px; height: 24px; flex-shrink: 0; }
+  .b18 { font-size: 18px; line-height: 1.55; letter-spacing: .5px; white-space: nowrap; }
+  .send {
+    position: relative; height: 48px; border-radius: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    font-family: Manrope, sans-serif; font-weight: 700; font-size: 14px; line-height: 16px; letter-spacing: .75px; text-transform: uppercase;
+  }
+  .spin { position: absolute; left: 50%; top: 50%; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%;
+    border: 2.5px solid rgba(255,255,255,.35); border-top-color: #fff; }
+
+  /* Request received */
+  .ok-card { padding: 48px 24px; display: flex; flex-direction: column; gap: 48px; align-items: center; }
+  .ok-icon { position: relative; width: 96px; height: 96px; }
+  .ok-icon__bg, .ok-icon__ring { position: absolute; inset: 0; border-radius: 48px; }
+  .ok-icon__bg { background: rgba(28,99,237,.08); }
+  .ok-icon__ring { border: 2px solid rgba(28,99,237,.35); }
+  .ok-icon svg { position: absolute; left: 24px; top: 24px; width: 48px; height: 48px; overflow: visible; }
+  .ok-txt { width: 100%; display: flex; flex-direction: column; gap: 32px; align-items: center; text-align: center; }
+  .ok-title { font-size: 34px; line-height: 40px; letter-spacing: .25px; }
+  .ok-sum { padding: 16px 72px; background: rgba(0,0,0,.04); border: 1px solid #bdbdbd; border-radius: 8px; }
+  .ok-note { color: rgba(0,0,0,.42); }
+  .ok-note a { position: relative; color: #1c63ed; text-decoration: none; }
+  .tobtn { width: 248px; }
+
+  /* Skeleton: white cards and grey bars, one shimmer sweeping across */
+  .skel { background: transparent; }
+  .sk { position: absolute; }
+  .sk--card { background: #fff; }
+  .sk--line { border: 1px solid #d9dfe4; border-radius: 8px; }
+  .sk--bar { border-radius: 4px; background-color: #ececec; background-image: linear-gradient(90deg, rgba(255,255,255,0) 0, rgba(255,255,255,.7) 50%, rgba(255,255,255,0) 100%);
+    background-size: 480px 100%; background-repeat: no-repeat; }
+
+  /* Cursor */
+  .cursor { position: absolute; left: 0; top: 0; width: 19px; height: 24px; z-index: 20; transform-origin: 6px 1px; }
+  .click { position: absolute; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; border: 2px solid #3b69ff; z-index: 19; pointer-events: none; }
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <!-- Home -->
+  <div class="view" id="v-home"><div class="page"><div class="card">
+    <div class="ptitle"><div class="ptitle__h">
+      <div class="ptitle__row hello"><span>Hello,</span><b>Amara Okonkwo</b></div>
+      <div class="ptitle__sub" style="padding-left:0">Welcome to the patient portal</div>
+    </div></div>
+    <div class="grid" id="homeGrid"></div>
+  </div></div></div>
+
+  <!-- My Tests -->
+  <div class="view" id="v-tests"><div class="page"><div class="card">
+    <div class="back pill-a" id="testsBack"><img src="assets/arrow-left.svg" alt="">Back to Home</div>
+    <div class="ptitle"><div class="ptitle__h">
+      <div class="ptitle__row" id="testsTitle"><img src="assets/title-tests.svg" alt=""><span>My Tests</span></div>
+      <div class="ptitle__sub"><span>Results &amp; reports</span></div>
+    </div></div>
+    <div class="group">
+      <div class="range">
+        <div class="tf" id="rangeTf">
+          <div class="tf__box"></div>
+          <img class="tf__icon" src="assets/calendar.svg" alt="">
+          <div class="tf__label">Date range</div>
+          <div class="tf__val"><span>01/05/2026 — 13/08/2026</span></div>
+        </div>
+        <div class="reset" id="reset">Reset</div>
+      </div>
+      <div class="tbl" id="testsTbl">
+        <div class="tr th"><span style="left:16px">Test Name</span><span style="left:340px">Date</span><span style="left:480px">Doctor</span><span style="left:660px">Clinic</span><span style="left:860px">Status</span></div>
+        <div id="testRows"></div>
+        <div class="pg" id="testsPg"></div>
+      </div>
+    </div>
+  </div></div></div>
+
+  <!-- Test result -->
+  <div class="view" id="v-detail"><div class="page"><div class="card">
+    <div class="back pill-b" id="detailBack"><img src="assets/arrow-left-blue.svg" alt="">Back to My Tests</div>
+    <div class="ptitle">
+      <div class="ptitle__h">
+        <div class="ptitle__row"><img src="assets/title-flask.svg" alt=""><span>Basic Metabolic Panel</span></div>
+        <div class="ptitle__sub"><span>Collected 04/08/2026</span></div>
+      </div>
+      <div class="btn-light pill-b" id="pdf"><img src="assets/download.svg" alt="">Download PDF</div>
+    </div>
+    <div class="info">
+      <div class="box"><div class="t16">Patient</div><div class="fields">
+        <div class="fl"><small>Name</small><span>Amara Okonkwo</span></div>
+        <div class="fl"><small>Gender</small><span>Female</span></div>
+        <div class="fl"><small>Date of Birth</small><span>19/04/1990</span></div>
+      </div></div>
+      <div class="box"><div class="t16">Order Info</div><div class="fields">
+        <div class="fl"><small>Prescribed by</small><span>Carol Nyambura</span></div>
+        <div class="fl"><small>Performed by</small><span>Naomi Reyes</span></div>
+        <div class="fl"><small>Clinic</small><span>Riverside Medical Clinic</span></div>
+      </div></div>
+      <div class="box box--16"><div class="t16">Lab Test Info</div>
+        <div class="fl"><small>Sample Type</small><span>Venous Blood Draw</span></div>
+        <div class="fl"><small>Status</small><span class="ok">Ready</span></div>
+      </div>
+    </div>
+    <div class="box res">
+      <div class="t16 res__t">Results</div>
+      <div class="tbl">
+        <div class="rr rr--h"><span class="c1">Parameter</span><span class="c2">Result</span><span class="c3">Units</span><span class="c4">Reference Values</span><span class="c5">Flagged</span></div>
+        <div id="resRows"></div>
+        <div class="pg" id="resPg"></div>
+      </div>
+    </div>
+  </div></div></div>
+
+  <!-- Book an appointment -->
+  <div class="view" id="v-book"><div class="page"><div class="card">
+    <div class="back pill-b" id="bookBack"><img src="assets/arrow-left-blue.svg" alt="">Back to Home</div>
+    <div class="ptitle"><div class="ptitle__h">
+      <div class="ptitle__row"><img src="assets/title-book.svg" alt=""><span>Book an Appointment</span></div>
+      <div class="ptitle__sub"><span>Schedule a visit</span></div>
+    </div></div>
+    <div class="box det">
+      <div class="t16">Appointment Details</div>
+      <div class="flds" id="flds"></div>
+    </div>
+    <div class="box dt">
+      <div class="t16">Choose Date &amp; Time</div>
+      <div class="sect">
+        <div class="t16 sect__t">Next 7 Days: Aug 14 - 20, 2026</div>
+        <div class="days" id="days"></div>
+      </div>
+      <div class="sect">
+        <div class="t16 sect__t">Available Timeslots</div>
+        <div class="slots" id="slots"></div>
+      </div>
+      <div class="toastWrap" id="toastWrap"><div class="toast">
+        <div class="toast__bar"></div>
+        <div class="toast__main"><img src="assets/info.svg" alt=""><div class="b18">
+          Requesting General Consultation · NGN 8,500<br>Dr. Priya Anand · Family Medicine · Sunset Family Health Center<br>Tue, Aug 18 at 2:00 PM
+        </div></div>
+      </div></div>
+      <div class="send" id="send"><span id="sendTxt">Send Appointment Request</span><i class="spin" id="spin"></i></div>
+    </div>
+  </div></div></div>
+
+  <!-- Request received -->
+  <div class="view" id="v-done"><div class="page"><div class="card">
+    <div class="back pill-a" id="doneBack"><img src="assets/arrow-left.svg" alt="">Back to Home</div>
+    <div class="ptitle"><div class="ptitle__h">
+      <div class="ptitle__row"><img src="assets/title-book.svg" alt=""><span>Book an Appointment</span></div>
+      <div class="ptitle__sub"><span>Schedule a visit</span></div>
+    </div></div>
+    <div class="box ok-card">
+      <div class="ok-icon" id="okIcon">
+        <div class="ok-icon__ring" id="okRing"></div>
+        <div class="ok-icon__bg" id="okBg"></div>
+        <svg viewBox="0 0 48 48"><polyline id="okCheck" points="8.2,25.4 18,35.2 40.6,12.6" fill="none" stroke="#1c63ed" stroke-width="3.96" stroke-linejoin="miter" stroke-miterlimit="4"/></svg>
+      </div>
+      <div class="ok-txt">
+        <div class="ok-title" id="ok1">Your request has been received</div>
+        <div class="ok-sum b18" id="ok2">General Consultation · NGN 8,500<br>Dr. Priya Anand · Family Medicine · Sunset Family Health Center<br>Tue, Aug 18 at 2:00 PM</div>
+        <div class="ok-note" id="ok3">You’ll be notified about your appointment status by email.<br>You can also check its status anytime under <a id="okLink">Appointments</a>.</div>
+      </div>
+      <div class="btn-light pill-a tobtn" id="ok4">To my Appointments</div>
+    </div>
+  </div></div></div>
+
+  <!-- Skeletons shown while the next screen loads -->
+  <div class="view skel" id="sk-tests"></div>
+  <div class="view skel" id="sk-detail"></div>
+  <div class="view skel" id="sk-book"></div>
+
+  <div class="header">
+    <img class="logo" id="logo" src="assets/logo.png" alt="">
+    <img class="logout" src="assets/logout.svg" alt="">
+  </div>
+
+  <div class="click" id="click"></div>
+  <img class="cursor" id="cursor" src="assets/cursor-hand.png" alt="">
+</div>
+
+<script src="../_lib/motion.js"></script>
+<script src="../_lib/player.js"></script>
+<script>
+const $ = (id) => document.getElementById(id);
+
+// ---------- Data: one patient, one story ----------
+// Amara Okonkwo, 36, sees Carol Nyambura at Riverside and Priya Anand (family medicine) at Sunset.
+// Her fasting glucose came back high, so she books Dr. Anand: Tue, Aug 18, 14:00.
+const HOME = [
+  [['prescriptions', 'Prescriptions', 'Current & past medications'], ['conditions', 'Conditions', 'Diagnoses & history'], ['tests', 'My tests', 'Results & reports']],
+  [['appointments', 'Appointments', 'Past visits & admissions'], ['book', 'Book an appointment', 'Schedule a visit'], ['telemedicine', 'Telemedicine', 'Request an online consultation']],
+];
+const TESTS = [
+  ['Lipid Panel', '11/08/2026', 'Priya Anand', 'Sunset Family Health Center', 'pending'],
+  ['Basic Metabolic Panel (BMP)', '04/08/2026', 'Carol Nyambura', 'Riverside Medical Clinic', 'ready'],
+  ['Urine Culture', '04/08/2026', 'Carol Nyambura', 'Riverside Medical Clinic', 'fail'],
+  ['HbA1c', '22/07/2026', 'Kwame Mensah', 'Riverside Medical Clinic', 'ready'],
+  ['Malaria Parasite Test', '09/07/2026', 'Priya Anand', 'Sunset Family Health Center', 'ready'],
+  ['Thyroid Panel (TSH, Free T4)', '09/07/2026', 'Priya Anand', 'Sunset Family Health Center', 'ready'],
+  ['Complete Blood Count (CBC)', '18/06/2026', 'Carol Nyambura', 'Riverside Medical Clinic', 'ready'],
+  ['Vitamin D (25-OH)', '18/06/2026', 'Carol Nyambura', 'Riverside Medical Clinic', 'fail'],
+  ['Hepatitis B Surface Antigen', '27/05/2026', 'Kwame Mensah', 'Riverside Medical Clinic', 'ready'],
+];
+const TAG = { ready: 'Ready', fail: 'Unsuccessful', pending: 'Pending' };
+const OPEN_ROW = 1; // the BMP
+const RESULTS = [
+  ['Glucose (fasting)', '6.4', 'mmol/L', '3.9 - 5.5', true],
+  ['Sodium', '139', 'mmol/L', '135 - 145'],
+  ['Potassium', '4.2', 'mmol/L', '3.5 - 5.1'],
+  ['Chloride', '102', 'mmol/L', '98 - 107'],
+  ['Bicarbonate (CO₂)', '25', 'mmol/L', '22 - 29'],
+  ['Urea', '4.8', 'mmol/L', '2.5 - 7.1'],
+  ['Creatinine', '74', 'µmol/L', '45 - 90'],
+  ['Calcium', '2.36', 'mmol/L', '2.15 - 2.55'],
+];
+const FIELDS = [
+  ["Select the clinic where you're a patient", 'Sunset Family Health Center'],
+  ['Select a specialty', 'Family Medicine'],
+  ['Select a doctor', 'Dr. Priya Anand'],
+  ['Select a service', 'General Consultation — NGN 8,500'],
+];
+const DOCTORS = [['Dr. Priya Anand', 'Family Medicine'], ['Dr. Efua Asante', 'Family Medicine'], ['Dr. Tunde Bakare', 'Family Medicine']];
+const DAYS = [['FRI', 14], ['SAT', 15, 1], ['SUN', 16, 1], ['MON', 17, 1], ['TUE', 18], ['WED', 19], ['THU', 20]];
+const PICK_DAY = 4;
+const SLOTS_FRI = ['9:00', '9:30', '10:30', '11:00', '12:30', '13:00', '15:30', '16:00', '16:30'];
+const SLOTS_TUE = ['9:00', '9:30', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00', '15:30'];
+const PICK_SLOT = 5; // 14:00
+
+// ---------- Build ----------
+$('homeGrid').innerHTML = HOME.map((row) => `<div class="line">${row.map(([ic, t, s]) => `
+  <div class="blk" data-hv="home"><div class="ic"><img src="assets/ic-${ic}.svg" alt=""></div>
+  <div class="blk__txt"><div class="blk__t">${t}</div><div class="blk__s">${s.replace('&', '&amp;')}</div></div></div>`).join('')}</div>`).join('') + `
+  <div class="line"><div class="blk blk--out" data-hv="home"><div class="blk__txt"><div class="blk__t">Log out</div><div class="blk__s">End your session</div></div>
+  <div class="ic"><img src="assets/ic-logout36.svg" alt=""></div></div></div>`;
+
+$('testRows').innerHTML = TESTS.map(([n, d, doc, cl, st], i) => `
+  <div class="tr tr--hv${i % 2 ? '' : ' tr--z'}" data-hv="tests">
+    <span style="left:16px">${n}</span><span style="left:340px">${d}</span><span style="left:480px">${doc}</span><span style="left:660px">${cl}</span>
+    <div class="tag tag--${st}">${TAG[st]}</div>
+    ${st === 'ready' ? `<div class="view-btn pill-a" data-hv="tests">View<img src="assets/view16.svg" alt=""></div>` : ''}
+  </div>`).join('');
+
+// Pagination: Figma pins everything to the right edge (W = table width inside the border).
+const pagination = (W, range) => `
+  <span style="left:${W - 511}px">Items per page:</span>
+  <span style="left:${W - 396}px;color:#000">10</span><i style="left:${W - 396}px"></i><img src="assets/drop.svg" alt="" style="left:${W - 347}px">
+  <span style="left:${W - 286}px">${range}</span>
+  <img src="assets/pg-c.svg" alt="" style="left:${W - 168}px"><img src="assets/pg-d.svg" alt="" style="left:${W - 128}px">
+  <img src="assets/pg-a.svg" alt="" style="left:${W - 88}px"><img src="assets/pg-b.svg" alt="" style="left:${W - 48}px">`;
+$('testsPg').innerHTML = pagination(1062, `1 — ${TESTS.length} of ${TESTS.length}`);
+$('resPg').innerHTML = pagination(1062, `1 — ${RESULTS.length} of ${RESULTS.length}`);
+
+$('resRows').innerHTML = RESULTS.map(([n, v, u, r, f], i) => `
+  <div class="rr tr--hv${i % 2 ? '' : ' tr--z'}${f ? ' rr--flag' : ''}" data-hv="detail">
+    <span class="c1">${n}</span><span class="c2">${v}</span><span class="c3">${u}</span><span class="c4">${r}</span>
+    <span class="c5">${f ? '<i class="flag"></i>' : '—'}</span>
+  </div>`).join('');
+
+$('flds').innerHTML = FIELDS.map(([l, v], i) => `
+  <div class="tf fld${i === 3 ? ' fld--muted' : ''}" id="fld${i}" data-hv="book">
+    <div class="tf__box"></div>
+    <img class="tf__icon" src="assets/dropdown.svg" alt="">
+    <div class="tf__label">${l}</div>
+    <div class="tf__val"><span>${i < 2 ? v : ''}</span></div>
+    ${i === 2 ? `<div class="menu" id="menu">${DOCTORS.map(([d, s]) => `<div class="opt">${d}<small>${s}</small></div>`).join('')}</div>` : ''}
+  </div>`).join('');
+
+$('days').innerHTML = DAYS.map(([d, n, off]) => `<div class="day${off ? ' day--off' : ''}"><b>${d}</b><strong>${n}</strong></div>`).join('');
+$('slots').innerHTML = SLOTS_TUE.map(() => `<div class="slot"><span></span></div>`).join('');
+
+const DAY_EL = [...document.querySelectorAll('.day')];
+const SLOT_EL = [...document.querySelectorAll('.slot')];
+const OPT_EL = [...document.querySelectorAll('.opt')];
+const FLD_EL = [0, 1, 2, 3].map((i) => $('fld' + i));
+
+// ---------- Layout helpers ----------
+const VIEWS = ['home', 'tests', 'detail', 'book', 'done'];
+const pageOf = (scr) => $('v-' + scr).querySelector('.page');
+// Rect of an element in its page's coordinates (page top = 0 at scroll 0).
+function R(el) {
+  const page = el.closest('.page');
+  let x = 0, y = 0, e = el;
+  while (e && e !== page) { x += e.offsetLeft; y += e.offsetTop; e = e.offsetParent; }
+  return { x, y, w: el.offsetWidth, h: el.offsetHeight };
+}
+const mid = (r, dx = 0, dy = 0) => [r.x + r.w / 2 + dx, r.y + r.h / 2 + dy];
+
+// ---------- Timeline ----------
+const T = {
+  pres: 1.2, cond: 2.1, tests: 3.1, cTests: 3.4,          // Home: across the cards to My tests
+  rows: 5.3, eye: 6.4, cEye: 6.7,                          // My Tests: down the rows, the BMP's View
+  glu: 8.3, logo: 9.2, cLogo: 9.45,                        // Result: a look at the flagged glucose, the logo goes home
+  book: 10.5, cBook: 10.8,
+  doc: 12.4, cDoc: 12.6, cOpt: 13.9,                       // doctor dropdown
+  s2a: 14.3, s2b: 15.4, day: 16.1, cDay: 16.35, slot: 17.3, cSlot: 17.55,
+  s3a: 17.8, s3b: 18.6, send: 19.4, cSend: 19.7,
+  done: 20.4,                                              // request received: the check draws
+  back: 23.6, cBack: 23.9,                                 // Back to Home
+  end: 25.9,
+};
+const CLICKS = [T.cTests, T.cEye, T.cLogo, T.cBook, T.cDoc, T.cOpt, T.cDay, T.cSlot, T.cSend, T.cBack];
+const SK = .6;  // skeleton hold before the screen fades in
+const FADE = .2;
+// Which screen is up. A click cuts the old screen at once; skeleton (if any), then the screen fades in.
+const NAV = [
+  { at: -1, scr: 'home' },
+  { at: T.cTests + .05, scr: 'tests', skel: 'sk-tests' },
+  { at: T.cEye + .05, scr: 'detail', skel: 'sk-detail' },
+  { at: T.cLogo + .05, scr: 'home' },
+  { at: T.cBook + .05, scr: 'book', skel: 'sk-book' },
+  { at: T.done, scr: 'done' },
+  { at: T.cBack + .05, scr: 'home' },
+];
+const navAt = (t) => NAV.filter((n) => n.at <= t).pop();
+const shownAt = (n) => n.at + (n.skel ? SK : 0);
+const readyAt = (n) => shownAt(n) + FADE;
+
+// Scroll of each page (set once the layout is measured).
+let B_MAX = 0, TOAST = 140;
+const SCROLL = {
+  home: () => 0, tests: () => 0, detail: () => 0, done: () => 0,
+  book: (t) => (B_MAX - TOAST) * io(p(t, T.s2a, T.s2b)) + TOAST * io(p(t, T.s3a, T.s3b)),
+};
+
+// ---------- Hover ----------
+// Every hoverable element: its screen, its rect (page coordinates) and what hover does to it.
+const HOV = [];
+const inR = ([x, y], r) => x >= r.x && x < r.x + r.w && y >= r.y && y < r.y + r.h;
+let cursorAt = () => [0, 0];
+// Soft hover: share of the last 0.12 s the pointer spent on it, on its screen once that's up.
+function hoverK(t, h) {
+  let n = 0;
+  for (let i = 0; i < 6; i++) {
+    const ts = t - i * .024, nav = navAt(ts);
+    const [x, y] = cursorAt(ts);
+    if (h.fixed) { n += inR([x, y], h.r) ? 1 : 0; continue; }
+    if (nav.scr !== h.scr || ts < readyAt(nav) || (h.when && !h.when(ts))) continue;
+    n += inR([x, y - 64 + SCROLL[h.scr](ts)], h.r) ? 1 : 0;
+  }
+  return n / 6;
+}
+const setH = (el, k) => el.style.setProperty('--h', k.toFixed(3));
+
+// ---------- Skeletons, built from the real layout ----------
+function skeleton(scr, items) {
+  const html = items.map(([r, kind, rad]) => {
+    let { x, y, w, h } = r;
+    if (kind === 'text') { const bh = Math.round(h * .62); y += (h - bh) / 2; h = bh; kind = 'bar'; }
+    return `<i class="sk sk--${kind}" data-x="${x}" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px${rad ? `;border-radius:${rad}px` : ''}"></i>`;
+  }).join('');
+  $('sk-' + scr).innerHTML = html;
+}
+// Shimmer: one band sweeping the whole page every 1.1 s; each bar shows its slice of it.
+function shimmer(el, t) {
+  const sx = ((t % 1.1) / 1.1) * 2400 - 480;
+  el.querySelectorAll('.sk--bar').forEach((b) => { b.style.backgroundPosition = `${sx - b.dataset.x}px 0`; });
+}
+const card = (scr) => R(pageOf(scr).querySelector('.card'));
+const texts = (root, sel = 'span') => [...root.querySelectorAll(sel)].map((s) => [R(s), 'text']);
+function buildSkeletons() {
+  const head = (scr) => {
+    const c = pageOf(scr).querySelector('.card');
+    const back = c.querySelector('.back'), row = c.querySelector('.ptitle__row');
+    return [[card(scr), 'card', 32], [R(back), 'bar', 12], [R(row.querySelector('img')), 'bar', 8], [R(row.querySelector('span')), 'text'],
+      [R(c.querySelector('.ptitle__sub span')), 'text']];
+  };
+  const rowBars = (tbl) => [...tbl.querySelectorAll('.tr > span, .tag, .rr .c1, .rr .c2, .rr .c4')].map((s) => {
+    const r = R(s);
+    const cap = s.matches('.c1') ? 140 : s.matches('.c2') ? 36 : s.matches('.c4') ? 80 : r.w;
+    return [{ ...r, w: Math.min(r.w, cap) }, 'text'];
+  });
+  skeleton('tests', [...head('tests'),
+    [R($('rangeTf').querySelector('.tf__box')), 'line'], [R($('rangeTf').querySelector('.tf__val span')), 'text'], [R($('reset')), 'bar', 4],
+    [R($('testsTbl')), 'line'], ...rowBars($('testsTbl'))]);
+  const det = pageOf('detail');
+  skeleton('detail', [...head('detail'), [R($('pdf')), 'bar', 20],
+    ...[...det.querySelectorAll('.info .box')].flatMap((b) => [[R(b), 'line'], ...texts(b, '.fl span')]),
+    [R(det.querySelector('.res')), 'line'], ...rowBars(det.querySelector('.res .tbl'))]);
+  const bk = pageOf('book');
+  skeleton('book', [...head('book'),
+    [R(bk.querySelector('.det')), 'line'], ...FLD_EL.map((f) => [R(f.querySelector('.tf__box')), 'line']),
+    [R(bk.querySelector('.dt')), 'line'],
+    ...DAY_EL.map((d) => [R(d), 'bar', 8]),
+    ...SLOT_EL.map((s) => [R(s), 'bar', 8])]);
+  // Section titles: fixed-width bars (they're block elements)
+  for (const [scr, sel, w] of [['detail', '.info .t16', 90], ['detail', '.res__t', 64], ['book', '.box > .t16', 180], ['book', '.sect__t', 220]]) {
+    if (!w) continue;
+    $('sk-' + scr).insertAdjacentHTML('beforeend', [...pageOf(scr).querySelectorAll(sel)].map((el) => {
+      const r = R(el), h = 14;
+      r.x += parseFloat(getComputedStyle(el).paddingLeft);
+      return `<i class="sk sk--bar" data-x="${r.x}" style="left:${r.x}px;top:${r.y + (r.h - h) / 2}px;width:${w}px;height:${h}px"></i>`;
+    }).join(''));
+  }
+}
+
+// ---------- Measure, then the cursor path ----------
+function measure() {
+  // Layout at its fullest: summary shown, menu open (so their rects exist).
+  $('toastWrap').style.height = '116px'; $('toastWrap').style.marginTop = '0px';
+  $('menu').style.display = '';
+  const H = (scr) => pageOf(scr).offsetHeight;
+  B_MAX = H('book') - 1016;
+  TOAST = 116 + 24;
+
+  const reg = (scr, el, apply, more = {}) => { const h = { scr, el, r: R(el), apply: apply || ((k) => setH(el, k)), ...more }; HOV.push(h); return h; };
+  document.querySelectorAll('[data-hv]').forEach((el) => reg(el.dataset.hv, el));
+  reg('tests', $('testsBack')); reg('tests', $('reset'));
+  reg('detail', $('detailBack')); reg('detail', $('pdf'));
+  reg('book', $('bookBack'));
+  OPT_EL.forEach((o) => reg('book', o, null, { when: (t) => menuK(t) > .5 }));
+  DAY_EL.forEach((d, i) => { if (!DAYS[i][2]) reg('book', d, (k) => { d._h = k; }); });
+  SLOT_EL.forEach((s) => reg('book', s, (k) => { s._h = k; }));
+  reg('book', $('send'), (k) => { $('send')._h = k; });
+  reg('done', $('doneBack')); reg('done', $('ok4'));
+  reg('done', $('okLink'), (k) => { $('okLink').style.textDecoration = k > .5 ? 'underline' : 'none'; });
+  HOV.push({ fixed: true, el: $('logo'), r: { x: 20, y: 12, w: 184, h: 40 }, apply: (k) => setH($('logo'), k) });
+
+  buildSkeletons();
+
+  // Cursor targets, in stage coordinates at the scroll they're reached at.
+  const st = (scr, [x, y], t) => [x, y + 64 - SCROLL[scr](t)];
+  const blk = [...pageOf('home').querySelectorAll('.blk')];
+  const rows = [...$('testRows').children];
+  const view = rows[OPEN_ROW].querySelector('.view-btn');
+  const glu = $('resRows').children[0];
+  const P = {
+    pres: st('home', mid(R(blk[0]), -20, 30), 0),
+    cond: st('home', mid(R(blk[1]), 40, 10), 0),
+    tests: st('home', mid(R(blk[2]), 60, 40), 0),
+    rows: st('tests', mid(R(rows[5]), -120, 4), 0),
+    eye: st('tests', mid(R(view), -6, 1), 0),
+    glu: st('detail', [R(glu).x + 380, R(glu).y + 26], 0),
+    logo: [96, 30],
+    book: st('home', mid(R(blk[4]), 30, 20), 0),
+    doc: st('book', [R(FLD_EL[2]).x + 340, R(FLD_EL[2]).y + 31], 0),
+    opt1: st('book', [R(OPT_EL[1]).x + 250, R(OPT_EL[1]).y + 26], 0),
+    opt0: st('book', [R(OPT_EL[0]).x + 210, R(OPT_EL[0]).y + 25], 0),
+    day: st('book', mid(R(DAY_EL[PICK_DAY]), 4, 8), T.s2b),
+    slot: st('book', mid(R(SLOT_EL[PICK_SLOT]), -30, 4), T.s2b),
+    send: st('book', mid(R($('send')), 90, 3), T.s3b),
+    back: st('done', mid(R($('doneBack')), 10, 2), 0),
+  };
+  const START = [1700, 1000];
+  cursorAt = cursorPath(START, [
+    [.4, T.pres, ...P.pres],
+    [T.pres + .3, T.cond, ...P.cond],
+    [T.cond + .3, T.tests, ...P.tests],
+    [T.cTests + 1.1, T.rows, ...P.rows],
+    [T.rows + .3, T.eye, ...P.eye],
+    [T.cEye + .9, T.glu, ...P.glu],
+    [T.glu + .3, T.logo, ...P.logo],
+    [T.cLogo + .35, T.book, ...P.book],
+    [T.cBook + .9, T.doc, ...P.doc],
+    [T.cDoc + .25, T.cDoc + .7, ...P.opt1],
+    [T.cDoc + .8, T.cOpt - .2, ...P.opt0],
+    [T.s2b, T.day, ...P.day],
+    [T.cDay + .25, T.slot, ...P.slot],
+    [T.s3b + .1, T.send, ...P.send],
+    [T.done + 2.4, T.back, ...P.back],
+    [T.cBack + .45, T.end - .4, ...START],
+  ]);
+}
+
+// ---------- Book screen state ----------
+function menuK(t) {
+  if (t < T.cDoc) return 0;
+  if (t < T.cOpt) return outC(p(t, T.cDoc + .02, T.cDoc + .17));
+  return 1 - p(t, T.cOpt + .02, T.cOpt + .14);
+}
+const lerpC = (a, b, k) => `rgb(${a.map((v, i) => Math.round(v + (b[i] - v) * k)).join(',')})`;
+const lerpA = (a, b, k) => `rgba(${a.map((v, i) => +(v + (b[i] - v) * k).toFixed(3)).join(',')})`;
+const C = { white: [255, 255, 255], hv: [247, 249, 255], sel: [240, 243, 255], line: [240, 243, 255], blue: [59, 105, 255], hvLine: [176, 196, 255] };
+
+function renderBook(t) {
+  // Doctor dropdown
+  const m = menuK(t);
+  $('menu').style.display = m > 0 ? '' : 'none';
+  $('menu').style.opacity = m;
+  $('menu').style.transform = `scaleY(${mix(.85, 1, t < T.cOpt ? m : 1)})`;
+  const focus = t >= T.cDoc && t < T.cOpt + .1 ? 1 : 0;
+  const f2 = FLD_EL[2];
+  f2.classList.toggle('fld--open', m > 0);
+  f2.querySelector('.tf__box').style.boxShadow = focus ? 'inset 0 0 0 1px #3b69ff' : '';
+  f2.querySelector('.tf__box').style.borderColor = focus ? '#3b69ff' : '';
+  f2.querySelector('.tf__label').style.color = focus ? '#3b69ff' : '';
+  f2.querySelector('.tf__icon').style.transform = `rotate(${180 * (t < T.cOpt ? m : m)}deg)`;
+  f2.querySelector('.tf__val span').textContent = t >= T.cOpt + .05 ? FIELDS[2][1] : '';
+  // The service fills in once there's a doctor
+  const sv = p(t, T.cOpt + .25, T.cOpt + .5);
+  FLD_EL[3].classList.toggle('fld--muted', sv === 0);
+  const s3 = FLD_EL[3].querySelector('.tf__val span');
+  s3.textContent = sv > 0 ? FIELDS[3][1] : '';
+  s3.style.opacity = sv;
+
+  // Day: Fri is preselected, Tue is picked
+  const kd = p(t, T.cDay, T.cDay + .18);
+  DAY_EL.forEach((d, i) => {
+    if (DAYS[i][2]) return;
+    const sel = i === 0 ? 1 - kd : i === PICK_DAY ? kd : 0, h = (d._h || 0) * (1 - sel);
+    d.style.background = sel ? lerpC(C.white, C.sel, sel) : lerpC(C.white, C.hv, h);
+    d.style.borderColor = sel ? lerpC(C.line, C.blue, sel) : lerpC(C.line, C.hvLine, h);
+    d.querySelector('b').style.color = lerpC([0, 0, 0], C.blue, sel);
+  });
+  // Slots swap with the day: a quick fade out and in
+  const ks = p(t, T.cDay + .02, T.cDay + .3);
+  const set = ks < .5 ? SLOTS_FRI : SLOTS_TUE;
+  const kSlot = p(t, T.cSlot, T.cSlot + .18);
+  SLOT_EL.forEach((s, i) => {
+    const sp = s.firstChild;
+    if (sp.textContent !== set[i]) sp.textContent = set[i];
+    sp.style.opacity = Math.abs(1 - 2 * ks);
+    const sel = i === PICK_SLOT ? kSlot : 0, h = (s._h || 0) * (1 - sel);
+    s.style.background = sel ? lerpC(C.white, C.sel, sel) : lerpC(C.white, C.hv, h);
+    s.style.borderColor = sel ? lerpC(C.line, C.blue, sel) : lerpC(C.line, C.hvLine, h);
+    s.style.color = lerpC([0, 0, 0], C.blue, sel);
+  });
+  // Summary slides open under the slots, the button turns on
+  const kt = outC(p(t, T.cSlot + .05, T.cSlot + .5));
+  $('toastWrap').style.height = 116 * kt + 'px';
+  $('toastWrap').style.marginTop = -24 * (1 - kt) + 'px';
+  $('toastWrap').firstElementChild.style.opacity = p(t, T.cSlot + .2, T.cSlot + .5);
+  const on = p(t, T.cSlot + .05, T.cSlot + .3), hs = $('send')._h || 0;
+  const busy = t >= T.cSend && t < T.done + .3;
+  $('send').style.background = on ? lerpC([224, 224, 224], [59 - 14 * hs, 105 - 14 * hs, 255 - 18 * hs], on) : 'rgb(224,224,224)';
+  $('send').style.color = lerpA([0, 0, 0, .38], [255, 255, 255, 1], on);
+  $('send').style.boxShadow = `0 4px 12px rgba(59,105,255,${(.28 * hs * on).toFixed(3)})`;
+  $('sendTxt').style.opacity = busy ? 0 : 1;
+  $('spin').style.display = busy ? '' : 'none';
+  if (busy) $('spin').style.transform = `rotate(${(t - T.cSend) * 500}deg)`;
+}
+
+// ---------- Request received: the check ----------
+const CHECK_LEN = 13.86 + 31.96;
+function renderDone(t) {
+  const k = t - T.done;
+  const kb = outBack(p(k, .1, .55), 1.6);
+  $('okBg').style.transform = `scale(${mix(.4, 1, kb)})`;
+  $('okBg').style.opacity = p(k, .1, .3);
+  const kc = io(p(k, .38, .85));
+  $('okCheck').style.strokeDasharray = CHECK_LEN;
+  $('okCheck').style.strokeDashoffset = CHECK_LEN * (1 - kc);
+  const kr = p(k, .8, 1.7);
+  $('okRing').style.transform = `scale(${mix(1, 1.5, outC(kr))})`;
+  $('okRing').style.opacity = kr > 0 && kr < 1 ? 1 - kr : 0;
+  ['ok1', 'ok2', 'ok3', 'ok4'].forEach((id, i) => {
+    const kk = outC(p(k, .45 + i * .12, .85 + i * .12));
+    $(id).style.opacity = kk;
+    $(id).style.transform = `translateY(${10 * (1 - kk)}px)`;
+  });
+}
+
+// ---------- Render ----------
+function render(t) {
+  const nav = navAt(t);
+  VIEWS.forEach((scr) => {
+    const v = $('v-' + scr), cur = scr === nav.scr;
+    const o = cur ? p(t, shownAt(nav), shownAt(nav) + FADE) : 0;
+    v.style.opacity = o;
+    v.style.visibility = o > 0 ? 'visible' : 'hidden';
+    v.style.zIndex = cur ? 2 : 0;
+    pageOf(scr).style.transform = `translateY(${-SCROLL[scr](t)}px)`;
+  });
+  ['tests', 'detail', 'book'].forEach((scr) => {
+    const el = $('sk-' + scr);
+    const on = nav.skel === 'sk-' + scr && t < shownAt(nav) + FADE;
+    el.style.display = on ? '' : 'none';
+    el.style.zIndex = 1;
+    if (on) shimmer(el, t - nav.at);
+  });
+
+  HOV.forEach((h) => h.apply(hoverK(t, h), t));
+  renderBook(t);
+  renderDone(t);
+
+  // Cursor + click ring
+  const [cx, cy] = cursorAt(t);
+  const press = Math.max(...CLICKS.map((c) => bump(t, c, .18)));
+  $('cursor').style.transform = `translate(${cx - 6}px, ${cy - 1}px) scale(${1 - .14 * press})`;
+  const last = CLICKS.filter((c) => c <= t).pop();
+  const ck = last === undefined ? 1 : p(t, last, last + .45);
+  const ring = $('click');
+  ring.style.display = ck < 1 ? '' : 'none';
+  if (ck < 1) {
+    ring.style.left = cx + 'px'; ring.style.top = cy + 'px';
+    ring.style.opacity = .5 * (1 - ck);
+    ring.style.transform = `scale(${mix(.3, 1, outC(ck))})`;
+  }
+}
+
+document.fonts.ready.then(() => {
+  measure();
+  MotionPlayer.mount({
+    stage: $('stage'), duration: T.end, render,
+    markers: [['tests', T.cTests], ['result', T.cEye], ['home', T.cLogo], ['book', T.cBook], ['doctor', T.cDoc], ['date', T.cDay], ['send', T.cSend], ['back', T.cBack]],
+    refs: [['Home', 'src/1-home.png'], ['My Tests', 'src/2-tests.png'], ['Result', 'src/3-detail.png'], ['Book · top', 'src/4-book-top.png'],
+      ['Book · bottom', 'src/4-book-bottom.png'], ['Received', 'src/5-done.png']],
+    poster: 0, // the first frame: the case shows it until the loop starts, so the start is seamless
+  });
+});
+</script>
+</body>
+</html>

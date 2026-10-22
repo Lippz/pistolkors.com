@@ -215,15 +215,10 @@ Finance reports open on six numbers — billed, collected, outstanding, collecti
 
 Patients sign in with their email and a six-digit one-time code. The home screen gathers their prescriptions, conditions, appointments and test results, and booking takes a single page: clinic, specialty, doctor and service with its price, then a day in the coming week and a free timeslot. A test result lists every parameter against its reference range, flags what is out of range and downloads as a PDF. The portal works on phones too.
 
-<div class="carousel">
-
-![Patient portal home with cards for prescriptions, conditions, appointments, tests, booking, telemedicine and log out](../../assets/cases/linkhms/portal-home.webp "Home")
-
-![Book an Appointment: clinic, specialty, doctor and service with price, a choice of day in the next seven days, available timeslots and a summary before sending the request](../../assets/cases/linkhms/portal-booking.webp "Book an appointment")
-
-![Test result for a basic metabolic panel: patient, order and test info, and a results table with units, reference values and flagged values, with a PDF download](../../assets/cases/linkhms/portal-test-result.webp "Test result")
-
-</div>
+<figure class="case-motion" data-lightbox-group>
+<video src="../../motion/linkhms-patient-portal.mp4" poster="../../motion/linkhms-patient-portal.jpg" width="1920" height="1080" muted loop playsinline preload="metadata" aria-label="The patient portal: from the home screen to My Tests, where a basic metabolic panel opens with its out-of-range glucose flagged, then back home to book an appointment: a doctor is picked from the list, then a Tuesday and a 2 pm slot, the request is sent and a check mark confirms it was received" data-label="The patient portal: from the home screen to My Tests, where a basic metabolic panel opens with its out-of-range glucose flagged, then back home to book an appointment: a doctor is picked from the list, then a Tuesday and a 2 pm slot, the request is sent and a check mark confirms it was received"></video>
+<figcaption class="eyebrow">Test results and a booking, from the patient’s side</figcaption>
+</figure>
 
 ## AI in the process
 
