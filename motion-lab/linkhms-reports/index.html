@@ -45,7 +45,7 @@
 
   /* Scrolling page */
   .view { position: absolute; left: 72px; top: 64px; width: 1848px; height: 1016px; overflow: hidden; }
-  .page { position: absolute; left: 0; top: 0; width: 1848px; height: 3004px; }
+  .page { position: absolute; left: 0; top: 0; width: 1848px; height: 3016px; }
 
   .chead {
     position: absolute; left: 24px; top: 24px; width: 1800px; height: 60px; background: #fff; border-radius: 32px; z-index: 2;
@@ -65,7 +65,7 @@
   .chead .btn-primary img { width: 16px; height: 16px; }
 
   .tabs {
-    position: absolute; left: 24px; top: 96px; width: 1800px; height: 48px; padding: 4px; gap: 4px; display: flex; border-radius: 24px; background: #ececec;
+    position: absolute; left: 24px; top: 108px; width: 1800px; height: 48px; padding: 4px; gap: 4px; display: flex; border-radius: 24px; background: #ececec;
     box-shadow: 0 8px 12px rgba(136,136,136,.08), 0 16px 48px rgba(136,136,136,.08), 0 32px 64px rgba(136,136,136,.08);
   }
   .tab {
@@ -75,7 +75,9 @@
   .tab img { width: 24px; height: 24px; }
   .tab--on { background: #fff; color: #3b69ff; }
 
-  .panel { position: absolute; left: 24px; top: 156px; width: 1800px; height: 2824px; background: #fff; border-radius: 16px; }
+  /* 24 px from the content header to the tabs (the Figma frames have 12; layout below is in Figma
+     coordinates and shifted by OY in code) */
+  .panel { position: absolute; left: 24px; top: 168px; width: 1800px; height: 2824px; background: #fff; border-radius: 16px; }
   .block { position: absolute; background: #fff; border: 1px solid #d9dfe4; border-radius: 8px; overflow: hidden; }
   .title { font-size: 20px; line-height: normal; letter-spacing: .15px; white-space: nowrap; }
   .sub { color: rgba(0,0,0,.42); white-space: nowrap; }
@@ -479,6 +481,7 @@
 <script src="../_lib/player.js"></script>
 <script>
 const $ = (id) => document.getElementById(id);
+const OY = 12; // tabs and everything under them sit 12 px lower than in the Figma frame
 const fmt = (n) => 'NGN ' + Math.round(n).toLocaleString('en-US') + '.00';
 
 // ---------- Static content ----------
@@ -631,8 +634,8 @@ $('items').innerHTML = `
 // [x, y, w, h, kind, radius]: card = white surface, line = bordered box, bar = shimmering placeholder
 const skelChrome = (tabs) => [
   [24, 24, 1800, 60, 'card', 32], [48, 42, 24, 24, 'bar'], [88, 44, 150, 22, 'bar'],
-  [24, 96, 1800, 48, 'bar', 24], [28, 100, (1792 - 4 * (tabs - 1)) / tabs, 40, 'card', 24],
-  [24, 156, 1800, 1400, 'card', 16],
+  [24, 108, 1800, 48, 'bar', 24], [28, 112, (1792 - 4 * (tabs - 1)) / tabs, 40, 'card', 24],
+  [24, 168, 1800, 1400, 'card', 16],
 ];
 const SKEL_REP = [...skelChrome(4),
   [1484, 36, 180, 36, 'bar'], [1676, 36, 136, 36, 'bar', 18],
@@ -654,7 +657,7 @@ const SKEL_INV = [...skelChrome(3),
   [48, 950, 1752, 615, 'line'], [64, 966, 180, 26, 'bar'], [64, 998, 400, 14, 'bar'],
 ];
 for (const [id, list] of [['skelInv', SKEL_INV], ['skelRep', SKEL_REP]]) {
-  $(id).innerHTML = list.map(([x, y, w, h, kind, r]) =>
+  $(id).innerHTML = list.map(([x, y0, w, h, kind, r], i) => ({ x, y: i < 6 ? y0 : y0 + OY, w, h, kind, r })).map(({ x, y, w, h, kind, r }) =>
     `<i class="sk sk--${kind}" data-x="${x}" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px${r ? `;border-radius:${r}px` : ''}"></i>`).join('');
 }
 // Shimmer: one band sweeping the whole page every 1.1 s; each bar shows its slice of it.
@@ -665,7 +668,7 @@ function shimmer(el, t) {
 
 // ---------- Timeline ----------
 // Page scroll positions: S1 shows the three charts, the bottom shows Attention Needed.
-const S1 = 870, SMAX = 1988;
+const S1 = 870, SMAX = 2000;
 const T = {
   kpi: 1.1, chartIn: 2.5, day8: 3.3, scrubEnd: 4.9,
   s1a: 5.3, s1b: 6.7,
@@ -689,14 +692,14 @@ function scrollAt(t) {
 }
 
 // Page-local (x, y) → stage, at scroll S.
-const toStage = (x, y, S) => [x + 72, y + 64 - S];
+const toStage = (x, y, S) => [x + 72, y + 64 + OY - S]; // x, y in Figma page coordinates
 const dayX = (d) => 415.45 + (d - 8) * 56.103;    // plot x of day d (day 8 = the Figma hover line)
 const PLOT = [120, 489];                           // plot origin, page-local
 const DERM = toStage(48 + 24 + 272, 938 + 229, S1); // fingertip positions of the Figma hover cursors
-const MOBILE = [932, 284];                         // inside the pink segment
+const MOBILE = [932, 284 + OY];                         // inside the pink segment
 const NOTC = toStage(48 + 1176 + 248, 938 + 321, S1);
-const KPI1 = [515, 372];
-const yScrub = 64 + PLOT[1] + 188;
+const KPI1 = [515, 372 + OY];
+const yScrub = 64 + OY + PLOT[1] + 188;
 const START = [1240, 1000];
 const RAIL_REPORTS = [38, 605];                     // Reports in the main menu
 let cursorAt;
@@ -741,7 +744,7 @@ const dayLabel = (d) => d <= 28 ? `Feb ${d}, 2026` : `Mar ${d - 28}, 2026`;
 // ---------- Hover helpers ----------
 const inRect = ([x, y], l, tp, w, h) => x >= l && x < l + w && y >= tp && y < tp + h;
 // Where the pointer is on the page at time t (page-local coordinates).
-const pagePt = (t) => { const [x, y] = cursorAt(t); return [x - 72, y - 64 + scrollAt(t)]; };
+const pagePt = (t) => { const [x, y] = cursorAt(t); return [x - 72, y - 64 - OY + scrollAt(t)]; };
 // Soft hover: share of the last 0.12 s the pointer spent inside.
 const hoverK = (t, test) => {
   let n = 0;
@@ -909,7 +912,7 @@ loadCurves().then(() => {
   tipW = $('tipBvc').offsetWidth;
   // The first Denied row's invoice link, once the table is filtered and scrolled to the bottom.
   LINK_Y = 2196 + $('row0').offsetTop + 16;
-  cursorAt = makeCursor([72 + 74 + 22, LINK_Y + 8 + 64 - SMAX]);
+  cursorAt = makeCursor([72 + 74 + 22, LINK_Y + 8 + 64 + OY - SMAX]);
   MotionPlayer.mount({
     stage: $('stage'), duration: T.end, render,
     markers: [['kpi', T.kpi], ['scrub', T.chartIn], ['charts', T.s1a], ['invoice', T.open], ['menu', T.back]],
