@@ -39,6 +39,34 @@ stats:
       label: active time per session
 ---
 
+## Brand and design system
+
+### Calm, clinical, recognisable
+
+A distinct identity set LinkHMS apart from dated competitors. The UI takes its cue from modern healthcare facilities: clean, minimal and patient-centric. To keep it consistent as the product grows, I defined design tokens for numeric values, colour and type and built every component on top of them, from small elements to the blocks assembled from them.
+
+![LinkHMS logo and app icons next to pieces of the design system: accent colour scales, spacing and corner radius tokens, buttons, tags, record type chips, filters, tabs, page headers, a date picker, a section menu, metric cards and inputs](../../assets/cases/linkhms/brand-design-system.webp)
+
+## Wireframes
+
+### From a flowchart to tested screens
+
+I mapped the main flow first, then built a low-fidelity prototype in Figma and ran two rounds of usability testing before any high-fidelity work.
+
+<div class="carousel">
+
+![Flowchart of the app: sign-up and login, then the schedule with new appointments, patients and their medical records, and administration of staff, departments and services](../../assets/cases/linkhms/wf-flowchart.webp "Flowchart")
+
+![Low-fidelity wireframe of the doctors schedule grid](../../assets/cases/linkhms/wf-schedule.webp "Schedule")
+
+![Low-fidelity wireframe of the patients list](../../assets/cases/linkhms/wf-patients.webp "Patients")
+
+![Low-fidelity wireframe of a patient summary with recent visits, tests, diagnoses and prescriptions](../../assets/cases/linkhms/wf-patient-summary.webp "Patient summary")
+
+![Low-fidelity wireframe of a patient’s records history with a category menu](../../assets/cases/linkhms/wf-patient-records.webp "Patient records")
+
+</div>
+
 ## Problem
 
 ### Hospital software ignores the small clinic
@@ -117,25 +145,11 @@ I started with hand-drawn sketches to decide what each screen needed, then mappe
 
 A mid-level designer worked on LinkHMS with me, and I trained them on the project itself: the clinic domain, the design system and how a flow goes from sketch to developer hand-off. I reviewed their screens before they went to the developers, so the product kept one design language while two people worked on it.
 
-![User flow covering registration, scheduling, patients, medical records and administration](../../assets/cases/linkhms/user-flow.webp)
-
-<div class="carousel">
-
-![Low-fidelity wireframe of the doctors schedule grid](../../assets/cases/linkhms/wf-schedule.webp "Schedule")
-
-![Low-fidelity wireframe of the patients list](../../assets/cases/linkhms/wf-patients.webp "Patients")
-
-![Low-fidelity wireframe of a patient summary with recent visits, tests, diagnoses and prescriptions](../../assets/cases/linkhms/wf-patient-summary.webp "Patient summary")
-
-![Low-fidelity wireframe of a patient’s records history with a category menu](../../assets/cases/linkhms/wf-patient-records.webp "Patient records")
-
-</div>
-
 ## Scope
 
 ### From the front desk to the finance office
 
-LinkHMS covers a clinic’s whole day. Before the flows themselves, here is the look and the building blocks every screen shares.
+LinkHMS covers a clinic’s whole day in nine areas, from the first booking at the front desk to the month’s numbers in the finance office.
 
 <div class="cards">
 <div data-icon="calendar"><b>Schedule and queue</b>Doctors’ appointments on a timeslot grid and a daily live queue by status: book, edit, cancel, start and complete visits.</div>
@@ -147,36 +161,6 @@ LinkHMS covers a clinic’s whole day. Before the flows themselves, here is the 
 <div data-icon="chart"><b>Reports</b>Operational reports on admissions, diagnoses, lab tests, patient flow and antenatal care, and finance reports on what was billed, collected and is outstanding.</div>
 <div data-icon="users"><b>Administration and HR</b>Departments, services, insurance providers with plan-based pricing, API keys, and staff accounts with roles and weekly schedules.</div>
 <div data-icon="sliders"><b>Settings and permissions</b>Account and clinic details, invoice text, working hours, subscription billing and view and edit permissions for every role.</div>
-</div>
-
-## Visual identity
-
-### Calm, clinical, recognisable
-
-With that much to cover, the product needed a face of its own. A distinct identity set LinkHMS apart from dated competitors. The UI takes its cue from modern healthcare facilities: clean, minimal and patient-centric.
-
-![LinkHMS logo in colour and white, and the app icon on white and blue](../../assets/cases/linkhms/brand-logo.webp)
-
-![Icon sets: an outline set for the product on the left and a duotone set with a soft gradient for the landing page on the right](../../assets/cases/linkhms/brand-icons.webp)
-
-*A variety of Google Icons was also used.*
-
-## Design system
-
-### Small pieces, used everywhere
-
-To keep the interface consistent as it grows, I defined design tokens for numeric values, colour and type, and built every component on top of them. The components follow the atomic approach: small elements first, then the blocks assembled from them.
-
-<div class="carousel">
-
-![Numeric tokens for spacing and corner radius, and colour tokens: neutrals and ten accent hues in twelve steps](../../assets/cases/linkhms/design-tokens.webp "Tokens")
-
-![Typography: Roboto Flex for the interface and Manrope for buttons, with the full size scale](../../assets/cases/linkhms/design-typography.webp "Typography")
-
-![Atoms: buttons, tags, record type chips and small status labels](../../assets/cases/linkhms/design-atoms.webp "Atoms")
-
-![Molecules and organisms: filters, tabs, page titles, a search field, a date picker, a section menu, metric cards and text inputs](../../assets/cases/linkhms/design-molecules-organisms.webp "Molecules and organisms")
-
 </div>
 
 ## Key decisions
