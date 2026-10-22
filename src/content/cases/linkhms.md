@@ -164,7 +164,7 @@ LinkHMS covers a clinic’s whole day in nine areas, from the first booking at t
 
 ## Key decisions
 
-### Six flows that run a clinic
+### Flows that run a clinic
 
 With the identity and the components in place, here are the flows where speed mattered most.
 

@@ -598,6 +598,17 @@ a:hover .frame img {
   line-height: 1;
   color: var(--accent);
 }
+/* LinkHMS flows aren't a ranked list: a dot instead of the number, on the first line. */
+:is(#flows-that-run-a-clinic ~ h4, #flows-that-run-a-clinic ~ details h4):not(#flows-that-run-a-clinic ~ h2 ~ h4, #flows-that-run-a-clinic ~ h2 ~ details h4)::before {
+  content: '';
+  align-self: flex-start;
+  width: 10px;
+  height: 10px;
+  font-size: inherit; /* the number's 2.5rem would throw off the em below */
+  margin-top: calc(0.6em - 5px);
+  border-radius: 50%;
+  background: var(--accent);
+}
 .prose ul,
 .prose ol {
   padding-left: 1.2em;
