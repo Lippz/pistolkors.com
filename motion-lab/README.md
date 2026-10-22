@@ -19,6 +19,9 @@ show the same thing.
 - `linkhms-clinic-signup/`: Clinic Registration form → Complete Your Clinic Set Up (progress to 40%).
 - `linkhms-live-queue/`: Schedule → Live Queue (walk-ins, a separate queue), one visit completed and
   the next started, back to the unchanged schedule. `?figma` lays the queue out with the Figma sample data for D.
+- `linkhms-medical-record/`: Summary → History → Administration Chart → Vaccinations (an overdue
+  dose given from the cell menu) → Summary, through the record's section menu. One patient, a
+  5-month-old, so the data agrees across the four screens.
 
 ## Workflow
 

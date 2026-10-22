@@ -200,17 +200,10 @@ Receptionists create an appointment for a specific doctor in just a few clicks, 
 
 The electronic medical record is split into sections and subsections, so a doctor jumps straight to what matters in an emergency.
 
-<div class="carousel">
-
-![Patient summary with recent visits, samples and tests, diagnoses and prescriptions](../../assets/cases/linkhms/patient-summary.webp "Summary")
-
-![Patient records history with a category menu and colour-coded record types](../../assets/cases/linkhms/patient-records.webp "Records")
-
-![Prescriptions and drug administration chart: medicines with route, dosage and status, a log of non-prescribed medications and Log Dose buttons](../../assets/cases/linkhms/emr-drug-administration.webp "Drug administration")
-
-![Vaccinations: a schedule grid by age with each vaccine marked completed, scheduled, overdue, refused, excluded or contraindicated](../../assets/cases/linkhms/emr-vaccinations.webp "Vaccinations")
-
-</div>
+<figure class="case-motion" data-lightbox-group>
+<video src="../../motion/linkhms-medical-record.mp4" poster="../../motion/linkhms-medical-record.jpg" width="1920" height="1080" muted loop playsinline preload="metadata" aria-label="A patient’s record: from the summary to the full history, then through the section menu to the drug administration chart and the vaccination grid, where an overdue dose is given, and back to the summary" data-label="A patient’s record: from the summary to the full history, then through the section menu to the drug administration chart and the vaccination grid, where an overdue dose is given, and back to the summary"></video>
+<figcaption class="eyebrow">Summary, history, drug chart and vaccinations in one record</figcaption>
+</figure>
 
 #### A patient photo without leaving the record
 
