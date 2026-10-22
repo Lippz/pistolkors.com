@@ -13,7 +13,8 @@
  *
  * The same viewer opens the Motion lab loops (`.lab video`) on the home page: the video
  * grows out of its tile, keeps playing from the same frame, a click pauses it, and
- * ← / → step through the tiles. Videos have no zoom.
+ * ← / → step through the tiles. Videos have no zoom. A case's product loop
+ * (`.case-motion video`, under the results) opens the same way, on its own.
  */
 ---
 
@@ -43,7 +44,7 @@
 
   const q = <T extends Element>(root: ParentNode, sel: string) => root.querySelector<T>(sel);
   const dlg = q<HTMLDialogElement>(document, '.lb');
-  const els = [...document.querySelectorAll<Media>('.case-prose img, .slides img, .lab video')];
+  const els = [...document.querySelectorAll<Media>('.case-prose img, .slides img, .lab video, .case-motion video')];
 
   if (dlg && els.length) {
     const stage = q<HTMLElement>(dlg, '.lb__stage')!;

@@ -57,6 +57,20 @@ const cases = defineCollection({
           items: z.array(z.object({ value: z.string(), label: z.string() })),
         })
         .optional(),
+      /**
+       * A product loop shown right under the results: a video exported from motion-lab
+       * (`node motion-lab/export.mjs <name>` writes /motion/<name>.mp4 and .jpg into public/).
+       * It plays while in view, opens full screen on click, and stays on the poster for
+       * people who prefer reduced motion.
+       */
+      motion: z
+        .object({
+          video: z.string(),
+          poster: z.string(),
+          alt: z.string(),
+          caption: z.string().optional(),
+        })
+        .optional(),
       /** "story": written case with sections. "slides": intro + presentation slides. */
       format: z.enum(['story', 'slides']).default('story'),
       slides: z.array(z.object({ src: image(), alt: z.string() })).default([]),

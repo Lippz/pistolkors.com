@@ -451,8 +451,8 @@ a:hover .frame img {
 .prose > .more > * + * {
   margin-top: 24px;
 }
-.prose > :is(p:has(> img), .pair, .grid-4, .cards, .persona, .carousel, .quotes, .columns, .framed, ol.flow, blockquote),
-.prose > .more > :is(p:has(> img), .pair, .grid-4, .cards, .persona, .carousel, .quotes, .columns, .framed, ol.flow, blockquote) {
+.prose > :is(p:has(> img), .pair, .grid-4, .cards, .persona, .carousel, .case-motion, .quotes, .columns, .framed, ol.flow, blockquote),
+.prose > .more > :is(p:has(> img), .pair, .grid-4, .cards, .persona, .carousel, .case-motion, .quotes, .columns, .framed, ol.flow, blockquote) {
   margin-top: 32px;
 }
 .prose > :is(h3, h4),
@@ -939,4 +939,24 @@ a:hover .frame img {
 .prose .persona ul {
   gap: 8px;
   color: var(--ink-2);
+}
+
+/* A product loop exported from motion-lab: under a case's results (`motion:` in the
+   frontmatter) or in the text as
+   <figure class="case-motion" data-lightbox-group><video src="../../motion/<name>.mp4" …></video></figure>
+   (relative, so it works under the GitHub Pages base path too: case pages live at /work/<slug>/).
+   It plays while in view and opens full screen on click (see work/[slug].astro). */
+.case-motion {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.case-motion video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
 }

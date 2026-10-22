@@ -37,6 +37,11 @@ stats:
       label: of sessions from returning users
     - value: 14.6 min
       label: active time per session
+motion:
+  video: /motion/linkhms-new-visit.mp4
+  poster: /motion/linkhms-new-visit.jpg
+  alt: 'A receptionist books a visit in the LinkHMS schedule: clicks an empty slot, finds the patient by name, picks a service, creates the visit and marks the patient as confirmed'
+  caption: From an empty slot to a confirmed visit
 ---
 
 ## Brand and design system
@@ -46,26 +51,6 @@ stats:
 A distinct identity set LinkHMS apart from dated competitors. The UI takes its cue from modern healthcare facilities: clean, minimal and patient-centric. To keep it consistent as the product grows, I defined design tokens for numeric values, colour and type and built every component on top of them, from small elements to the blocks assembled from them.
 
 ![LinkHMS logo and app icons next to pieces of the design system: accent colour scales, spacing and corner radius tokens, buttons, tags, record type chips, filters, tabs, page headers, a date picker, a section menu, metric cards and inputs](../../assets/cases/linkhms/brand-design-system.webp)
-
-## Wireframes
-
-### From a flowchart to tested screens
-
-I mapped the main flow first, then built a low-fidelity prototype in Figma and ran two rounds of usability testing before any high-fidelity work.
-
-<div class="carousel">
-
-![Flowchart of the app: sign-up and login, then the schedule with new appointments, patients and their medical records, and administration of staff, departments and services](../../assets/cases/linkhms/wf-flowchart.webp "Flowchart")
-
-![Low-fidelity wireframe of the doctors schedule grid](../../assets/cases/linkhms/wf-schedule.webp "Schedule")
-
-![Low-fidelity wireframe of the patients list](../../assets/cases/linkhms/wf-patients.webp "Patients")
-
-![Low-fidelity wireframe of a patient summary with recent visits, tests, diagnoses and prescriptions](../../assets/cases/linkhms/wf-patient-summary.webp "Patient summary")
-
-![Low-fidelity wireframe of a patient’s records history with a category menu](../../assets/cases/linkhms/wf-patient-records.webp "Patient records")
-
-</div>
 
 ## Problem
 
@@ -141,7 +126,21 @@ I grouped the findings in an affinity diagram, graded features by importance and
 
 I started with hand-drawn sketches to decide what each screen needed, then mapped the user flow and built a low-fidelity prototype in Figma. A usability study showed where the task flow broke down; a second round confirmed the fixes before any high-fidelity work.
 
-#### Mentoring on the project
+<div class="carousel">
+
+![Flowchart of the app: sign-up and login, then the schedule with new appointments, patients and their medical records, and administration of staff, departments and services](../../assets/cases/linkhms/wf-flowchart.webp "Flowchart")
+
+![Low-fidelity wireframe of the doctors schedule grid](../../assets/cases/linkhms/wf-schedule.webp "Schedule")
+
+![Low-fidelity wireframe of the patients list](../../assets/cases/linkhms/wf-patients.webp "Patients")
+
+![Low-fidelity wireframe of a patient summary with recent visits, tests, diagnoses and prescriptions](../../assets/cases/linkhms/wf-patient-summary.webp "Patient summary")
+
+![Low-fidelity wireframe of a patient’s records history with a category menu](../../assets/cases/linkhms/wf-patient-records.webp "Patient records")
+
+</div>
+
+### Mentoring on the project
 
 A mid-level designer worked on LinkHMS with me, and I trained them on the project itself: the clinic domain, the design system and how a flow goes from sketch to developer hand-off. I reviewed their screens before they went to the developers, so the product kept one design language while two people worked on it.
 
@@ -178,41 +177,12 @@ LinkHMS launched with two account types: an individual practice for a doctor wor
 <div><b>What we chose</b>We dropped the individual practice. A doctor working alone is now a clinic with one seat and keeps every feature, and a team shares the same system with roles — one product to maintain instead of two.</div>
 </div>
 
-After sign-up, a guided tour walks through the first set-up: it creates a department, a service and a user, ticking them off in a “Let’s set up your clinic” checklist, and the home screen keeps the remaining steps in view. The tour can be skipped and restarted at any time from the menu.
+After sign-up, a short guided tour sets up the first department, service and user, and can be skipped.
 
-<div class="carousel">
-
-![Clinic registration form with Google sign-in, clinic details and terms](../../assets/cases/linkhms/clinic-registration.webp "Clinic registration")
-
-![Home screen after sign-up with quick actions, a trial notice, a clinic set-up progress bar and recommended next steps](../../assets/cases/linkhms/clinic-setup.webp "Clinic set-up")
-
-</div>
-
-<div class="carousel">
-
-![Welcome message of the onboarding tour with a Start Tour button](../../assets/cases/linkhms/tour-01.webp "Welcome")
-
-![Administration with an empty departments list: a tooltip points at New Department, next to the Let’s set up your clinic checklist and a Skip Tour button](../../assets/cases/linkhms/tour-02.webp "New department")
-
-![New Department form with a tooltip about naming the department and setting its status](../../assets/cases/linkhms/tour-03.webp "Department form")
-
-![The checklist now has Create Department ticked, and a tooltip points at the Services tab](../../assets/cases/linkhms/tour-04.webp "Services tab")
-
-![An empty services list with a tooltip pointing at New Service](../../assets/cases/linkhms/tour-05.webp "New service")
-
-![New Service form: name, status, type, departments, price and duration, with a tooltip explaining that a service can belong to several departments](../../assets/cases/linkhms/tour-06.webp "Service form")
-
-![A tooltip points at the Human Resources section in the side menu, with departments and services ticked in the checklist](../../assets/cases/linkhms/tour-07.webp "Human resources")
-
-![Empty Human Resources list with a tooltip pointing at New User and the available roles](../../assets/cases/linkhms/tour-08.webp "New user")
-
-![New User form with a note that the user is charged on the next subscription invoice and a tooltip about the email invitation](../../assets/cases/linkhms/tour-09.webp "User form")
-
-![Congratulations message at the end of the tour, with all three checklist items ticked and an End Tour button](../../assets/cases/linkhms/tour-10.webp "All set")
-
-</div>
-
-*The onboarding tour — departments first, then the services they offer and the people who provide them: from the welcome message to “You’re all set”.*
+<figure class="case-motion" data-lightbox-group>
+<video src="../../motion/linkhms-clinic-signup.mp4" poster="../../motion/linkhms-clinic-signup.jpg" width="1920" height="1080" muted loop playsinline preload="metadata" aria-label="A clinic signs up for LinkHMS: the email and clinic name are typed, the rest of the form fills in, the terms are accepted, then each of the four set-up steps is started and the progress bar runs from 20% to 100%" data-label="A clinic signs up for LinkHMS: the email and clinic name are typed, the rest of the form fills in, the terms are accepted, then each of the four set-up steps is started and the progress bar runs from 20% to 100%"></video>
+<figcaption class="eyebrow">From sign-up to a clinic all set up</figcaption>
+</figure>
 
 #### Booking ahead and walk-ins
 

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>New animation — motion draft</title>
+<!-- Fonts the product uses (Google Fonts here; export waits for them to load). -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=block" rel="stylesheet">
+<link rel="stylesheet" href="../_lib/player.css">
+<style>
+  /* Stage is the Figma frame size; every number in here is Figma pixels. */
+  * { box-sizing: border-box; }
+  .stage { background: #fff; font-family: Roboto, sans-serif; color: #000; -webkit-font-smoothing: antialiased; }
+  .bg { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+  .box { position: absolute; left: 860px; top: 440px; width: 200px; height: 200px; border-radius: 16px; background: #3b69ff; }
+  .cursor { position: absolute; left: 0; top: 0; width: 19px; height: 24px; z-index: 20; transform-origin: 6px 1px; }
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <!-- <img class="bg" src="assets/background.png" alt=""> -->
+  <div class="box" id="box"></div>
+  <img class="cursor" id="cursor" src="../linkhms-new-visit/assets/cursor-hand.png" alt="">
+</div>
+
+<script src="../_lib/motion.js"></script>
+<script src="../_lib/player.js"></script>
+<script>
+// Named beats, in seconds: easy to talk about ("make `click` later").
+const T = { move: .5, click: 1.6, end: 4 };
+const CLICKS = [T.click];
+const START = [1400, 800];
+const cursorAt = cursorPath(START, [
+  [T.move, T.click - .2, 960, 540],
+  [T.end - 1, T.end - .1, ...START], // back to the start: the loop is seamless
+]);
+
+const $ = (id) => document.getElementById(id);
+
+// Pure function of t: set every style that can change, every frame.
+function render(t) {
+  const k = outBack(p(t, T.click, T.click + .5));
+  $('box').style.transform = `scale(${mix(1, 1.1, k) - .1 * p(t, T.end - .6, T.end)})`;
+  const [x, y] = cursorAt(t);
+  const press = Math.max(...CLICKS.map((c) => bump(t, c, .18)));
+  $('cursor').style.transform = `translate(${x - 6}px, ${y - 1}px) scale(${1 - .14 * press})`;
+}
+
+MotionPlayer.mount({
+  stage: $('stage'), duration: T.end, render,
+  markers: [['click', T.click]],
+  refs: [/* ['Frame name', 'src/1-frame.png'] */],
+  poster: T.click + .5,
+});
+</script>
+</body>
+</html>

@@ -54,6 +54,42 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
     </header>
 
     <div class="container">
+      {
+        d.stats && (
+          <section class="case-stats" aria-label={d.stats.label}>
+            <p class="eyebrow case-stats__label">{d.stats.label}</p>
+            <div class:list={['case-stats__grid', { 'case-stats__grid--four': d.stats.items.length === 4 }]}>
+              {d.stats.items.map((s) => (
+                <div>
+                  <span class="case-stats__value">{s.value}</span>
+                  <span class="case-stats__text">{s.label}</span>
+                </div>
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      {
+        d.motion && (
+          <figure class="case-motion" data-lightbox-group>
+            <video
+              src={url(d.motion.video)}
+              poster={url(d.motion.poster)}
+              width="1920"
+              height="1080"
+              muted
+              loop
+              playsinline
+              preload="metadata"
+              aria-label={d.motion.alt}
+              data-label={d.motion.alt}
+            />
+            {d.motion.caption && <figcaption class="eyebrow">{d.motion.caption}</figcaption>}
+          </figure>
+        )
+      }
+
       <dl class="case-facts" style={`--cols: ${facts.length}`}>
         {
           facts.map((f) => (
@@ -81,21 +117,6 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
         )
       }
 
-      {
-        d.stats && (
-          <section class="case-stats" aria-label={d.stats.label}>
-            <p class="eyebrow case-stats__label">{d.stats.label}</p>
-            <div class:list={['case-stats__grid', { 'case-stats__grid--four': d.stats.items.length === 4 }]}>
-              {d.stats.items.map((s) => (
-                <div>
-                  <span class="case-stats__value">{s.value}</span>
-                  <span class="case-stats__text">{s.label}</span>
-                </div>
-              ))}
-            </div>
-          </section>
-        )
-      }
     </div>
 
     {
@@ -210,6 +231,32 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
     );
     update();
   }
+
+  // Product loops (the one under the results and any in the text) play while at least half
+  // of each is on screen and the full-screen viewer is closed. Reduced motion keeps them on
+  // the poster; the viewer has controls then.
+  const loops = document.querySelectorAll<HTMLVideoElement>('.case-motion video');
+  if (loops.length && !window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+    const seen = new Set<HTMLVideoElement>();
+    const pick = () =>
+      loops.forEach((v) => {
+        if (seen.has(v) && !document.querySelector('dialog.lb[open]')) v.play().catch(() => {});
+        else v.pause();
+      });
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          const v = e.target as HTMLVideoElement;
+          if (e.intersectionRatio >= 0.5) seen.add(v);
+          else seen.delete(v);
+        }
+        pick();
+      },
+      { threshold: [0, 0.5, 1] },
+    );
+    loops.forEach((v) => io.observe(v));
+    document.addEventListener('close', (e) => (e.target as Element).classList?.contains('lb') && pick(), true);
+  }
 </script>
 
 <style>
@@ -260,6 +307,13 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
 
   .case-facts {
     margin: 0;
+  }
+  .case-stats + .case-motion {
+    margin-top: 24px;
+  }
+  /* Results and the product loop come first, right under the lead; the facts follow. */
+  * + .case-facts {
+    margin-top: clamp(56px, 7vw, 88px);
     display: grid;
     grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
     gap: 20px 24px;
@@ -290,15 +344,16 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
     gap: 24px;
   }
   .case-part__title {
-    grid-column: span 4;
+    grid-column: span 3;
     margin: 0;
     font-size: var(--step-h3);
     font-weight: 500;
     line-height: 1.1;
     letter-spacing: -0.025em;
   }
+  /* Same columns as the case text below, so the two line up. */
   .case-part__list {
-    grid-column: 5 / span 8;
+    grid-column: 4 / span 9;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -328,7 +383,6 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
   }
 
   .case-stats {
-    margin-top: 48px;
     padding: clamp(28px, 4vw, 40px) clamp(24px, 4vw, 48px);
     border-radius: var(--radius);
     background: var(--surface);

@@ -1,0 +1,13 @@
+{
+  "name": "pistolkors-motion-lab",
+  "private": true,
+  "type": "module",
+  "description": "Sandbox for UI loops: build an animation, iterate with the scrubber, export to public/motion.",
+  "scripts": {
+    "serve": "python3 -m http.server 4500",
+    "export": "node export.mjs"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.64.1"
+  }
+}

@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LinkHMS · New Visit — motion draft</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700&family=Roboto:wght@400&display=block" rel="stylesheet">
+<link rel="stylesheet" href="../_lib/player.css">
+<style>
+  /*
+   * LinkHMS · New Visit. Stage is the Figma frame size (1920×1080); all numbers below are
+   * Figma pixels. Player, easing and export live in ../_lib and ../export.mjs.
+   */
+  :root {
+    --ink: #000;
+    --ink-60: rgba(0, 0, 0, .6);
+    --ink-42: rgba(0, 0, 0, .42);
+    --line: rgba(0, 0, 0, .08);
+    --fill-ro: rgba(0, 0, 0, .04);
+    --blue: #3b69ff;
+    --blue-50: #f0f3ff;
+    --red: #ed1c3f;
+    /* shadow/Default from Figma: blur 4 / 8 / 12. drop-shadow takes half the blur. */
+    --shadow: drop-shadow(0 2px 2px rgba(0,0,0,.16)) drop-shadow(0 4px 4px rgba(0,0,0,.08)) drop-shadow(0 8px 6px rgba(0,0,0,.04));
+    --shadow-box: 0 2px 4px rgba(0,0,0,.16), 0 4px 8px rgba(0,0,0,.08), 0 8px 12px rgba(0,0,0,.04);
+  }
+  * { box-sizing: border-box; }
+
+  .stage {
+    background: #fff;
+    font-family: Roboto, sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased;
+  }
+  .bg { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+
+  /* Schedule bits drawn over the screenshot */
+  .ghost {
+    position: absolute; width: 128px; height: 48px;
+    border: 1px dashed var(--blue); border-radius: 8px; background: #fff;
+    box-shadow: 0 4px 14px rgba(59, 105, 255, .12);
+    display: flex; align-items: center; gap: 8px; padding-left: 20px;
+  }
+  .ghost svg { flex: none; }
+  .ghost span { font-size: 10px; line-height: 12px; color: var(--ink-42); letter-spacing: .2px; }
+  .appt {
+    position: absolute; left: 1018px; top: 434px; width: 128px; height: 48px;
+    border: 1px solid #97b5ff; border-radius: 8px; background: #dde6ff; transform-origin: center;
+    /* Record / Schedule: 8/12 padding counted from the outer edge (Figma strokes sit inside) */
+    padding: 7px 11px; display: flex; flex-direction: column; justify-content: center; gap: 4px;
+    letter-spacing: .4px; white-space: nowrap;
+  }
+  .appt b { font-weight: 400; font-size: 12px; line-height: 16px; color: #000; }
+  .appt i { font-style: normal; font-size: 10px; line-height: normal; color: rgba(0,0,0,.42); }
+  .appt__ring { position: absolute; inset: -1px; border-radius: 8px; pointer-events: none; }
+  /* Visit menu (Figma 160:37738): opens under the visit when it is clicked */
+  .menu {
+    position: absolute; left: 1037px; top: 479px; width: 204px; height: 384px; background: #fff; border-radius: 4px;
+    box-shadow: var(--shadow-box); transform-origin: 0 0;
+    font-size: 14px; line-height: 20px; letter-spacing: .25px; white-space: nowrap;
+  }
+  .menu__band { position: absolute; left: 0; right: 0; height: 42px; background: rgba(0,0,0,.04); }
+  .menu__item { position: absolute; left: 12px; height: 24px; display: flex; align-items: center; gap: 16px; }
+  .menu__item img, .menu__dot { width: 24px; height: 24px; flex: none; }
+  .menu__dot { display: grid; place-items: center; }
+  .menu__dot::before { content: ''; width: 16px; height: 16px; border-radius: 8px; border: 1px solid var(--c); background: var(--b); box-sizing: border-box; }
+  /* Hovered appointment: the border takes the status accent, as on the active block in Figma */
+  .hl { position: absolute; height: 48px; border: 1px solid; border-radius: 8px; pointer-events: none; }
+
+  /* Figma overlay (151:4894): 50% black over a background blur of 6. Measured against the
+     Figma frames, it equals CSS blur(6px). Fading the element's opacity fades both, so the
+     schedule goes soft and dark together. */
+  .overlay { position: absolute; inset: 0; background: rgba(0, 0, 0, .5); backdrop-filter: blur(6px); }
+
+  /* Popup */
+  .popup {
+    position: absolute; left: 550px; width: 820px; padding: 32px; border-radius: 16px; background: #fff;
+    filter: var(--shadow); transform-origin: 50% 50%;
+  }
+  .popup__title { display: flex; justify-content: space-between; align-items: center; height: 40px; margin-bottom: 24px; }
+  .popup__title h1 { margin: 0; font-weight: 400; font-size: 34px; letter-spacing: .25px; line-height: 40px; }
+  .main { position: relative; }
+  .collapse { overflow: hidden; }
+  .line { display: flex; gap: 12px; height: 60px; }
+  .headline { font-size: 22px; line-height: 26px; margin-bottom: 12px; }
+  .stack > * + * { margin-top: 12px; }
+
+  /* Textfield_New */
+  .tf { position: relative; flex: 1 1 0; min-width: 0; height: 60px; }
+  .tf__box { position: absolute; inset: 4px 0 4px 0; border-radius: 4px; border: 1px solid var(--line); background: #fff; }
+  .tf--ro .tf__box { background: var(--fill-ro); }
+  .tf__icon { position: absolute; right: 12px; top: 18px; width: 24px; height: 24px; }
+  .tf__label {
+    position: absolute; left: 6px; top: 0; padding: 0 4px; display: flex; gap: 2px;
+    font-size: 10px; line-height: 12px; letter-spacing: .4px; white-space: nowrap; transform-origin: left top;
+  }
+  .tf__value {
+    position: absolute; left: 10px; top: 20px; right: 46px; display: flex; align-items: flex-end;
+    font-size: 14px; line-height: 20px; letter-spacing: .25px; white-space: nowrap;
+  }
+  .tf--noicon .tf__value { right: 10px; }
+  .tf__text { overflow: hidden; text-overflow: ellipsis; }
+  .tf__caret { flex: none; width: 1px; height: 18px; margin-bottom: 1px; background: var(--blue); }
+  .tf--ro .tf__value, .tf--ro .tf__label { color: var(--ink-60); }
+
+  /* Dropdown */
+  .dd {
+    position: absolute; left: 0; width: 756px; background: #fff; border-radius: 4px; box-shadow: var(--shadow-box);
+    font-size: 14px; line-height: 20px; letter-spacing: .25px; transform-origin: top center; z-index: 5;
+  }
+  .dd__band { position: absolute; left: 0; right: 0; height: 42px; background: rgba(0,0,0,.04); }
+  .dd__item { position: absolute; left: 12px; right: 12px; height: 20px; }
+  .dd__item--link { color: #1c63ed; }
+  .dd__item--muted { color: var(--ink-42); }
+  .dd__divider { position: absolute; left: 12px; right: 12px; height: 1px; background: rgba(0,0,0,.12); }
+
+  /* Button_New */
+  .btn {
+    position: relative; overflow: hidden; height: 40px; padding: 0 12px; border-radius: 4px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+    font-family: Manrope, sans-serif; font-weight: 700; font-size: 14px; letter-spacing: .75px; text-transform: uppercase; line-height: 16px;
+  }
+  .btn--more { width: 100%; background: var(--blue-50); color: var(--blue); }
+  .btn--more img { width: 20px; height: 20px; }
+  .btn--cancel { width: 84px; color: var(--red); }
+  .btn--create { width: 81px; background: var(--blue); color: #fff; }
+  .buttons { display: flex; justify-content: flex-end; gap: 12px; }
+  .ripple { position: absolute; border-radius: 50%; pointer-events: none; }
+
+  /* Cursor */
+  .cursor { position: absolute; left: 0; top: 0; width: 19px; height: 24px; z-index: 20; transform-origin: 6px 1px; }
+  .cursor img { width: 19px; height: 24px; display: block; }
+  .click { position: absolute; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; border: 2px solid var(--blue); z-index: 19; pointer-events: none; }
+
+
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+    <img class="bg" src="assets/schedule-clean.png" alt="">
+
+    <div class="appt" id="appt"><div class="appt__ring" id="apptRing"></div><b>Jerel Parocha, 35</b><i>(308) 555-0121</i></div>
+    <div id="hover"></div>
+
+    <div class="menu" id="menu">
+      <div class="menu__band" id="menuBand"></div>
+      <div class="menu__item" style="top:12px;color:#1c63ed"><img src="assets/menu-play.svg" alt="">Start Visit</div>
+      <div class="menu__item" style="top:60px"><i class="menu__dot" style="--b:#dae6fc;--c:rgba(28,99,237,.16)"></i>Patient Confirmed</div>
+      <div class="menu__item" style="top:108px"><i class="menu__dot" style="--b:rgba(151,71,255,.16);--c:rgba(151,71,255,.16)"></i>Patient Arrived</div>
+      <div class="menu__item" style="top:156px"><i class="menu__dot" style="--b:rgba(43,176,31,.16);--c:rgba(43,176,31,.16)"></i>Complete Visit</div>
+      <div class="menu__item" style="top:204px"><img src="assets/menu-admission.svg" alt="">Convert to Admission</div>
+      <div class="menu__item" style="top:252px"><img src="assets/menu-launch.svg" alt="">View Patient Profile</div>
+      <div class="menu__item" style="top:300px"><img src="assets/menu-edit.svg" alt="">Edit</div>
+      <div class="menu__item" style="top:348px;color:#ed1c24"><img src="assets/menu-cancel.svg" alt="">Cancel</div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <div class="popup" id="popup">
+      <div class="popup__title"><h1>New Visit</h1><img src="assets/close.svg" width="36" height="36" alt=""></div>
+      <div class="main" id="main">
+        <div class="collapse" id="cSearch"><div class="line" data-fields="search"></div></div>
+
+        <div class="collapse" id="cPatient"><div class="stack">
+          <div class="line" data-fields="first last"></div>
+          <div class="line" data-fields="pid gender birthday phone"></div>
+        </div></div>
+        <div class="collapse" id="cExtra"><div style="padding-top:12px"><div class="line" data-fields="email city"></div></div></div>
+        <div class="collapse" id="cGap"></div>
+        <div class="collapse" id="cInsurance"><div style="padding-bottom:16px">
+          <div class="headline">Insurance Information</div>
+          <div class="line" data-fields="billing provider insNumber plan"></div>
+        </div></div>
+        <div class="collapse" id="cMore"><div style="padding-bottom:16px">
+          <div class="btn btn--more" id="moreBtn"><span id="moreLabel">Show more info</span><img id="moreChevron" src="assets/chevron-blue.svg" alt=""></div>
+        </div></div>
+
+        <div id="visit" style="padding-bottom:16px">
+          <div class="headline">Visit Information</div>
+          <div class="stack">
+            <div class="line" data-fields="doctor date"></div>
+            <div class="line" data-fields="service"></div>
+            <div class="line" data-fields="timeslot price visitType subType"></div>
+            <div class="line" data-fields="reason"></div>
+          </div>
+        </div>
+        <div class="buttons">
+          <div class="btn btn--cancel">Cancel</div>
+          <div class="btn btn--create" id="createBtn">Create</div>
+        </div>
+
+        <div class="dd" id="ddPatient" style="top:56px;height:176px">
+          <div class="dd__band" id="ddPatientBand"></div>
+          <div class="dd__item dd__item--link" style="top:12px">+ Add New Patient</div>
+          <div class="dd__item" style="top:56px">Jerel Applebaum, 13/04/1964</div>
+          <div class="dd__item" style="top:100px">Jerel Grey, 09/01/2001</div>
+          <div class="dd__item" style="top:144px">Jerel Parocha, 22/07/1988</div>
+        </div>
+        <div class="dd" id="ddService" style="height:177px">
+          <div class="dd__band" id="ddServiceBand"></div>
+          <div class="dd__item" style="top:16px">Regular Appointment</div>
+          <div class="dd__divider" style="top:52px"></div>
+          <div class="dd__item dd__item--muted" style="top:69px">Services not linked to this Doctor:</div>
+          <div class="dd__item" style="top:105px;padding-left:12px">Appointment Classique</div>
+          <div class="dd__item" style="top:141px;padding-left:12px">Important Appointment</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="click" id="click"></div>
+    <div class="cursor" id="cursor"><img src="assets/cursor-hand.png" alt=""></div>
+  </div>
+
+<script src="../_lib/motion.js"></script>
+<script src="../_lib/player.js"></script>
+<script>
+// ---------- Data (from the Figma frames) ----------
+const ICON = {
+  search: 'assets/search.svg', dropdown: 'assets/dropdown.svg', calendar: 'assets/calendar.svg',
+  dropdownMuted: 'assets/dropdown-muted.svg', calendarMuted: 'assets/calendar-muted.svg',
+};
+// value: what the field ends up holding; ro: read-only grey field.
+const FIELDS = {
+  search:    { label: 'Search Patient’s Name or Phone Number', req: true, icon: 'search' },
+  first:     { label: 'First Name', req: true, value: 'Jerel', ro: true },
+  last:      { label: 'Last Name', req: true, value: 'Parocha', ro: true },
+  pid:       { label: 'ID', value: '14097856-HJ-27', ro: true },
+  gender:    { label: 'Gender', req: true, value: 'Male', ro: true, icon: 'dropdownMuted' },
+  birthday:  { label: 'Birthday', req: true, value: '22/07/1988', ro: true, icon: 'calendarMuted' },
+  phone:     { label: 'Phone', req: true, value: '(308) 555-0121', ro: true },
+  email:     { label: 'Email', value: 'jerel.parocha@example.com', ro: true },
+  city:      { label: 'City', value: 'Kerlukeshire', ro: true },
+  billing:   { label: 'Billing Type', value: 'Insurance Provider', ro: true, icon: 'dropdownMuted' },
+  provider:  { label: 'Insurance Provider', value: 'SecureLife Insurance', ro: true, icon: 'search', iconMuted: true },
+  insNumber: { label: 'Insurance Number', value: '432978657852694', ro: true },
+  plan:      { label: 'Policy Plan', value: 'Standard', ro: true, icon: 'dropdownMuted' },
+  // Doctor and timeslot follow the clicked slot (John Appleseed, 13:15), not the Figma sample data.
+  doctor:    { label: 'Doctor', req: true, value: 'John Appleseed', icon: 'dropdown' },
+  date:      { label: 'Date', req: true, value: '17/04/2024', icon: 'calendar' },
+  service:   { label: 'Service Name', req: true, value: 'Regular Appointment', icon: 'dropdown' },
+  timeslot:  { label: 'Timeslot', req: true, value: '1:15 - 1:30', icon: 'dropdown' },
+  price:     { label: 'Price', value: '$12.00', ro: true },
+  visitType: { label: 'Visit Type', value: 'Prescription Refill', icon: 'dropdown' },
+  subType:   { label: 'Sub Type', value: 'Maternity', icon: 'dropdown' },
+  reason:    { label: 'Reason / Purpose' },
+};
+
+// Schedule grid from the Figma table: 140×60 cells from (312, 308); a block sits 6px inside its cells.
+// Visible part only: columns 12:00–14:30, doctor rows Eric Lieberman … Ulrich Colbert.
+const GRID = { x: 312, y: 308, w: 140, h: 60, cols: 11, rows: 12 };
+// Status → hover border, the status accent from the legend (u unconfirmed, c confirmed, w waiting,
+// o ongoing, d completed, x conflict). Ongoing's legend dot is near-white, so it takes a neutral grey.
+const ACCENT = { u: '#fca808', c: '#3b69ff', w: '#9f45ff', o: '#9e9e9e', d: '#25c316', x: '#ed1c3f' };
+// [row, first column, columns, status], read off the Figma frame.
+const BLOCKS = [
+  [0, 1, 4, 'o'], [0, 5, 1, 'c'], [0, 6, 3, 'u'], [0, 9, 1, 'c'], [0, 10, 1, 'u'],
+  [1, 0, 2, 'd'], [1, 2, 3, 'o'], [1, 5, 2, 'w'],
+  [2, 0, 3, 'd'], [2, 6, 3, 'c'], [2, 9, 2, 'c'],
+  [3, 0, 2, 'd'], [3, 3, 4, 'o'], [3, 7, 3, 'c'], [3, 10, 1, 'x'],
+  [4, 0, 1, 'd'], [4, 1, 4, 'o'], [4, 5, 1, 'w'], [4, 6, 3, 'u'], [4, 10, 1, 'c'],
+  [5, 0, 2, 'd'], [5, 2, 3, 'o'], [5, 5, 2, 'u'], [5, 7, 4, 'c'],
+  [6, 0, 3, 'd'], [6, 3, 2, 'o'], [6, 5, 1, 'w'], [6, 9, 2, 'c'],
+  [7, 2, 1, 'd'], [7, 3, 4, 'o'], [7, 7, 3, 'c'], [7, 10, 1, 'c'],
+  [8, 0, 2, 'd'], [8, 2, 1, 'd'], [8, 3, 1, 'o'], [8, 4, 2, 'c'], [8, 6, 2, 'u'], [8, 8, 1, 'w'], [8, 10, 1, 'x'],
+  [9, 0, 2, 'd'], [9, 5, 4, 'c'], [9, 9, 2, 'c'],
+  [10, 1, 1, 'd'], [10, 2, 3, 'o'], [10, 5, 2, 'w'], [10, 7, 1, 'c'], [10, 8, 1, 'w'], [10, 9, 2, 'u'],
+  [11, 0, 2, 'd'], [11, 2, 1, 'd'], [11, 3, 1, 'o'], [11, 4, 2, 'c'], [11, 8, 1, 'u'], [11, 9, 1, 'w'],
+];
+const SLOT = [2, 5];            // John Appleseed, 13:15: where the new visit goes
+const NEW_BLOCK = BLOCKS.length; // index of the booked visit once it is in the schedule
+
+// ---------- Timeline (seconds) ----------
+// Each beat is named so it is easy to talk about: "make `pick` slower", "move `more` later".
+const T = {
+  click1: 1.6,                           // click the empty slot (hover follows the cursor, see hoverAt)
+  open: 1.7,                             // overlay + popup in
+  focusSearch: 1.9, typeSearch: 2.6,     // search field focused, "Jerel" typed
+  ddPatient: 3.45, click2: 4.7,          // results drop, pick Jerel Parocha
+  pick: 4.8,                             // search collapses into the patient card
+  fillVisit: 5.5,                        // doctor, date, timeslot come from the slot
+  click3: 6.6, typeService: 6.8,         // focus service, type "Appo"
+  ddService: 7.45, click4: 8.45,         // services drop, pick Regular Appointment
+  fillService: 8.7,                      // price, visit type, sub type follow the service
+  click5: 9.95, more: 10.0,              // show more info
+  click6: 12.45, close: 12.5,            // create
+  appt: 12.85,                           // the visit lands in the schedule, Waiting (purple)
+  click7: 14.3, menu: 14.35,             // click the visit, its menu opens
+  click8: 15.55, confirm: 15.6,          // Patient Confirmed: the visit turns blue
+  loopOut: 17.4,
+  end: 18.2,
+};
+const TYPE_STEP = 0.14;
+const CLICKS = [T.click1, T.click2, T.click3, T.click4, T.click5, T.click6, T.click7, T.click8];
+
+const START = [1480, 800];
+// [from, to, x, y] — the cursor hotspot travels to (x, y) between from and to.
+const MOVES = [
+  [0.35, 1.35, 1086, 462],   // empty slot, John Appleseed 13:15
+  [2.0, 2.55, 1010, 404],    // rests below the search field while typing
+  [3.85, 4.55, 846, 560],    // Jerel Parocha row
+  [5.75, 6.45, 905, 632],    // Service Name field
+  [7.8, 8.3, 772, 683],      // Regular Appointment
+  [9.2, 9.8, 1000, 454],     // Show more info
+  [11.6, 12.3, 1300, 934],   // Create
+  [13.4, 14.1, 1084, 460],   // the new visit
+  [14.75, 15.35, 1213, 556], // Patient Confirmed
+  [15.85, 16.4, 1100, 462],  // back over the visit, now blue
+  [T.loopOut - 0.1, T.end - 0.1, ...START],
+];
+
+// ---------- Build fields ----------
+const $ = (id) => document.getElementById(id);
+const F = {};
+for (const line of document.querySelectorAll('[data-fields]')) {
+  for (const key of line.dataset.fields.split(' ')) {
+    const d = FIELDS[key];
+    const el = document.createElement('div');
+    el.className = 'tf' + (d.ro ? ' tf--ro' : '') + (d.icon ? '' : ' tf--noicon');
+    el.innerHTML = `<div class="tf__box"></div>` +
+      (d.icon ? `<img class="tf__icon" src="${ICON[d.icon]}" alt=""${d.iconMuted ? ' style="opacity:.42"' : ''}>` : '') +
+      `<div class="tf__label"><span>${d.label}</span>${d.req ? '<span>*</span>' : ''}</div>` +
+      `<div class="tf__value"><span class="tf__text"></span><i class="tf__caret"></i></div>`;
+    line.appendChild(el);
+    F[key] = {
+      el, d, box: el.querySelector('.tf__box'), label: el.querySelector('.tf__label'),
+      value: el.querySelector('.tf__value'), text: el.querySelector('.tf__text'), caret: el.querySelector('.tf__caret'),
+    };
+  }
+}
+
+// One field's look at a moment: float 0..1 lifts the label, focus draws the dark border,
+// flash tints the box when the app fills it in, show fades/raises the value.
+function setField(f, { float = 0, focus = false, text = '', caret = false, flash = 0, show = 1, appear = 1 }) {
+  const ro = f.d.ro;
+  f.el.style.opacity = appear;
+  f.el.style.transform = appear < 1 ? `translateY(${(1 - appear) * 8}px)` : '';
+  f.box.style.borderWidth = focus ? '2px' : '1px';
+  f.box.style.borderColor = focus ? 'rgba(0,0,0,.42)' : 'rgba(0,0,0,.08)';
+  // The popup is white, so the read-only 4% black reads as #f5f5f5.
+  const base = ro ? [245, 245, 245] : [255, 255, 255];
+  const c = base.map((v, i) => Math.round(mix(v, [224, 232, 255][i], flash)));
+  f.box.style.background = `rgb(${c})`;
+  // Label: inside the field at 14px when empty, 10px on the border when filled.
+  // Real font-size steps rather than a scale, so the tracking matches Figma at both ends.
+  const k = io(float);
+  Object.assign(f.label.style, {
+    top: mix(20, 0, k) + 'px', fontSize: mix(14, 10, k) + 'px',
+    lineHeight: mix(20, 12, k) + 'px', letterSpacing: mix(.25, .4, k) + 'px',
+  });
+  f.label.style.background = `rgba(255,255,255,${k})`;
+  f.label.style.color = ro ? 'rgba(0,0,0,.6)' : '#000';
+  f.text.textContent = text;
+  f.value.style.opacity = show;
+  f.value.style.transform = show < 1 ? `translateY(${(1 - show) * 6}px)` : '';
+  f.caret.style.visibility = caret ? 'visible' : 'hidden';
+}
+
+const typed = (t, at, word) => word.slice(0, clamp(Math.floor((t - at) / TYPE_STEP) + 1, 0, word.length));
+const blink = (t, since) => t < since || Math.floor((t - since) * 2) % 2 === 0;
+
+// ---------- Cursor ----------
+const cursorAt = cursorPath(START, MOVES);
+// ---------- Render ----------
+const stage = $('stage'), popup = $('popup'), main = $('main');
+const rect = (el) => {
+  const s = stage.getBoundingClientRect(), r = el.getBoundingClientRect(), z = s.width / 1920;
+  return { x: (r.left - s.left) / z, y: (r.top - s.top) / z, w: r.width / z, h: r.height / z };
+};
+const inside = (r, x, y) => x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h;
+
+function ripple(el, t, at, color) {
+  let r = el.querySelector('.ripple');
+  if (!r) { r = document.createElement('i'); r.className = 'ripple'; el.prepend(r); }
+  const k = p(t, at, at + .5);
+  const on = t >= at && k < 1;
+  const w = el.offsetWidth * 2.2;
+  Object.assign(r.style, {
+    display: on ? 'block' : 'none', width: w + 'px', height: w + 'px',
+    left: (el.offsetWidth - w) / 2 + 'px', top: (el.offsetHeight - w) / 2 + 'px',
+    background: color, opacity: .35 * (1 - k), transform: `scale(${outC(k)})`,
+  });
+}
+
+// ---------- Schedule hover ----------
+// What the cursor hovers at moment s: an appointment ('b:index') or an empty cell ('c:row:col').
+// Nothing while the popup's overlay is up.
+function hoverAt(s) {
+  if (s >= T.open && s < T.close + .3) return null;
+  // While the visit menu is open nothing under it reacts (as in Figma 160:36385, the visit keeps its plain border).
+  if (s >= T.click7 && s < T.click8 + .1) return null;
+  const [x, y] = cursorAt(s);
+  const c = Math.floor((x - GRID.x) / GRID.w), r = Math.floor((y - GRID.y) / GRID.h);
+  if (c < 0 || r < 0 || c >= GRID.cols || r >= GRID.rows) return null;
+  if (r === SLOT[0] && c === SLOT[1] && s >= T.appt && s < T.loopOut + .2) return 'b:' + NEW_BLOCK;
+  const i = BLOCKS.findIndex(([br, bc, n]) => br === r && c >= bc && c < bc + n);
+  return i >= 0 ? 'b:' + i : `c:${r}:${c}`;
+}
+// Hover fades in and out over HOVER_FADE: each target's strength is the share of recent samples
+// it was hovered in. Keeps render(t) a pure function of t, so scrubbing still works.
+const HOVER_FADE = .14, HOVER_SAMPLES = 8;
+function hoverWeights(t) {
+  const w = new Map();
+  for (let i = 0; i < HOVER_SAMPLES; i++) {
+    const id = hoverAt(t - (HOVER_FADE * i) / (HOVER_SAMPLES - 1));
+    if (id) w.set(id, (w.get(id) || 0) + 1 / HOVER_SAMPLES);
+  }
+  return w;
+}
+const hoverLayer = $('hover');
+const pool = (n, make) => Array.from({ length: n }, () => hoverLayer.appendChild(make()));
+const ghosts = pool(3, () => {
+  const g = document.createElement('div');
+  g.className = 'ghost';
+  g.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v14M3 10h14" stroke="#3b69ff" stroke-width="2"/></svg><span>New<br>Appointment</span>';
+  return g;
+});
+const highlights = pool(3, () => Object.assign(document.createElement('div'), { className: 'hl' }));
+
+function renderHover(t) {
+  const items = [...hoverWeights(t)].sort((a, b) => b[1] - a[1]);
+  const cells = items.filter(([id]) => id[0] === 'c'), blocks = items.filter(([id]) => id[0] === 'b');
+  ghosts.forEach((g, i) => {
+    const it = cells[i];
+    g.style.display = it ? '' : 'none';
+    if (!it) return;
+    const [, r, c] = it[0].split(':').map(Number);
+    const pressed = r === SLOT[0] && c === SLOT[1] ? bump(t, T.click1, .2) : 0;
+    Object.assign(g.style, {
+      left: GRID.x + 6 + c * GRID.w + 'px', top: GRID.y + 6 + r * GRID.h + 'px',
+      opacity: it[1], transform: `scale(${1 - .03 * pressed})`,
+    });
+  });
+  highlights.forEach((h, i) => {
+    const it = blocks[i];
+    h.style.display = it ? '' : 'none';
+    if (!it) return;
+    const n = +it[0].slice(2);
+    const [r, c, span, status] = n === NEW_BLOCK ? [...SLOT, 1, t >= T.confirm ? 'c' : 'w'] : BLOCKS[n];
+    Object.assign(h.style, {
+      left: GRID.x + 6 + c * GRID.w + 'px', top: GRID.y + 6 + r * GRID.h + 'px',
+      width: span * GRID.w - 12 + 'px', borderColor: ACCENT[status], opacity: it[1],
+    });
+  });
+}
+
+function render(t) {
+  // Schedule: hover states, then the booked visit.
+  renderHover(t);
+
+  const a = p(t, T.appt, T.appt + .45);
+  const out = p(t, T.loopOut, T.loopOut + .4);
+  $('appt').style.opacity = clamp(a * 3) * (1 - out);
+  $('appt').style.transform = `scale(${mix(.86, 1, outBack(a, 1.2))})`;
+  // Waiting (purple, like Esther Howard above) until Patient Confirmed turns it blue.
+  const cf = io(p(t, T.confirm, T.confirm + .35));
+  const tone = (a, b) => `rgb(${a.map((v, i) => Math.round(mix(v, b[i], cf)))})`;
+  $('appt').style.background = tone([238, 225, 255], [221, 230, 255]);
+  $('appt').style.borderColor = tone([224, 200, 255], [151, 181, 255]);
+  // A ring goes out when the visit lands and again when it is confirmed, in its new colour.
+  const ringAt = (at, rgb) => {
+    const k = p(t, at, at + 1);
+    return k > 0 && k < 1 ? `0 0 0 ${outC(k) * 14}px rgba(${rgb},${.35 * (1 - k)})` : '';
+  };
+  $('apptRing').style.boxShadow = ringAt(T.appt + .1, '159,69,255') || ringAt(T.confirm, '59,105,255') || 'none';
+
+  // Visit menu: grows from its top-left corner, rows highlight under the cursor.
+  const menu = $('menu');
+  const mk = outQ(p(t, T.menu, T.menu + .22)) * (1 - p(t, T.click8 + .05, T.click8 + .2));
+  menu.style.display = mk > 0 ? '' : 'none';
+  if (mk > 0) {
+    menu.style.opacity = clamp(mk * 1.5);
+    menu.style.transform = `scale(${mix(.92, 1, mk)})`;
+    const [mx, my] = cursorAt(t), y = my - 479;
+    const row = mx >= 1037 && mx <= 1241 && y >= 3 && y < 381 ? Math.floor((y - 3) / 48) : -1;
+    $('menuBand').style.display = row < 0 ? 'none' : '';
+    $('menuBand').style.top = 3 + row * 48 + 'px';
+  }
+
+  // Overlay and popup in/out.
+  const open = p(t, T.open, T.open + .45), close = p(t, T.close, T.close + .3);
+  $('overlay').style.opacity = (outC(p(t, T.open, T.open + .3)) - outC(p(t, T.close, T.close + .4)));
+  const shown = t >= T.open && close < 1;
+  popup.style.display = shown ? '' : 'none';
+  popup.style.opacity = clamp(open * 2.5) * (1 - outC(close));
+  popup.style.transform = `translateY(${mix(24, 0, outQ(open))}px) scale(${mix(.96, 1, outQ(open)) - .02 * outC(close)})`;
+
+  // Layout morphs: k1 swaps the search for the patient card, k2 opens "more info".
+  const k1 = io(p(t, T.pick, T.pick + .55));
+  const k2 = io(p(t, T.more, T.more + .55));
+  $('cSearch').style.height = 76 * (1 - k1) + 'px';
+  $('cPatient').style.height = 132 * k1 + 'px';
+  $('cExtra').style.height = 72 * k2 + 'px';
+  $('cGap').style.height = 16 * k1 + 'px';
+  $('cInsurance').style.height = 114 * k2 + 'px';
+  $('cMore').style.height = 56 * k1 + 'px';
+  $('cSearch').firstElementChild.style.opacity = 1 - p(t, T.pick, T.pick + .2);
+  const H = 32 + 40 + 24 + 446 + 128 * k1 + 186 * k2 + 32;
+  popup.style.top = (1080 - H) / 2 + 'px';
+
+  // Search
+  const searchFocus = t >= T.focusSearch && t < T.pick;
+  setField(F.search, {
+    float: p(t, T.focusSearch, T.focusSearch + .18), focus: searchFocus,
+    text: typed(t, T.typeSearch, 'Jerel'),
+    caret: searchFocus && blink(t, T.typeSearch + 5 * TYPE_STEP),
+  });
+
+  // Patient card fields come in one after another.
+  ['first', 'last', 'pid', 'gender', 'birthday', 'phone'].forEach((key, i) => {
+    const s = outC(p(t, T.pick + .15 + i * .05, T.pick + .45 + i * .05));
+    setField(F[key], { float: 1, text: F[key].d.value, appear: s });
+  });
+  ['email', 'city', 'billing', 'provider', 'insNumber', 'plan'].forEach((key, i) => {
+    const s = outC(p(t, T.more + .12 + i * .05, T.more + .42 + i * .05));
+    setField(F[key], { float: 1, text: F[key].d.value, appear: s });
+  });
+
+  // Auto-filled from the slot or the service: label lifts, value rises in, box blinks blue.
+  const autofill = (key, at) => {
+    const k = p(t, at, at + .25);
+    setField(F[key], {
+      float: k, text: t >= at ? F[key].d.value : '', show: outC(k),
+      flash: t >= at ? 1 - p(t, at + .15, at + .9) : 0,
+    });
+  };
+  autofill('doctor', T.fillVisit);
+  autofill('date', T.fillVisit + .12);
+  autofill('timeslot', T.fillVisit + .24);
+  autofill('price', T.fillService);
+  autofill('visitType', T.fillService + .12);
+  autofill('subType', T.fillService + .24);
+  setField(F.reason, {});
+
+  // Service: typed, then picked from the list.
+  const serviceFocus = t >= T.click3 && t < T.click4;
+  const picked = t >= T.click4;
+  setField(F.service, {
+    float: p(t, T.click3, T.click3 + .18), focus: serviceFocus,
+    text: picked ? F.service.d.value : typed(t, T.typeService, 'Appo'),
+    caret: serviceFocus && blink(t, T.typeService + 4 * TYPE_STEP),
+    flash: picked ? .6 * (1 - p(t, T.click4 + .05, T.click4 + .7)) : 0,
+  });
+
+  const [cx, cy] = cursorAt(t);
+
+  // Dropdowns: unfold from the field, rows highlight under the cursor.
+  const dropdown = (el, band, at, closeAt, rows) => {
+    const k = outC(p(t, at, at + .25)) * (1 - p(t, closeAt, closeAt + .15));
+    el.style.display = k > 0 ? '' : 'none';
+    el.style.opacity = clamp(k * 1.6);
+    // The reveal clip reaches 24px past the edges so the shadow isn't cut off.
+    el.style.clipPath = `inset(-24px -24px ${mix(el.offsetHeight, -24, k)}px -24px)`;
+    el.style.transform = `translateY(${(1 - k) * -6}px)`;
+    if (k <= 0) return;
+    const r = rect(el), y = cy - r.y;
+    const row = inside(r, cx, cy) ? rows.find((top) => y >= top - 11 && y < top + 31) : undefined;
+    band.style.display = row === undefined ? 'none' : '';
+    if (row !== undefined) band.style.top = row - 11 + 'px';
+  };
+  dropdown($('ddPatient'), $('ddPatientBand'), T.ddPatient, T.click2 + .05, [12, 56, 100, 144]);
+  $('ddService').style.top = F.service.el.offsetTop + 56 + 'px';
+  dropdown($('ddService'), $('ddServiceBand'), T.ddService, T.click4 + .05, [16, 105, 141]);
+
+  // Show / hide more info
+  $('moreLabel').textContent = t < T.more + .12 ? 'Show more info' : 'Hide more info';
+  $('moreChevron').style.transform = `rotate(${180 * io(p(t, T.more, T.more + .35))}deg)`;
+  const overMore = inside(rect($('moreBtn')), cx, cy) && t < T.close;
+  $('moreBtn').style.background = overMore ? '#e4eaff' : '';
+  ripple($('moreBtn'), t, T.click5, '#3b69ff');
+
+  const overCreate = inside(rect($('createBtn')), cx, cy) && t < T.close;
+  $('createBtn').style.background = overCreate ? '#2f5ae6' : '';
+  ripple($('createBtn'), t, T.click6, '#fff');
+
+  // Cursor + click ring
+  const press = Math.max(...CLICKS.map((c) => bump(t, c, .18)));
+  const cur = $('cursor');
+  cur.style.transform = `translate(${cx - 6}px, ${cy - 1}px) scale(${1 - .14 * press})`;
+  cur.style.opacity = 1;
+  const last = CLICKS.filter((c) => c <= t).pop();
+  const ck = last === undefined ? 1 : p(t, last, last + .45);
+  const ring = $('click');
+  ring.style.display = ck < 1 ? '' : 'none';
+  if (ck < 1) {
+    ring.style.left = cx + 'px'; ring.style.top = cy + 'px';
+    ring.style.opacity = .5 * (1 - ck);
+    ring.style.transform = `scale(${mix(.3, 1, outC(ck))})`;
+  }
+}
+
+// ---------- Player ----------
+MotionPlayer.mount({
+  stage, duration: T.end, render,
+  markers: [['slot', T.click1], ['search', T.focusSearch], ['pick', T.pick], ['service', T.click3],
+    ['more', T.more], ['create', T.click6], ['menu', T.click7], ['loop', T.loopOut]],
+  refs: [['Schedule', 'src/1-schedule.png'], ['Search', 'src/2-search.png'], ['Service', 'src/4-service.png'],
+    ['More info', 'src/3-full.png'], ['Visit menu', 'src/5-menu.png']],
+  poster: 11.2, // the full form, filled in
+});
+</script>
+</body>
+</html>
