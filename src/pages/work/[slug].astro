@@ -307,6 +307,9 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
 
   .case-facts {
     margin: 0;
+    display: grid;
+    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    gap: 20px 24px;
   }
   .case-stats + .case-motion {
     margin-top: 24px;
@@ -314,9 +317,6 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
   /* Results and the product loop come first, right under the lead; the facts follow. */
   * + .case-facts {
     margin-top: clamp(56px, 7vw, 88px);
-    display: grid;
-    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
-    gap: 20px 24px;
   }
   .case-facts div {
     border-top: 1px solid var(--rule);

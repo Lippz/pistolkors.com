@@ -177,9 +177,6 @@ Receptionists create an appointment for a specific doctor in just a few clicks, 
 <figcaption class="eyebrow">Walk-ins in their own queue, next to the schedule</figcaption>
 </figure>
 
-<details class="more">
-<summary><span class="more__show">Show the other 3 flows</span><span class="more__hide">Hide the other 3 flows</span></summary>
-
 #### A medical record you can scan in seconds
 
 The electronic medical record is split into sections and subsections, so a doctor jumps straight to what matters in an emergency.
@@ -206,8 +203,6 @@ Finance reports open on six numbers — billed, collected, outstanding, collecti
 <video src="../../motion/linkhms-reports.mp4" poster="../../motion/linkhms-reports.jpg" width="1920" height="1080" muted loop playsinline preload="metadata" aria-label="The finance overview report: the pointer runs along the billed versus collected trend and over revenue by department, the payment mix and the claim pipeline, scrolls to the invoices that need attention, opens one invoice, then returns to the report from the main menu" data-label="The finance overview report: the pointer runs along the billed versus collected trend and over revenue by department, the payment mix and the claim pipeline, scrolls to the invoices that need attention, opens one invoice, then returns to the report from the main menu"></video>
 <figcaption class="eyebrow">From a chart to the invoice behind it</figcaption>
 </figure>
-
-</details>
 
 ## Patient portal
 
