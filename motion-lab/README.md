@@ -22,6 +22,8 @@ show the same thing.
 - `linkhms-medical-record/`: Summary → History → Administration Chart → Vaccinations (an overdue
   dose given from the cell menu) → Summary, through the record's section menu. One patient, a
   5-month-old, so the data agrees across the four screens.
+- `linkhms-patient-photo/`: Records history → the photo placeholder next to the name opens the photo
+  dialog: a wrong file format (error), the photo, Save (success), close, the photo next to the name.
 
 ## Workflow
 

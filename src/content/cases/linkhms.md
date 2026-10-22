@@ -209,19 +209,10 @@ The electronic medical record is split into sections and subsections, so a docto
 
 A photo is added right from the patient’s record: upload a file or take one with the device camera, check it, then save. If the file has the wrong format, the dialog says which formats work, and it warns before unsaved changes are lost.
 
-<div class="carousel">
-
-![Patient record history with the cursor on the patient’s photo placeholder next to the name](../../assets/cases/linkhms/photo-record.webp "From the record")
-
-![Patient photo dialog over the record with a placeholder, Upload Photo and Open Camera buttons and a disabled Save](../../assets/cases/linkhms/photo-empty.webp "Empty")
-
-![Patient photo dialog with a chosen photo, a delete icon, Take New and an active Save button](../../assets/cases/linkhms/photo-selected.webp "Photo chosen")
-
-![Patient photo dialog after saving, with a success message](../../assets/cases/linkhms/photo-saved.webp "Saved")
-
-![Patient photo dialog with an invalid file format error listing the accepted formats](../../assets/cases/linkhms/photo-error.webp "Wrong format")
-
-</div>
+<figure class="case-motion" data-lightbox-group>
+<video src="../../motion/linkhms-patient-photo.mp4" poster="../../motion/linkhms-patient-photo.jpg" width="1920" height="1080" muted loop playsinline preload="metadata" aria-label="The patient’s photo added from the record: a file in the wrong format shows which formats work, the next upload shows the photo, Save confirms it, and the photo appears next to the patient’s name" data-label="The patient’s photo added from the record: a file in the wrong format shows which formats work, the next upload shows the photo, Save confirms it, and the photo appears next to the patient’s name"></video>
+<figcaption class="eyebrow">Wrong format, upload, save, without leaving the record</figcaption>
+</figure>
 
 #### Reports that point to the problem
 
