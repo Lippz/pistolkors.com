@@ -17,6 +17,8 @@ show the same thing.
 - `_template/`: a starter page.
 - `linkhms-new-visit/`: the first full example (schedule → New Visit form → confirmed visit).
 - `linkhms-clinic-signup/`: Clinic Registration form → Complete Your Clinic Set Up (progress to 40%).
+- `linkhms-live-queue/`: Schedule → Live Queue (walk-ins, a separate queue), one visit completed and
+  the next started, back to the unchanged schedule. `?figma` lays the queue out with the Figma sample data for D.
 
 ## Workflow
 

@@ -188,15 +188,10 @@ After sign-up, a short guided tour sets up the first department, service and use
 
 Receptionists create an appointment for a specific doctor in just a few clicks, straight from the schedule. Not every patient books ahead, though: the Live Queue shows the day’s visits by status — waiting, ongoing, completed or cancelled — with urgent cases marked in red, and every row can start or complete a visit, convert it to an admission or open the patient’s profile. A walk-in is added in the same New Visit dialog, which finds the patient by name or phone number.
 
-<div class="carousel">
-
-![Doctors schedule grid with colour-coded appointment statuses and a new appointment slot](../../assets/cases/linkhms/schedule.webp "Schedule")
-
-![New Visit dialog with patient details, doctor, date and a service search](../../assets/cases/linkhms/new-visit.webp "New visit")
-
-![Live Queue: today’s visits with urgency, doctor, service and status, and a row menu to start or complete a visit, convert it to an admission, edit or cancel it](../../assets/cases/linkhms/live-queue.webp "Live Queue")
-
-</div>
+<figure class="case-motion" data-lightbox-group>
+<video src="../../motion/linkhms-live-queue.mp4" poster="../../motion/linkhms-live-queue.jpg" width="1920" height="1080" muted loop playsinline preload="metadata" aria-label="From the schedule to the Live Queue of walk-ins: a doctor’s ongoing visit is completed from its row menu, her next waiting patient’s visit is started, and the schedule stays as it was" data-label="From the schedule to the Live Queue of walk-ins: a doctor’s ongoing visit is completed from its row menu, her next waiting patient’s visit is started, and the schedule stays as it was"></video>
+<figcaption class="eyebrow">Walk-ins in their own queue, next to the schedule</figcaption>
+</figure>
 
 <details class="more">
 <summary><span class="more__show">Show the other 7 flows</span><span class="more__hide">Hide the other 7 flows</span></summary>
