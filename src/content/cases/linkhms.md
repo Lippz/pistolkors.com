@@ -194,7 +194,7 @@ Receptionists create an appointment for a specific doctor in just a few clicks, 
 </figure>
 
 <details class="more">
-<summary><span class="more__show">Show the other 4 flows</span><span class="more__hide">Hide the other 4 flows</span></summary>
+<summary><span class="more__show">Show the other 3 flows</span><span class="more__hide">Hide the other 3 flows</span></summary>
 
 #### A medical record you can scan in seconds
 
@@ -222,20 +222,6 @@ Finance reports open on six numbers — billed, collected, outstanding, collecti
 <video src="../../motion/linkhms-reports.mp4" poster="../../motion/linkhms-reports.jpg" width="1920" height="1080" muted loop playsinline preload="metadata" aria-label="The finance overview report: the pointer runs along the billed versus collected trend and over revenue by department, the payment mix and the claim pipeline, scrolls to the invoices that need attention, opens one invoice, then returns to the report from the main menu" data-label="The finance overview report: the pointer runs along the billed versus collected trend and over revenue by department, the payment mix and the claim pipeline, scrolls to the invoices that need attention, opens one invoice, then returns to the report from the main menu"></video>
 <figcaption class="eyebrow">From a chart to the invoice behind it</figcaption>
 </figure>
-
-#### A subscription that grows with the team
-
-The price is counted per seat: an administrator, plus every doctor, nurse, receptionist or lab worker added in HR. A doctor working alone pays for one seat and still gets every feature; a clinic adds seats as it hires. The plan screen compares monthly and annual billing side by side, and a notice warns that a newly added user is charged on the next invoice.
-
-<div class="carousel">
-
-![Subscription payment summary: seats per role with totals, a notice that new users are charged on the next invoice and a link to manage users in HR](../../assets/cases/linkhms/subscription-summary.webp "Payment summary")
-
-![Subscription plan: seats per role priced monthly and annually side by side, with the current plan marked and an upgrade to annual billing](../../assets/cases/linkhms/subscription-plan.webp "Monthly or annual")
-
-![Add Payment Method dialog over the payment summary: continue to payment with a card or choose an alternative payment method, with ways to get help](../../assets/cases/linkhms/subscription-payment.webp "Payment method")
-
-</div>
 
 </details>
 
