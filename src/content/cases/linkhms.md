@@ -164,7 +164,7 @@ LinkHMS covers a clinic’s whole day in nine areas, from the first booking at t
 
 ## Key decisions
 
-### Nine flows that run a clinic
+### Eight flows that run a clinic
 
 With the identity and the components in place, here are the flows where speed mattered most.
 
@@ -194,24 +194,7 @@ Receptionists create an appointment for a specific doctor in just a few clicks, 
 </figure>
 
 <details class="more">
-<summary><span class="more__show">Show the other 7 flows</span><span class="more__hide">Hide the other 7 flows</span></summary>
-
-#### Patients at the centre, with the right to be forgotten
-
-The patient is the main entity of the system, and the clinic owns its patients’ data — data privacy came up in research as a need, not a nice-to-have.
-
-<div class="cards cards--answer">
-<div><b>Whose call it is</b>The clinic answers for its patients’ records and how long they are kept. LinkHMS holds them on the clinic’s behalf, so deleting a patient is the clinic’s decision, not ours.</div>
-<div><b>What LinkHMS gives</b>A record removed completely on the patient’s request, by the roles or people the admin allows, behind a warning that it cannot be undone. A clinic that leaves gets its patients’ data exported on request, and then it is deleted.</div>
-</div>
-
-<div class="carousel">
-
-![Patients list with search, filters, CSV upload and a row menu with Edit and Delete](../../assets/cases/linkhms/patients-list.webp "Patients list")
-
-![Delete Patient dialog warning that the action is permanent and asking for confirmation](../../assets/cases/linkhms/delete-patient.webp "Delete patient")
-
-</div>
+<summary><span class="more__show">Show the other 6 flows</span><span class="more__hide">Hide the other 6 flows</span></summary>
 
 #### A medical record you can scan in seconds
 
