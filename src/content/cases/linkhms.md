@@ -52,20 +52,11 @@ A distinct identity set LinkHMS apart from dated competitors. The UI takes its c
 
 ![LinkHMS logo and app icons next to pieces of the design system: accent colour scales, spacing and corner radius tokens, buttons, tags, record type chips, filters, tabs, page headers, a date picker, a section menu, metric cards and inputs](../../assets/cases/linkhms/brand-design-system.webp)
 
-## Problem
+## Problem and research
 
 ### Hospital software ignores the small clinic
 
 Most HMS products are heavy, dated and aimed at large hospitals. Smaller clinics and solo practitioners are left juggling paper records and slow tools that were never meant for them.
-
-<div class="cards cards--answer">
-<div><b>Challenge</b>Design a streamlined system that covers the core needs of most clinics and individual practitioners.</div>
-<div><b>Solution</b>Combine and improve on the strongest features of competitors to simplify internal cooperation and patient–clinic interaction.</div>
-</div>
-
-## Research
-
-### What makes a hospital system work
 
 I surveyed 12 healthcare professionals, interviewed 5 of them and analysed 4 competing products to understand how they manage patients, scheduling and communication.
 
@@ -74,16 +65,9 @@ I surveyed 12 healthcare professionals, interviewed 5 of them and analysed 4 com
 - Existing tools feel outdated, hard to use and unreliable.
 - A clear dashboard for scheduling and patients is essential for quick decisions.
 
-<div class="quotes">
-
-> The old software we’re using is extremely slow and clunky. It takes forever to update patient records or schedule appointments, and half the time, the system crashes.
->
-> Abdoulaye B., Doctor
-
-> Handwritten records make managing appointments difficult and time-consuming. A modern system would save time and prevent mistakes.
->
-> Priya S., Administrative Assistant
-
+<div class="cards cards--answer">
+<div><b>Challenge</b>Design a streamlined system that covers the core needs of most clinics and individual practitioners.</div>
+<div><b>Solution</b>Combine and improve on the strongest features of competitors to simplify internal cooperation and patient–clinic interaction.</div>
 </div>
 
 I grouped the findings in an affinity diagram, graded features by importance and built a persona — Kwame, a physical therapist working across several public and private clinics — to test every decision against.
