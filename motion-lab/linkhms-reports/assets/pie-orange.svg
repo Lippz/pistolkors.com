@@ -1,0 +1,16 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="81.0555" height="83.6129" viewBox="0 0 81.0555 83.6129" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="Ellipse 65">
+<use xlink:href="#stroke0_0_87" fill="url(#paint0_radial_0_87)"/>
+<mask id="stroke1_0_87" fill="white">
+<use xlink:href="#stroke0_0_87"/>
+</mask>
+<path d="M3.71633 53.4273C11.9764 59.7973 18.436 68.2157 22.4512 77.843C24.1519 81.9208 28.4896 84.4832 32.7574 83.3396L75.2581 71.9516C79.5258 70.808 82.0841 66.4096 80.6589 62.2274C72.1719 37.3223 55.7249 15.8882 33.865 1.24446C30.1943 -1.21455 25.2835 0.118141 23.0744 3.94448L1.0744 42.0496C-1.13474 45.8759 0.217609 50.7291 3.71633 53.4273Z" stroke-width="4" stroke="white" mask="url(#stroke1_0_87)"/>
+</g>
+<defs>
+<radialGradient id="paint0_radial_0_87" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(-32.9256 100.939) rotate(90) scale(120)">
+<stop stop-color="#FFD1A6"/>
+<stop offset="1" stop-color="#FCA808"/>
+</radialGradient>
+<path id="stroke0_0_87" d="M23.0744 3.94448C25.2835 0.118141 30.1943 -1.21455 33.865 1.24446C55.7249 15.8883 72.1719 37.3223 80.6589 62.2274C82.0841 66.4096 79.5258 70.808 75.2581 71.9516L32.7574 83.3396C28.4896 84.4832 24.1519 81.9208 22.4512 77.843C18.4361 68.2157 11.9764 59.7973 3.71634 53.4273C0.217606 50.7291 -1.13474 45.8759 1.0744 42.0496L23.0744 3.94448Z"/>
+</defs>
+</svg>

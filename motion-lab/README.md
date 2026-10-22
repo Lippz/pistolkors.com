@@ -24,6 +24,10 @@ show the same thing.
   5-month-old, so the data agrees across the four screens.
 - `linkhms-patient-photo/`: Records history → the photo placeholder next to the name opens the photo
   dialog: a wrong file format (error), the photo, Save (success), close, the photo next to the name.
+- `linkhms-reports/`: Reports · Finance Overview, a 1920×3068 page scrolled inside the 1080 stage (header and
+  main menu stay). Hover across KPIs and charts, scroll to Attention Needed, INV-1188 opens Edit Invoice
+  (Figma 180:40861, its items add up to the row's Net Total), then Reports in the main menu brings the page
+  back at the top. Each click cuts to a skeleton of the next screen (SK seconds) before it fades in. `?figma&s=870` shows every Figma hover state at that scroll for D.
 
 ## Workflow
 

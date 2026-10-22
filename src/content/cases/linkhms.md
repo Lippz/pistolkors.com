@@ -218,11 +218,10 @@ A photo is added right from the patient’s record: upload a file or take one wi
 
 Finance reports open on six numbers — billed, collected, outstanding, collection rate, average invoice and denied claims — followed by the trend, revenue by department, the payment mix and the claim pipeline. Clicking a tile or a chart segment filters the “Attention needed” table of flagged invoices below, and each invoice opens in one click.
 
-<div class="framed">
-
-![Finance overview report: KPI tiles, billed versus collected trend, revenue by department, payment method mix, claim pipeline, top ten rankings and a table of invoices that need attention](../../assets/cases/linkhms/finance-overview.webp)
-
-</div>
+<figure class="case-motion" data-lightbox-group>
+<video src="../../motion/linkhms-reports.mp4" poster="../../motion/linkhms-reports.jpg" width="1920" height="1080" muted loop playsinline preload="metadata" aria-label="The finance overview report: the pointer runs along the billed versus collected trend and over revenue by department, the payment mix and the claim pipeline, scrolls to the invoices that need attention, opens one invoice, then returns to the report from the main menu" data-label="The finance overview report: the pointer runs along the billed versus collected trend and over revenue by department, the payment mix and the claim pipeline, scrolls to the invoices that need attention, opens one invoice, then returns to the report from the main menu"></video>
+<figcaption class="eyebrow">From a chart to the invoice behind it</figcaption>
+</figure>
 
 #### A subscription that grows with the team
 
