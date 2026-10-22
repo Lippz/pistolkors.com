@@ -35,7 +35,7 @@ const cases = defineCollection({
       /**
        * Optional layers for a livelier cover on the home page: a blurred background and a
        * vector logo that move against each other on hover. `cover` stays the static composite
-       * (case page, social image). `logoWidth` is the logo's share of the cover width, in %.
+       * (social image). `logoWidth` is the logo's share of the cover width, in %.
        * `themed` makes the cover follow the site theme: the background gets a translucent white
        * veil and the logo turns black in the light theme, a black veil and a white logo in the
        * dark one. Give it a raw background then, with no darkening or lightening baked in.
