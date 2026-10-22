@@ -164,7 +164,7 @@ LinkHMS covers a clinic’s whole day in nine areas, from the first booking at t
 
 ## Key decisions
 
-### Eight flows that run a clinic
+### Seven flows that run a clinic
 
 With the identity and the components in place, here are the flows where speed mattered most.
 
@@ -194,7 +194,7 @@ Receptionists create an appointment for a specific doctor in just a few clicks, 
 </figure>
 
 <details class="more">
-<summary><span class="more__show">Show the other 6 flows</span><span class="more__hide">Hide the other 6 flows</span></summary>
+<summary><span class="more__show">Show the other 5 flows</span><span class="more__hide">Hide the other 5 flows</span></summary>
 
 #### A medical record you can scan in seconds
 
@@ -220,24 +220,6 @@ A photo is added right from the patient’s record: upload a file or take one wi
 ![Patient photo dialog after saving, with a success message](../../assets/cases/linkhms/photo-saved.webp "Saved")
 
 ![Patient photo dialog with an invalid file format error listing the accepted formats](../../assets/cases/linkhms/photo-error.webp "Wrong format")
-
-</div>
-
-#### One visit, two bills
-
-Insurance is handled item by item. When a claim is created, everything the patient’s plan covers or needs to authorise goes to the insurer as a single claim, and anything not covered is billed to the patient on a separate invoice. The insurer’s decision is then recorded line by line, and the claim keeps both invoices and a change log in one place.
-
-<div class="carousel">
-
-![Billing claims list with filters by status, type and insurance provider, totals and colour-coded statuses](../../assets/cases/linkhms/billing-claims.webp "Claims")
-
-![New Claim, step two: linking the claim to a visit and adding services and medications, with a note on how covered and not covered items are billed](../../assets/cases/linkhms/billing-new-claim.webp "New claim")
-
-![New Claim with items added: each medication shows its coverage, and not covered items are marked to be billed to the patient on a separate invoice](../../assets/cases/linkhms/billing-claim-items.webp "Coverage per item")
-
-![Claim details: patient, insurer, visit and dates, items with coverage and the insurer’s decision, and separate insurance and patient invoices](../../assets/cases/linkhms/billing-claim-decision.webp "Insurer’s decision")
-
-![Edit Invoice: balance and payments, linked claim, insurance provider, invoice items, discount and the details printed on the invoice](../../assets/cases/linkhms/billing-invoice.webp "Invoice")
 
 </div>
 
