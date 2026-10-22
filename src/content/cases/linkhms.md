@@ -164,7 +164,7 @@ LinkHMS covers a clinic’s whole day in nine areas, from the first booking at t
 
 ## Key decisions
 
-### Seven flows that run a clinic
+### Six flows that run a clinic
 
 With the identity and the components in place, here are the flows where speed mattered most.
 
@@ -194,7 +194,7 @@ Receptionists create an appointment for a specific doctor in just a few clicks, 
 </figure>
 
 <details class="more">
-<summary><span class="more__show">Show the other 5 flows</span><span class="more__hide">Hide the other 5 flows</span></summary>
+<summary><span class="more__show">Show the other 4 flows</span><span class="more__hide">Hide the other 4 flows</span></summary>
 
 #### A medical record you can scan in seconds
 
@@ -230,18 +230,6 @@ Finance reports open on six numbers — billed, collected, outstanding, collecti
 <div class="framed">
 
 ![Finance overview report: KPI tiles, billed versus collected trend, revenue by department, payment method mix, claim pipeline, top ten rankings and a table of invoices that need attention](../../assets/cases/linkhms/finance-overview.webp)
-
-</div>
-
-#### Six roles, each with the right access
-
-Admins, doctors, nurses, receptionists, lab workers and pharmacists each get their own set of permissions. Access is set per section and sub-section, with view and edit rights apart, and can always be reset to the defaults.
-
-<div class="carousel">
-
-![Settings, Permissions tab: six roles with the number of active users in each](../../assets/cases/linkhms/roles.webp "Roles")
-
-![Receptionist permissions: sections and sub-sections with separate view and edit checkboxes and a Reset Permissions button](../../assets/cases/linkhms/role-permissions.webp "Receptionist")
 
 </div>
 
