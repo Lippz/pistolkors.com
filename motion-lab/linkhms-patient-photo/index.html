@@ -416,7 +416,7 @@ MotionPlayer.mount({
   markers: [['photo', T.cPhoto], ['wrong file', T.cUpload1], ['upload', T.cUpload2], ['save', T.cSave], ['close', T.cClose], ['loop', T.loopOut]],
   refs: [['Record', 'src/1-record.png'], ['Empty', 'src/2-empty.png'], ['Wrong format', 'src/3-wrong-format.png'],
     ['Photo chosen', 'src/4-photo.png'], ['Saved', 'src/5-saved.png']],
-  poster: T.cSave + 1, // saved: photo, success message
+  poster: 0, // the first frame: the case shows it until the loop starts, so the start is seamless
 });
 </script>
 </body>

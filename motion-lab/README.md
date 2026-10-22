@@ -88,3 +88,5 @@ show the same thing.
 - Hover follows the cursor: derive it from `cursorAt(t)` sampled over the last ~0.14 s, not
   from fixed times, so it stays right when you change the path.
 - `clip-path` reveals cut shadows; give the clip negative insets.
+- Keep `poster: 0`. The page shows the poster until the loop starts at frame 0, so any other
+  frame reads as a jump; the reduced-motion view sees the first frame too.

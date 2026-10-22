@@ -463,7 +463,7 @@ MotionPlayer.mount({
     ['continue', T.cGo], ['set up', T.dash], ['steps', T.steps[0]], ['100%', T.trophy], ['loop', T.loopOut]]
     .map(([name, t]) => [name, at(t)]),
   refs: [['Clinic Registration', 'src/1-signup.png'], ['Set up', 'src/2-setup.png']],
-  poster: at(11.2),
+  poster: 0, // the first frame: the case shows it until the loop starts, so the start is seamless
 });
 </script>
 </body>

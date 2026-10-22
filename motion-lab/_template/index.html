@@ -50,7 +50,7 @@ MotionPlayer.mount({
   stage: $('stage'), duration: T.end, render,
   markers: [['click', T.click]],
   refs: [/* ['Frame name', 'src/1-frame.png'] */],
-  poster: T.click + .5,
+  poster: 0, // first frame, so the case page doesn't jump from the poster to the start
 });
 </script>
 </body>

@@ -917,7 +917,7 @@ loadCurves().then(() => {
     stage: $('stage'), duration: T.end, render,
     markers: [['kpi', T.kpi], ['scrub', T.chartIn], ['charts', T.s1a], ['invoice', T.open], ['menu', T.back]],
     refs: [['Top', 'src/ref-0.png'], ['Charts (?figma&s=870)', 'src/ref-870.png'], ['Bottom (?figma&s=1988)', 'src/ref-1988.png']],
-    poster: T.notc + .2,
+    poster: 0, // the first frame: the case shows it until the loop starts, so the start is seamless
   });
 });
 </script>
