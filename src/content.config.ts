@@ -59,7 +59,7 @@ const cases = defineCollection({
         .optional(),
       /**
        * A product loop shown right under the results: a video exported from motion-lab
-       * (`node motion-lab/export.mjs <name>` writes /motion/<name>.mp4 and .jpg into public/).
+       * (`node motion-lab/export.mjs <project>/<name>` writes /motion/<project>-<name>.mp4 and .jpg into public/).
        * It plays while in view, opens full screen on click, and stays on the poster for
        * people who prefer reduced motion.
        */

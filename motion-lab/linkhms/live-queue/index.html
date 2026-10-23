@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LinkHMS · Live Queue — motion draft</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=block" rel="stylesheet">
+<link rel="stylesheet" href="../../_lib/player.css">
+<style>
+  /*
+   * LinkHMS · Live Queue. Stage is the Figma frame size (1920×1080); all numbers below are
+   * Figma pixels. Schedule: Figma 165:37944. Live Queue: Figma 151:8388.
+   */
+  * { box-sizing: border-box; }
+  .stage {
+    background: #fff;
+    font-family: Roboto, sans-serif; color: #000; -webkit-font-smoothing: antialiased;
+  }
+  .bg { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+
+  /* Live Queue table (Table / Live Queue / Item): rows 48px from y 265, table from x 96 */
+  .row {
+    position: absolute; left: 96px; width: 1800px; height: 48px; background: rgba(0,0,0,.02);
+    font-size: 14px; line-height: 20px; letter-spacing: .25px; white-space: nowrap;
+  }
+  .row:nth-child(even) { background: none; }
+  .row::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: #d9dfe4; }
+  .row > span { position: absolute; top: 14px; }
+  .urgent { color: #ed1c3f; }
+  .pill {
+    position: absolute; left: 1600px; top: 12px; height: 24px; padding: 0 12px; border: 1px solid; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center; font-weight: 500; letter-spacing: 0; transform-origin: 0 50%;
+  }
+  /* Widths from Figma: the browser sets Roboto Medium ~2px wider */
+  .pill--w { width: 72px; background: #faf1ff; border-color: #e6c2ff; color: #5d0ab3; }
+  .pill--o { width: 77px; background: #f6f6f6; border-color: #dadada; color: #434343; }
+  .pill--d { width: 93px; background: #ebfaec; border-color: #abedaf; color: #007200; }
+  .pill--x { width: 86px; background: #ffebf0; border-color: #ffb2c1; color: #aa000f; }
+  .more { position: absolute; left: 1752px; top: 12px; width: 24px; height: 24px; }
+  .more--pressed { left: 1744px; top: 4px; width: 40px; height: 40px; }
+
+  /* Row menu (Dropdown 151:8645): right 16px of the table, 43px under the row's top */
+  .menu {
+    position: absolute; left: 1676px; width: 204px; height: 288px; background: #fff; border-radius: 4px;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,.16)) drop-shadow(0 4px 4px rgba(0,0,0,.08)) drop-shadow(0 8px 6px rgba(0,0,0,.04));
+    transform-origin: 100% 0; z-index: 5;
+    font-size: 14px; line-height: 20px; letter-spacing: .25px; white-space: nowrap;
+  }
+  .menu__band { position: absolute; left: 0; right: 0; height: 42px; background: rgba(0,0,0,.04); }
+  .menu__item { position: absolute; left: 12px; height: 24px; display: flex; align-items: center; gap: 16px; }
+  .menu__item img, .menu__dot { width: 24px; height: 24px; flex: none; }
+  .menu__dot { display: grid; place-items: center; }
+  .menu__dot::before { content: ''; box-sizing: border-box; width: 16px; height: 16px; border-radius: 8px; border: 1px solid #92e18b; background: #b9ebb4; }
+
+  /* Cursor */
+  .cursor { position: absolute; left: 0; top: 0; width: 19px; height: 24px; z-index: 20; transform-origin: 6px 1px; }
+  .cursor img { width: 19px; height: 24px; display: block; }
+  .click { position: absolute; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; border: 2px solid #3b69ff; z-index: 19; pointer-events: none; }
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <img class="bg" src="assets/schedule.png" alt="">
+  <div id="queue">
+    <img class="bg" src="assets/queue-clean.png" alt="">
+    <div id="rows"></div>
+    <div class="menu" id="menu">
+      <div class="menu__band" id="menuBand"></div>
+      <div class="menu__item" style="top:12px;color:#3b69ff"><img src="assets/menu-play.svg" alt="">Start Visit</div>
+      <div class="menu__item" style="top:60px"><i class="menu__dot"></i>Complete Visit</div>
+      <div class="menu__item" style="top:108px"><img src="assets/menu-admission.svg" alt="">Convert to Admission</div>
+      <div class="menu__item" style="top:156px"><img src="assets/menu-launch.svg" alt="">View Patient Profile</div>
+      <div class="menu__item" style="top:204px"><img src="assets/menu-edit.svg" alt="">Edit</div>
+      <div class="menu__item" style="top:252px;color:#ed1c3f"><img src="assets/menu-cancel.svg" alt="">Cancel</div>
+    </div>
+  </div>
+  <div class="click" id="click"></div>
+  <div class="cursor" id="cursor"><img src="assets/cursor-hand.png" alt=""></div>
+</div>
+
+<script src="../../_lib/motion.js"></script>
+<script src="../../_lib/player.js"></script>
+<script>
+// ?figma lays the queue out with the Figma sample data and the menu open on row 9, to D-diff
+// against src/2-queue-menu.png.
+const FIGMA = new URLSearchParams(location.search).has('figma');
+
+// ---------- Data ----------
+// The Live Queue is walk-ins, a queue of its own: none of these patients is in the schedule and
+// nothing here changes it. Same clinic and doctors, same day (17/04/2024, now 12:45); the time is
+// when the patient was added. Sonya Lichtenstein finishes one walk-in and starts the next.
+// [time, urgent, doctor, patient, age, phone, status, status after the story]
+const ROWS = FIGMA
+  ? ['w', 'w', 'w!', 'o', 'o!', 'd', 'd', 'x', 'd', 'd'].map((s) =>
+      ['12:45', s.endsWith('!'), 'Rick Sanchez', 'Jerel Parocha', 35, '+5799558565', s[0]])
+  : [
+      ['12:41', false, 'Sonya Lichtenstein', 'Courtney Henry', 41, '+5799558512', 'w', 'o'],
+      ['12:38', false, 'Mariam Straszinski', 'Brooklyn Simmons', 29, '+5799558547', 'w'],
+      ['12:44', true, 'Carl Sagan', 'Arlene McCoy', 57, '+5799558530', 'w'],
+      ['12:06', false, 'Sonya Lichtenstein', 'Dwayne Hughes', 52, '+5799558573', 'o', 'd'],
+      ['12:27', true, 'Gertrude Smith', 'Priscilla Ward', 63, '+5799558518', 'o'],
+      ['11:32', false, 'Gertrude Smith', 'Nathan Brooks', 27, '+5799558596', 'd'],
+      ['11:15', false, 'Mariam Straszinski', 'Gloria Rivera', 38, '+5799558504', 'd'],
+      ['11:48', false, 'Kevin MacFallister', 'Leslie Alexander', 44, '+5799558561', 'x'],
+      ['10:52', false, 'Rick Sanchez', 'Irene Hall', 46, '+5799558589', 'd'],
+      ['10:21', false, 'Ulrich Colbert', 'Colleen Ford', 31, '+5799558525', 'd'],
+    ];
+const STATUS = { w: 'Waiting', o: 'Ongoing', d: 'Completed', x: 'Cancelled' };
+const COLS = [24, 220, 340, 570, 810, 1040, 1180];
+const ROW_Y = (i) => 265 + i * 48;
+const DONE = 3, NEXT = 0; // Dwayne Hughes is completed, then Courtney Henry is started
+
+// ---------- Timeline (seconds) ----------
+const T = {
+  click1: 1.6, swap: 1.65,               // Live Queue in the side menu: the queue comes in
+  click2: 3.7, menu1: 3.75,              // ⋮ on Dwayne Hughes (Ongoing)
+  click3: 5.0, done: 5.05,               // Complete Visit: Ongoing → Completed
+  click4: 7.0, menu2: 7.05,              // ⋮ on Courtney Henry (Waiting)
+  click5: 8.3, next: 8.35,               // Start Visit: Waiting → Ongoing
+  click6: 10.4, back: 10.45,             // back to the Schedule, as it was: the loop starts here
+  loopOut: 11.0,
+  end: 12.2,
+};
+const CLICKS = [T.click1, T.click2, T.click3, T.click4, T.click5, T.click6];
+const MENU_TOP = (i) => ROW_Y(i) + 43;
+
+const START = [190, 760];
+const MOVES = [
+  [0.4, 1.4, 36, 236],                         // Live Queue icon
+  [2.6, 3.5, 1860, ROW_Y(DONE) + 24],          // ⋮ on Dwayne Hughes
+  [4.15, 4.8, 1790, MENU_TOP(DONE) + 74],      // Complete Visit
+  [5.9, 6.8, 1860, ROW_Y(NEXT) + 24],          // ⋮ on Courtney Henry
+  [7.45, 8.1, 1776, MENU_TOP(NEXT) + 26],      // Start Visit
+  [9.2, 10.2, 36, 180],                        // Schedule icon
+  [T.loopOut, T.end - 0.1, ...START],
+];
+const cursorAt = FIGMA ? () => [1846, 768] : cursorPath(START, MOVES);
+
+// ---------- Build ----------
+const $ = (id) => document.getElementById(id);
+const pill = (s) => `<div class="pill pill--${s}">${STATUS[s]}</div>`;
+const rows = ROWS.map(([time, urgent, doctor, patient, age, phone, s, after], i) => {
+  const el = document.createElement('div');
+  el.className = 'row';
+  el.style.top = ROW_Y(i) + 'px';
+  const cells = [`17/04/2024, ${time}`, urgent ? 'Urgent' : 'Regular', doctor, 'Appointment', patient, age, phone];
+  el.innerHTML = cells.map((c, j) => `<span style="left:${COLS[j]}px"${j === 1 && urgent ? ' class="urgent"' : ''}>${c}</span>`).join('') +
+    pill(s) + (after ? pill(after) : '') +
+    '<img class="more" src="assets/more.svg" alt=""><img class="more more--pressed" src="assets/more-pressed.svg" alt="">';
+  $('rows').appendChild(el);
+  const [p1, p2] = el.querySelectorAll('.pill');
+  return { el, p1, p2, pressed: el.querySelector('.more--pressed') };
+});
+
+// ---------- Render ----------
+// Which screen is up at t: 0 schedule, 1 queue. A quick cut-fade, so the two layouts don't ghost.
+const queueShown = (t) => FIGMA ? 1 : outC(p(t, T.swap, T.swap + .18)) * (1 - outC(p(t, T.back, T.back + .18)));
+
+// A menu: open from `at` until the click that picks an item.
+const menuK = (t, at, until) => outQ(p(t, at, at + .22)) * (1 - p(t, until + .05, until + .2));
+
+// A status change: the old pill shrinks away, the new one pops in.
+function swapPill(r, t, at) {
+  const k = p(t, at, at + .4);
+  r.p1.style.opacity = 1 - clamp(k * 2.5);
+  r.p1.style.transform = `scale(${1 - .15 * outC(clamp(k * 2.5))})`;
+  r.p2.style.opacity = clamp(k * 2.5 - .5);
+  r.p2.style.transform = `scale(${mix(.8, 1, outBack(clamp(k * 1.6 - .25), 1.6))})`;
+}
+
+function render(t) {
+  const q = queueShown(t);
+  $('queue').style.opacity = q;
+  $('queue').style.display = q > 0 ? '' : 'none';
+
+  // Rows come in one after another each time the queue opens.
+  rows.forEach((r, i) => {
+    const k = FIGMA ? 1 : outC(p(t, T.swap + .1 + i * .035, T.swap + .45 + i * .035));
+    r.el.style.opacity = k;
+    r.el.style.transform = `translateY(${(1 - k) * 10}px)`;
+    if (r.p2) { r.p1.style.opacity = 1; r.p2.style.opacity = 0; }
+  });
+  if (!FIGMA) {
+    swapPill(rows[DONE], t, T.done);
+    swapPill(rows[NEXT], t, T.next);
+  }
+
+  // Row menu
+  const [cx, cy] = cursorAt(t);
+  const m1 = menuK(t, T.menu1, T.click3), m2 = menuK(t, T.menu2, T.click5);
+  const mk = FIGMA ? 1 : Math.max(m1, m2), mRow = FIGMA ? 8 : m1 > 0 ? DONE : NEXT;
+  const menu = $('menu');
+  menu.style.display = mk > 0 ? '' : 'none';
+  if (mk > 0) {
+    menu.style.top = MENU_TOP(mRow) + 'px';
+    menu.style.opacity = clamp(mk * 1.5);
+    menu.style.transform = `scale(${mix(.92, 1, mk)})`;
+    const y = cy - MENU_TOP(mRow);
+    const item = cx >= 1676 && cx <= 1880 && y >= 3 && y < 291 ? Math.floor((y - 3) / 48) : -1;
+    $('menuBand').style.display = item < 0 ? 'none' : '';
+    $('menuBand').style.top = 3 + item * 48 + 'px';
+  }
+  // ⋮ pressed circle: under the cursor, and while its menu is open.
+  rows.forEach((r, i) => {
+    const over = Math.hypot(cx - 1860, cy - (ROW_Y(i) + 24)) < 20 && q === 1 ? 1 : 0;
+    r.pressed.style.opacity = Math.max(over, i === mRow ? mk : 0);
+  });
+
+  // Cursor + click ring
+  const press = FIGMA ? 0 : Math.max(...CLICKS.map((c) => bump(t, c, .18)));
+  $('cursor').style.transform = `translate(${cx - 6}px, ${cy - 1}px) scale(${1 - .14 * press})`;
+  const last = FIGMA ? undefined : CLICKS.filter((c) => c <= t).pop();
+  const ck = last === undefined ? 1 : p(t, last, last + .45);
+  const ring = $('click');
+  ring.style.display = ck < 1 ? '' : 'none';
+  if (ck < 1) {
+    ring.style.left = cx + 'px'; ring.style.top = cy + 'px';
+    ring.style.opacity = .5 * (1 - ck);
+    ring.style.transform = `scale(${mix(.3, 1, outC(ck))})`;
+  }
+}
+
+// ---------- Player ----------
+MotionPlayer.mount({
+  stage: $('stage'), duration: T.end, render,
+  markers: [['queue', T.click1], ['menu', T.click2], ['complete', T.click3], ['start', T.click5],
+    ['schedule', T.click6], ['loop', T.loopOut]],
+  refs: [['Schedule', 'src/1-schedule.png'], ['Live Queue (?figma)', 'src/2-queue-menu.png']],
+  poster: 0, // the first frame: the case shows it until the loop starts, so the start is seamless
+});
+</script>
+</body>
+</html>

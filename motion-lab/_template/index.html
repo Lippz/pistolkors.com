@@ -1,12 +1,13 @@
 <!doctype html>
 <html lang="en">
 <head>
+<!-- Starter: copy this folder to motion-lab/<project>/<name>/ (paths below assume that depth). -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>New animation — motion draft</title>
 <!-- Fonts the product uses (Google Fonts here; export waits for them to load). -->
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=block" rel="stylesheet">
-<link rel="stylesheet" href="../_lib/player.css">
+<link rel="stylesheet" href="../../_lib/player.css">
 <style>
   /* Stage is the Figma frame size; every number in here is Figma pixels. */
   * { box-sizing: border-box; }
@@ -20,11 +21,11 @@
 <div class="stage" id="stage">
   <!-- <img class="bg" src="assets/background.png" alt=""> -->
   <div class="box" id="box"></div>
-  <img class="cursor" id="cursor" src="../linkhms-new-visit/assets/cursor-hand.png" alt="">
+  <img class="cursor" id="cursor" src="../../_lib/cursor-hand.png" alt="">
 </div>
 
-<script src="../_lib/motion.js"></script>
-<script src="../_lib/player.js"></script>
+<script src="../../_lib/motion.js"></script>
+<script src="../../_lib/player.js"></script>
 <script>
 // Named beats, in seconds: easy to talk about ("make `click` later").
 const T = { move: .5, click: 1.6, end: 4 };

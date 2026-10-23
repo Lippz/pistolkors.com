@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LegalFans · Statistics — motion draft</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=block" rel="stylesheet">
+<link rel="stylesheet" href="../../_lib/player.css">
+<style>
+  /* Stage is the Figma frame (KK 213:22508 → 213:22643), 1440×1024; every number is Figma pixels. */
+  * { box-sizing: border-box; }
+  p { margin: 0; }
+  .stage { background: #0c0d0d; font-family: Roboto, sans-serif; color: rgba(255,255,255,.96); -webkit-font-smoothing: antialiased; overflow: hidden; }
+  .abs { position: absolute; }
+
+  /* Header */
+  .header { left: 0; top: 0; width: 1440px; height: 64px; background: #1a1a1a; }
+  .user { right: 24px; top: 20px; display: flex; gap: 8px; align-items: center; font-size: 12px; line-height: 16px; letter-spacing: .4px; }
+  .user img { width: 24px; height: 24px; display: block; }
+
+  /* Rail of creators */
+  .rail { left: 0; top: 64px; width: 72px; height: 960px; background: #1a1a1a; display: flex; flex-direction: column; align-items: center; gap: 24px; padding-top: 20px; }
+  .rail .av { position: relative; width: 36px; height: 36px; flex: none; }
+  .rail .av img { position: absolute; inset: 0; width: 36px; height: 36px; display: block; }
+  .rail .div { width: 48px; height: 1px; background: rgba(255,255,255,.12); flex: none; }
+  .all-label { position: absolute; left: 9px; top: 10px; font-size: 10px; line-height: 16px; font-weight: 500; letter-spacing: .5px; text-transform: uppercase; color: #1a1a1a; }
+  .ring { width: 44px; height: 44px; left: -4px; z-index: 3; }
+
+  /* Menu */
+  .menu { left: 72px; top: 64px; width: 200px; height: 960px; background: #0c0d0d; }
+  .menu-in { position: absolute; left: 16px; top: 0; width: 168px; padding: 16px 0; display: flex; flex-direction: column; gap: 16px; }
+  .mi { height: 40px; padding: 8px; display: flex; gap: 16px; align-items: center; border-radius: 4px; font-size: 14px; line-height: 1.4; letter-spacing: .25px; white-space: nowrap; }
+  .mi img { width: 24px; height: 24px; display: block; }
+  .mi.on { background: rgba(1,175,241,.16); }
+  .menu .div { height: 1px; background: rgba(255,255,255,.12); }
+  .group { display: flex; flex-direction: column; gap: 16px; }
+
+  /* Main */
+  .title { left: 296px; top: 92px; display: flex; gap: 16px; align-items: center; height: 40px; }
+  .title img { width: 36px; height: 36px; display: block; }
+  .title p { font-size: 34px; letter-spacing: .25px; line-height: normal; }
+  .range { left: 1216px; top: 88px; width: 200px; height: 48px; }
+  .range .bg { position: absolute; inset: 0; background: #1a1a1a; border: 1px solid rgba(255,255,255,.12); border-radius: 4px; }
+  .range .ic { position: absolute; right: 12px; top: 12px; width: 24px; height: 24px; }
+  .range .val { position: absolute; left: 10px; top: 14px; font-size: 14px; line-height: 20px; letter-spacing: .25px; white-space: nowrap; }
+  .range .lab { position: absolute; left: 6px; top: -5px; padding: 0 4px; background: #0c0d0d; font-size: 10px; letter-spacing: .4px; line-height: normal; color: rgba(255,255,255,.6); }
+
+  /* Empty state */
+  .empty { left: 272px; top: 160px; width: 1168px; height: 864px; background: #1a1a1a; }
+  .illu { left: 284px; top: 174.5px; width: 600px; height: 387px; }
+  .msg { left: 294.5px; top: 609.5px; width: 579px; display: flex; flex-direction: column; align-items: center; gap: 24px; }
+  .msg h2 { margin: 0; font-weight: 400; font-size: 24px; line-height: normal; color: #fff; }
+  .msg .row { display: flex; gap: 8px; align-items: center; font-size: 16px; line-height: normal; color: rgba(255,255,255,.48); white-space: nowrap; }
+  .chip { background: #17282f; display: flex; gap: 4px; align-items: center; padding: 4px 8px; border-radius: 4px; color: #78d5f7; }
+  .chip img { width: 16px; height: 16px; display: block; }
+
+  /* Dashboard */
+  .dash { left: 296px; top: 160px; width: 1120px; display: flex; flex-wrap: wrap; gap: 12px; }
+  .row1 { display: flex; gap: 12px; height: 157px; width: 1120px; }
+  /* Figma strokes take no layout space: paddings below are the Figma padding minus the border. */
+  .big { flex: 1 0 0; height: 100%; display: flex; align-items: flex-end; justify-content: space-between; padding: 31px 23px; border-radius: 8px; line-height: normal; }
+  .big .l { font-size: 32px; width: 190px; height: 100%; text-box: trim-both cap alphabetic; }
+  .big .n { font-size: 54px; font-weight: 500; letter-spacing: .25px; white-space: nowrap; text-align: right; text-box: trim-both cap alphabetic; }
+  .big.det { background: rgba(1,175,241,.08); border: 1px solid rgba(1,175,241,.2); box-shadow: 0 12px 24px rgba(0,45,63,.25); }
+  .big.det .l { color: #8adfff; } .big.det .n { color: #01aff1; text-shadow: 0 8px 36px rgba(0,184,255,.5); }
+  .big.rem { background: rgba(1,241,45,.08); border: 1px solid rgba(1,241,45,.2); box-shadow: 0 12px 24px rgba(0,63,4,.25); }
+  .big.rem .l { color: #8affcc; } .big.rem .n { color: #01cf0f; text-shadow: 0 8px 36px rgba(0,255,55,.5); }
+  .row2 { display: flex; gap: 12px; width: 1120px; height: 157px; }
+  .card { flex: 1 0 0; background: #1a1a1a; border: 1px solid rgba(255,255,255,.12); border-radius: 8px; padding: 22px 23px 24px; display: flex; flex-direction: column; gap: 12px; justify-content: center; white-space: nowrap; line-height: normal; }
+  .card .h { font-size: 24px; font-weight: 500; }
+  .card .v { font-size: 34px; font-weight: 700; color: #01aff1; letter-spacing: .25px; text-shadow: 0 8px 36px rgba(0,184,255,.5); }
+  .card .split { display: flex; justify-content: space-between; align-items: center; }
+  .card .split img { width: 36px; height: 36px; display: block; }
+  .card .ago { display: flex; flex-direction: column; gap: 4px; height: 40px; }
+  .card .ago b { font-size: 20px; color: #01aff1; letter-spacing: .15px; text-shadow: 0 8px 36px rgba(0,184,255,.5); }
+  .card .ago span { font-size: 12px; line-height: 16px; letter-spacing: .4px; }
+  .block { flex: 1 0 0; height: 444px; border-radius: 8px; padding: 24px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; position: relative; overflow: hidden; }
+  .block.leaks { background: #222; border: 2px solid rgba(255,255,255,.12); padding: 22px 22px 21px; }
+  .block.up { background: #1a1a1a; border: 1px solid rgba(255,255,255,.12); padding: 23px 23px 22px; }
+  .bh { width: 100%; display: flex; gap: 12px; align-items: center; font-size: 24px; line-height: normal; }
+  .bh img { width: 24px; height: 24px; display: block; }
+  .leaks .bh { height: 36px; }
+  .legend { width: 100%; display: flex; flex-wrap: wrap; gap: 8px 16px; }
+  .lg { background: rgba(255,255,255,.04); display: flex; gap: 12px; align-items: center; padding: 8px 12px; border-radius: 4px; font-size: 14px; line-height: 1.4; letter-spacing: .25px; white-space: nowrap; }
+  .lg i { width: 12px; height: 12px; border-radius: 50%; display: block; }
+  .donut { position: relative; top: -1px; width: 240px; height: 240px; flex: none; }
+  .donut svg { position: absolute; left: -60px; top: -60px; width: 360px; height: 360px; overflow: visible; }
+  .donut .c { position: absolute; left: 50%; top: 50%; transform: translate(calc(-50% + .5px), -50%); display: flex; flex-direction: column; align-items: center; white-space: nowrap; }
+  .donut .c b { font-weight: 400; font-size: 34px; letter-spacing: .25px; line-height: normal; }
+  .donut .c span { font-size: 18px; line-height: 28px; letter-spacing: .5px; color: rgba(255,255,255,.42); }
+  .tip { left: 27px; top: 4px; width: 46px; height: 32px; filter: drop-shadow(0 2px 2px rgba(0,0,0,.16)) drop-shadow(0 4px 4px rgba(0,0,0,.08)) drop-shadow(0 8px 6px rgba(0,0,0,.04)); transform-origin: 23px 37px; }
+  .tip .arrow { position: absolute; left: calc(50% + .5px); bottom: -5px; width: 28px; height: 28px; transform: translateX(-50%); display: flex; align-items: center; justify-content: center; }
+  .tip .arrow i { width: 19.8px; height: 19.8px; background: #0c0d0d; border-radius: 2px; transform: rotate(45deg); }
+  .tip .box { position: absolute; left: 50%; top: -10px; transform: translateX(-50%); padding: 10px; }
+  .tip .box p { background: #0c0d0d; padding: 8px 14px; border-radius: 4px; font-size: 12px; line-height: 16px; letter-spacing: .4px; }
+  .chart { position: relative; width: 100%; height: 260px; overflow: hidden; flex: none; }
+  .grid { left: 0; top: 15px; width: 458px; display: flex; flex-direction: column; gap: 50px; }
+  .grid i { height: 1px; background: #111; display: block; }
+  .yax { left: 470px; top: 8px; display: flex; flex-direction: column; gap: 35px; font-size: 12px; line-height: 16px; letter-spacing: .4px; color: rgba(255,255,255,.24); text-align: right; }
+  .xax { left: 18px; top: 232px; width: 420px; height: 28px; font-size: 12px; line-height: 16px; letter-spacing: .4px; text-align: center; white-space: nowrap; }
+  .xax p { position: absolute; top: 0; transform: translateX(-50%); }
+  .xax .yr { display: flex; flex-direction: column; position: absolute; top: 0; }
+  .xax .yr small { font-size: 10px; line-height: normal; color: rgba(255,255,255,.42); }
+  .bars { left: 28px; top: 0; height: 220px; display: flex; gap: 32px; align-items: flex-end; }
+  .bar { position: relative; width: 4px; }
+  .bar i { position: absolute; left: 0; bottom: 0; width: 4px; border-radius: 2px 2px 0 0; background: #01aff1; display: block; }
+  .bar i.all { opacity: .32; }
+  .ulg { width: 100%; display: flex; gap: 8px 64px; justify-content: flex-end; }
+  .ulg .pair { display: flex; gap: 12px; }
+  .total { flex: 1 0 0; justify-content: center; gap: 4px; }
+  .total b { font-weight: 500; }
+  .ver { right: 24px; top: 966px; font-size: 14px; line-height: 24px; color: rgba(255,255,255,.42); }
+
+  .cursor { left: 0; top: 0; width: 19px; height: 24px; z-index: 20; transform-origin: 6px 1px; }
+  .cursor img { width: 19px; height: 24px; display: block; }
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="abs header">
+    <img class="abs" src="assets/imgGroup.svg" alt="" style="left:25.06px;top:26.9px;width:158.98px;height:11.74px">
+    <img class="abs" src="assets/imgGroup1.svg" alt="" style="left:105.12px;top:24.86px;width:14.98px;height:15.27px">
+    <div class="abs user"><p>username@mailprovider.com</p><img src="assets/imgIcon.svg" alt=""></div>
+  </div>
+
+  <div class="abs rail">
+    <div class="av" id="avAll"><img src="assets/imgBg.svg" alt=""><span class="all-label">All</span></div>
+    <i class="div"></i>
+    <div class="av" id="avCat"><img src="assets/imgBg1.png" alt=""></div>
+    <div class="av"><img src="assets/imgBg2.png" alt=""></div>
+    <div class="av"><img src="assets/imgBg3.png" alt=""></div>
+    <i class="div"></i>
+    <div class="av"><img src="assets/imgBg4.png" alt=""></div>
+    <i class="div"></i>
+    <div class="av"><img src="assets/imgUsersAgency.svg" alt=""></div>
+  </div>
+  <!-- Selection rings: blue on a creator, white on ALL (the ALL circle is blue itself). -->
+  <img class="abs ring" id="ringCat" src="assets/hlCreator.svg" alt="" style="left:14px;top:165px">
+  <img class="abs ring" id="ringAll" src="assets/imgHl.svg" alt="" style="left:14px;top:80px">
+
+  <div class="abs menu"><div class="menu-in">
+    <div class="mi on"><img src="assets/imgIcon1.svg" alt="">Statistics</div>
+    <i class="div"></i>
+    <div class="group"><div class="mi"><img src="assets/imgIcon2.svg" alt="">Magic Vault</div><div class="mi"><img src="assets/imgIcon3.svg" alt="">Leaks</div></div>
+    <i class="div"></i>
+    <div class="group"><div class="mi"><img src="assets/imgIcon4.svg" alt="">My Platforms</div><div class="mi"><img src="assets/imgIcon5.svg" alt="">My Camsites</div><div class="mi"><img src="assets/imgIcon6.svg" alt="">My Socials</div></div>
+    <i class="div"></i>
+    <div class="mi"><img src="assets/imgIcon7.svg" alt="">Keyword Search</div>
+    <i class="div"></i>
+    <div class="group"><div class="mi"><img src="assets/imgIcon8.svg" alt="">Payments</div><div class="mi"><img src="assets/imgIcon9.svg" alt="">My Account</div></div>
+    <i class="div"></i>
+    <div class="mi"><img src="assets/imgIcon10.svg" alt="">Install Extension</div>
+  </div></div>
+
+  <div class="abs title"><img src="assets/imgIcon11.svg" alt=""><p>Statistics</p></div>
+  <div class="abs range" id="range"><div class="bg"></div><img class="ic" src="assets/imgIcon12.svg" alt=""><p class="val">09.07.24 - 09.07.25</p><p class="lab">Date Range</p></div>
+
+  <div class="abs empty" id="empty">
+    <img class="abs illu" id="illu" src="assets/illustration.png" alt="">
+    <div class="abs msg" id="msg">
+      <h2>No statistics yet</h2>
+      <div class="row">Try adding some media to the <span class="chip"><img src="assets/iconVault16.svg" alt="">Magic Vault</span> or download our <span class="chip"><img src="assets/iconExt16.svg" alt="">Extension</span></div>
+    </div>
+  </div>
+
+  <div class="abs dash" id="dash">
+    <div class="row1">
+      <div class="big det" data-in="0"><p class="l">Overall Leaks<br>Detected</p><p class="n" data-count="20000">20 000</p></div>
+      <div class="big rem" data-in="1"><p class="l">Overall Leaks<br>Removed</p><p class="n" data-count="18900">18 900</p></div>
+    </div>
+    <div class="row2">
+      <div class="card" data-in="2"><p class="h">Leak Removal<br>Percentage</p><p class="v" data-count="94" data-suffix="%">94%</p></div>
+      <div class="card" data-in="3"><p class="h">Top Creator<br>Position</p><div class="split"><p class="v" data-count="136">136</p><img src="assets/imgIcon13.svg" alt=""></div></div>
+      <div class="card" data-in="4"><p class="h">Total Media<br>Uploaded</p><p class="v" data-count="1493043">1 493 043</p></div>
+      <div class="card" data-in="5"><p class="h">Last Scan<br>Performed</p><div class="ago"><b>7 days ago</b><span>August, 7th 2024</span></div></div>
+    </div>
+    <div class="block leaks" data-in="6">
+      <div class="bh"><img src="assets/imgIcon3.svg" alt=""><p>Current Leaks</p></div>
+      <div class="donut">
+        <svg viewBox="-60 -60 360 360">
+          <defs>
+            <filter id="gb" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="8" stdDeviation="18" flood-color="rgb(0,184,255)" flood-opacity=".24"/></filter>
+            <filter id="gr" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="8" stdDeviation="18" flood-color="rgb(241,72,73)" flood-opacity=".24"/></filter>
+          </defs>
+          <!-- r 108, stroke 24 = the Figma ring (outer 120, inner 96). Blue: 300° clockwise from 12 o'clock; red: the last 60°. -->
+          <circle id="arcB" cx="120" cy="120" r="108" fill="none" stroke="#01aff1" stroke-width="24" filter="url(#gb)" transform="rotate(-90 120 120)"/>
+          <circle id="arcR" cx="120" cy="120" r="108" fill="none" stroke="#f54545" stroke-width="24" filter="url(#gr)" transform="rotate(210 120 120)"/>
+        </svg>
+        <div class="c"><b data-count="47">47</b><span>total leaks</span></div>
+        <div class="abs tip" id="tip"><div class="arrow"><i></i></div><div class="box"><p>19</p></div></div>
+      </div>
+      <div class="legend"><div class="lg"><i style="background:#01aff1"></i>Requested</div><div class="lg"><i style="background:#f54545"></i>Found</div></div>
+    </div>
+    <div class="block up" data-in="7">
+      <div class="bh"><img src="assets/imgIcon14.svg" alt=""><p>Upload Dynamics</p></div>
+      <div class="chart">
+        <div class="abs grid"><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="abs yax"><p>200K</p><p>150K</p><p>100K</p><p>50K</p><p>0</p></div>
+        <div class="abs xax">
+          <div class="yr" style="left:0;align-items:center"><span>FEB</span><small>2023</small></div>
+          <p style="left:48.5px">MAR</p><p style="left:84px">APR</p><p style="left:120px">MAY</p><p style="left:156px">JUN</p><p style="left:192px">JUL</p>
+          <p style="left:228.5px">AUG</p><p style="left:264.5px">SEP</p><p style="left:300px">OCT</p><p style="left:336px">NOV</p><p style="left:372px">DEC</p>
+          <div class="yr" style="left:396px;align-items:flex-start"><span>JAN</span><small>2024</small></div>
+        </div>
+        <div class="abs bars" id="bars"></div>
+      </div>
+      <div class="ulg">
+        <div class="pair"><div class="lg"><i style="background:#01aff1"></i>Magic Vault</div><div class="lg"><i style="background:#01aff1;opacity:.32"></i>Other</div></div>
+        <div class="lg total"><b>Total:</b>1 493 043</div>
+      </div>
+    </div>
+  </div>
+  <p class="abs ver" id="ver">v.1.0.72</p>
+
+  <div class="abs cursor" id="cursor"><img src="../../_lib/cursor-hand.png" alt=""></div>
+</div>
+
+<script src="../../_lib/motion.js"></script>
+<script src="../../_lib/player.js"></script>
+<script>
+// Story: a creator with no data yet → ALL creators: the dashboard fills in, the cursor checks the red
+// "Found" slice (19) → back to the creator's empty state. Same numbers as the Figma frame.
+const T = {
+  toAll: 1.5, clickAll: 2.5,   // cursor to ALL in the rail
+  fill: 2.75,                  // empty state out, cards in
+  toDonut: 5.4, hover: 6.5,    // cursor onto the red slice, tooltip
+  toCat: 9.2, clickCat: 10.3,  // back to the first creator
+  unfill: 10.45,
+  end: 12.6,
+};
+const CLICKS = [T.clickAll, T.clickCat];
+const START = [300, 250]; // just right of the menu: short trips to the rail at the start and the end
+const ALL = [36, 102], CAT = [36, 187];
+const RED = [508, 648]; // on the red slice, where the Figma frame has its hand cursor
+const cursorAt = cursorPath(START, [
+  [T.toAll, T.clickAll - .15, ...ALL],
+  [T.toDonut, T.hover - .1, ...RED],
+  [T.toCat, T.clickCat - .15, ...CAT],
+  [T.end - 1.2, T.end - .2, ...START],
+]);
+
+// Upload Dynamics: [all, magic vault] heights, from Figma.
+const BARS = [[118, 81], [54, 39], [95, 68], [163, 117], [133, 67], [95, 24], [118, 96], [102, 69], [149, 112], [183, 136], [173, 119], [220, 167]];
+const $ = (id) => document.getElementById(id);
+$('bars').innerHTML = BARS.map(([a, m]) => `<div class="bar" style="height:${a}px"><i class="all"></i><i class="mv"></i></div>`).join('');
+const bars = [...document.querySelectorAll('.bar')].map((b) => [b.children[0], b.children[1]]);
+const ins = [...document.querySelectorAll('[data-in]')];
+const counts = [...document.querySelectorAll('[data-count]')];
+const C = 2 * Math.PI * 108;
+const fmt = (n) => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
+function render(t) {
+  // 0 = empty state, 1 = dashboard. The illustration PNG is opaque on #1a1a1a, so it only fades
+  // while the panel behind it is fully #1a1a1a: panel out after it, panel in before it.
+  const gone = t < T.unfill ? p(t, T.fill, T.fill + .35) : 1 - p(t, T.unfill + .3, T.unfill + .7);
+  const panel = t < T.unfill ? p(t, T.fill + .35, T.fill + .65) : 1 - p(t, T.unfill + .05, T.unfill + .3);
+  $('illu').style.opacity = $('msg').style.opacity = 1 - gone;
+  $('msg').style.transform = $('illu').style.transform = `translateY(${-8 * gone}px)`;
+  $('empty').style.background = `rgba(26,26,26,${1 - panel})`;
+  const shown = t < T.unfill ? 1 : 1 - p(t, T.unfill, T.unfill + .3);
+  $('range').style.opacity = p(t, T.fill + .2, T.fill + .6) * shown;
+  $('ver').style.opacity = p(t, T.fill + 1, T.fill + 1.4) * shown;
+
+  // Selection ring: leaves the old avatar as it lands on the new one.
+  const onAll = p(t, T.clickAll + .05, T.clickAll + .3) * (1 - p(t, T.clickCat + .05, T.clickCat + .3));
+  $('ringAll').style.opacity = onAll;
+  $('ringAll').style.transform = `scale(${mix(.86, 1, outC(onAll))})`;
+  $('ringCat').style.opacity = 1 - onAll;
+  $('ringCat').style.transform = `scale(${mix(.86, 1, outC(1 - onAll))})`;
+
+  // Cards rise in one after another.
+  for (const el of ins) {
+    const i = +el.dataset.in;
+    const k = outC(p(t, T.fill + .3 + i * .09, T.fill + .85 + i * .09));
+    el.style.opacity = k * shown;
+    el.style.transform = `translateY(${16 * (1 - k)}px)`;
+  }
+  const n = io(p(t, T.fill + .55, T.fill + 2.1));
+  for (const el of counts) el.textContent = fmt(+el.dataset.count * n) + (el.dataset.suffix || '');
+
+  // Donut draws clockwise from 12 o'clock as one sweep with one easing: blue, then the red slice closes it.
+  const sweep = io(p(t, T.fill + .9, T.fill + 2.2)) * 360;
+  const blue = Math.min(sweep, 300), red = Math.max(0, sweep - 300);
+  $('arcB').setAttribute('stroke-dasharray', `${C * blue / 360} ${C}`);
+  $('arcR').setAttribute('stroke-dasharray', `${C * red / 360} ${C}`);
+  $('arcR').style.opacity = red > 0 ? 1 : 0;
+
+  bars.forEach(([all, mv], i) => {
+    const k = outC(p(t, T.fill + .95 + i * .06, T.fill + 1.75 + i * .06));
+    const [a, m] = BARS[i];
+    all.style.height = a * k + 'px';
+    mv.style.height = m * outC(p(t, T.fill + 1.15 + i * .06, T.fill + 1.95 + i * .06)) + 'px';
+  });
+
+  // Tooltip while the cursor rests on the red slice.
+  const [x, y] = cursorAt(t);
+  const near = Math.hypot(x - RED[0], y - RED[1]) < 14 ? 1 : 0;
+  const tip = outBack(p(t, T.hover, T.hover + .3)) * (1 - p(t, T.toCat, T.toCat + .15)) * near;
+  $('tip').style.opacity = clamp(tip);
+  $('tip').style.transform = `translateY(${4 * (1 - tip)}px) scale(${mix(.9, 1, tip)})`;
+
+  const press = Math.max(...CLICKS.map((c) => bump(t, c, .18)));
+  $('cursor').style.transform = `translate(${x - 6}px, ${y - 1}px) scale(${1 - .14 * press})`;
+}
+
+const FIGMA = new URLSearchParams(location.search).has('figma');
+MotionPlayer.mount({
+  stage: $('stage'), width: 1440, height: 1024, duration: T.end, render: FIGMA ? (t) => { render(t); $('cursor').style.opacity = 0; } : render,
+  markers: [['ALL', T.clickAll], ['filled', T.fill + 2.3], ['hover', T.hover], ['creator', T.clickCat]],
+  refs: [['Empty (213:22508)', 'src/1-empty.png'], ['Filled (213:22643)', 'src/2-filled.png']],
+  poster: 0,
+});
+</script>
+</body>
+</html>

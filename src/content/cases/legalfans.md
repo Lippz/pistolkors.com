@@ -145,13 +145,10 @@ Fully automatic matching produced false positives, and a wrong takedown damages 
 
 Creators don’t want to manage cases; they want to know they’re covered. The statistics view leads with leaks detected and removed, and keeps the legal detail one level down. Even the empty state explains what will appear there.
 
-<div class="carousel">
-
-![Statistics dashboard in its empty state: an illustration and a prompt to add media to the Magic Vault or install the extension](../../assets/cases/legalfans/stats-empty.webp "Empty state")
-
-![Statistics dashboard with data: leaks detected and removed, removal percentage, top creator position, a donut chart and upload dynamics](../../assets/cases/legalfans/stats-filled.webp "Dashboard with data")
-
-</div>
+<figure class="case-motion" data-lightbox-group>
+<video src="../../motion/legalfans-stats.mp4" poster="../../motion/legalfans-stats.jpg" width="1440" height="1024" muted loop playsinline preload="metadata" aria-label="A creator with no data yet sees the empty statistics view, which suggests adding media to the Magic Vault or installing the extension; switching to all creators fills the dashboard: leaks detected and removed, removal percentage, top creator position, total media, the current leaks donut and upload dynamics, and the red slice shows 19 leaks found" data-label="A creator with no data yet sees the empty statistics view, which suggests adding media to the Magic Vault or installing the extension; switching to all creators fills the dashboard: leaks detected and removed, removal percentage, top creator position, total media, the current leaks donut and upload dynamics, and the red slice shows 19 leaks found"></video>
+<figcaption class="eyebrow">From the empty state to the dashboard with data</figcaption>
+</figure>
 
 #### Guided setup for non-technical users
 

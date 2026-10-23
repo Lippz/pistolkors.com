@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LinkHMS brand and design system — motion draft</title>
+<link rel="stylesheet" href="../../_lib/player.css">
+<style>
+  /* Stage is the Figma frame (KK, page pp, frames "1"…"8", 185:43920 → 157:30257); numbers are Figma px. */
+  * { box-sizing: border-box; }
+  .stage { background: #06235d; }
+  .abs { position: absolute; left: 0; top: 0; }
+
+  /* Frames 1–5: the mark drawn, filled, on blue, then shrunk into the app icon */
+  #blue { position: absolute; inset: 0; background: #296aff; }
+  #mark { position: absolute; left: 705.5px; top: 531px; width: 1488px; height: 1488px; overflow: visible; transform-origin: 744px 744px; }
+  #mark .line { fill: none; stroke: #fff; stroke-width: 2; }
+  #mark .fill { fill: #fff; }
+
+  /* Frames 5–8: everything sits on the grid of cards, which the camera moves at the end */
+  #grid { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+  /* white at 96 % over the navy, opaque so it matches the exports' background exactly */
+  .card { position: absolute; border-radius: 24px; background: #f5f6f9 no-repeat; overflow: hidden; }
+  .card.logo { overflow: visible; background: none; }
+  .card.logo .bg { position: absolute; inset: 0; border-radius: 24px; background: #fff; }
+  .piece { position: absolute; background-repeat: no-repeat; will-change: transform, opacity; }
+  .wm { position: absolute; width: 510px; height: 72px; }
+  .wm img { position: absolute; inset: 0; }
+  .icon { position: absolute; top: 116px; width: 264px; height: 264px; border-radius: 64px; }
+  .icon img { position: absolute; left: 47px; top: 47px; width: 170px; height: 170px; }
+  #iconW { background: #fff; box-shadow: 0 8px 12px rgba(0, 0, 0, .12); }
+  #iconB { background: #296aff; }
+
+  #fade { position: absolute; inset: 0; background: #06235d; pointer-events: none; }
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div id="blue"></div>
+  <svg id="mark" viewBox="0 0 1488 1488">
+    <!-- Frame 2: outlines (Figma stroke 2) -->
+    <path class="line" pathLength="1" d="M990.998 1C990.83 171.019 947.847 331.009 872.252 470.776L60.7627 493.318C306.264 463.392 496.498 254.465 496.997 1L990.998 1Z"/>
+    <path class="line" pathLength="1" d="M1424.3 496.994C1081.77 518.495 770.671 711.687 597.347 990.994H1L1 496.994H1424.3Z"/>
+    <path class="line" pathLength="1" d="M1487 991.003C1213.31 991.542 991.542 1213.31 991.003 1487H497.002C497.542 940.48 940.48 497.541 1487 497.001V991.003Z"/>
+    <!-- Frame 3: fills -->
+    <path class="fill" d="M0 496.008V496C0.105186 496 0.210259 495.999 0.31543 495.999L0 496.008ZM992 0C992 170.768 948.849 331.457 872.857 471.761L27.6514 495.239C288.722 480.893 496 264.654 496 0H992Z"/>
+    <path class="fill" d="M1488 991.994H1488V495.994C1120.82 495.994 781.669 695.487 597.901 991.994H0V495.994H1488V991.994Z"/>
+    <path class="fill" fill-rule="evenodd" d="M1488 992C1214.07 992 992 1214.07 992 1488H496C496 940.135 940.135 496 1488 496V992Z"/>
+  </svg>
+
+  <div id="grid"></div>
+  <div id="fade"></div>
+</div>
+
+<script src="../../_lib/motion.js"></script>
+<script src="../../_lib/player.js"></script>
+<script src="assets/pieces.js"></script>
+<script>
+const SLOW = 1; // stretch every beat at once
+// Named beats, in seconds.
+const B = {
+  draw: .6, drawEnd: 2.5,      // 1 → 2: outlines draw themselves
+  fill: 2.5, fillEnd: 3.3,     // 2 → 3: white fill
+  blue: 3.5, blueEnd: 4.3,     // 3 → 4: blue floods out from the centre
+  icon: 4.9, iconEnd: 6.1,     // 4 → 5: the blue and the mark shrink into the app icon
+  logos: 6.6, logosEnd: 7.7,   // 5 → 6: icon moves right, the light icon and wordmarks arrive
+  card: 8.3, cardEnd: 9.3,     // 6 → 7: the card under them, dark wordmarks
+  cam: 9.9, camEnd: 12.1,      // 7 → 8: the camera tilts 5° and pulls to the corner of the grid
+  cards: 10.2,                 // first new card; the others follow, then their content lands
+};
+const T = Object.fromEntries(Object.entries(B).map(([k, v]) => [k, v * SLOW]));
+const HOLD = 3, FADE = 1, BLANK = .3; // after the last piece lands: hold, fade to navy, a beat of navy
+const PIECE = .7 * SLOW;              // one piece's drop
+
+const $ = (id) => document.getElementById(id);
+const hash = (i) => { const s = Math.sin(i * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); };
+
+// ---------- Grid (Figma group 157:30258 coordinates) ----------
+const CARDS = [
+  ['spacing', 5, 576, 1464, 432], ['accents', 1549, 0, 1464, 1008],
+  ['buttons', 0, 1088, 1480, 748], ['pills', 0, 1916, 1480, 432], ['history', 0, 2428, 1480, 160], ['tags', 0, 2668, 1480, 160],
+  ['filters', 1560, 1088, 1457, 272], ['tabs', 1560, 1440, 1457, 176], ['headers', 1560, 1696, 1457, 356], ['pickers', 1560, 2132, 1457, 696],
+];
+const LOGO = [5, 0, 1464, 496];
+const C = [LOGO[0] + LOGO[2] / 2, LOGO[1] + LOGO[3] / 2]; // the logo card's centre, the camera's anchor
+
+const grid = $('grid');
+const el = (cls, css, html = '') => {
+  const d = document.createElement('div');
+  d.className = cls; Object.assign(d.style, css); d.innerHTML = html;
+  return d;
+};
+const px = (v) => v + 'px';
+
+// Logo card: frames 5–7 happen inside it, frame 8 keeps it as the first card.
+const logo = el('card logo', { left: px(LOGO[0]), top: px(LOGO[1]), width: px(LOGO[2]), height: px(LOGO[3]) },
+  `<div class="bg" id="logoBg"></div>
+   <div class="wm" id="wm1"><img id="wm1a" src="assets/f6a.svg" alt=""><img id="wm1b" src="assets/f7a.svg" alt=""></div>
+   <div class="wm" id="wm2"><img id="wm2a" src="assets/f6c.svg" alt=""><img id="wm2b" src="assets/f7c.svg" alt=""></div>
+   <div class="icon" id="iconW"><img src="assets/f6d.svg" alt=""></div>
+   <div class="icon" id="iconB"><img src="assets/f7e.svg" alt=""></div>`);
+grid.appendChild(logo);
+
+// Cards appear in a wave out from the logo card; each one's content lands a beat later, piece by piece.
+const cards = CARDS.map(([name, x, y, w, h]) => {
+  const d = Math.hypot(x + w / 2 - C[0], y + h / 2 - C[1]);
+  return { name, x, y, w, h, d };
+}).sort((a, b) => a.d - b.d);
+let lastLand = 0;
+cards.forEach((c, i) => {
+  c.at = T.cards + i * .23 * SLOW + hash(i) * .1;
+  c.node = el('card', { left: px(c.x), top: px(c.y), width: px(c.w), height: px(c.h) });
+  grid.appendChild(c.node);
+  const pad = c.name === 'headers' ? 18 : 6;
+  const list = PIECES[c.name];
+  const spread = Math.min(2.2, .8 + list.length * .01) * SLOW; // more pieces, a longer shower
+  c.pieces = list.map(([x, y, w, h], j) => {
+    const x0 = Math.max(0, x - pad), y0 = Math.max(0, y - pad);
+    const x1 = Math.min(c.w, x + w + pad), y1 = Math.min(c.h, y + h + pad);
+    const node = el('piece', {
+      left: px(x0), top: px(y0), width: px(x1 - x0), height: px(y1 - y0),
+      backgroundImage: `url(assets/card-${c.name}.png)`, backgroundPosition: `${-x0}px ${-y0}px`,
+    });
+    c.node.appendChild(node);
+    // Roughly top to bottom, but shuffled enough to feel hand-placed.
+    const order = (y + h / 2) / c.h * .6 + (x + w / 2) / c.w * .15 + hash(i * 97 + j) * .3;
+    const at = c.at + .25 * SLOW + order / 1.05 * spread;
+    lastLand = Math.max(lastLand, at + PIECE);
+    return { node, at, big: Math.max(w, h), tilt: (hash(j * 13 + i) - .5) * 4 };
+  });
+  // Once everything has landed, the card shows the whole export and drops the pieces:
+  // tilted piece edges antialias into faint 1 px seams otherwise.
+  c.done = Math.max(...c.pieces.map((pc) => pc.at)) + PIECE;
+});
+T.hold = lastLand; T.fade = lastLand + HOLD; T.end = T.fade + FADE + BLANK;
+
+// ---------- Render ----------
+const lines = [...document.querySelectorAll('#mark .line')];
+const fills = [...document.querySelectorAll('#mark .fill')];
+const ICON = [1318, 1143, 264]; // app icon in frame 5, stage px
+const A7 = [1450, 1275];        // the logo card's centre in frame 7 (stage centre)
+const R5 = 5 * Math.PI / 180;
+const A8 = [-176 + C[0] * Math.cos(R5) + C[1] * Math.sin(R5), -2 - C[0] * Math.sin(R5) + C[1] * Math.cos(R5)];
+
+function render(t) {
+  // 1 → 2: three outlines draw one after another, overlapping
+  lines.forEach((l, i) => {
+    const k = io(p(t, T.draw + i * .35 * SLOW, T.drawEnd - (2 - i) * .2 * SLOW));
+    l.style.strokeDashoffset = 1 - k;
+    l.style.strokeDasharray = '1 1';
+    l.style.opacity = 1 - p(t, T.fill + .2 * SLOW, T.fillEnd);
+  });
+  // 2 → 3: fills
+  fills.forEach((f, i) => { f.style.opacity = outC(p(t, T.fill + i * .1 * SLOW, T.fillEnd)); });
+
+  // 3 → 4 → 5: blue grows as a circle, then closes into the icon square
+  const blue = $('blue');
+  if (t < T.icon) {
+    const r = outC(p(t, T.blue, T.blueEnd)) * 1940;
+    blue.style.clipPath = `circle(${r}px at 1450px 1275px)`;
+  } else {
+    const k = io(p(t, T.icon, T.iconEnd));
+    const [x, y, s] = ICON;
+    blue.style.clipPath = `inset(${y * k}px ${(2900 - x - s) * k}px ${(2550 - y - s) * k}px ${x * k}px round ${64 * k}px)`;
+  }
+  const inIcon = t >= T.iconEnd;
+  blue.style.visibility = t < T.blue || inIcon ? 'hidden' : 'visible';
+  const ms = mix(1, 170 / 1488, io(p(t, T.icon, T.iconEnd)));
+  $('mark').style.transform = `scale(${ms})`;
+  $('mark').style.visibility = t < T.draw || inIcon ? 'hidden' : 'visible';
+
+  // 5 → 6 → 7: logo card content (card px)
+  const kL = io(p(t, T.logos, T.logosEnd)), kC = io(p(t, T.card, T.cardEnd));
+  $('iconB').style.visibility = inIcon ? 'visible' : 'hidden';
+  $('iconB').style.left = px(mix(mix(600, 1240, kL), 1062, kC));
+  const kW = p(t, T.logos + .45 * SLOW, T.logosEnd + .3 * SLOW);
+  $('iconW').style.left = px(mix(777, 730, kC));
+  $('iconW').style.opacity = outC(kW);
+  $('iconW').style.transform = `scale(${mix(.8, 1, outBack(kW, 1.2))})`;
+  [['wm1', 131, .35], ['wm2', 293, .5]].forEach(([id, top, d]) => {
+    const k = outC(p(t, T.logos + d * SLOW, T.logosEnd + d * SLOW));
+    const node = $(id);
+    node.style.top = px(top);
+    node.style.left = px(mix(mix(-140, -40, k), 138, kC));
+    node.style.opacity = k;
+    $(id + 'b').style.opacity = kC;
+    $(id + 'a').style.opacity = 1 - kC;
+  });
+  const kCam = io(p(t, T.cam, T.camEnd));
+  $('logoBg').style.opacity = mix(kC * .9, .96, kCam);
+  $('logoBg').style.transform = `scale(${mix(.94, 1, outC(kC))})`;
+
+  // 7 → 8: camera. Anchor the logo card's centre, tilt 5° and dip the zoom a little on the way.
+  const ax = mix(A7[0], A8[0], kCam), ay = mix(A7[1], A8[1], kCam);
+  const zoom = 1 - .12 * Math.sin(Math.PI * kCam);
+  grid.style.transform = `translate(${ax}px, ${ay}px) rotate(${-5 * kCam}deg) scale(${zoom}) translate(${-C[0]}px, ${-C[1]}px)`;
+
+  for (const c of cards) {
+    const k = p(t, c.at, c.at + .6 * SLOW);
+    c.node.style.opacity = outC(Math.min(1, k * 1.6));
+    c.node.style.transform = `translateY(${(1 - outC(k)) * 70}px) scale(${mix(.92, 1, outC(k))})`;
+    const done = t >= c.done;
+    c.node.style.backgroundImage = done ? `url(assets/card-${c.name}.png)` : 'none';
+    for (const pc of c.pieces) {
+      pc.node.style.display = done ? 'none' : '';
+      if (done) continue;
+      const q = p(t, pc.at, pc.at + PIECE);
+      const s = 1 + Math.min(.22, 40 / pc.big) * (1 - outQ(q)); // dropped from above: big, then lands
+      pc.node.style.opacity = outC(Math.min(1, q * 2.2));
+      pc.node.style.transform = `translateY(${-18 * (1 - outQ(q))}px) rotate(${pc.tilt * (1 - outQ(q))}deg) scale(${s})`;
+      const sh = 1 - outC(q);
+      pc.node.style.boxShadow = q > 0 && q < 1 ? `0 ${24 * sh}px ${36 * sh}px rgba(6, 35, 93, ${.22 * sh})` : 'none';
+    }
+  }
+
+  $('fade').style.opacity = outC(p(t, T.fade, T.fade + FADE));
+}
+
+MotionPlayer.mount({
+  stage: $('stage'), width: 2900, height: 2550, duration: T.end, render,
+  markers: [['draw', T.draw], ['fill', T.fill], ['blue', T.blue], ['icon', T.icon], ['logos', T.logos], ['card', T.card], ['tilt', T.cam], ['hold', T.hold], ['fade', T.fade]],
+  refs: [1, 2, 3, 4, 5, 6, 7, 8].map((i) => [`Frame ${i}`, `src/${i}.png`]),
+  poster: 0,
+});
+</script>
+</body>
+</html>
