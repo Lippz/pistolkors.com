@@ -68,6 +68,12 @@ show the same thing.
   (Added), then Onlyfans, LoyalFans and Friends2Follow one by one, the counter
   says "1 — 4 of 4" (Figma has "1 — 10 of 69") → a short dip back to the empty frame. `?figma&t=0` and `?figma=2` lay out
   the two Figma frames for D (the second with Figma's three rows and counter). The illustration is the Figma SVG export.
+- `account/`: My Account, 1440×1024 (KK 216:25196 General Info, 216:25258 plans popup). Basic Plan → Upgrade → the
+  popup's surface covers the page, then its content settles in, the three plans rising one by one → the cursor rests on
+  Premium's Choose plan (its Figma hover, #00c8ff; the Premium card's Figma look is its hover too, off hover it is
+  styled like Basic) → Cancel: the content goes, then the surface. Figma sizes "auto"
+  line-height text to whole pixels rounded up (24 → 29, 48 → 57), so those are set explicitly. `?figma&t=0` and
+  `?figma=2` lay out the two frames for D (the second has Figma's own cursor drawn in).
 
 ## Workflow
 

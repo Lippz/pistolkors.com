@@ -192,13 +192,9 @@ Connecting an account and installing an extension are where people give up. The 
 
 *My Platforms — cam sites and socials the team monitors on the creator’s behalf.*
 
-<div class="carousel">
-
-![My Account with general profile information](../../assets/cases/legalfans/cv-account-info.webp "Profile")
-
-![Subscription plans modal with Basic, Advanced and Premium](../../assets/cases/legalfans/cv-account-plans.webp "Subscription plans")
-
-</div>
+<figure class="case-motion" data-lightbox-group>
+<video src="../../motion/legalfans-account.mp4" poster="../../motion/legalfans-account.jpg" width="1440" height="1024" muted loop playsinline preload="metadata" aria-label="On My Account, a creator on the Basic Plan with the next charge on 02.12.2025 clicks Upgrade; the subscription plans open, Basic, Advanced and Premium at $69, $129 and $149 a license, the cursor rests on Premium's Choose plan, and Cancel closes the plans back to the account" data-label="On My Account, a creator on the Basic Plan with the next charge on 02.12.2025 clicks Upgrade; the subscription plans open, Basic, Advanced and Premium at $69, $129 and $149 a license, the cursor rests on Premium's Choose plan, and Cancel closes the plans back to the account"></video>
+</figure>
 
 *My Account — profile and subscription upgrade.*
 

@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LegalFans · My Account — motion draft</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=block" rel="stylesheet">
+<link rel="stylesheet" href="../../_lib/player.css">
+<style>
+  /* Stage is the Figma frame (KK 216:25196 My Account → 216:25258 plans popup), 1440×1024; every number is Figma pixels. */
+  * { box-sizing: border-box; }
+  p { margin: 0; }
+  .stage { background: #0c0d0d; font-family: Roboto, sans-serif; color: rgba(255,255,255,.96); -webkit-font-smoothing: antialiased; overflow: hidden; }
+  .abs { position: absolute; }
+  .row { display: flex; }
+  .col { display: flex; flex-direction: column; }
+  /* Figma strokes sit inside the box and take no layout space. */
+  .stroke { box-shadow: inset 0 0 0 1px var(--s); }
+  /* Figma sizes "auto" line-height text boxes to whole pixels, rounded up: 10 → 12, 24 → 29, 34 → 40, 48 → 57. */
+
+  /* Header */
+  .header { left: 0; top: 0; width: 1440px; height: 64px; background: #1a1a1a; }
+  .user { right: 24px; top: 20px; display: flex; gap: 8px; align-items: center; font-size: 12px; line-height: 16px; letter-spacing: .4px; }
+  .user img { width: 24px; height: 24px; display: block; }
+
+  /* Menu */
+  .menu { left: 0; top: 64px; width: 200px; height: 960px; background: #0c0d0d; }
+  .menu-in { position: absolute; left: 16px; top: 0; width: 168px; padding: 16px 0; display: flex; flex-direction: column; gap: 16px; }
+  .mi { height: 40px; padding: 8px; display: flex; gap: 16px; align-items: center; border-radius: 4px; font-size: 14px; line-height: 1.4; letter-spacing: .25px; white-space: nowrap; }
+  .mi img { width: 24px; height: 24px; display: block; }
+  .mi.on { background: rgba(1,175,241,.16); }
+  .menu .div { height: 1px; background: rgba(255,255,255,.12); }
+  .group { display: flex; flex-direction: column; gap: 16px; }
+
+  /* Main */
+  .main { left: 200px; top: 64px; width: 1240px; height: 960px; padding-top: 24px; gap: 24px; }
+  .headline { padding: 4px 24px; }
+  .ttl { display: flex; gap: 16px; align-items: center; }
+  .ttl img { width: 36px; height: 36px; display: block; }
+  .ttl p { font-size: 34px; letter-spacing: .25px; line-height: 40px; white-space: nowrap; }
+  .tabs { gap: 4px; }
+  .tab { position: relative; flex: 1 0 0; height: 48px; border-radius: 8px 8px 0 0; overflow: hidden; background: #1a1a1a; }
+  .tab > img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .tab p { position: absolute; left: calc(50% - .5px); top: 15.6px; transform: translateX(-50%); font-size: 14px; font-weight: 500; line-height: 16px; letter-spacing: .75px; text-transform: uppercase; color: #01aff1; white-space: nowrap; }
+  .panel { background: #1a1a1a; height: 822px; padding: 24px; gap: 24px; }
+  .h5 { font-size: 24px; line-height: 29px; white-space: nowrap; }
+  .block { gap: 12px; }
+  .line { gap: 12px; height: 76px; width: 1120px; }
+  .pill { height: 36px; padding: 8px 16px; border-radius: 24px; background: rgba(1,175,241,.16); color: #01aff1; font-size: 14px; line-height: 1.4; letter-spacing: .25px; white-space: nowrap; display: flex; align-items: center; gap: 12px; }
+  .pill.plain { background: none; }
+  .pill img { width: 16px; height: 16px; display: block; }
+  .upload { height: 48px; padding: 12px 16px; border-radius: 24px; background: rgba(1,175,241,.16); color: #01aff1; font-size: 14px; font-weight: 500; line-height: 16px; letter-spacing: .75px; text-transform: uppercase; display: flex; align-items: center; }
+
+  /* Text field (textfield_rectangle): the box is inset 5/19, the label sits on its top edge. */
+  .field { position: relative; flex: 1 0 0; height: 76px; overflow: hidden; }
+  .field .bg { position: absolute; left: 0; right: 0; top: 5px; bottom: 19px; background: #1a1a1a; border: 1px solid rgba(255,255,255,.08); border-radius: 4px; }
+  .field .lab { position: absolute; left: 6px; top: 0; padding: 0 4px; background: #1a1a1a; font-size: 10px; letter-spacing: .4px; line-height: 12px; color: rgba(255,255,255,.6); white-space: nowrap; }
+  .field .val { position: absolute; left: 10px; top: 24px; font-size: 14px; line-height: 1.4; letter-spacing: .25px; white-space: nowrap; }
+  .field.nolab .val { top: 21px; }
+  .field .ic { position: absolute; right: 12px; top: 19px; width: 24px; height: 24px; display: block; }
+  .field.off .bg { background: #222; }
+  .field.off .lab, .field.off .val { color: rgba(255,255,255,.42); }
+
+  .card { --s: rgba(255,255,255,.12); background: #171717; border-radius: 8px; padding: 24px 24px 32px; gap: 12px; justify-content: center; }
+  .h3 { font-size: 48px; line-height: 57px; white-space: nowrap; }
+  .grad5 { flex: 1 0 0; color: transparent; -webkit-background-clip: text; background-clip: text;
+    background: url(assets/headline5.png) center / cover no-repeat, linear-gradient(196.70deg, #01aff1 15.391%, #1c63ed 85.14%);
+    -webkit-background-clip: text; background-clip: text; }
+  .next { font-size: 14px; line-height: 1.4; letter-spacing: .25px; color: rgba(255,255,255,.42); text-align: right; white-space: nowrap; }
+  .btn { height: 48px; padding: 12px 16px; border-radius: 4px; background: #01aff1; border: 1px solid #01aff1; color: #1a1a1a; font-size: 14px; font-weight: 500; line-height: 16px; letter-spacing: .75px; text-transform: uppercase; display: flex; align-items: center; }
+
+  /* Plans popup (Popup / Permissions): the whole frame, rounded, with shadow/Default. */
+  /* The surface and the content fade separately, so the two screens never show through each other. */
+  .pop-bg { left: 0; top: 0; width: 1440px; height: 1024px; background: #1a1a1a; border-radius: 8px;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,.16)) drop-shadow(0 4px 4px rgba(0,0,0,.08)) drop-shadow(0 8px 6px rgba(0,0,0,.04)); }
+  .pop { left: 0; top: 0; width: 1440px; height: 1024px; padding: 32px 48px; gap: 24px; align-items: center; justify-content: center; }
+  .grad4 { width: 824px; font-size: 34px; letter-spacing: .25px; line-height: 40px; text-align: center; color: transparent;
+    background: url(assets/headline4.png) center / cover no-repeat, linear-gradient(-2.97deg, #01aff1 35.108%, #1c63ed 65.237%), #018ccf;
+    -webkit-background-clip: text; background-clip: text; }
+  /* In the Figma render the subtitle's glyphs sit 2 px above its 24 px box; the boxes around it match without a nudge. */
+  .sub { position: relative; top: -2px; font-size: 16px; line-height: 24px; letter-spacing: .15px; text-align: center; }
+  .uploads { background: #222; border-radius: 16px; padding: 12px 0; gap: 6px; justify-content: center; color: #01aff1; font-size: 14px; line-height: 1.4; letter-spacing: .25px; white-space: nowrap; }
+  .uploads span { height: 20px; padding: 0 8px; border-radius: 20px; background: rgba(1,175,241,.16); font-weight: 500; line-height: 20px; letter-spacing: 0; }
+  .plans { gap: 16px; }
+  .plan { position: relative; width: 300px; height: 480px; border-radius: 16px; padding: 32px 24px; gap: 32px; }
+  .plan.basic { --s: rgba(1,175,241,.16); background: #0c0d0d; }
+  .plan.adv { background: linear-gradient(263.71deg, #01aff1 4.5666%, #1c63ed 95.433%); }
+  /* Premium's Figma look (#181d1f, a lighter stroke) is its hover; off hover it looks like Basic. render() mixes the two. */
+  .plan.prem { --s: rgba(1,175,241,.16); background: #0c0d0d; }
+  .badge { align-self: flex-start; height: 24px; padding: 0 12px; border-radius: 20px; background: rgba(1,175,241,.2); color: #01aff1; font-size: 14px; font-weight: 500; line-height: 20px; display: flex; align-items: center; }
+  .adv .badge { background: rgba(255,255,255,.2); color: rgba(255,255,255,.96); }
+  .price { align-items: flex-end; text-align: center; }
+  .price .num { display: flex; height: 32px; align-items: flex-start; line-height: 40px; white-space: nowrap; }
+  .price b { font-size: 34px; font-weight: 700; letter-spacing: .25px; }
+  .price i { font-style: normal; font-size: 24px; line-height: 29px; }
+  .price .per { width: 56px; height: 10px; display: flex; flex-direction: column; justify-content: center; font-size: 14px; line-height: 1.4; letter-spacing: .25px; white-space: nowrap; text-align: left; }
+  .choose { align-self: flex-start; align-items: center; gap: 8px; }
+  .choose .b { position: relative; height: 40px; padding: 10px 24px; border-radius: 24px; font-size: 14px; font-weight: 500; line-height: 16px; letter-spacing: .75px; text-transform: uppercase; white-space: nowrap; display: flex; align-items: center; color: #1a1a1a; }
+  .basic .b { background: rgba(255,255,255,.08); color: rgba(255,255,255,.42); }
+  .adv .b { background: rgba(255,255,255,.96); }
+  .prem .b { background: #01aff1; }
+  .prem .b .hov { position: absolute; inset: 0; border-radius: 24px; background: #00c8ff; }
+  .prem .b span { position: relative; }
+  .charged { font-size: 10px; letter-spacing: .4px; line-height: 12px; opacity: .72; white-space: nowrap; }
+  .inc { gap: 8px; }
+  .inc > b { font-size: 18px; font-weight: 700; line-height: 28px; letter-spacing: .5px; }
+  .list { gap: 8px; }
+  .basic .list, .prem .list { opacity: .72; }
+  .li { display: flex; gap: 8px; align-items: center; font-size: 14px; line-height: 24px; }
+  .li.top { align-items: flex-start; }
+  .li img { width: 20px; height: 20px; display: block; flex: none; }
+  .fine { width: 100%; font-size: 10px; letter-spacing: .4px; line-height: 12px; color: rgba(255,255,255,.42); text-align: center; }
+  .cancel { width: 90px; justify-content: center; }
+  .cancel p { height: 40px; padding: 10px 16px; display: flex; align-items: center; color: #f54545; font-size: 14px; font-weight: 500; line-height: 16px; letter-spacing: .75px; text-transform: uppercase; }
+  .close { right: 20px; top: 20px; width: 36px; height: 36px; display: block; }
+
+  .cursor { left: 0; top: 0; width: 19px; height: 24px; z-index: 20; transform-origin: 6px 1px; }
+  .cursor img { width: 19px; height: 24px; display: block; }
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="abs header">
+    <img class="abs" src="assets/logo1.svg" alt="" style="left:25.06px;top:26.9px;width:158.98px;height:11.74px">
+    <img class="abs" src="assets/logo2.svg" alt="" style="left:105.12px;top:24.86px;width:14.98px;height:15.27px">
+    <div class="abs user"><p>username@mailprovider.com</p><img src="assets/logout.svg" alt=""></div>
+  </div>
+
+  <div class="abs menu"><div class="menu-in">
+    <div class="mi"><img src="assets/m1.svg" alt="">Statistics</div>
+    <i class="div"></i>
+    <div class="group"><div class="mi"><img src="assets/m2.svg" alt="">Magic Vault</div><div class="mi"><img src="assets/m3.svg" alt="">Leaks</div></div>
+    <i class="div"></i>
+    <div class="group"><div class="mi"><img src="assets/m4.svg" alt="">My Platforms</div><div class="mi"><img src="assets/m5.svg" alt="">My Camsites</div><div class="mi"><img src="assets/m6.svg" alt="">My Socials</div></div>
+    <i class="div"></i>
+    <div class="mi"><img src="assets/m7.svg" alt="">Keyword Search</div>
+    <i class="div"></i>
+    <div class="group"><div class="mi"><img src="assets/m8.svg" alt="">Payments</div><div class="mi on"><img src="assets/m9.svg" alt="">My Account</div></div>
+    <i class="div"></i>
+    <div class="mi"><img src="assets/m10.svg" alt="">Install Extension</div>
+  </div></div>
+
+  <div class="abs col main">
+    <div class="headline"><div class="ttl"><img src="assets/title.svg" alt=""><p>My Account</p></div></div>
+    <div class="col">
+      <div class="row tabs">
+        <div class="tab" style="background:none"><img src="assets/tab.svg" alt=""><img src="assets/ind-on.svg" alt=""><p>General Info</p></div>
+        <div class="tab"><img src="assets/ind-off.svg" alt=""><p>Linked accounts</p></div>
+        <div class="tab"><img src="assets/ind-off.svg" alt=""><p>Whitelist</p></div>
+      </div>
+      <div class="col panel">
+        <div class="col" style="gap:24px">
+          <div class="col block">
+            <p class="h5">Photo</p>
+            <div class="row" style="gap:24px;align-items:center">
+              <img src="assets/avatar.svg" alt="" style="width:48px;height:48.5px;display:block;margin-bottom:-.5px">
+              <div class="upload">Upload Photo</div>
+            </div>
+          </div>
+          <div class="col block">
+            <p class="h5">Info</p>
+            <div class="row line">
+              <div class="field"><div class="bg"></div><p class="lab">Stage Name *</p><p class="val">Jessica Sparkle</p></div>
+              <div class="field"><div class="bg"></div><p class="lab">Name *</p><p class="val">Jessica</p></div>
+            </div>
+            <div class="row line">
+              <div class="field off"><div class="bg"></div><p class="lab">Email</p><p class="val">jessica.lastname@gmail.com</p></div>
+              <div class="row" style="flex:1 0 0;gap:10px">
+                <div class="field nolab" style="flex:none;width:100px"><div class="bg"></div><img class="ic" src="assets/drop.svg" alt=""><p class="val">US +1</p></div>
+                <div class="field"><div class="bg"></div><p class="lab">Phone Number *</p><p class="val">592870534</p></div>
+              </div>
+            </div>
+          </div>
+          <div class="row" style="gap:12px;align-items:center">
+            <div class="col block" style="flex:1 0 0">
+              <p class="h5">Account Type</p>
+              <div class="col card stroke">
+                <p class="h3">Creator</p>
+                <div class="row"><div class="pill">Upgrade to Agency</div></div>
+              </div>
+            </div>
+            <div class="col block" style="flex:1 0 0">
+              <p class="h5">Subscription</p>
+              <div class="col card stroke">
+                <div class="row" style="gap:10px;align-items:center"><p class="h3 grad5">Basic Plan</p><p class="next">Next charge at<br>02.12.2025</p></div>
+                <div class="row" style="gap:12px"><div class="pill" id="upgrade">Upgrade</div><div class="pill plain"><img src="assets/ext.svg" alt="">Payment Info</div><div class="pill plain" style="color:#f54545">Cancel Subscription</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col block">
+          <p class="h5">Change password</p>
+          <div class="row" style="gap:12px">
+            <div class="field nolab"><div class="bg"></div><img class="ic" src="assets/eye-off.svg" alt=""><p class="val">Old password</p></div>
+            <div class="field nolab"><div class="bg"></div><img class="ic" src="assets/eye-off.svg" alt=""><p class="val">New password</p></div>
+            <div class="field nolab"><div class="bg"></div><img class="ic" src="assets/eye-off.svg" alt=""><p class="val">Confirm new password</p></div>
+          </div>
+        </div>
+        <div class="row" style="justify-content:flex-end"><div class="btn">Update</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="abs pop-bg" id="popBg"></div>
+  <div class="abs col pop" id="pop">
+    <p class="grad4">Subscribe to unlock all features</p>
+    <div class="col" style="gap:16px;align-items:flex-end">
+      <div class="col" style="gap:12px;width:100%">
+        <p class="sub">Choose a plan that fits your needs</p>
+        <div class="row uploads">Your current amount of uploads is<span>572</span></div>
+      </div>
+      <div class="row plans" id="plans"></div>
+      <p class="fine">*Subscription price does not include taxes. Plan price is fixed for 1 month. Minimum subscription duration is 3 months.</p>
+    </div>
+    <div class="row cancel"><p>Cancel</p></div>
+    <img class="abs close" src="assets/close.svg" alt="">
+  </div>
+
+  <div class="abs cursor" id="cursor"><img src="../../_lib/cursor-hand.png" alt=""></div>
+</div>
+
+<script src="../../_lib/motion.js"></script>
+<script src="../../_lib/player.js"></script>
+<script>
+// Story: Jessica's My Account (Basic Plan) → Upgrade under Subscription → the plans popup, the cards rising in one
+// by one → the cursor settles on Premium's Choose plan (its Figma hover) → Cancel → back to My Account.
+const T = {
+  upgrade: 1.8,      // click Upgrade
+  open: 2.0,         // the popup fades in, then the cards
+  premium: 4.4,      // the cursor arrives on Premium's Choose plan
+  cancel: 6.6,       // click Cancel
+  close: 6.75,       // the popup fades out
+  end: 8.8,
+};
+const CLICKS = [T.upgrade, T.cancel];
+const START = [1120, 900];
+const UPGRADE = [895, 728], PREMIUM = [1006, 466], CANCEL = [722, 860];
+const cursorAt = cursorPath(START, [
+  [.5, T.upgrade - .15, ...UPGRADE],
+  [T.open + .9, T.premium, ...PREMIUM],
+  [T.premium + 1.3, T.cancel - .15, ...CANCEL],
+  [T.close + .7, T.end - .3, ...START],
+]);
+
+const PLANS = [
+  ['basic', 'Basic', '$69', 'Current Plan', '$276', ['Full content rescan once a month', 'Included 250 pictures', '$14 for additional 500 pictures', 'Socials Integration: $15/month', 'Cam Sites: $100/month<br>or $90/month (5+ Users)']],
+  ['adv', 'Advanced', '$129', 'Choose plan', '$516', ['Full content rescan once a week', 'Included 500 pictures', '$19 for additional 1000 pictures', 'Socials Integration: $15/month', 'Cam Sites: $80/month<br>or $75/month (5+ Users)']],
+  ['prem', 'Premium', '$149', 'Choose plan', '$596', ['Full content rescan every day', 'Included 1000 pictures', '$19 for additional 1000 pictures', 'Socials Integration: $15/month', 'Cam Sites: $80/month<br>or $75/month (5+ Users)']],
+];
+const $ = (id) => document.getElementById(id);
+$('plans').innerHTML = PLANS.map(([k, name, price, btn, charged, items]) => `<div class="col plan ${k}${k === 'adv' ? '' : ' stroke'}">
+  <div class="col" style="gap:16px;align-self:flex-start"><p class="badge">${name}</p>
+    <div class="row price"><div class="num"><b>${price}</b><i>*</i></div><div class="per"><p>/ license</p></div></div></div>
+  <div class="col choose"><div class="b"${k === 'prem' ? ' id="prem"' : ''}>${k === 'prem' ? '<i class="hov" id="premHov"></i>' : ''}<span>${btn}</span></div><p class="charged">You will be charged ${charged}</p></div>
+  <div class="col inc"><b>Includes:</b><div class="col list">${items.map((s, i) => `<div class="li${i === 4 ? ' top' : ''}"><img src="assets/check.svg" alt=""><p>${s}</p></div>`).join('')}</div></div>
+</div>`).join('');
+const planEls = [...$('plans').children];
+
+// Hover follows the cursor: the share of the last 0.14 s it spent inside the button.
+// Layout rects in stage pixels, from offsets: they ignore the popup's scale and the cards' rise.
+const rectOf = (el) => {
+  const w = el.offsetWidth, h = el.offsetHeight; let x = 0, y = 0;
+  for (; el && el !== $('stage'); el = el.offsetParent) { x += el.offsetLeft; y += el.offsetTop; }
+  return { left: x, top: y, right: x + w, bottom: y + h };
+};
+const premCard = planEls[2], premCardRect = rectOf(premCard), premRect = rectOf($('prem'));
+const inside = (r, [x, y]) => x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+const hoverAt = (r, t) => { let n = 0; for (let i = 0; i < 8; i++) n += inside(r, cursorAt(t - i * .02)); return n / 8; };
+
+function render(t) {
+  // Popup: the surface covers the page first, then the content settles in, the cards rising one after another.
+  // After Cancel the content goes first, then the surface uncovers the page.
+  $('popBg').style.opacity = outC(p(t, T.open, T.open + .25)) * (1 - io(p(t, T.close + .2, T.close + .5)));
+  const o = outC(p(t, T.open + .15, T.open + .55)) * (1 - io(p(t, T.close, T.close + .25)));
+  $('pop').style.opacity = o;
+  $('pop').style.transform = `scale(${mix(.985, 1, o)})`;
+  planEls.forEach((el, i) => {
+    const k = outC(p(t, T.open + .3 + .12 * i, T.open + .85 + .12 * i));
+    el.style.opacity = k;
+    el.style.transform = `translateY(${16 * (1 - k)}px)`;
+  });
+  $('upgrade').style.filter = `brightness(${1 - .15 * bump(t, T.upgrade, .22)})`;
+
+  $('premHov').style.opacity = t < T.close ? hoverAt(premRect, t) : 0;
+  const h = t < T.close ? hoverAt(premCardRect, t) : 0;
+  premCard.style.background = `rgb(${mix(12, 24, h)},${mix(13, 29, h)},${mix(13, 31, h)})`;
+  premCard.style.setProperty('--s', `rgba(${mix(1, 156, h)},${mix(175, 224, h)},${mix(241, 250, h)},${mix(.16, .33, h)})`);
+
+  const [x, y] = cursorAt(t);
+  const press = Math.max(...CLICKS.map((c) => bump(t, c, .18)));
+  $('cursor').style.transform = `translate(${x - 6}px, ${y - 1}px) scale(${1 - .14 * press})`;
+}
+
+// ?figma (with t=0) shows My Account as in Figma for D; ?figma=2 freezes the popup with Premium's hover on.
+const FIGMA = new URLSearchParams(location.search).get('figma');
+const figmaRender = (t) => {
+  render(FIGMA === '2' ? T.premium + .5 : t);
+  $('cursor').style.opacity = 0;
+};
+MotionPlayer.mount({
+  stage: $('stage'), width: 1440, height: 1024, duration: T.end, render: FIGMA !== null ? figmaRender : render,
+  markers: [['upgrade', T.upgrade], ['premium', T.premium], ['cancel', T.cancel]],
+  refs: [['My Account (216:25196)', 'src/1-account.png'], ['Plans (216:25258)', 'src/2-plans.png']],
+  poster: 0,
+});
+</script>
+</body>
+</html>
