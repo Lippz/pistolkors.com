@@ -1,5 +1,6 @@
 ---
 /** Testimonials: one card per quote, each ending in a link to the case it is about. */
+import { Image } from 'astro:assets';
 import ArrowCircle from './ArrowCircle.astro';
 import { testimonials } from '../data/site';
 import { url } from '../lib/url';
@@ -37,6 +38,7 @@ const splitRole = (role: string, label?: string) => {
               </blockquote>
               {t.proof ? (
                 <a href={url(t.proof.href)} class="quote__foot quote__foot--link arrow-trigger">
+                  {t.photo && <Image src={t.photo} alt="" width={48} height={48} densities={[1, 2]} class="quote__photo" />}
                   <span class="quote__who">
                     <span class="quote__name">{t.name}</span>
                     <span class="quote__role">
@@ -50,6 +52,7 @@ const splitRole = (role: string, label?: string) => {
                 </a>
               ) : (
                 <div class="quote__foot">
+                  {t.photo && <Image src={t.photo} alt="" width={48} height={48} densities={[1, 2]} class="quote__photo" />}
                   <span class="quote__who">
                     <span class="quote__name">{t.name}</span>
                     <span class="quote__role">{t.role}</span>
@@ -140,7 +143,15 @@ const splitRole = (role: string, label?: string) => {
     outline: 2px solid var(--accent);
     outline-offset: 4px;
   }
+  .quote__photo {
+    flex: none;
+    width: 48px;
+    height: 48px;
+    border-radius: 999px;
+    object-fit: cover;
+  }
   .quote__who {
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 4px;

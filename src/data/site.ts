@@ -1,5 +1,6 @@
 import { url } from '../lib/url';
 import { PRODUCT_SINCE, yearsSince, inWords } from '../lib/years';
+import artemOpolskyi from '../assets/site/artem-opolskyi.webp';
 
 export const site = {
   name: 'Pylyp Pistolkors',
@@ -79,14 +80,23 @@ export const motion: { title: string; kind: string; video?: string; poster?: str
  * Testimonials on the home page. An entry with `placeholder: true` only shows in
  * `npm run dev`; the whole section stays hidden on the live site until at least one
  * real quote is in. Replace a placeholder with the real words and drop the flag.
+ * `photo` is a square image from src/assets/site/, shown as a round avatar.
  */
 export const testimonials: {
   quote: string;
   name: string;
   role: string;
+  photo?: ImageMetadata;
   proof?: { label: string; href: string };
   placeholder?: boolean;
 }[] = [
+  {
+    quote:
+      'I really liked working with Pylyp. He is a very good designer and he notices small details that other people often miss. At the same time, he always thinks about the user and whether the design really makes sense, not only if it looks nice. He is easy to work with, he is open to feedback, and he often came with ideas that were better than what we had before.',
+    name: 'Artem Opolskyi',
+    role: 'Project Manager, Existek',
+    photo: artemOpolskyi,
+  },
   {
     quote:
       'Placeholder. What the LinkHMS product manager says about working together goes here: two or three sentences, in their own words.',
