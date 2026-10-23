@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LegalFans · My Platforms — motion draft</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=block" rel="stylesheet">
+<link rel="stylesheet" href="../../_lib/player.css">
+<style>
+  /* Stage is the Figma frame (KK 215:24572 empty → 215:24742 with credentials), 1440×1024; every number is Figma pixels. */
+  * { box-sizing: border-box; }
+  p { margin: 0; }
+  .stage { background: #0c0d0d; font-family: Roboto, sans-serif; color: rgba(255,255,255,.96); -webkit-font-smoothing: antialiased; overflow: hidden; }
+  .abs { position: absolute; }
+
+  /* Header */
+  .header { left: 0; top: 0; width: 1440px; height: 64px; background: #1a1a1a; }
+  .user { right: 24px; top: 20px; display: flex; gap: 8px; align-items: center; font-size: 12px; line-height: 16px; letter-spacing: .4px; }
+  .user img { width: 24px; height: 24px; display: block; }
+
+  /* Rail of creators */
+  .rail { left: 0; top: 64px; width: 72px; height: 960px; background: #1a1a1a; display: flex; flex-direction: column; align-items: center; gap: 24px; padding-top: 20px; }
+  .rail .av { position: relative; width: 36px; height: 36px; flex: none; }
+  .rail .av > img { position: absolute; inset: 0; width: 36px; height: 36px; display: block; }
+  .rail .av > .hl { left: -4px; top: -4px; width: 44px; height: 44px; }
+  .rail .div { width: 48px; height: 1px; background: rgba(255,255,255,.12); flex: none; }
+  .all-label { position: absolute; left: 9px; top: 10px; font-size: 10px; line-height: 16px; font-weight: 500; letter-spacing: .5px; text-transform: uppercase; color: #1a1a1a; }
+
+  /* Menu */
+  .menu { left: 72px; top: 64px; width: 200px; height: 960px; background: #0c0d0d; }
+  .menu-in { position: absolute; left: 16px; top: 0; width: 168px; padding: 16px 0; display: flex; flex-direction: column; gap: 16px; }
+  .mi { height: 40px; padding: 8px; display: flex; gap: 16px; align-items: center; border-radius: 4px; font-size: 14px; line-height: 1.4; letter-spacing: .25px; white-space: nowrap; }
+  .mi img { width: 24px; height: 24px; display: block; }
+  .mi.on { background: rgba(1,175,241,.16); }
+  .menu .div { height: 1px; background: rgba(255,255,255,.12); }
+  .group { display: flex; flex-direction: column; gap: 16px; }
+
+  /* Page title */
+  .ttl { left: 296px; top: 92px; height: 40px; display: flex; gap: 16px; align-items: center; }
+  .ttl img { width: 36px; height: 36px; display: block; }
+  .ttl p { font-size: 34px; letter-spacing: .25px; line-height: normal; white-space: nowrap; }
+
+  /* Form panel: grows from the empty frame (266) to the credentials frame (427). */
+  .panel { left: 272px; top: 160px; width: 1168px; background: #1a1a1a; }
+  .q { left: 296px; top: 184px; font-size: 24px; line-height: normal; white-space: nowrap; }
+  .field { position: absolute; width: 554px; height: 76px; overflow: hidden; }
+  .field .bg { position: absolute; left: 0; right: 0; top: 5px; bottom: 19px; background: #1a1a1a; border: 1px solid rgba(255,255,255,.08); border-radius: 4px; }
+  .field .ic { position: absolute; right: 12px; top: 19px; width: 24px; height: 24px; display: block; }
+  .field .lab { position: absolute; left: 6px; top: 0; padding: 0 4px; background: #1a1a1a; font-size: 10px; letter-spacing: .4px; line-height: normal; color: rgba(255,255,255,.6); white-space: nowrap; }
+  .field .val { position: absolute; left: 10px; top: 24px; font-size: 14px; line-height: 1.4; letter-spacing: .25px; white-space: nowrap; display: flex; align-items: center; }
+  /* Focused variant (textfield_rectangle focused=yes): a 2 px accent stroke inside the box, the label in accent. */
+  .field .bg::after { content: ""; position: absolute; inset: -1px; border: 2px solid #01aff1; border-radius: 4px; opacity: var(--f, 0); }
+  .caret { display: inline-block; width: 1px; height: 16px; margin-left: 1px; background: rgba(255,255,255,.96); }
+  .tg-row { left: 296px; top: 318px; display: flex; gap: 12px; align-items: flex-start; }
+  .toggle { position: relative; width: 40px; height: 24px; flex: none; }
+  .toggle > img { position: absolute; left: 0; top: 0; width: 40px; height: 24px; display: block; }
+  .toggle .knob { position: absolute; top: 0; width: 26px; height: 26px; display: block; }
+  .tg-row p { font-size: 14px; line-height: 24px; white-space: nowrap; }
+  .msg { left: 296px; top: 366px; width: 1120px; height: 44px; padding: 12px; border-radius: 4px; background: rgba(1,175,241,.16); color: #01aff1; font-size: 14px; line-height: 20px; letter-spacing: .25px; text-align: center; white-space: nowrap; }
+  .btn { right: 24px; height: 48px; border-radius: 4px; background: #01aff1; border: 1px solid #01aff1; overflow: hidden; }
+  .btn span { position: absolute; left: 50%; top: 15px; transform: translateX(-50%); font-size: 14px; font-weight: 500; line-height: 16px; letter-spacing: .75px; text-transform: uppercase; color: #1a1a1a; white-space: nowrap; }
+
+  /* Lower area: the illustration (empty) or the platforms table. */
+  .lower { left: 272px; width: 1168px; bottom: 0; background: #1a1a1a; overflow: hidden; }
+  .illu { position: absolute; left: 357px; width: 454px; height: 364px; display: block; }
+  .table { position: absolute; inset: 0; background: #151515; }
+  .tr { position: absolute; left: 0; width: 1168px; height: 48px; background: #1a1a1a; }
+  .tr::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: #111; }
+  .tr > * { position: absolute; top: 50%; transform: translateY(-50%); white-space: nowrap; }
+  .tr.th > p { font-size: 14px; font-weight: 500; line-height: 20px; }
+  .tr.td > p { font-size: 14px; line-height: 1.4; letter-spacing: .25px; }
+  .tr .kebab { left: auto; right: 24px; width: 24px; height: 24px; display: block; }
+  .pill { height: 24px; padding: 0 12px; border-radius: 12px; display: inline-flex; align-items: center; font-size: 14px; font-weight: 500; line-height: 20px; }
+  .pill.blue { background: rgba(1,175,241,.16); color: #01aff1; }
+  .pill.green { background: rgba(56,205,43,.16); color: #38cd2b; }
+  .pag { position: absolute; left: 0; bottom: 0; width: 1168px; height: 64px; background: #1a1a1a; border-top: 1px solid #111; font-size: 12px; line-height: 16px; letter-spacing: .4px; white-space: nowrap; }
+  .pag p { position: absolute; transform: translateY(-50%); }
+  .pag img { position: absolute; width: 24px; height: 24px; display: block; }
+  .pag .ul { position: absolute; left: 772px; top: 42px; width: 73px; height: 1px; background: rgba(255,255,255,.6); }
+
+  .cursor { left: 0; top: 0; width: 19px; height: 24px; z-index: 20; transform-origin: 6px 1px; }
+  .cursor img { width: 19px; height: 24px; display: block; }
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="abs header">
+    <img class="abs" src="assets/imgGroup.svg" alt="" style="left:25.06px;top:26.9px;width:158.98px;height:11.74px">
+    <img class="abs" src="assets/imgGroup1.svg" alt="" style="left:105.12px;top:24.86px;width:14.98px;height:15.27px">
+    <div class="abs user"><p>username@mailprovider.com</p><img src="assets/imgIcon.svg" alt=""></div>
+  </div>
+
+  <div class="abs rail">
+    <div class="av"><img src="assets/imgBg.svg" alt=""><span class="all-label">All</span></div>
+    <i class="div"></i>
+    <div class="av"><img class="hl" src="assets/imgHl.svg" alt=""><img src="assets/imgBg1.png" alt=""></div>
+    <div class="av"><img src="assets/imgBg2.png" alt=""></div>
+    <div class="av"><img src="assets/imgBg3.png" alt=""></div>
+    <i class="div"></i>
+    <div class="av"><img src="assets/imgBg4.png" alt=""></div>
+    <i class="div"></i>
+    <div class="av"><img src="assets/imgUsersAgency.svg" alt=""></div>
+  </div>
+
+  <div class="abs menu"><div class="menu-in">
+    <div class="mi"><img src="assets/imgIcon1.svg" alt="">Statistics</div>
+    <i class="div"></i>
+    <div class="group"><div class="mi"><img src="assets/imgIcon2.svg" alt="">Magic Vault</div><div class="mi"><img src="assets/imgIcon3.svg" alt="">Leaks</div></div>
+    <i class="div"></i>
+    <div class="group"><div class="mi on"><img src="assets/imgIcon4.svg" alt="">My Platforms</div><div class="mi"><img src="assets/imgIcon5.svg" alt="">My Camsites</div><div class="mi"><img src="assets/imgIcon6.svg" alt="">My Socials</div></div>
+    <i class="div"></i>
+    <div class="mi"><img src="assets/imgIcon7.svg" alt="">Keyword Search</div>
+    <i class="div"></i>
+    <div class="group"><div class="mi"><img src="assets/imgIcon8.svg" alt="">Payments</div><div class="mi"><img src="assets/imgIcon9.svg" alt="">My Account</div></div>
+    <i class="div"></i>
+    <div class="mi"><img src="assets/imgIcon10.svg" alt="">Install Extension</div>
+  </div></div>
+
+  <div class="abs ttl"><img src="assets/imgIcon11.svg" alt=""><p>My Platforms</p></div>
+
+  <div id="main">
+    <div class="abs panel" id="panel"></div>
+    <p class="abs q">Which Fan Site would you like to add?</p>
+    <div class="field" style="left:296px;top:237px"><div class="bg"></div><img class="ic" src="assets/imgIcon13.svg" alt=""><p class="lab">Select Fan Site</p><p class="val">Fansly</p></div>
+    <div class="field" style="left:862px;top:237px"><div class="bg"></div><p class="lab">Username</p><p class="val">@sdliuhcpiashjcd</p></div>
+    <div class="abs tg-row">
+      <div class="toggle"><img src="assets/toggle-off.svg" alt="" id="trackOff"><img src="assets/toggle-on.svg" alt="" id="trackOn">
+        <img class="knob" src="assets/knob-off.svg" alt="" id="knobOff"><img class="knob" src="assets/knob.svg" alt="" id="knobOn"></div>
+      <p>Add log in information for content access</p>
+    </div>
+    <div id="creds">
+      <p class="abs msg">We need to use your credentials to have a full control over the content leaks. It is our highest priority to keep the credentials safe.</p>
+      <div class="field" id="fE" style="left:296px;top:434px"><div class="bg"></div><p class="lab">Email</p><p class="val"><span id="email"></span><i class="caret" id="caretE"></i></p></div>
+      <div class="field" id="fP" style="left:862px;top:434px"><div class="bg"></div><img class="ic" src="assets/eye-off.svg" alt=""><p class="lab">Password</p><p class="val"><span id="pass"></span><i class="caret" id="caretP"></i></p></div>
+    </div>
+    <div class="abs btn" id="btn"><span id="lbl1">Submit</span><span id="lbl2">Submit and validate</span></div>
+
+    <div class="abs lower" id="lower">
+      <img class="illu" id="illu" src="assets/illustration.svg" alt="">
+      <div class="table" id="table">
+        <div class="tr th" style="top:0"><p style="left:24px">Site Name</p><p style="left:400px">Username</p><p style="left:920px">Status</p></div>
+        <div id="rows"></div>
+        <div class="pag">
+          <p style="left:657px;top:31px;color:rgba(255,255,255,.6)">Items per page:</p>
+          <p style="left:772px;top:32px">10</p><i class="ul"></i><img src="assets/drop.svg" alt="" style="left:821px;top:19px">
+          <p style="left:882px;top:31px;color:rgba(255,255,255,.6)" id="count"></p>
+          <img src="assets/pg-first.svg" alt="" style="left:1000px;top:19px"><img src="assets/pg-prev.svg" alt="" style="left:1040px;top:19px">
+          <img src="assets/pg-next.svg" alt="" style="left:1080px;top:19px"><img src="assets/pg-last.svg" alt="" style="left:1120px;top:19px">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="abs cursor" id="cursor"><img src="../../_lib/cursor-hand.png" alt=""></div>
+</div>
+
+<script src="../../_lib/motion.js"></script>
+<script src="../../_lib/player.js"></script>
+<script>
+// Story: the creator's empty My Platforms, Fansly and the username already picked (frame 1) → the log-in
+// toggle opens the credentials → email and password typed → Submit and validate → Fansly is the first row of
+// the table, then Onlyfans, LoyalFans and Friends2Follow join it one by one → a dip back to the empty frame.
+const T = {
+  toggle: 1.5,                 // click the toggle; the form grows right after
+  email: 3.0, emailTyped: 4.2, // click Email, type
+  pass: 4.6, passTyped: 5.4,   // click Password, type
+  submit: 6.4,                 // Submit and validate
+  rows: [6.9, 8.0, 8.6, 9.2],  // Fansly, then the three others
+  dip: 11.4,                   // fade out, swap to the empty frame, fade in
+  end: 12.6,
+};
+const DIP = .35;
+const CLICKS = [T.toggle, T.email, T.pass, T.submit];
+const START = [900, 780];
+const TOGGLE = [316, 330], EMAIL = [520, 462], PASS = [1040, 462], SUBMIT = [1318, 539];
+const cursorAt = cursorPath(START, [
+  [.5, T.toggle - .15, ...TOGGLE],
+  [T.toggle + .7, T.email - .15, ...EMAIL],
+  [T.emailTyped + .05, T.pass - .15, ...PASS],
+  [T.passTyped + .2, T.submit - .15, ...SUBMIT],
+  [T.submit + .7, T.submit + 1.7, 1180, 920],   // out of the way while the rows arrive
+  [T.dip - .2, T.end - .3, ...START],
+]);
+
+const EMAIL_TEXT = 'sdliuhcpiashjcd@mailprovider.com';
+const PASS_LEN = 26;
+const ROWS = [
+  ['Fansly', 'Added'], ['Onlyfans', 'Connected'], ['LoyalFans', 'Added'], ['Friends2Follow', 'Connected'],
+];
+const $ = (id) => document.getElementById(id);
+$('rows').innerHTML = ROWS.map(([site, st], i) => `<div class="tr td" style="top:${48 * (i + 1)}px"><p style="left:24px">${site}</p>
+  <p style="left:400px">@sdliuhcpiashjcd</p><span class="pill ${st === 'Added' ? 'green' : 'blue'}" style="left:920px">${st}</span>
+  <img class="kebab" src="assets/kebab.svg" alt=""></div>`).join('');
+const rowEls = [...$('rows').children];
+// Button widths as in Figma (the labels are centred in them).
+const W1 = 88, W2 = 196;
+
+const typed = (s, a, b, n) => Math.round(n * p(s, a, b));
+const blink = (t) => (Math.floor(t / .5) % 2 ? 0 : 1);
+
+function render(t) {
+  // After the dip the story time goes back to 0: the frame is the empty one again, so the loop closes.
+  const s = t < T.dip + DIP ? t : 0;
+  const dim = t < T.dip ? 1 : 1 - bump(t, T.dip, 2 * DIP) ** .6;
+  $('main').style.opacity = dim;
+
+  // Toggle and the form growing from frame 1 to frame 2.
+  const on = io(p(s, T.toggle + .05, T.toggle + .3));
+  $('trackOn').style.opacity = $('knobOn').style.opacity = on;
+  $('trackOff').style.opacity = $('knobOff').style.opacity = 1 - on;
+  $('knobOn').style.left = $('knobOff').style.left = `${mix(-1, 15, on)}px`;
+  const g = io(p(s, T.toggle + .15, T.toggle + .75));
+  $('panel').style.height = `${mix(266, 427, g)}px`;
+  $('btn').style.top = `${mix(354, 515, g)}px`;
+  $('btn').style.width = `${mix(W1, W2, g)}px`;
+  $('lbl1').style.opacity = 1 - p(g, 0, .4);
+  $('lbl2').style.opacity = p(g, .5, 1);
+  $('btn').style.filter = `brightness(${1 - .12 * bump(s, T.submit, .22)})`;
+  const c = outC(p(s, T.toggle + .45, T.toggle + .9));
+  $('creds').style.opacity = c;
+  $('creds').style.transform = `translateY(${-8 * (1 - c)}px)`;
+  $('lower').style.top = `${mix(450, 611, g)}px`;
+  $('illu').style.top = `${(mix(574, 413, g) - 364) / 2}px`;
+
+  // Focus: from the click on a field to the next click (Password, then Submit), the Figma focused variant.
+  const focus = (el, a, b) => {
+    const f = p(s, a, a + .12) * (1 - p(s, b, b + .12));
+    el.style.setProperty('--f', f);
+    el.querySelector('.lab').style.color = `rgba(${mix(255, 1, f)},${mix(255, 175, f)},${mix(255, 241, f)},${mix(.6, 1, f)})`;
+  };
+  focus($('fE'), T.email, T.pass);
+  focus($('fP'), T.pass, T.submit);
+
+  // Typing; the caret blinks in the focused field.
+  $('email').textContent = EMAIL_TEXT.slice(0, typed(s, T.email + .15, T.emailTyped, EMAIL_TEXT.length));
+  $('pass').textContent = '•'.repeat(typed(s, T.pass + .15, T.passTyped, PASS_LEN));
+  $('caretE').style.opacity = s >= T.email && s < T.pass ? (s < T.emailTyped ? 1 : blink(s - T.emailTyped)) : 0;
+  $('caretP').style.opacity = s >= T.pass && s < T.submit ? (s < T.passTyped ? 1 : blink(s - T.passTyped)) : 0;
+
+  // Submit: the illustration gives way to the table, then the rows arrive one by one.
+  const tb = io(p(s, T.submit + .15, T.submit + .5));
+  $('table').style.opacity = tb;
+  $('illu').style.opacity = 1 - tb;
+  let n = 0;
+  rowEls.forEach((el, i) => {
+    const k = outC(p(s, T.rows[i], T.rows[i] + .4));
+    if (s >= T.rows[i]) n++;
+    el.style.opacity = k;
+    el.style.transform = `translateY(${-10 * (1 - k)}px)`;
+  });
+  $('count').textContent = `1 — ${Math.max(n, 1)} of ${Math.max(n, 1)}`;
+
+  const [x, y] = cursorAt(t);
+  const press = Math.max(...CLICKS.map((c) => bump(t, c, .18)));
+  $('cursor').style.transform = `translate(${x - 6}px, ${y - 1}px) scale(${1 - .14 * press})`;
+}
+
+// ?figma shows a frame as in Figma for D: ?figma&t=0 (empty), ?figma=2 freezes the credentials frame with
+// the three Figma rows (Onlyfans, LoyalFans, Friends2Follow) and its "1 — 10 of 69".
+const FIGMA = new URLSearchParams(location.search).get('figma');
+const figmaRender = (t) => {
+  render(FIGMA === '2' ? T.dip - .1 : t);
+  if (FIGMA === '2') {
+    rowEls.forEach((el, i) => { el.style.top = `${48 * i}px`; el.style.display = i ? '' : 'none'; });
+    $('count').textContent = '1 — 10 of 69';
+    $('caretE').style.opacity = $('caretP').style.opacity = 0;
+  }
+  $('cursor').style.opacity = 0;
+};
+MotionPlayer.mount({
+  stage: $('stage'), width: 1440, height: 1024, duration: T.end, render: FIGMA !== null ? figmaRender : render,
+  markers: [['toggle', T.toggle], ['email', T.email], ['submit', T.submit], ['rows', T.rows[1]], ['dip', T.dip]],
+  refs: [['Empty (215:24572)', 'src/1-empty.png'], ['Credentials (215:24742)', 'src/2-credentials.png']],
+  poster: 0,
+});
+</script>
+</body>
+</html>

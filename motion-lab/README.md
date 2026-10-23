@@ -62,6 +62,12 @@ show the same thing.
   "Waiting" item, so the cursor settles back there and the last frame equals the first. No hover under the overlay. The dialog
   fades only over the dark overlay (in after it, out before it lifts), so it never shows the grid through itself.
   Strokes are an `::after` overlay (`.stroke`), as in Figma they sit inside the box.
+- `platforms/`: My Platforms, 1440×1024 (KK 215:24572 empty, 215:24742 with credentials). The empty frame (Fansly and the
+  username already picked) → the log-in toggle grows the form → email and password typed, the field in the Figma
+  focused variant while it has focus → Submit and validate → the illustration gives way to the table: Fansly first
+  (Added), then Onlyfans, LoyalFans and Friends2Follow one by one, the counter
+  says "1 — 4 of 4" (Figma has "1 — 10 of 69") → a short dip back to the empty frame. `?figma&t=0` and `?figma=2` lay out
+  the two Figma frames for D (the second with Figma's three rows and counter). The illustration is the Figma SVG export.
 
 ## Workflow
 
