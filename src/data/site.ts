@@ -62,28 +62,16 @@ export const experience = [
  */
 export const motion: { title: string; kind: string; video?: string; poster?: string }[] = [
   {
-    title: 'LinkHMS schedule: book and confirm a visit',
+    title: 'LinkHMS schedule: from an empty slot to a confirmed visit',
     kind: 'Product · Healthcare',
-    video: '/motion/linkhms-schedule.mp4',
-    poster: '/motion/linkhms-schedule.jpg',
+    video: '/motion/linkhms-new-visit.mp4',
+    poster: '/motion/linkhms-new-visit.jpg',
   },
   {
-    title: 'LinkHMS finance overview: charts that answer',
+    title: 'LinkHMS finance overview: reports that point to the problem',
     kind: 'Product · Healthcare',
-    video: '/motion/linkhms-finance.mp4',
-    poster: '/motion/linkhms-finance.jpg',
-  },
-  {
-    title: 'LinkHMS patient photo: upload, error, save',
-    kind: 'Product · Healthcare',
-    video: '/motion/linkhms-photo.mp4',
-    poster: '/motion/linkhms-photo.jpg',
-  },
-  {
-    title: 'BBQ.ua add to cart: price, buy, mini cart',
-    kind: 'Product · E-commerce',
-    video: '/motion/bbq-cart.mp4',
-    poster: '/motion/bbq-cart.jpg',
+    video: '/motion/linkhms-reports.mp4',
+    poster: '/motion/linkhms-reports.jpg',
   },
 ];
 
