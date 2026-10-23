@@ -58,52 +58,18 @@ A distinct identity set LinkHMS apart from dated competitors. The UI takes its c
 
 ### Hospital software ignores the small clinic
 
-Most HMS products are heavy, dated and aimed at large hospitals. Smaller clinics and solo practitioners are left juggling paper records and slow tools that were never meant for them.
+Most HMS products are heavy, dated and built for large hospitals, so small clinics and solo doctors are left with paper records and slow tools. I surveyed 12 healthcare professionals, interviewed 5 and analysed 4 competitors. They juggle separate systems for records, appointments and messages, find existing tools outdated and unreliable, and want one clear dashboard that fits their own workflow.
 
-I surveyed 12 healthcare professionals, interviewed 5 of them and analysed 4 competing products to understand how they manage patients, scheduling and communication.
-
-- Clinicians juggle several systems for records, appointments and communication.
-- Staff value being able to tailor patient records and scheduling to their own workflow.
-- Existing tools feel outdated, hard to use and unreliable.
-- A clear dashboard for scheduling and patients is essential for quick decisions.
-
-<div class="cards cards--answer">
-<div><b>Challenge</b>Design a streamlined system that covers the core needs of most clinics and individual practitioners.</div>
-<div><b>Solution</b>Combine and improve on the strongest features of competitors to simplify internal cooperation and patient–clinic interaction.</div>
-</div>
-
-I grouped the findings in an affinity diagram, graded features by importance and built a persona — Kwame, a physical therapist working across several public and private clinics — to test every decision against.
-
-### Meet Kwame, the primary user
+The findings became a persona to test every decision against:
 
 <div class="persona">
 <dl class="persona__id">
 <div><dt>Name</dt><dd>Kwame, 36</dd></div>
 <div><dt>Occupation</dt><dd>Physical therapist</dd></div>
-<div><dt>Location</dt><dd>West Africa</dd></div>
-<div><dt>Environment</dt><dd>Multiple public and private clinics</dd></div>
+<div><dt>Environment</dt><dd>Multiple public and private clinics in West Africa</dd></div>
 <div><dt>Tech</dt><dd>100% desktop</dd></div>
 </dl>
 <p class="persona__bio">“Managing patient records and appointments was a constant struggle with slow software and endless paperwork. It took time away from patient care.”</p>
-<div class="persona__cols">
-<div>
-<p class="persona__label">Goals</p>
-<ul>
-<li>Faster access to medical records.</li>
-<li>Streamlined appointment scheduling.</li>
-<li>Less administrative workload.</li>
-<li>Better communication with other staff.</li>
-</ul>
-</div>
-<div>
-<p class="persona__label">Frustrations</p>
-<ul>
-<li>Outdated systems that delay access to patient data.</li>
-<li>Difficulty managing large volumes of paperwork.</li>
-<li>Lack of integration between different departments.</li>
-</ul>
-</div>
-</div>
 </div>
 
 ## Process
