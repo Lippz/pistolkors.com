@@ -176,15 +176,11 @@ Connecting an account and installing an extension are where people give up. The 
 
 *Magic Vault — where creators add and manage all their content.*
 
-<div class="carousel">
+<figure class="case-motion" data-lightbox-group>
+<video src="../../motion/legalfans-leaks.mp4" poster="../../motion/legalfans-leaks.jpg" width="1440" height="1024" muted loop playsinline preload="metadata" aria-label="On Keyword Search, the query Jessica Sparkle + Onlyfans + xxx photo leak is searched across Google, Yahoo and Bing; while the progress runs, the hint points to the Leaks Tab, which opens leak JP-0001-DR: the preview found on reddit.com, its link, and the other leaks of the same image with statuses from Requested to Completed; Keyword Search in the menu brings back the search" data-label="On Keyword Search, the query Jessica Sparkle + Onlyfans + xxx photo leak is searched across Google, Yahoo and Bing; while the progress runs, the hint points to the Leaks Tab, which opens leak JP-0001-DR: the preview found on reddit.com, its link, and the other leaks of the same image with statuses from Requested to Completed; Keyword Search in the menu brings back the search"></video>
+</figure>
 
-![A single leak with a preview and other copies of the same content](../../assets/cases/legalfans/cv-leak-details.webp "Leak details")
-
-![Keyword search across Google, Yahoo and Bing](../../assets/cases/legalfans/cv-keyword-search.webp "Keyword search")
-
-</div>
-
-*Leaks and keyword search — one leak in detail, plus search by keyword.*
+*Keyword search and leaks — search by keyword, then one leak in detail.*
 
 <figure class="case-motion" data-lightbox-group>
 <video src="../../motion/legalfans-platforms.mp4" poster="../../motion/legalfans-platforms.jpg" width="1440" height="1024" muted loop playsinline preload="metadata" aria-label="On My Platforms, a creator with no platforms yet has picked Fansly and a username; turning on log-in information opens email and password fields, and after Submit and validate the empty-state illustration gives way to the table: Fansly is added, then Onlyfans, LoyalFans and Friends2Follow join it one by one" data-label="On My Platforms, a creator with no platforms yet has picked Fansly and a username; turning on log-in information opens email and password fields, and after Submit and validate the empty-state illustration gives way to the table: Fansly is added, then Onlyfans, LoyalFans and Friends2Follow join it one by one"></video>

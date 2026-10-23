@@ -74,6 +74,10 @@ show the same thing.
   styled like Basic) → Cancel: the content goes, then the surface. Figma sizes "auto"
   line-height text to whole pixels rounded up (24 → 29, 48 → 57), so those are set explicitly. `?figma&t=0` and
   `?figma=2` lay out the two frames for D (the second has Figma's own cursor drawn in).
+- `leaks/`: Keyword Search → a leak, 1440×1024 (KK 220:25783 search, 220:25706 Leaks (View)). Jessica's query → search: the
+  progress sweeps and the hint points to the Leaks Tab → Leaks Tab opens JP-0001-DR, the other reddit copies listed one by
+  one → Keyword Search in the menu brings back the search as at the start. The menu's on look moves with the screen.
+  `?figma` (the fill at Figma's 151 px) and `?figma=2` lay out the two frames for D.
 
 ## Workflow
 
