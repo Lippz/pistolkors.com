@@ -2,6 +2,7 @@ import { url } from '../lib/url';
 import { PRODUCT_SINCE, yearsSince, inWords } from '../lib/years';
 import artemOpolskyi from '../assets/site/artem-opolskyi.webp';
 import tanyaTritelnitskaya from '../assets/site/tanya-tritelnitskaya.webp';
+import lucMallinger from '../assets/site/luc-mallinger.webp';
 
 export const site = {
   name: 'Pylyp Pistolkors',
@@ -97,6 +98,13 @@ export const testimonials: {
     name: 'Artem Opolskyi',
     role: 'Project Manager, Existek',
     photo: artemOpolskyi,
+  },
+  {
+    quote:
+      'We’ve been working with Pylyp for over a year now, and he’s been excellent throughout. He consistently delivers high-quality work with quick turnaround times, has a great understanding of our often complex requirements, and knows when to take the initiative to suggest improvements that make the final result even better.',
+    name: 'Luc Mallinger',
+    role: 'CEO, SortFlow',
+    photo: lucMallinger,
   },
   {
     quote:
