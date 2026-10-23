@@ -50,7 +50,9 @@ motion:
 
 A distinct identity set LinkHMS apart from dated competitors. The UI takes its cue from modern healthcare facilities: clean, minimal and patient-centric. To keep it consistent as the product grows, I defined design tokens for numeric values, colour and type and built every component on top of them, from small elements to the blocks assembled from them.
 
-![LinkHMS logo and app icons next to pieces of the design system: accent colour scales, spacing and corner radius tokens, buttons, tags, record type chips, filters, tabs, page headers, a date picker, a section menu, metric cards and inputs](../../assets/cases/linkhms/brand-design-system.webp)
+<figure class="case-motion" data-lightbox-group>
+<video src="../../motion/linkhms-brand.mp4" poster="../../motion/linkhms-brand.jpg" width="1740" height="1530" muted loop playsinline preload="metadata" aria-label="The LinkHMS mark draws itself, fills in and shrinks into the app icon, the wordmarks join it on a card, then the view tilts onto the design system: accent colour scales, spacing and corner radius tokens, buttons, tags, record type chips, filters, tabs, page headers, a date picker, a section menu, metric cards and inputs land piece by piece" data-label="The LinkHMS mark draws itself, fills in and shrinks into the app icon, the wordmarks join it on a card, then the view tilts onto the design system: accent colour scales, spacing and corner radius tokens, buttons, tags, record type chips, filters, tabs, page headers, a date picker, a section menu, metric cards and inputs land piece by piece"></video>
+</figure>
 
 ## Problem and research
 

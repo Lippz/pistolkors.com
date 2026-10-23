@@ -33,6 +33,12 @@ show the same thing.
   dropdown, Tue 18, 14:00, the summary opens) → request received (the check draws itself) → Back to Home. Skeletons
   are built from the real layout of the next screen; hover is one registry, `HOV`, measured once from the DOM.
 
+- `linkhms-brand/`: brand and design system, 2900×2550 like the Figma frames (KK, page pp, frames "1"…"8" from 185:43920).
+  The mark draws itself, fills, the blue floods out and shrinks into the app icon, the wordmarks and the light card
+  arrive, then the camera tilts 5° onto the grid of cards and each card's content lands piece by piece. The cards are
+  Figma exports (`assets/card-*.png`, composited on navy) cut into pieces by `assets/pieces.js`: blobs found in the
+  export, by hand for tabs and headers. Holds 3 s, fades to navy.
+
 ## Workflow
 
 1. Copy `_template` to `motion-lab/<name>/`.
