@@ -57,6 +57,11 @@ show the same thing.
   empty state → ALL in the rail: the cards rise in, the numbers count up, the donut and the bars draw, the cursor rests on the
   red slice (tooltip 19) → back to the creator's empty state. Figma strokes take no layout space, so card paddings are the Figma
   padding minus the border. `?figma` hides the cursor for D; `tools/frames.mjs` saves stills.
+- `vault/`: Magic Vault, 1440×1024 (KK 214:23437 grid, 214:23521 item). It starts on the "Waiting" item's
+  Figma hover, opens the first kitten → ID-587945 with its 16 leaks → closes it; the close icon sits over the
+  "Waiting" item, so the cursor settles back there and the last frame equals the first. No hover under the overlay. The dialog
+  fades only over the dark overlay (in after it, out before it lifts), so it never shows the grid through itself.
+  Strokes are an `::after` overlay (`.stroke`), as in Figma they sit inside the box.
 
 ## Workflow
 

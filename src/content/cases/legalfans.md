@@ -170,13 +170,9 @@ Connecting an account and installing an extension are where people give up. The 
 
 ### The creator view
 
-<div class="carousel">
-
-![Magic Vault grid with thumbnails, filters and a media counter](../../assets/cases/legalfans/cv-vault-grid.webp "Media grid")
-
-![A single item in Magic Vault with its detected leaks](../../assets/cases/legalfans/cv-vault-details.webp "Item details")
-
-</div>
+<figure class="case-motion" data-lightbox-group>
+<video src="../../motion/legalfans-vault.mp4" poster="../../motion/legalfans-vault.jpg" width="1440" height="1024" muted loop playsinline preload="metadata" aria-label="In the Magic Vault grid of thumbnails, filters and a media counter, the cursor rests on an item waiting for a scan, then opens a kitten photo: item ID-587945, manually uploaded and scanned, 16 leaks, with the platforms, claim IDs and statuses Resolved, Found and Cancelled; the dialog closes back to the grid" data-label="In the Magic Vault grid of thumbnails, filters and a media counter, the cursor rests on an item waiting for a scan, then opens a kitten photo: item ID-587945, manually uploaded and scanned, 16 leaks, with the platforms, claim IDs and statuses Resolved, Found and Cancelled; the dialog closes back to the grid"></video>
+</figure>
 
 *Magic Vault — where creators add and manage all their content.*
 

@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LegalFans · Magic Vault — motion draft</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=block" rel="stylesheet">
+<link rel="stylesheet" href="../../_lib/player.css">
+<style>
+  /* Stage is the Figma frame (KK 214:23437 grid → 214:23521 item), 1440×1024; every number is Figma pixels. */
+  * { box-sizing: border-box; }
+  p { margin: 0; }
+  .stage { background: #0c0d0d; font-family: Roboto, sans-serif; color: rgba(255,255,255,.96); -webkit-font-smoothing: antialiased; overflow: hidden; }
+  .abs { position: absolute; }
+  /* Figma strokes sit inside the box and take no layout space: drawn as an overlay. */
+  .stroke { position: relative; }
+  .stroke::after { content: ""; position: absolute; inset: 0; border: 1px solid var(--bd, rgba(255,255,255,.12)); border-radius: inherit; pointer-events: none; }
+
+  /* Header */
+  .header { left: 0; top: 0; width: 1440px; height: 64px; background: #1a1a1a; }
+  .user { right: 24px; top: 20px; display: flex; gap: 8px; align-items: center; font-size: 12px; line-height: 16px; letter-spacing: .4px; }
+  .user img { width: 24px; height: 24px; display: block; }
+
+  /* Rail of creators */
+  .rail { left: 0; top: 64px; width: 72px; height: 960px; background: #1a1a1a; display: flex; flex-direction: column; align-items: center; gap: 24px; padding-top: 20px; }
+  .rail .av { position: relative; width: 36px; height: 36px; flex: none; }
+  .rail .av > img { position: absolute; inset: 0; width: 36px; height: 36px; display: block; }
+  .rail .av > .hl { left: -4px; top: -4px; width: 44px; height: 44px; }
+  .rail .div { width: 48px; height: 1px; background: rgba(255,255,255,.12); flex: none; }
+  .all-label { position: absolute; left: 9px; top: 10px; font-size: 10px; line-height: 16px; font-weight: 500; letter-spacing: .5px; text-transform: uppercase; color: #1a1a1a; }
+
+  /* Menu */
+  .menu { left: 72px; top: 64px; width: 200px; height: 960px; background: #0c0d0d; }
+  .menu-in { position: absolute; left: 16px; top: 0; width: 168px; padding: 16px 0; display: flex; flex-direction: column; gap: 16px; }
+  .mi { height: 40px; padding: 8px; display: flex; gap: 16px; align-items: center; border-radius: 4px; font-size: 14px; line-height: 1.4; letter-spacing: .25px; white-space: nowrap; }
+  .mi img { width: 24px; height: 24px; display: block; }
+  .mi.on { background: rgba(1,175,241,.16); }
+  .menu .div { height: 1px; background: rgba(255,255,255,.12); }
+  .group { display: flex; flex-direction: column; gap: 16px; }
+
+  /* Headline */
+  .headline { left: 296px; top: 88px; width: 1120px; height: 58px; display: flex; align-items: center; justify-content: space-between; }
+  .ttl { display: flex; gap: 24px; align-items: center; }
+  .ttl .pt { display: flex; gap: 16px; align-items: center; }
+  .ttl .pt img { width: 36px; height: 36px; display: block; }
+  .ttl .pt p { font-size: 34px; letter-spacing: .25px; line-height: normal; white-space: nowrap; }
+  .ttl .round { width: 48px; height: 48px; border-radius: 24px; background: rgba(255,255,255,.1); display: flex; align-items: center; justify-content: center; }
+  .ttl .round img { width: 24px; height: 24px; display: block; }
+  .actions { display: flex; gap: 24px; align-items: center; }
+  .selects { display: flex; gap: 12px; align-items: center; }
+  .sel { position: relative; width: 180px; height: 58px; }
+  .sel .bg { position: absolute; left: 0; right: 0; top: 5px; height: 48px; background: #1a1a1a; border: 1px solid rgba(255,255,255,.08); border-radius: 4px; }
+  .sel .ic { position: absolute; right: 12px; top: 17px; width: 24px; height: 24px; }
+  .sel .lab { position: absolute; left: 6px; top: 0; padding: 0 4px; background: #1a1a1a; font-size: 10px; letter-spacing: .4px; line-height: normal; color: rgba(255,255,255,.6); white-space: nowrap; }
+  .sel .val { position: absolute; left: 10px; top: 19px; font-size: 14px; line-height: 1.4; letter-spacing: .25px; white-space: nowrap; }
+  .upload { height: 48px; padding: 12px 16px; border-radius: 24px; background: #01aff1; display: flex; gap: 12px; align-items: center; font-size: 14px; font-weight: 500; line-height: 16px; letter-spacing: .75px; text-transform: uppercase; color: #1a1a1a; white-space: nowrap; }
+  .upload img { width: 24px; height: 24px; display: block; }
+
+  /* Media in Vault */
+  .quota { left: 953px; top: 158px; width: 463px; display: flex; flex-direction: column; gap: 10px; }
+  .quota .top { display: flex; justify-content: space-between; align-items: center; }
+  .quota .top b { font-weight: 500; font-size: 14px; line-height: 20px; }
+  .quota .cnt { display: flex; gap: 4px; align-items: center; font-size: 14px; line-height: 1.4; letter-spacing: .25px; }
+  .quota .cnt span { color: rgba(255,255,255,.42); }
+  .quota .cnt img { width: 16px; height: 16px; display: block; }
+  .quota .bar { position: relative; height: 8px; border-radius: 4px; background: rgba(1,175,241,.16); }
+  .quota .bar i { position: absolute; left: 0; top: 0; bottom: 0; width: 27.43%; border-radius: 4px; background: #01aff1; }
+
+  /* Grid */
+  .grid { left: 296px; top: 220px; width: 1120px; display: flex; flex-direction: column; gap: 10px; }
+  .row { display: flex; justify-content: space-between; }
+  .item { width: 216px; height: 304px; border-radius: 8px; background: #1a1a1a; overflow: hidden; flex: none; }
+  .item .hov { position: absolute; inset: 0; background: rgba(255,255,255,.16); opacity: 0; pointer-events: none; }
+  .item::after { z-index: 3; }
+  .item .hb { position: absolute; inset: 0; border: 1px solid rgba(255,255,255,.36); border-radius: 8px; opacity: 0; z-index: 4; }
+  .pic { position: relative; width: 220px; height: 220px; overflow: hidden; }
+  .pic > img { position: absolute; inset: 0; width: 220px; height: 220px; object-fit: cover; display: block; }
+  .pic > .trash { position: absolute; left: auto; right: 12px; top: 12px; width: 24px; height: 24px; opacity: 0; }
+  .pic .ph { position: absolute; inset: 0; filter: blur(24px); opacity: .2; }
+  .pic .ph img { position: absolute; inset: 0; width: 220px; height: 220px; object-fit: cover; }
+  .pic .ph i { position: absolute; inset: 0; background: #01aff1; mix-blend-mode: color; }
+  .pic .msg { position: absolute; left: calc(50% + .5px); top: 50%; transform: translate(-50%, -50%); width: 107px; display: flex; flex-direction: column; gap: 8px; align-items: center; font-size: 12px; line-height: 16px; letter-spacing: .4px; color: rgba(255,255,255,.42); text-align: center; white-space: nowrap; }
+  .pic .msg .ic { position: relative; width: 48px; height: 48px; }
+  .pic .msg .ic img { position: absolute; display: block; }
+  .info { position: relative; padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .leaks { height: 28px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .leaks p { font-size: 18px; line-height: 28px; letter-spacing: .5px; white-space: nowrap; }
+  .leaks p b { font-weight: 700; }
+  .leaks img { width: 24px; height: 24px; display: block; }
+  .pill { height: 24px; padding: 8px 12px; border-radius: 12px; display: inline-flex; align-items: center; font-size: 14px; font-weight: 500; line-height: 20px; white-space: nowrap; }
+  .pill.wait { background: rgba(255,199,0,.16); }
+  .pill.grey { background: rgba(255,255,255,.08); }
+  .pill.blue { background: rgba(1,175,241,.16); color: #01aff1; }
+  .pill.red { background: rgba(245,69,69,.16); color: #f54545; }
+  .pill.purple { background: rgba(190,139,255,.16); color: #be8bff; }
+  .incl { display: flex; align-items: center; justify-content: space-between; }
+  .incl .l { display: flex; gap: 8px; align-items: center; font-size: 12px; line-height: 16px; letter-spacing: .4px; white-space: nowrap; }
+  .incl .l img { width: 16px; height: 16px; display: block; }
+  .toggle { position: relative; width: 40px; height: 24px; }
+  .toggle > img { position: absolute; inset: 0; width: 40px; height: 24px; display: block; }
+  .toggle .knob { position: absolute; left: 15px; top: 0; width: 26px; height: 26px; display: block; }
+
+  /* Pagination */
+  .pag { height: 64px; border-radius: 8px; background: #1a1a1a; overflow: hidden; font-size: 12px; line-height: 16px; letter-spacing: .4px; white-space: nowrap; }
+  .pag p { position: absolute; transform: translateY(-50%); }
+  .pag img { position: absolute; width: 24px; height: 24px; display: block; }
+  .pag .ul { position: absolute; left: 724px; top: 43px; width: 73px; height: 1px; background: rgba(255,255,255,.6); }
+
+  /* Item dialog */
+  .overlay { left: 0; top: 0; width: 1440px; height: 1024px; background: rgba(0,0,0,.72); backdrop-filter: blur(20px); z-index: 10; }
+  .dialog { left: 252px; top: 278px; width: 936px; height: 468px; border-radius: 8px; background: #1a1a1a; overflow: hidden; display: flex; z-index: 11;
+    box-shadow: 0 2px 4px rgba(0,0,0,.16), 0 4px 8px rgba(0,0,0,.08), 0 8px 12px rgba(0,0,0,.04); }
+  .dialog .photo { position: relative; width: 468px; height: 468px; overflow: hidden; flex: none; }
+  .dialog .photo > img:first-child { position: absolute; left: -15.3%; top: 0; width: 150%; height: 100%; max-width: none; display: block; }
+  .dialog .photo .trash { position: absolute; right: 12px; bottom: 12px; width: 24px; height: 24px; }
+  .side { position: relative; width: 468px; height: 468px; padding: 48px; display: flex; flex-direction: column; justify-content: space-between; flex: none; }
+  .side .head { display: flex; flex-direction: column; gap: 24px; }
+  .side .idrow { display: flex; flex-direction: column; gap: 12px; }
+  .side h3 { margin: 0; font-weight: 400; font-size: 24px; line-height: normal; white-space: nowrap; }
+  .side .meta { display: flex; align-items: flex-end; justify-content: space-between; }
+  .side .meta .pills { display: flex; gap: 8px; }
+  .side .meta .date { font-size: 12px; line-height: 16px; letter-spacing: .4px; }
+  .side .hr { width: 372px; height: 1px; background: #111; }
+  .side .lk { display: flex; align-items: center; justify-content: space-between; }
+  .side .lk .r { display: flex; gap: 16px; align-items: center; }
+  .side .close { position: absolute; right: 24px; top: 24px; width: 24px; height: 24px; }
+  /* Figma: 192 px with both borders, so the four 48 px rows lose a pixel at the top and the bottom. */
+  .table { position: relative; height: 192px; display: flex; flex-direction: column; justify-content: center; border-top: 1px solid #111; border-bottom: 1px solid #111; overflow: hidden; }
+  .tr { position: relative; height: 48px; flex: none; background: #1a1a1a; }
+  .tr::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: #111; }
+  .tr > * { position: absolute; top: 50%; transform: translateY(-50%); white-space: nowrap; }
+  .tr.th > * { font-size: 14px; font-weight: 500; line-height: 20px; }
+  .tr.td > p { font-size: 14px; line-height: 1.4; letter-spacing: .25px; }
+  .thumb { position: absolute; right: 8px; top: 6px; width: 6px; height: 73px; border-radius: 3px; background: rgba(255,255,255,.24); }
+
+  .cursor { left: 0; top: 0; width: 19px; height: 24px; z-index: 20; transform-origin: 6px 1px; }
+  .cursor img { width: 19px; height: 24px; display: block; }
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="abs header">
+    <img class="abs" src="assets/imgGroup.svg" alt="" style="left:25.06px;top:26.9px;width:158.98px;height:11.74px">
+    <img class="abs" src="assets/imgGroup1.svg" alt="" style="left:105.12px;top:24.86px;width:14.98px;height:15.27px">
+    <div class="abs user"><p>username@mailprovider.com</p><img src="assets/imgIcon.svg" alt=""></div>
+  </div>
+
+  <div class="abs rail">
+    <div class="av"><img src="assets/imgBg.svg" alt=""><span class="all-label">All</span></div>
+    <i class="div"></i>
+    <div class="av"><img class="hl" src="assets/imgHl.svg" alt=""><img src="assets/imgBg1.png" alt=""></div>
+    <div class="av"><img src="assets/imgBg2.png" alt=""></div>
+    <div class="av"><img src="assets/imgBg3.png" alt=""></div>
+    <i class="div"></i>
+    <div class="av"><img src="assets/imgBg4.png" alt=""></div>
+    <i class="div"></i>
+    <div class="av"><img src="assets/imgUsersAgency.svg" alt=""></div>
+  </div>
+
+  <div class="abs menu"><div class="menu-in">
+    <div class="mi"><img src="assets/imgIcon1.svg" alt="">Statistics</div>
+    <i class="div"></i>
+    <div class="group"><div class="mi on"><img src="assets/imgIcon2.svg" alt="">Magic Vault</div><div class="mi"><img src="assets/imgIcon3.svg" alt="">Leaks</div></div>
+    <i class="div"></i>
+    <div class="group"><div class="mi"><img src="assets/imgIcon4.svg" alt="">My Platforms</div><div class="mi"><img src="assets/imgIcon5.svg" alt="">My Camsites</div><div class="mi"><img src="assets/imgIcon6.svg" alt="">My Socials</div></div>
+    <i class="div"></i>
+    <div class="mi"><img src="assets/imgIcon7.svg" alt="">Keyword Search</div>
+    <i class="div"></i>
+    <div class="group"><div class="mi"><img src="assets/imgIcon8.svg" alt="">Payments</div><div class="mi"><img src="assets/imgIcon9.svg" alt="">My Account</div></div>
+    <i class="div"></i>
+    <div class="mi"><img src="assets/imgIcon10.svg" alt="">Install Extension</div>
+  </div></div>
+
+  <div class="abs headline">
+    <div class="ttl">
+      <div class="pt"><img src="assets/imgIcon11.svg" alt=""><p>Magic Vault</p></div>
+      <div class="round"><img src="assets/imgIcon12.svg" alt=""></div>
+    </div>
+    <div class="actions">
+      <div class="selects">
+        <div class="sel"><div class="bg"></div><img class="ic" src="assets/imgIcon13.svg" alt=""><p class="lab">Sort by</p><p class="val">Leaks Qty</p></div>
+        <div class="sel"><div class="bg"></div><img class="ic" src="assets/imgIcon13.svg" alt=""><p class="lab">Source</p><p class="val">Magic Vault</p></div>
+      </div>
+      <div class="upload"><img src="assets/imgIcon14.svg" alt="">Upload File</div>
+    </div>
+  </div>
+  <div class="abs quota">
+    <div class="top"><b>Media in Vault</b><div class="cnt">150<span>/ 500</span><img src="assets/imgIcon15.svg" alt=""></div></div>
+    <div class="bar"><i></i></div>
+  </div>
+
+  <div class="abs grid" id="grid"></div>
+
+  <div class="abs overlay" id="overlay"></div>
+  <div class="abs dialog stroke" id="dialog">
+    <div class="photo"><img src="assets/picture.jpg" alt=""><img class="trash" src="assets/imgIcon17.svg" alt=""></div>
+    <div class="side">
+      <div class="head">
+        <div class="idrow">
+          <h3>ID-587945</h3>
+          <div class="meta"><div class="pills"><span class="pill grey">Manual Upload</span><span class="pill blue">Scanned</span></div><p class="date">9.07.2023, 11:35</p></div>
+        </div>
+        <i class="hr"></i>
+        <div class="lk">
+          <div class="leaks"><p>Leaks: <b>16</b></p></div>
+          <div class="r"><div class="incl"><div class="l"><img src="assets/imgIcon16.svg" alt="">Include in search</div></div>
+            <div class="toggle"><img src="assets/imgToggle.svg" alt=""><img class="knob" src="assets/imgKnob.svg" alt=""></div></div>
+        </div>
+      </div>
+      <div class="table">
+        <div class="tr th"><p style="left:0">Platform</p><p style="left:142px">Claim ID</p><p style="left:268px">Status</p></div>
+        <div class="tr td"><p style="left:0">nudestar.tv</p><p style="left:142px">02934872</p><span class="pill blue" style="left:268px">Resolved</span></div>
+        <div class="tr td"><p style="left:0">facebook.com</p><p style="left:142px">86754890</p><span class="pill red" style="left:268px">Found</span></div>
+        <div class="tr td"><p style="left:0">website.org</p><p style="left:142px">23045987</p><span class="pill purple" style="left:268px">Cancelled</span></div>
+        <i class="thumb"></i>
+      </div>
+      <img class="close" src="assets/imgIcon26.svg" alt="">
+    </div>
+  </div>
+
+  <div class="abs cursor" id="cursor"><img src="../../_lib/cursor-hand.png" alt=""></div>
+</div>
+
+<script src="../../_lib/motion.js"></script>
+<script src="../../_lib/player.js"></script>
+<script>
+// Story: the creator's Magic Vault with the cursor resting on the "Waiting" item (its Figma hover, the
+// first frame) → across the row to the first kitten → its details: ID-587945, 16 leaks, where they are →
+// closes it; the close icon sits over the "Waiting" item, so the cursor settles back on it and the loop closes.
+const T = {
+  toFirst: 1.0, click: 2.2,    // from the "Waiting" item across the row to the first item, click
+  open: 2.3,                   // dialog in
+  toClose: 5.2, close: 6.3,    // read the leaks, then the close icon
+  shut: 6.4,                   // dialog out
+  end: 8.3,
+};
+const CLICKS = [T.click, T.close];
+const WAIT = [1150, 452];           // where the Figma frame has its hand cursor
+const FIRST = [410, 360];
+const CLOSE = [1164, 314];          // the dialog's close icon
+const cursorAt = cursorPath(WAIT, [
+  [T.toFirst, T.click - .15, ...FIRST],
+  [T.open + .9, T.open + 1.9, 960, 640],    // down to the leaks table
+  [T.toClose, T.close - .15, ...CLOSE],
+  [T.end - 1.3, T.end - .4, ...WAIT],
+]);
+
+// The grid, as in Figma: picture, the first line (leaks or a status), border.
+const ITEMS = [
+  { pic: 'picture.jpg' }, { pic: 'picture1.jpg' }, { pic: 'picture2.jpg' }, { pic: 'picture3.jpg', wait: '#ffc700' }, { pic: 'picture.jpg' },
+  { pic: 'picture3.jpg', wait: 'rgba(255,255,255,.96)' }, { pic: 'picture.jpg', error: true }, { ph: 'No preview', icon: ['imgIcon19.svg', -10.65, -7.85, 66.65, 66.45] },
+  { pic: 'picture1.jpg' }, { ph: 'Search in Progress', icon: ['imgIcon20.svg', -6, -6, 58.98, 58.98] },
+];
+const item = (it) => {
+  const pic = it.ph
+    ? `<div class="ph"><img src="assets/picture2.jpg" alt=""><i></i></div><div class="msg"><div class="ic"><img src="assets/${it.icon[0]}" alt="" style="left:${it.icon[1]}px;top:${it.icon[2]}px;width:${it.icon[3]}px;height:${it.icon[4]}px"></div>${it.ph}</div>`
+    : `<img src="assets/${it.pic}" alt=""><img class="trash" src="assets/imgIcon17.svg" alt="">`;
+  const first = it.wait
+    ? `<div class="leaks"><span class="pill wait" style="color:${it.wait}">Waiting</span></div>`
+    : `<div class="leaks"><p>Leaks: <b>16</b></p>${it.error ? '<img src="assets/imgIcon18.svg" alt="">' : ''}</div>`;
+  return `<div class="item stroke"${it.error ? ' style="--bd:#f54545"' : ''}><i class="hov"></i><i class="hb"></i>
+    <div class="pic">${pic}</div>
+    <div class="info">${first}<div class="incl"><div class="l"><img src="assets/imgIcon16.svg" alt="">Include in search</div>
+      <div class="toggle"><img src="assets/imgToggle.svg" alt=""><img class="knob" src="assets/imgKnob.svg" alt=""></div></div></div></div>`;
+};
+const $ = (id) => document.getElementById(id);
+$('grid').innerHTML = `<div class="row">${ITEMS.slice(0, 5).map(item).join('')}</div><div class="row">${ITEMS.slice(5).map(item).join('')}</div>
+  <div class="pag stroke">
+    <p style="left:610px;top:31px;color:rgba(255,255,255,.6)">Items per page:</p>
+    <p style="left:724px;top:32px">10</p><i class="ul"></i><img src="assets/imgIconArrowDropDownFill.svg" alt="" style="left:773px;top:20px">
+    <p style="left:835px;top:31px;color:rgba(255,255,255,.6)">1 — 10 of 69</p>
+    <img src="assets/imgIcon23.svg" alt="" style="left:953px;top:19px"><img src="assets/imgIcon24.svg" alt="" style="left:993px;top:19px">
+    <img src="assets/imgIcon21.svg" alt="" style="left:1033px;top:19px"><img src="assets/imgIcon22.svg" alt="" style="left:1073px;top:19px">
+  </div>`;
+const cards = [...document.querySelectorAll('.item')].map((el, i) => ({
+  el, hov: el.querySelector('.hov'), hb: el.querySelector('.hb'), trash: el.querySelector('.trash'),
+  x: 296 + (i % 5) * 226, y: 220 + Math.floor(i / 5) * 314,
+}));
+
+// Hover follows the cursor: share of the last 0.14 s it spent over the item.
+const over = (t, c) => {
+  let n = 0;
+  for (let k = 0; k <= 6; k++) {
+    const [x, y] = cursorAt(t - k * .14 / 6);
+    if (x >= c.x && x < c.x + 216 && y >= c.y && y < c.y + 304) n++;
+  }
+  return n / 7;
+};
+
+function render(t) {
+  // Dialog: the overlay darkens, the dialog turns opaque quickly (a see-through dialog over the grid
+  // reads as a double exposure) while it rises a little and settles; out the same way, faster.
+  const opening = t < T.shut;
+  // The dialog fades only over a dark overlay: in after it, out before it lifts.
+  const dim = opening ? p(t, T.open, T.open + .22) : 1 - p(t, T.shut + .12, T.shut + .36);
+  const op = opening ? p(t, T.open + .14, T.open + .28) : 1 - p(t, T.shut, T.shut + .12);
+  const k = opening ? outC(p(t, T.open + .14, T.open + .6)) : 1 - io(p(t, T.shut, T.shut + .18));
+  $('overlay').style.opacity = dim;
+  $('dialog').style.opacity = op;
+  $('dialog').style.transform = `translateY(${14 * (1 - k)}px) scale(${mix(.97, 1, k)})`;
+  $('overlay').style.visibility = dim > 0 ? 'visible' : 'hidden';
+  $('dialog').style.visibility = op > 0 ? 'visible' : 'hidden';
+
+  // The overlay covers the grid: no hover under it, and the clicked item's hover fades with it.
+  for (const c of cards) {
+    const h = over(t, c) * (1 - dim);
+    c.hov.style.opacity = c.hb.style.opacity = h;
+    if (c.trash) c.trash.style.opacity = h;
+  }
+
+  const [x, y] = cursorAt(t);
+  const press = Math.max(...CLICKS.map((c) => bump(t, c, .18)));
+  $('cursor').style.transform = `translate(${x - 6}px, ${y - 1}px) scale(${1 - .14 * press})`;
+}
+
+const FIGMA = new URLSearchParams(location.search).has('figma');
+MotionPlayer.mount({
+  stage: $('stage'), width: 1440, height: 1024, duration: T.end, render: FIGMA ? (t) => { render(t); $('cursor').style.opacity = 0; } : render,
+  markers: [['hover', 0], ['click', T.click], ['item', T.open + 1], ['close', T.close]],
+  refs: [['Grid (214:23437)', 'src/1-grid.png'], ['Item (214:23521)', 'src/2-item.png']],
+  poster: 0,
+});
+</script>
+</body>
+</html>
