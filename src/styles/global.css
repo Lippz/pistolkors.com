@@ -817,6 +817,66 @@ a:hover .frame img {
 .prose .cards--answer > div:last-child b {
   color: var(--accent-ink);
 }
+/* Cards that hold their description back (<div class="cards cards--reveal">, the text
+ * after the title in a <span>). On a desktop the icon and title sit at the bottom of the
+ * card and the description fades in under them on hover; the card keeps its full height.
+ * The page script measures how far the title has to drop (--drop) and adds .is-ready.
+ * On a phone the cards are a swipeable row instead, with the description always shown. */
+.prose .cards--reveal > div {
+  position: relative;
+  justify-content: flex-end;
+}
+@media (hover: hover) and (min-width: 721px) {
+  .prose .cards--reveal > div {
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+  }
+  .prose .cards--reveal.is-ready > div > :is(b, span),
+  .prose .cards--reveal.is-ready > [data-icon]::before {
+    transition: translate 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.3s ease;
+  }
+  .prose .cards--reveal.is-ready > div:not(:hover) > b,
+  .prose .cards--reveal.is-ready > [data-icon]:not(:hover)::before {
+    translate: 0 var(--drop, 0px);
+  }
+  .prose .cards--reveal.is-ready > div:not(:hover) > span {
+    opacity: 0;
+    translate: 0 12px;
+  }
+  .prose .cards--reveal > div:hover {
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+    background: color-mix(in srgb, var(--accent) 6%, transparent);
+  }
+}
+@media (hover: hover) and (min-width: 721px) and (prefers-reduced-motion: reduce) {
+  .prose .cards--reveal.is-ready > div > :is(b, span),
+  .prose .cards--reveal.is-ready > [data-icon]::before {
+    transition: opacity 0.2s ease;
+  }
+}
+@media (max-width: 720px) {
+  .prose .cards--reveal {
+    display: flex;
+    gap: 12px;
+    margin-inline: calc(-1 * var(--gutter));
+    padding-inline: var(--gutter);
+    scroll-padding-inline: var(--gutter);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .prose .cards--reveal::-webkit-scrollbar {
+    display: none;
+  }
+  .prose .cards--reveal > div {
+    flex: 0 0 min(80%, 320px);
+    justify-content: flex-start;
+    scroll-snap-align: start;
+  }
+  body .prose .cards--reveal > div {
+    animation: none;
+  }
+}
 /* Cards rise in one after another as they scroll in: each card in a row of three
  * starts its reveal a little later in its own entry range. Same keyframes as .reveal. */
 @media (prefers-reduced-motion: no-preference) {

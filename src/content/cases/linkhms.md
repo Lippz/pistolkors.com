@@ -127,16 +127,16 @@ A mid-level designer worked on LinkHMS with me, and I trained them on the projec
 
 LinkHMS covers a clinic’s whole day in nine areas, from the first booking at the front desk to the month’s numbers in the finance office.
 
-<div class="cards">
-<div data-icon="calendar"><b>Schedule and queue</b>Doctors’ appointments on a timeslot grid and a daily live queue by status: book, edit, cancel, start and complete visits.</div>
-<div data-icon="record"><b>Patients and records</b>A searchable patient registry and an electronic record for every patient to view and add clinical entries, with photo upload.</div>
-<div data-icon="stethoscope"><b>Visits and admissions</b>Document a visit — vitals, diagnoses, prescriptions, analyses, services — convert it to an admission and follow it through discharge.</div>
-<div data-icon="receipt"><b>Billing and claims</b>Itemised invoices, payments, printing and sending, and insurance claims tracked from draft through submission to the insurer’s decision.</div>
-<div data-icon="pill"><b>Pharmacy</b>Prescription orders dispensed from stock and billed to the patient or the insurer, and a medicine inventory with CSV or Excel upload.</div>
-<div data-icon="flask"><b>Laboratory</b>Lab orders tracked by status, results entered with attachments and sent to the patient, and custom test templates next to the built-in ones.</div>
-<div data-icon="chart"><b>Reports</b>Operational reports on admissions, diagnoses, lab tests, patient flow and antenatal care, and finance reports on what was billed, collected and is outstanding.</div>
-<div data-icon="users"><b>Administration and HR</b>Departments, services, insurance providers with plan-based pricing, API keys, and staff accounts with roles and weekly schedules.</div>
-<div data-icon="sliders"><b>Settings and permissions</b>Account and clinic details, invoice text, working hours, subscription billing and view and edit permissions for every role.</div>
+<div class="cards cards--reveal">
+<div data-icon="calendar"><b>Schedule and queue</b><span>Doctors’ appointments on a timeslot grid and a daily live queue by status: book, edit, cancel, start and complete visits.</span></div>
+<div data-icon="record"><b>Patients and records</b><span>A searchable patient registry and an electronic record for every patient to view and add clinical entries, with photo upload.</span></div>
+<div data-icon="stethoscope"><b>Visits and admissions</b><span>Document a visit — vitals, diagnoses, prescriptions, analyses, services — convert it to an admission and follow it through discharge.</span></div>
+<div data-icon="receipt"><b>Billing and claims</b><span>Itemised invoices, payments, printing and sending, and insurance claims tracked from draft through submission to the insurer’s decision.</span></div>
+<div data-icon="pill"><b>Pharmacy</b><span>Prescription orders dispensed from stock and billed to the patient or the insurer, and a medicine inventory with CSV or Excel upload.</span></div>
+<div data-icon="flask"><b>Laboratory</b><span>Lab orders tracked by status, results entered with attachments and sent to the patient, and custom test templates next to the built-in ones.</span></div>
+<div data-icon="chart"><b>Reports</b><span>Operational reports on admissions, diagnoses, lab tests, patient flow and antenatal care, and finance reports on what was billed, collected and is outstanding.</span></div>
+<div data-icon="users"><b>Administration and HR</b><span>Departments, services, insurance providers with plan-based pricing, API keys, and staff accounts with roles and weekly schedules.</span></div>
+<div data-icon="sliders"><b>Settings and permissions</b><span>Account and clinic details, invoice text, working hours, subscription billing and view and edit permissions for every role.</span></div>
 </div>
 
 ## Key decisions
@@ -218,12 +218,12 @@ AI tools became part of the process as the project went on. Agents did not repla
 
 The heaviest sections were prototyped in code with AI agents (Cursor, Claude Code and Codex) instead of linked Figma frames, so the team could try them as working interfaces before development started.
 
-<div class="cards">
-<div data-icon="chart"><b>Reports</b>Operational reports on admissions, diagnoses, lab tests, patient flow and antenatal care.</div>
-<div data-icon="wallet"><b>Finance reports</b>Billed, collected and outstanding, with charts that filter the invoices that need attention.</div>
-<div data-icon="syringe"><b>Vaccinations</b>A schedule grid by age with a status for every vaccine.</div>
-<div data-icon="pulse"><b>Partograph</b>The labour progress chart in the Pregnancies section.</div>
-<div data-icon="clipboard"><b>Prescriptions and drug administration</b>Medicines with route, dosage and status, and a log of every dose given.</div>
+<div class="cards cards--reveal">
+<div data-icon="chart"><b>Reports</b><span>Operational reports on admissions, diagnoses, lab tests, patient flow and antenatal care.</span></div>
+<div data-icon="wallet"><b>Finance reports</b><span>Billed, collected and outstanding, with charts that filter the invoices that need attention.</span></div>
+<div data-icon="syringe"><b>Vaccinations</b><span>A schedule grid by age with a status for every vaccine.</span></div>
+<div data-icon="pulse"><b>Partograph</b><span>The labour progress chart in the Pregnancies section.</span></div>
+<div data-icon="clipboard"><b>Prescriptions and drug administration</b><span>Medicines with route, dosage and status, and a log of every dose given.</span></div>
 </div>
 
 #### A design system reworked in Figma, implemented by AI

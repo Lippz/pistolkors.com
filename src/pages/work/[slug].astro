@@ -232,6 +232,23 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
     update();
   }
 
+  // Cards that hold their description back until hover: the icon and title drop to the
+  // bottom by the description's height (and its gap), so the card keeps its full size.
+  document.querySelectorAll<HTMLElement>('.prose .cards--reveal').forEach((list) => {
+    const cards = [...list.children] as HTMLElement[];
+    const measure = () =>
+      cards.forEach((card) => {
+        const title = card.querySelector('b');
+        const text = card.querySelector('span');
+        if (!title || !text) return;
+        const drop = text.offsetTop + text.offsetHeight - (title.offsetTop + title.offsetHeight);
+        card.style.setProperty('--drop', `${drop}px`);
+      });
+    measure();
+    new ResizeObserver(measure).observe(list);
+    list.classList.add('is-ready');
+  });
+
   // Product loops (the one under the results and any in the text) play while at least half
   // of each is on screen and the full-screen viewer is closed. Reduced motion keeps them on
   // the poster; the viewer has controls then.
