@@ -112,19 +112,10 @@ I grouped the findings in an affinity diagram, graded features by importance and
 
 I started with hand-drawn sketches to decide what each screen needed, then mapped the user flow and built a low-fidelity prototype in Figma. A usability study showed where the task flow broke down; a second round confirmed the fixes before any high-fidelity work.
 
-<div class="carousel">
-
-![Flowchart of the app: sign-up and login, then the schedule with new appointments, patients and their medical records, and administration of staff, departments and services](../../assets/cases/linkhms/wf-flowchart.webp "Flowchart")
-
-![Low-fidelity wireframe of the doctors schedule grid](../../assets/cases/linkhms/wf-schedule.webp "Schedule")
-
-![Low-fidelity wireframe of the patients list](../../assets/cases/linkhms/wf-patients.webp "Patients")
-
-![Low-fidelity wireframe of a patient summary with recent visits, tests, diagnoses and prescriptions](../../assets/cases/linkhms/wf-patient-summary.webp "Patient summary")
-
-![Low-fidelity wireframe of a patient’s records history with a category menu](../../assets/cases/linkhms/wf-patient-records.webp "Patient records")
-
-</div>
+<figure class="case-motion" data-lightbox-group>
+<video src="../../motion/linkhms-flow.mp4" poster="../../motion/linkhms-flow.jpg" width="2240" height="1260" muted loop playsinline preload="metadata" aria-label="The four core steps, Schedule, Patients, EMR and Records, are laid out as a short flow; each step’s low-fidelity wireframe is sketched in pencil and shaded in, then the four steps take their places in the full flowchart, which grows around them: sign-up and login, new appointments, patient records and the administration of staff, departments and services" data-label="The four core steps, Schedule, Patients, EMR and Records, are laid out as a short flow; each step’s low-fidelity wireframe is sketched in pencil and shaded in, then the four steps take their places in the full flowchart, which grows around them: sign-up and login, new appointments, patient records and the administration of staff, departments and services"></video>
+<figcaption class="eyebrow">From four steps and their wireframes to the full flow</figcaption>
+</figure>
 
 ### Mentoring on the project
 

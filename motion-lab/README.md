@@ -39,6 +39,13 @@ show the same thing.
   Figma exports (`assets/card-*.png`, composited on navy) cut into pieces by `assets/pieces.js`: blobs found in the
   export, by hand for tabs and headers. Holds 3 s, fades to navy.
 
+- `linkhms-flow/`: user flow, 2240×1260 like the Figma frames (KK, page pp, frames "1"…"6" from 153:27813). The four steps
+  (Schedule → Patients → EMR → Records) appear and drop to the bottom; each step's wireframe is sketched in pencil, shaded in
+  with a scribble mask, and the lit step passes along the arrow; then the steps rise into their places in the long flow,
+  which grows out of them connector by connector. The long flow is the Figma SVG export (`assets/flow-long.svg`, one group
+  per node) plus connector centerlines (`tools/connectors.txt`), built into `assets/flow.js` by `tools/build-flow.py`.
+  `tools/frames.mjs <dir> 4.5 …` saves full-size stills for review.
+
 ## Workflow
 
 1. Copy `_template` to `motion-lab/<name>/`.
