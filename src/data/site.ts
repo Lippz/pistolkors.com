@@ -1,6 +1,7 @@
 import { url } from '../lib/url';
 import { PRODUCT_SINCE, yearsSince, inWords } from '../lib/years';
 import artemOpolskyi from '../assets/site/artem-opolskyi.webp';
+import tanyaTritelnitskaya from '../assets/site/tanya-tritelnitskaya.webp';
 
 export const site = {
   name: 'Pylyp Pistolkors',
@@ -99,27 +100,10 @@ export const testimonials: {
   },
   {
     quote:
-      'Placeholder. What the LinkHMS product manager says about working together goes here: two or three sentences, in their own words.',
-    name: 'Name Surname',
-    role: 'Product Manager, LinkHMS',
-    proof: { label: 'LinkHMS', href: '/work/linkhms/' },
-    placeholder: true,
-  },
-  {
-    quote:
-      'Placeholder. A quote from the LegalFans client goes here: what changed for them, and what it was like to work with me.',
-    name: 'Name Surname',
-    role: 'Founder, LegalFans',
-    proof: { label: 'LegalFans', href: '/work/legalfans/' },
-    placeholder: true,
-  },
-  {
-    quote:
-      'Placeholder. A quote from the Carolina Carports side goes here, or from a developer or designer on one of the teams.',
-    name: 'Name Surname',
-    role: 'Project Manager, Carolina Carports',
-    proof: { label: 'Carolina Carports', href: '/work/carolina-carports/' },
-    placeholder: true,
+      'Working with Pylyp was a real pleasure, and I think we were all lucky to have such a smart, creative and interesting person on the team. I always felt comfortable working with him. I love that he is principled and, at the same time, flexible. I’m truly grateful for the great collaboration and for all our conversations.',
+    name: 'Tanya Tritelnitskaya',
+    role: 'Front-End Engineer, Existek',
+    photo: tanyaTritelnitskaya,
   },
 ];
 
