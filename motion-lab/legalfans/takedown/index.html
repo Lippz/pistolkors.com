@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LegalFans · Leaks and Documents — motion draft</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=block" rel="stylesheet">
+<link rel="stylesheet" href="../../_lib/player.css">
+<style>
+  /* Stage is the Figma frame (KK 238:4547 Leaks, 238:4577 Add Leak Manually, 238:5311 Documents, 238:5346 Upload Document),
+     1440×1024; every number is Figma pixels. */
+  * { box-sizing: border-box; }
+  p { margin: 0; }
+  .stage { background: #f9fcfd; font-family: Roboto, sans-serif; color: rgba(0,0,0,.88); -webkit-font-smoothing: antialiased; overflow: hidden; }
+  .abs { position: absolute; }
+  img { display: block; }
+  /* Figma sizes the 1.4 line-height boxes to whole pixels: 19.6 → 20 (the text sits 1 px lower than at 19.6). */
+  .b2 { font-size: 14px; line-height: 20px; letter-spacing: .25px; white-space: nowrap; }
+  .btn-t { font-size: 14px; font-weight: 500; line-height: 16px; letter-spacing: .75px; text-transform: uppercase; white-space: nowrap; }
+
+  /* Header */
+  .header { left: 0; top: 0; width: 1440px; height: 64px; background: #fff; }
+  .user { right: 24px; top: 20px; display: flex; gap: 8px; align-items: center; font-size: 12px; line-height: 16px; letter-spacing: .4px; }
+  .user img { width: 24px; height: 24px; }
+
+  /* Menu: Leaks and Documents each have an "on" look (tint and accent icon) that render() fades. */
+  .menu { left: 16px; top: 64px; width: 168px; padding: 16px 0; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .group { width: 100%; display: flex; flex-direction: column; gap: 16px; }
+  .mi { position: relative; width: 100%; height: 40px; padding: 8px; display: flex; gap: 16px; align-items: center; border-radius: 4px; overflow: hidden; }
+  .mi .ic { position: relative; width: 24px; height: 24px; flex: none; }
+  .mi .ic img { position: absolute; inset: 0; width: 24px; height: 24px; }
+  .mi > img { width: 24px; height: 24px; position: relative; }
+  .mi span { position: relative; }
+  .mi .on-bg, .mi .hov { position: absolute; inset: 0; background: rgba(1,175,241,.16); }
+  .mi .hov { background: rgba(0,0,0,.04); opacity: 0; }
+  .menu .div { width: 152px; height: 1px; background: rgba(0,0,0,.12); flex: none; }
+
+  /* Screens: the main area right of the menu. */
+  .screen { left: 200px; top: 64px; width: 1240px; height: 960px; }
+  .headline { position: absolute; left: 0; top: 24px; width: 1240px; height: 48px; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; }
+  .ttl { display: flex; gap: 16px; align-items: center; }
+  .ttl img { width: 36px; height: 36px; }
+  .ttl p { font-size: 34px; letter-spacing: .25px; line-height: 40px; white-space: nowrap; }
+  .actions { display: flex; gap: 24px; align-items: center; }
+  .actions > img { width: 24px; height: 24px; }
+  .main-btn { position: relative; height: 48px; padding: 12px 16px; border-radius: 24px; background: #01aff1; display: flex; gap: 12px; align-items: center; color: #fff; overflow: hidden; }
+  .main-btn img { width: 24px; height: 24px; position: relative; }
+  .main-btn p { position: relative; }
+
+  .chips { position: absolute; left: 24px; top: 96px; display: flex; gap: 8px; }
+  /* Figma strokes sit inside the box: drawn as an ::after overlay. */
+  .chip { position: relative; height: 36px; border-radius: 24px; display: flex; align-items: center; justify-content: center; color: #018ccf; }
+  .chip::after { content: ""; position: absolute; inset: 0; border: 1px solid #01aff1; border-radius: 24px; }
+  .chip.on { background: rgba(1,175,241,.16); }
+
+  .table { position: absolute; left: 0; width: 1240px; height: 528px; overflow: hidden; }
+  .tr { position: absolute; left: 0; width: 1240px; height: 48px; background: #fff; }
+  .tr::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: #eee; }
+  .tr > * { position: absolute; top: 50%; transform: translateY(-50%); }
+  .tr.th { z-index: 2; }
+  .tr.th p, .tr.th .sort { font-size: 14px; font-weight: 500; line-height: 20px; white-space: nowrap; }
+  .tr.th .sort { display: flex; align-items: center; }
+  .tr.th .sort img { width: 24px; height: 24px; }
+  .tr .new { position: absolute; inset: 0; transform: none; top: 0; background: rgba(1,175,241,.08); opacity: 0; }
+  .link { color: #018ccf; }
+  .pill { height: 24px; padding: 0 12px; border-radius: 12px; display: flex; align-items: center; font-size: 14px; font-weight: 500; line-height: 20px; white-space: nowrap; }
+  .pill.found { background: rgba(237,28,36,.16); color: #ed1c24; }
+  .pill.canceled { background: rgba(0,0,0,.08); }
+  .pill.requested { background: rgba(151,71,255,.16); color: #9747ff; }
+  .pill.pending { background: rgba(237,175,16,.16); }
+  .pill.completed { background: rgba(43,176,31,.16); color: #2bb01f; }
+  .desc { width: 600px; overflow: hidden; text-overflow: ellipsis; }
+  .kebab { position: absolute; right: 16px; top: 4px !important; transform: none !important; width: 40px; height: 40px; opacity: 0; }
+
+  .pag { position: absolute; left: 0; top: 896px; width: 1240px; height: 64px; background: #fff; font-size: 12px; line-height: 16px; letter-spacing: .4px; }
+  .pag > * { position: absolute; }
+  .pag .g { color: rgba(0,0,0,.6); }
+  .pag img { width: 24px; height: 24px; top: 20px; }
+
+  /* Dropdown under the row's kebab (Figma: right 24, 2 px over the row's bottom). */
+  .dropdown { position: absolute; right: 24px; padding: 12px; border-radius: 4px; background: #fff; display: flex; flex-direction: column; gap: 24px; z-index: 3;
+    box-shadow: 0 2px 4px rgba(0,0,0,.16), 0 4px 8px rgba(0,0,0,.08), 0 8px 12px rgba(0,0,0,.04); transform-origin: 100% 0; }
+  .dropdown .it { display: flex; gap: 16px; align-items: center; }
+  .dropdown img { width: 24px; height: 24px; }
+
+  /* Dialogs */
+  .overlay { left: 0; top: 0; width: 1440px; height: 1024px; background: rgba(0,0,0,.5); backdrop-filter: blur(10px); opacity: 0; z-index: 5; }
+  .dlg { left: 470px; width: 500px; padding: 32px 24px; border-radius: 8px; background: #fff; display: flex; flex-direction: column; gap: 24px; z-index: 6; opacity: 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,.16), 0 4px 8px rgba(0,0,0,.08), 0 8px 12px rgba(0,0,0,.04); }
+  .dlg h4 { margin: 0; font-weight: 400; font-size: 34px; line-height: 40px; letter-spacing: .25px; white-space: nowrap; }
+  .dlg .body { display: flex; flex-direction: column; gap: 16px; }
+  .tf { position: relative; height: 76px; overflow: hidden; }
+  .tf .bg { position: absolute; left: 0; right: 0; top: 5px; bottom: 19px; border: 1px solid rgba(0,0,0,.08); border-radius: 4px; background: #fff; }
+  .tf.area { height: 124px; }
+  .tf .lab { position: absolute; left: 6px; top: 0; padding: 0 4px; background: #fff; font-size: 10px; line-height: 12px; letter-spacing: .4px; color: rgba(0,0,0,.6); white-space: nowrap; }
+  .tf .val { position: absolute; left: 10px; top: 24px; }
+  .tf .ico { position: absolute; right: 12px; top: 19px; width: 24px; height: 24px; }
+  .tf .cnt { position: absolute; right: 8px; top: 85px; font-size: 10px; line-height: 12px; letter-spacing: .4px; color: rgba(0,0,0,.42); }
+  .caret { display: inline-block; width: 1px; height: 17px; margin-left: 1px; vertical-align: -3px; background: #018ccf; }
+  .radios { display: flex; gap: 24px; }
+  .radios > div { display: flex; gap: 8px; align-items: center; }
+  .radios img { width: 24px; height: 24px; }
+  .upl { display: flex; gap: 12px; align-items: center; }
+  .pill-btn { position: relative; flex: none; height: 36px; padding: 8px 16px; border-radius: 24px; background: rgba(1,175,241,.16); display: flex; gap: 12px; align-items: center; color: #018ccf; overflow: hidden; }
+  .pill-btn .ic16 { position: relative; width: 16px; height: 16px; flex: none; }
+  .pill-btn .ic16 img { position: absolute; inset: 0; width: 16px; height: 16px; }
+  .pill-btn .lbls { position: relative; height: 20px; }
+  .pill-btn .lbls span { position: absolute; left: 0; top: 0; }
+  .tpl { color: #018ccf; text-decoration: underline; text-underline-position: from-font; }
+  .hint { color: rgba(0,0,0,.42); }
+  .btns { display: flex; gap: 12px; justify-content: flex-end; }
+  .b40 { position: relative; height: 40px; padding: 10px 16px; border-radius: 4px; display: flex; align-items: center; overflow: hidden; }
+  .b40.cancel { color: #ed1c24; }
+  .b40.ok { background: #01aff1; color: #fff; }
+  .b40 p { position: relative; }
+  .file-btn { position: relative; height: 48px; padding: 12px 16px; border-radius: 24px; background: rgba(1,175,241,.16); display: flex; gap: 12px; align-items: center; justify-content: center; color: #018ccf; overflow: hidden; }
+  .file-btn img { width: 24px; height: 24px; position: relative; }
+  .file-btn p { position: relative; }
+  .note { text-align: center; font-size: 10px; letter-spacing: .4px; line-height: 16px; color: rgba(0,0,0,.6); }
+  .note b { font-weight: 500; letter-spacing: .5px; }
+
+  /* Hover and press layers: render() sets them from the cursor. */
+  .hov-d, .rip { position: absolute; pointer-events: none; }
+  .hov-d { inset: 0; background: rgba(0,0,0,.1); opacity: 0; border-radius: inherit; }
+  .hov-d.light { background: rgba(1,175,241,.1); }
+  .rip { left: 0; top: 0; width: 2px; height: 2px; margin: -1px 0 0 -1px; border-radius: 50%; opacity: 0; background: rgba(255,255,255,.35); }
+  .rip.dark { background: rgba(1,140,207,.2); }
+
+  .cursor { left: 0; top: 0; width: 19px; height: 24px; z-index: 20; transform-origin: 6px 1px; }
+  .cursor img { width: 19px; height: 24px; }
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="abs header">
+    <img class="abs" src="assets/logo-a.svg" alt="" style="left:25.06px;top:26.9px;width:158.98px;height:11.74px">
+    <img class="abs" src="assets/logo-b.svg" alt="" style="left:105.12px;top:24.86px;width:14.98px;height:15.27px">
+    <div class="abs user"><p>username@mailprovider.com</p><img src="assets/logout.svg" alt=""></div>
+  </div>
+
+  <div class="abs menu">
+    <div class="mi b2"><img src="assets/m-stats.svg" alt=""><span>Statistics</span></div>
+    <i class="div"></i>
+    <div class="group">
+      <div class="mi b2"><img src="assets/m-users.svg" alt=""><span>Users</span></div>
+      <div class="mi b2"><img src="assets/m-uploads.svg" alt=""><span>Uploads</span></div>
+      <div class="mi b2" id="miLeaks"><i class="on-bg" id="leaksOn"></i><i class="hov" id="leaksHov"></i><i class="rip dark" id="leaksRip"></i><div class="ic"><img src="assets/m-leaks.svg" alt=""><img src="assets/m-leaks-on.svg" alt="" id="leaksIc"></div><span>Leaks</span></div>
+    </div>
+    <div class="group">
+      <div class="mi b2"><img src="assets/m-admin.svg" alt=""><span>Administration</span></div>
+      <div class="mi b2"><img src="assets/m-perf.svg" alt=""><span>Performance</span></div>
+      <div class="mi b2"><img src="assets/m-violators.svg" alt=""><span>Violators</span></div>
+      <div class="mi b2"><img src="assets/m-partners.svg" alt=""><span>Partners</span></div>
+      <div class="mi b2" id="miDocs"><i class="on-bg" id="docsOn"></i><i class="hov" id="docsHov"></i><i class="rip dark" id="docsRip"></i><div class="ic"><img src="assets/m-docs.svg" alt=""><img src="assets/m-docs-on.svg" alt="" id="docsIc"></div><span>Documents</span></div>
+    </div>
+  </div>
+
+  <!-- Leaks (238:4547) -->
+  <div class="abs screen" id="leaks">
+    <div class="headline">
+      <div class="ttl"><img src="assets/t-leaks.svg" alt=""><p>Leaks</p></div>
+      <div class="actions"><img src="assets/search.svg" alt=""><img src="assets/filter.svg" alt="">
+        <div class="main-btn" id="addBtn"><i class="hov-d" id="addHov"></i><i class="rip" id="addRip"></i><img src="assets/plus.svg" alt=""><p class="btn-t">Add Leak</p></div></div>
+    </div>
+    <div class="chips b2">
+      <div class="chip on" style="width:91px">All Leaks</div><div class="chip" style="width:141px">Found + Pending</div>
+      <div class="chip" style="width:73px">Found</div><div class="chip" style="width:101px">Requested</div>
+      <div class="chip" style="width:85px">Pending</div><div class="chip" style="width:103px">Completed</div>
+      <div class="chip" style="width:92px">Canceled</div>
+    </div>
+    <div class="table" id="leakTable" style="top:156px"></div>
+    <div class="pag" id="leakPag"></div>
+  </div>
+
+  <!-- Documents (238:5311) -->
+  <div class="abs screen" id="docs">
+    <div class="headline">
+      <div class="ttl"><img src="assets/t-docs.svg" alt=""><p>Documents</p></div>
+      <div class="actions"><img src="assets/search.svg" alt=""><img src="assets/filter.svg" alt="">
+        <div class="main-btn" id="updBtn"><i class="hov-d" id="updHov"></i><i class="rip" id="updRip"></i><img src="assets/upload-w.svg" alt=""><p class="btn-t">upload document</p></div></div>
+    </div>
+    <div class="table" id="docTable" style="top:96px"></div>
+    <div class="pag" id="docPag"></div>
+    <div class="dropdown b2" id="dropdown"><div class="it"><img src="assets/download.svg" alt="">Download</div><div class="it"><img src="assets/delete.svg" alt="">Delete</div></div>
+  </div>
+
+  <div class="abs overlay" id="overlay"></div>
+
+  <!-- Add Leak Manually (238:4608) -->
+  <div class="abs dlg" id="dlgAdd" style="top:298px">
+    <h4>Add Leak Manually</h4>
+    <div class="body">
+      <div>
+        <div class="tf"><div class="bg"></div><img class="ico" src="assets/f-search.svg" alt=""><p class="lab">User *</p><p class="val b2" id="addUser"></p></div>
+        <div class="tf"><div class="bg"></div><img class="ico" src="assets/f-search.svg" alt=""><p class="lab">Creator *</p><p class="val b2" id="addCreator"></p></div>
+      </div>
+      <div class="radios b2"><div><img src="assets/radio-off.svg" alt="">One link</div><div><img src="assets/radio-on.svg" alt="">File upload</div></div>
+      <div class="upl b2">
+        <div class="pill-btn" id="fileBtn"><i class="hov-d light" id="fileHov"></i><i class="rip dark" id="fileRip"></i><div class="ic16"><img src="assets/upload-b.svg" alt="" id="fileIcA"><img src="assets/refresh.svg" alt="" id="fileIcB"></div><div class="lbls" id="fileLbls"><span id="fileA">Upload file</span><span id="fileB"></span></div></div>
+        <p class="tpl">Template</p><p class="hint" id="fileHint">Max size: 5MB. Formats: CSV, XLS</p>
+      </div>
+      <div class="btns"><div class="b40 cancel btn-t"><p>Cancel</p></div><div class="b40 ok btn-t" id="saveBtn"><i class="hov-d" id="saveHov"></i><i class="rip" id="saveRip"></i><p>Save</p></div></div>
+    </div>
+  </div>
+
+  <!-- Upload Document (238:5368) -->
+  <div class="abs dlg" id="dlgUp" style="top:276px">
+    <h4>Upload Document</h4>
+    <div class="body">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="file-btn btn-t"><p id="upFile"></p><img src="assets/refresh.svg" alt=""></div>
+        <p class="note">File must not exceed <b>50MB</b></p>
+      </div>
+      <div>
+        <div class="tf"><div class="bg"></div><img class="ico" src="assets/f-drop.svg" alt=""><p class="lab">For Username *</p><p class="val b2" id="upUser"></p></div>
+        <div class="tf area"><div class="bg"></div><p class="lab">Description</p><p class="val b2" id="upDesc" style="width:432px;white-space:normal"></p><p class="cnt" id="upCnt"></p></div>
+      </div>
+      <div class="btns"><div class="b40 cancel btn-t"><p>Cancel</p></div><div class="b40 ok btn-t" id="upBtn"><i class="hov-d" id="upHov"></i><i class="rip" id="upRip"></i><p>Upload</p></div></div>
+    </div>
+  </div>
+
+  <div class="abs cursor" id="cursor"><img src="../../_lib/cursor-hand.png" alt=""></div>
+</div>
+
+<script src="../../_lib/motion.js"></script>
+<script src="../../_lib/player.js"></script>
+<script>
+// Story: the Leaks list → Add Leak: three of Emma's copies the scan missed come in from Northstar's file and land on top
+// as Found → Documents → Upload Document: the takedown notice for her Telegram leak EC-0354-TG, which is Requested in the
+// list → the new row's menu (Download, Delete) → Leaks in the menu brings back the list as at the start.
+const T = {
+  add: 1.4,        // click Add Leak
+  dlgIn: 1.55,
+  file: 3.0,       // click Upload file: the file's name takes the label's place
+  save: 4.3,       // click Save
+  rows: 4.75,      // the three new leaks push in on top
+  docs: 7.3,       // click Documents in the menu
+  upd: 8.9,        // click Upload Document
+  type: 9.7,       // the description types in
+  upload: 11.8,    // click Upload
+  kebab: 13.9,     // click the new row's menu
+  leaks: 15.6,     // click Leaks in the menu
+  end: 17,
+};
+const CLICKS = [T.add, T.file, T.save, T.docs, T.upd, T.upload, T.kebab, T.leaks];
+const START = [1010, 860];
+const $ = (id) => document.getElementById(id);
+const FIGMA = new URLSearchParams(location.search).get('figma');
+
+// ---------- Data ----------
+// Status follows the pipeline: Found (Checked: No until an operator looks), then Requested → Pending → Completed, or Canceled.
+const FL = (id, owner, op, pf, date, ck, st) => ({ id, owner, op, pf, date, ck, st });
+const LEAKS = FIGMA !== null ? [
+  ...['Facebook', 'Instagram', 'Reddit'].map((pf, i) => FL('JP-0001-DR', '@u377260716', 'Jerel Michael Parocha', pf, '9.07.2023, 11:35', i === 2 ? 'No' : 'Yes', 'Found')),
+  FL('JP-0001-DR-M', 'admin@existek.com', 'Jerel Michael Parocha', 'Facebook', '9.07.2023, 11:35', 'Yes', 'Found'),
+  ...[['No', 'Canceled'], ['No', 'Requested'], ['Yes', 'Requested'], ['No', 'Requested'], ['Yes', 'Pending'], ['Yes', 'Completed']]
+    .map(([ck, st]) => FL('JP-0001-DR', '@u377260716', 'Jerel Michael Parocha', 'Facebook', '9.07.2023, 11:35', ck, st)),
+] : [
+  FL('EC-0412-RD', '@emma.carter', '—', 'Reddit', '21.06.2025, 09:12', 'No', 'Found'),
+  FL('JS-0408-TG', '@jessica.sparkle', '—', 'Telegram', '21.06.2025, 08:47', 'No', 'Found'),
+  FL('LS-0403-XC', '@luna.skye', 'Dana Whitfield', 'X', '20.06.2025, 17:30', 'Yes', 'Found'),
+  FL('MR-0399-RD-M', '@mia.rose', 'Marco Ruiz', 'Reddit', '20.06.2025, 11:02', 'Yes', 'Found'),
+  FL('EC-0371-IG', '@emma.carter', 'Jerel Parocha', 'Instagram', '19.06.2025, 14:05', 'Yes', 'Canceled'),
+  FL('MR-0365-RD', '@mia.rose', 'Marco Ruiz', 'Reddit', '18.06.2025, 22:18', 'Yes', 'Requested'),
+  FL('JS-0360-GD', '@jessica.sparkle', 'Dana Whitfield', 'Google Drive', '18.06.2025, 16:41', 'Yes', 'Requested'),
+  FL('EC-0354-TG', '@emma.carter', 'Jerel Parocha', 'Telegram', '17.06.2025, 11:09', 'Yes', 'Requested'),
+  FL('LS-0349-FB', '@luna.skye', 'Marco Ruiz', 'Facebook', '14.06.2025, 19:56', 'Yes', 'Pending'),
+  FL('EC-0337-RD', '@emma.carter', 'Jerel Parocha', 'Reddit', '9.06.2025, 13:02', 'Yes', 'Completed'),
+];
+// Added by hand from Northstar's file: -M marks a manual leak, nobody has checked them yet.
+const NEW_LEAKS = [
+  FL('EC-0413-RD-M', '@emma.carter', '—', 'Reddit', '21.06.2025, 10:40', 'No', 'Found'),
+  FL('EC-0414-TG-M', '@emma.carter', '—', 'Telegram', '21.06.2025, 10:40', 'No', 'Found'),
+  FL('EC-0415-XC-M', '@emma.carter', '—', 'X', '21.06.2025, 10:40', 'No', 'Found'),
+];
+const LOREM = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas consequat, mi sit amet porttitor euismod, sem ligula vehicula felis, lobortis eleifend ligula diam in dolor.';
+const FD = (file, date, user, desc) => ({ file, date, user, desc });
+const DOCS = FIGMA !== null ? Array.from({ length: 10 }, () => FD('Document_Name.pdf', '9.07.2023, 11:35', '@u377260716', LOREM)) : [
+  FD('DMCA_notice_MR-0365.pdf', '20.06.2025, 16:05', '@mia.rose', 'Takedown notice to reddit.com for MR-0365-RD'),
+  FD('DMCA_notice_JS-0360.pdf', '20.06.2025, 09:40', '@jessica.sparkle', 'Takedown notice to Google Drive for JS-0360-GD'),
+  FD('Removal_proof_EC-0337.pdf', '19.06.2025, 14:12', '@emma.carter', 'reddit.com confirmed the removal of EC-0337-RD'),
+  FD('Complaint_LS-0349.pdf', '17.06.2025, 10:30', '@luna.skye', 'No reply from Facebook in 72 hours: complaint to its host about LS-0349-FB'),
+  FD('DMCA_notice_LS-0349.pdf', '15.06.2025, 12:10', '@luna.skye', 'Takedown notice to Facebook for LS-0349-FB'),
+  FD('Ownership_proof_luna.pdf', '14.06.2025, 20:15', '@luna.skye', 'Originals with their upload dates, proving ownership of 48 photos'),
+  FD('DMCA_notice_EC-0337.pdf', '10.06.2025, 09:45', '@emma.carter', 'Takedown notice to reddit.com for EC-0337-RD'),
+  FD('Power_of_attorney_emma.pdf', '3.06.2025, 11:30', '@emma.carter', 'Emma’s consent for LegalFans to act on her behalf'),
+  FD('Agency_agreement.pdf', '2.06.2025, 12:00', '@northstar', 'Northstar Talent: representation of 12 creators'),
+  FD('ID_check_jessica.pdf', '28.05.2025, 09:15', '@jessica.sparkle', 'Passport check before the first takedown'),
+];
+const NEW_DOC = FD('DMCA_notice_EC-0354.pdf', '21.06.2025, 11:20', '@emma.carter', 'Takedown notice to Telegram for EC-0354-TG');
+const ADD = FIGMA !== null ? { user: 'Agency Name', creator: 'Creator Name' } : { user: 'Northstar Talent', creator: 'Emma Carter' };
+const FILE_CSV = 'northstar_emma_links.csv';
+const UP = FIGMA !== null ? { file: 'document_name.pdf', user: '@u377260716', desc: 'Lorem ipsum dolor sit amet.' } : { file: NEW_DOC.file, user: NEW_DOC.user, desc: NEW_DOC.desc };
+
+// ---------- Tables ----------
+const leakRow = (r) => `<div class="tr"><i class="new"></i><p class="b2" style="left:24px">${r.id}</p><p class="b2 link" style="left:160px">${r.owner}</p>
+  <p class="b2" style="left:320px">${r.op}</p><p class="b2" style="left:540px">${r.pf}</p><p class="b2" style="left:720px">${r.date}</p>
+  <p class="b2" style="left:920px">${r.ck}</p><div class="pill ${r.st.toLowerCase()}" style="left:1060px">${r.st}</div></div>`;
+$('leakTable').innerHTML = `<div class="tr th" style="top:0"><div class="sort" style="left:24px">Leak ID</div><p style="left:160px">Owner</p><p style="left:320px">Operator</p>
+  <p style="left:540px">Platform(s)</p><p style="left:720px">Found Date</p><p style="left:920px">Checked</p>
+  <div class="sort" style="left:1060px">Status<img src="assets/sort.svg" alt=""></div></div>` + [...NEW_LEAKS, ...LEAKS].map(leakRow).join('');
+const docRow = (r) => `<div class="tr"><i class="new"></i><p class="b2" style="left:24px">${r.file}</p><p class="b2" style="left:240px">${r.date}</p>
+  <p class="b2 link" style="left:420px">${r.user}</p><p class="b2 desc" style="left:580px">${r.desc}</p><img class="kebab" src="assets/kebab.svg" alt=""></div>`;
+$('docTable').innerHTML = `<div class="tr th" style="top:0"><div class="sort" style="left:24px">File<img src="assets/sort.svg" alt=""></div><p style="left:240px">Date &amp; Time</p>
+  <p style="left:420px">Username</p><p style="left:580px">Description</p></div>` + [NEW_DOC, ...DOCS].map(docRow).join('');
+const pag = (id) => `<p class="g" style="left:729px;top:24px">Items per page:</p><p style="left:844px;top:24px">10</p>
+  <i style="left:844px;top:43px;width:73px;height:1px;background:rgba(0,0,0,.6)"></i><img src="assets/pg-drop.svg" alt="" style="left:893px">
+  <p class="g" style="left:954px;top:24px" id="${id}"></p><img src="assets/pg-r144.svg" alt="" style="left:1072px"><img src="assets/pg-r104.svg" alt="" style="left:1112px">
+  <img src="assets/pg-r64.svg" alt="" style="left:1152px"><img src="assets/pg-r24.svg" alt="" style="left:1192px">`;
+$('leakPag').innerHTML = pag('leakCount');
+$('docPag').innerHTML = pag('docCount');
+const leakRows = [...$('leakTable').querySelectorAll('.tr:not(.th)')];
+const docRows = [...$('docTable').querySelectorAll('.tr:not(.th)')];
+
+$('addUser').textContent = ADD.user;
+$('addCreator').textContent = ADD.creator;
+$('fileB').textContent = FILE_CSV;
+$('upFile').textContent = UP.file;
+$('upUser').textContent = UP.user;
+
+// The Upload file button grows from its label to the file's name.
+const WA = $('fileA').offsetWidth, WB = $('fileB').offsetWidth;
+$('fileLbls').style.width = `${WA}px`;
+
+// ---------- Cursor ----------
+const rectOf = (el) => {
+  const w = el.offsetWidth, h = el.offsetHeight; let x = 0, y = 0;
+  for (; el && el !== $('stage'); el = el.offsetParent) { x += el.offsetLeft; y += el.offsetTop; }
+  return [x, y, w, h];
+};
+const R = {
+  add: rectOf($('addBtn')), file: rectOf($('fileBtn')), save: rectOf($('saveBtn')), docs: rectOf($('miDocs')),
+  upd: rectOf($('updBtn')), up: rectOf($('upBtn')), leaks: rectOf($('miLeaks')),
+};
+R.row1 = [200, 64 + 96 + 48, 1240, 48];                 // the new document's row
+R.kebab = [200 + 1240 - 56, 64 + 96 + 48 + 4, 40, 40];
+$('fileBtn').style.width = `${R.file[2]}px`;              // measured with the label; render() sets it from here
+const at = ([x, y, w, h], dx = 0, dy = 0) => [x + w / 2 + dx, y + h / 2 + dy];
+const cursorAt = cursorPath(START, [
+  [.4, T.add - .15, ...at(R.add, 20, 6)],
+  [T.dlgIn + .6, T.file - .15, ...at(R.file, 10, 4)],
+  [T.file + .4, T.save - .15, ...at(R.save, 4, 4)],
+  [T.rows + 1.1, T.docs - .15, ...at(R.docs, -20, 2)],
+  [T.docs + .5, T.upd - .15, ...at(R.upd, 30, 6)],
+  [T.upd + .7, T.upload - .15, ...at(R.up, 4, 4)],
+  [T.upload + .6, T.kebab - .15, ...at(R.kebab, 2, 3)],
+  [T.kebab + .7, T.leaks - .15, ...at(R.leaks, -10, 2)],
+  [T.leaks + .3, T.end - .1, ...START],
+]);
+const inside = (r, [x, y]) => x >= r[0] && x <= r[0] + r[2] && y >= r[1] && y <= r[1] + r[3];
+// Hover follows the cursor: the share of the last 0.14 s it spent inside the box.
+const hoverOf = (r, t) => { let n = 0; for (let i = 0; i < 5; i++) if (inside(r, cursorAt(t - .035 * i))) n++; return n / 5; };
+
+// Press: a ripple grows from where the cursor clicked and fades.
+function ripple(el, r, t, when) {
+  const k = p(t, when, when + .5), [x, y] = cursorAt(when), d = 2 * Math.hypot(r[2], r[3]);
+  el.style.transform = `translate(${x - r[0]}px, ${y - r[1]}px) scale(${outC(k) * d / 2})`;
+  el.style.opacity = t < when ? 0 : 1 - io(k);
+}
+// A dialog: the overlay comes first, the card rises in a little after it; out the other way round.
+function dialog(el, t, a, b) {
+  const kin = outC(p(t, a + .08, a + .4)), kout = io(p(t, b, b + .25));
+  const k = kin * (1 - kout);
+  el.style.opacity = k;
+  el.style.transform = `translateY(${12 * (1 - kin)}px) scale(${.98 + .02 * k})`;
+  return Math.max(p(t, a, a + .3) * (1 - p(t, b + .1, b + .35)), 0);
+}
+
+function render(t) {
+  // Screens: Leaks → Documents at the menu click, back to Leaks at the end. One goes before the other comes:
+  // two tables on top of each other read as a mess.
+  const swap = (a) => [io(p(t, a + .05, a + .25)), outC(p(t, a + .25, a + .55))];
+  const [o1a, i1a] = swap(T.docs), [o2a, i2a] = swap(T.leaks);
+  const toDocs = t < T.leaks ? i1a : 1 - o2a;
+  $('leaks').style.opacity = t < T.leaks ? 1 - o1a : i2a;
+  $('docs').style.opacity = toDocs;
+  $('docs').style.visibility = toDocs > 0 ? 'visible' : 'hidden';
+  const back = t > T.leaks;   // the Leaks list comes back as it was at the start
+  $('leaksOn').style.opacity = $('leaksIc').style.opacity = 1 - toDocs;
+  $('docsOn').style.opacity = $('docsIc').style.opacity = toDocs;
+
+  // Dialogs and the shared overlay.
+  const o1 = dialog($('dlgAdd'), t, T.add + .05, T.save + .1);
+  const o2 = dialog($('dlgUp'), t, T.upd + .05, T.upload + .1);
+  $('overlay').style.opacity = Math.max(o1, o2);
+
+  // Upload file: the file's name takes the label's place and the button grows to fit it.
+  const kf = io(p(t, T.file + .15, T.file + .5));
+  $('fileLbls').style.width = `${mix(WA, WB, kf)}px`;
+  $('fileBtn').style.width = `${R.file[2] + (WB - WA) * kf}px`;
+  $('fileA').style.opacity = 1 - p(t, T.file + .15, T.file + .3);
+  $('fileB').style.opacity = p(t, T.file + .3, T.file + .5);
+  // With a file in, the upload arrow gives way to swap (the same icon as next to the file in Upload Document).
+  $('fileIcA').style.opacity = 1 - p(t, T.file + .15, T.file + .3);
+  $('fileIcB').style.opacity = p(t, T.file + .3, T.file + .5);
+  $('fileIcB').style.transform = `rotate(${-180 * (1 - outC(p(t, T.file + .3, T.file + .7)))}deg)`;
+  $('fileHint').style.opacity = 1 - p(t, T.file + .1, T.file + .25);   // the limits are done with once a file is in
+
+  // The new leaks: the list moves down three rows, then they fade in on top and keep a light tint for a moment.
+  const shift = back ? 0 : io(p(t, T.rows, T.rows + .5));
+  leakRows.forEach((el, i) => {
+    const isNew = i < NEW_LEAKS.length;
+    const k = isNew ? (back ? 0 : outC(p(t, T.rows + .35 + .1 * i, T.rows + .75 + .1 * i))) : 1;
+    el.style.top = `${48 + 48 * (isNew ? i : i - NEW_LEAKS.length + NEW_LEAKS.length * shift)}px`;
+    el.style.opacity = k;
+    el.firstElementChild.style.opacity = isNew ? Math.min(k, 1 - p(t, T.rows + 1.8, T.rows + 2.6)) : 0;
+  });
+  $('leakCount').textContent = shift > .5 ? '1 — 10 of 72' : '1 — 10 of 69';
+
+  // The new document: the same push from the top.
+  const dshift = io(p(t, T.upload + .45, T.upload + .9));
+  const dk = outC(p(t, T.upload + .8, T.upload + 1.2));
+  docRows.forEach((el, i) => {
+    el.style.top = `${48 + 48 * (i === 0 ? 0 : i - 1 + dshift)}px`;
+    el.style.opacity = i === 0 ? dk : 1;
+    el.firstElementChild.style.opacity = i === 0 ? Math.min(dk, 1 - p(t, T.upload + 2, T.upload + 2.8)) : 0;
+  });
+  $('docCount').textContent = dshift > .5 ? '1 — 10 of 42' : '1 — 10 of 41';
+
+  // Upload Document: the description types in, the counter keeps up.
+  const n = Math.round(UP.desc.length * p(t, T.type, T.type + 1.4));
+  const typing = t > T.type - .3 && t < T.upload + .1;
+  $('upDesc').innerHTML = UP.desc.slice(0, n) + (typing && (n < UP.desc.length || Math.floor(t * 2.2) % 2 === 0) ? '<i class="caret"></i>' : '');
+  $('upCnt').textContent = `${n}/100`;
+
+  // The new row's menu: its kebab shows while the cursor is on the row, the dropdown opens on the click.
+  const c = cursorAt(t);
+  const onRow = toDocs > .5 && o2 === 0 && inside(R.row1, c) ? 1 : 0;
+  docRows[0].querySelector('.kebab').style.opacity = Math.max(onRow, t > T.kebab && t < T.leaks ? 1 : 0) * dk;
+  const dd = outC(p(t, T.kebab + .05, T.kebab + .25)) * (1 - p(t, T.leaks, T.leaks + .15));
+  $('dropdown').style.top = `${96 + 94}px`;
+  $('dropdown').style.opacity = dd;
+  $('dropdown').style.transform = `scale(${.94 + .06 * dd})`;
+
+  // Hover and press.
+  $('addHov').style.opacity = hoverOf(R.add, t) * (o1 === 0 ? 1 : 0);
+  $('fileHov').style.opacity = hoverOf(R.file, t);
+  $('saveHov').style.opacity = hoverOf(R.save, t);
+  $('updHov').style.opacity = hoverOf(R.upd, t) * (o2 === 0 ? 1 : 0);
+  $('upHov').style.opacity = hoverOf(R.up, t);
+  $('docsHov').style.opacity = hoverOf(R.docs, t) * (1 - toDocs);
+  $('leaksHov').style.opacity = hoverOf(R.leaks, t) * toDocs;
+  ripple($('addRip'), R.add, t, T.add);
+  ripple($('fileRip'), R.file, t, T.file);
+  ripple($('saveRip'), R.save, t, T.save);
+  ripple($('docsRip'), R.docs, t, T.docs);
+  ripple($('updRip'), R.upd, t, T.upd);
+  ripple($('upRip'), R.up, t, T.upload);
+  ripple($('leaksRip'), R.leaks, t, T.leaks);
+
+  const press = Math.max(...CLICKS.map((cl) => bump(t, cl, .18)));
+  $('cursor').style.transform = `translate(${c[0] - 6}px, ${c[1] - 1}px) scale(${1 - .14 * press})`;
+}
+
+// ?figma (=1…4) lays out each Figma frame with Figma's own data for D: no cursor, no hover, no new rows.
+const figmaRender = () => {
+  const f = FIGMA || '1';
+  render({ 1: 0, 2: T.file - .3, 3: T.upd - .4, 4: T.type + 2 }[f]);
+  if (f === '3') {        // Figma has the menu open on the second row, under the first
+    docRows.forEach((el, i) => { el.style.top = `${48 * i}px`; el.style.opacity = 1; el.firstElementChild.style.opacity = 0; });
+    docRows[2].querySelector('.kebab').style.opacity = 1;
+    $('dropdown').style.top = `${96 + 142}px`; $('dropdown').style.opacity = 1; $('dropdown').style.transform = 'none';
+    $('docCount').textContent = '1 — 10 of 69';
+  }
+  if (f === '4') { $('upDesc').textContent = UP.desc; $('upCnt').textContent = '27/100'; }
+  $('cursor').style.opacity = 0;
+  document.querySelectorAll('.hov, .hov-d').forEach((el) => { el.style.opacity = 0; });
+};
+MotionPlayer.mount({
+  stage: $('stage'), width: 1440, height: 1024, duration: T.end, render: FIGMA !== null ? figmaRender : render,
+  markers: [['add leak', T.add], ['save', T.save], ['documents', T.docs], ['upload', T.upload], ['menu', T.kebab], ['leaks', T.leaks]],
+  refs: [['Leaks (238:4547)', 'src/1-leaks.png'], ['Add Leak (238:4577)', 'src/2-add-leak.png'], ['Documents (238:5311)', 'src/3-documents.png'], ['Upload Document (238:5346)', 'src/4-upload.png']],
+  poster: 0,
+});
+</script>
+</body>
+</html>

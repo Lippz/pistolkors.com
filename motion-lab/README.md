@@ -94,6 +94,12 @@ show the same thing.
   Pictures Match and clicks (each press has a ripple from the click point) → the matched pair slides out the same way, the
   first one comes back and Remain rolls to 25 again (last frame = first). The sort arrow stays ↓ (Figma's second frame has ↑).
   Hover comes from the cursor. `?figma` and `?figma=2` lay out the two frames for D.
+- `takedown/`: the admin's Leaks and Documents, 1440×1024 (KK 238:4547 Leaks, 238:4577 Add Leak Manually, 238:5311 Documents,
+  238:5346 Upload Document). Add Leak → Northstar's file (the upload arrow becomes swap, as next to the file in Upload Document) → Save: three of Emma's leaks (-M, Found, not checked) push in on top,
+  69 → 72 → Documents → Upload Document: the takedown notice for her Requested leak EC-0354-TG, the description types in →
+  the new row's menu (Download, Delete) → Leaks in the menu brings back the list as at the start. The data agree across the
+  two tables (dates, statuses, who). Figma's Upload Document frame has a broken backdrop (menu at full height), so the loop
+  uses the real Documents page behind it. `?figma=1…4` lays out each frame with Figma's own data for D.
 
 ## Workflow
 

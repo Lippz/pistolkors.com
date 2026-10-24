@@ -170,27 +170,12 @@ Fully automatic matching produced false positives, and a wrong takedown damages 
 
 Only confirmed leaks reach the legal team. From there each one moves through the same statuses, Found, Requested, Pending and Completed or Canceled, so the team sees where every takedown stands and filters the list down to the stage that needs work. Copies the scan missed don't wait for the next one: the team adds them by hand, one link at a time or as a CSV or XLS file with an agency's whole list.
 
-<div class="carousel">
-
-![Admin leaks list filtered by status](../../assets/cases/legalfans/ap-leaks.webp "Leaks list")
-
-![Dialog for adding a leak manually, by link or file upload](../../assets/cases/legalfans/ap-leak-add.webp "Add a leak")
-
-</div>
-
-*Leaks — every takedown in one list by status, with manual entry for copies the AI missed.*
-
 The paperwork behind each takedown is kept with the creator it belongs to. Emma never has to file anything herself.
 
-<div class="carousel">
-
-![Admin documents list with download and delete actions](../../assets/cases/legalfans/ap-documents.webp "Documents list")
-
-![Dialog for uploading a document for a user](../../assets/cases/legalfans/ap-document-upload.webp "Upload a document")
-
-</div>
-
-*Documents — the legal paperwork behind each takedown.*
+<figure class="case-motion" data-lightbox-group>
+<video src="../../motion/legalfans-takedown.mp4" poster="../../motion/legalfans-takedown.jpg" width="1440" height="1024" muted loop playsinline preload="metadata" aria-label="On the admin's Leaks list, every copy has an owner, an operator, a platform, a found date and a status from Found to Completed; Add Leak Manually takes Northstar Talent's file for Emma Carter, and three of her leaks the scan missed join the top of the list as Found; in Documents, the takedown notice for her Telegram leak EC-0354-TG is uploaded for @emma.carter with its description, joins the top of the list, and its menu offers Download and Delete" data-label="On the admin's Leaks list, every copy has an owner, an operator, a platform, a found date and a status from Found to Completed; Add Leak Manually takes Northstar Talent's file for Emma Carter, and three of her leaks the scan missed join the top of the list as Found; in Documents, the takedown notice for her Telegram leak EC-0354-TG is uploaded for @emma.carter with its description, joins the top of the list, and its menu offers Download and Delete"></video>
+<figcaption class="eyebrow">Leaks and documents — every takedown by status, manual entry for missed copies, and the paperwork behind each one</figcaption>
+</figure>
 
 ## Result
 
