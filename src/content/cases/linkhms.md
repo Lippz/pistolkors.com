@@ -52,6 +52,7 @@ A distinct identity set LinkHMS apart from dated competitors. The UI takes its c
 
 <figure class="case-motion" data-lightbox-group>
 <video src="../../motion/linkhms-brand.mp4" poster="../../motion/linkhms-brand.jpg" width="1740" height="1530" muted loop playsinline preload="metadata" aria-label="The LinkHMS mark draws itself, fills in and shrinks into the app icon, the wordmarks join it on a card, then the view tilts onto the design system: accent colour scales, spacing and corner radius tokens, buttons, tags, record type chips, filters, tabs, page headers, a date picker, a section menu, metric cards and inputs land piece by piece" data-label="The LinkHMS mark draws itself, fills in and shrinks into the app icon, the wordmarks join it on a card, then the view tilts onto the design system: accent colour scales, spacing and corner radius tokens, buttons, tags, record type chips, filters, tabs, page headers, a date picker, a section menu, metric cards and inputs land piece by piece"></video>
+<figcaption class="eyebrow">From the mark to the design system</figcaption>
 </figure>
 
 ## Problem and research

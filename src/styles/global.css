@@ -1023,12 +1023,6 @@ a:hover .frame img {
   flex-direction: column;
   gap: 16px;
 }
-/* Caption right after a loop, like the one after a carousel. */
-.prose .case-motion + p:has(> em:only-child) {
-  margin-top: 16px;
-  font-size: 0.9375rem;
-  color: var(--muted);
-}
 .case-motion video {
   display: block;
   width: 100%;

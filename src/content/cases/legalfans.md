@@ -125,9 +125,8 @@ On My Platforms she lists every other place she publishes, so the team knows whe
 
 <figure class="case-motion" data-lightbox-group>
 <video src="../../motion/legalfans-platforms.mp4" poster="../../motion/legalfans-platforms.jpg" width="1440" height="1024" muted loop playsinline preload="metadata" aria-label="On My Platforms, a creator with no platforms yet has picked Fansly and a username; turning on log-in information opens email and password fields, and after Submit and validate the empty-state illustration gives way to the table: Fansly is added, then Onlyfans, LoyalFans and Friends2Follow join it one by one" data-label="On My Platforms, a creator with no platforms yet has picked Fansly and a username; turning on log-in information opens email and password fields, and after Submit and validate the empty-state illustration gives way to the table: Fansly is added, then Onlyfans, LoyalFans and Friends2Follow join it one by one"></video>
+<figcaption class="eyebrow">Every platform the team watches on her behalf</figcaption>
 </figure>
-
-*My Platforms — cam sites and socials the team monitors on the creator’s behalf.*
 
 ## Her content
 
@@ -137,9 +136,8 @@ Detection needs originals to compare against. Whatever the extension syncs, and 
 
 <figure class="case-motion" data-lightbox-group>
 <video src="../../motion/legalfans-vault.mp4" poster="../../motion/legalfans-vault.jpg" width="1440" height="1024" muted loop playsinline preload="metadata" aria-label="In the Magic Vault grid of thumbnails, filters and a media counter, the cursor rests on an item waiting for a scan, then opens a kitten photo: item ID-587945, manually uploaded and scanned, 16 leaks, with the platforms, claim IDs and statuses Resolved, Found and Cancelled; the dialog closes back to the grid" data-label="In the Magic Vault grid of thumbnails, filters and a media counter, the cursor rests on an item waiting for a scan, then opens a kitten photo: item ID-587945, manually uploaded and scanned, 16 leaks, with the platforms, claim IDs and statuses Resolved, Found and Cancelled; the dialog closes back to the grid"></video>
+<figcaption class="eyebrow">All her content in one place, each item with its leaks</figcaption>
 </figure>
-
-*Magic Vault — where creators add and manage all their content.*
 
 ## Detection
 
@@ -149,9 +147,8 @@ Every item in the vault is matched against copies across the web. Emma can also 
 
 <figure class="case-motion" data-lightbox-group>
 <video src="../../motion/legalfans-leaks.mp4" poster="../../motion/legalfans-leaks.jpg" width="1440" height="1024" muted loop playsinline preload="metadata" aria-label="On Keyword Search, the query Jessica Sparkle + Onlyfans + xxx photo leak is searched across Google, Yahoo and Bing; while the progress runs, the hint points to the Leaks Tab, which opens leak JP-0001-DR: the preview found on reddit.com, its link, and the other leaks of the same image with statuses from Requested to Completed; Keyword Search in the menu brings back the search" data-label="On Keyword Search, the query Jessica Sparkle + Onlyfans + xxx photo leak is searched across Google, Yahoo and Bing; while the progress runs, the hint points to the Leaks Tab, which opens leak JP-0001-DR: the preview found on reddit.com, its link, and the other leaks of the same image with statuses from Requested to Completed; Keyword Search in the menu brings back the search"></video>
+<figcaption class="eyebrow">From a keyword search to one leak in detail</figcaption>
 </figure>
-
-*Keyword search and leaks — search by keyword, then one leak in detail.*
 
 ## Validation
 
@@ -161,7 +158,7 @@ Fully automatic matching produced false positives, and a wrong takedown damages 
 
 <figure class="case-motion" data-lightbox-group>
 <video src="../../motion/legalfans-compare.mp4" poster="../../motion/legalfans-compare.jpg" width="1440" height="1024" muted loop playsinline preload="metadata" aria-label="On the Comparison screen, with 25 pairs remaining, the suspected copy's preview is unavailable, so the operator clicks Skip for now; the next pair slides in with the original and the copy side by side, 24 remaining, and the operator clicks Pictures match" data-label="On the Comparison screen, with 25 pairs remaining, the suspected copy's preview is unavailable, so the operator clicks Skip for now; the next pair slides in with the original and the copy side by side, 24 remaining, and the operator clicks Pictures match"></video>
-<figcaption class="eyebrow">Comparison view — the operator checks the original against the suspected copy before a case goes to a lawyer</figcaption>
+<figcaption class="eyebrow">The operator checks every match before it goes legal</figcaption>
 </figure>
 
 ## Takedown
@@ -174,7 +171,7 @@ The paperwork behind each takedown is kept with the creator it belongs to. Emma 
 
 <figure class="case-motion" data-lightbox-group>
 <video src="../../motion/legalfans-takedown.mp4" poster="../../motion/legalfans-takedown.jpg" width="1440" height="1024" muted loop playsinline preload="metadata" aria-label="On the admin's Leaks list, every copy has an owner, an operator, a platform, a found date and a status from Found to Completed; Add Leak Manually takes Northstar Talent's file for Emma Carter, and three of her leaks the scan missed join the top of the list as Found; in Documents, the takedown notice for her Telegram leak EC-0354-TG is uploaded for @emma.carter with its description, joins the top of the list, and its menu offers Download and Delete" data-label="On the admin's Leaks list, every copy has an owner, an operator, a platform, a found date and a status from Found to Completed; Add Leak Manually takes Northstar Talent's file for Emma Carter, and three of her leaks the scan missed join the top of the list as Found; in Documents, the takedown notice for her Telegram leak EC-0354-TG is uploaded for @emma.carter with its description, joins the top of the list, and its menu offers Download and Delete"></video>
-<figcaption class="eyebrow">Leaks and documents — every takedown by status, manual entry for missed copies, and the paperwork behind each one</figcaption>
+<figcaption class="eyebrow">Every takedown by status, and the paperwork behind it</figcaption>
 </figure>
 
 ## Result
@@ -192,9 +189,8 @@ Everything else, like her profile and subscription, stays out of the way in My A
 
 <figure class="case-motion" data-lightbox-group>
 <video src="../../motion/legalfans-account.mp4" poster="../../motion/legalfans-account.jpg" width="1440" height="1024" muted loop playsinline preload="metadata" aria-label="On My Account, a creator on the Basic Plan with the next charge on 02.12.2025 clicks Upgrade; the subscription plans open, Basic, Advanced and Premium at $69, $129 and $149 a license, the cursor rests on Premium's Choose plan, and Cancel closes the plans back to the account" data-label="On My Account, a creator on the Basic Plan with the next charge on 02.12.2025 clicks Upgrade; the subscription plans open, Basic, Advanced and Premium at $69, $129 and $149 a license, the cursor rests on Premium's Choose plan, and Cancel closes the plans back to the account"></video>
+<figcaption class="eyebrow">From the Basic plan to the upgrade options</figcaption>
 </figure>
-
-*My Account — profile and subscription upgrade.*
 
 ## Lessons
 
