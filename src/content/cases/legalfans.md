@@ -3,7 +3,7 @@ order: 2
 featured: true
 client: LegalFans
 title: Automating content-leak takedowns for creators, operators and lawyers
-accent: lawyers
+accent: creators
 summary: Three user groups, one workflow — detect stolen media, validate matches, launch legal action — without creators tracking leaks by hand.
 lead: LegalFans helps creators and agencies protect their content. It finds stolen media across the web, has a human confirm every match, and turns each one into a legal takedown — so creators stop chasing leaks by hand.
 industry: B2B SaaS
@@ -61,30 +61,30 @@ Leaked content means lost income, stress and damage to a creator’s reputation.
 <div><dt>Occupation</dt><dd>Full-time content creator</dd></div>
 <div><dt>Location</dt><dd>Los Angeles, CA</dd></div>
 </dl>
-<p class="persona__bio">Emma has been a content creator for over three years, building a loyal fanbase and generating a stable income through subscriptions. Recently, she discovered her content was being leaked on various websites without her consent, impacting her revenue and personal well-being. She lacks the time and technical knowledge to manually track and report these violations.</p>
+<p class="persona__bio">Three years in, Emma earns a steady income from subscriptions. Then she found her content leaked across the web, hurting both her revenue and her peace of mind. She has neither the time nor the technical skills to chase every copy herself.</p>
 <div class="persona__cols">
 <div>
 <p class="persona__label">Goals</p>
 <ul>
-<li>Protect her content and revenue from unauthorized distribution.</li>
-<li>Find an easy, automated way to detect and remove leaked content.</li>
-<li>Maintain control over her brand and digital presence.</li>
+<li>Protect her content and income.</li>
+<li>Find and remove leaks without doing it by hand.</li>
+<li>Stay in control of her brand.</li>
 </ul>
 </div>
 <div>
 <p class="persona__label">Frustrations</p>
 <ul>
-<li>Manual takedown processes are slow and ineffective.</li>
-<li>Many websites ignore her removal requests.</li>
-<li>Emma feels vulnerable and lacks legal resources to fight back.</li>
+<li>Manual takedowns are slow and rarely work.</li>
+<li>Sites ignore her requests.</li>
+<li>No legal help to fight back.</li>
 </ul>
 </div>
 <div>
 <p class="persona__label">How LegalFans helps</p>
 <ul>
-<li>Automatically scans and detects unauthorized use of her content.</li>
-<li>Provides a seamless way to initiate legal takedown requests.</li>
-<li>Gives her peace of mind by handling the enforcement process.</li>
+<li>Finds her leaked content automatically.</li>
+<li>Turns each leak into a legal takedown.</li>
+<li>Handles enforcement, so she doesn’t have to.</li>
 </ul>
 </div>
 </div>

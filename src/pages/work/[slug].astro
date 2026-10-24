@@ -30,10 +30,11 @@ const d = entry.data;
 const { Content, headings } = await render(entry);
 const toc = headings.filter((h) => h.depth === 2);
 
-// Split the title so the accent word(s) get the italic serif treatment.
+// Split the title so the accent word(s) get the italic serif treatment, wherever they sit in it.
 const accentAt = d.accent ? d.title.lastIndexOf(d.accent) : -1;
 const titleHead = accentAt >= 0 ? d.title.slice(0, accentAt) : d.title;
 const titleAccent = accentAt >= 0 ? d.accent : undefined;
+const titleTail = accentAt >= 0 ? d.title.slice(accentAt + d.accent!.length) : '';
 
 const facts = [
   { label: 'Role', value: d.role },
@@ -52,7 +53,7 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
       <a href={url('/#work')} class="case-hero__back arrow-trigger"><ArrowCircle dir="left" />Back</a>
       <p class="eyebrow">Case study · {d.client} · {d.industry}</p>
       <h1 class="h1 case-hero__title">
-        {titleHead}{titleAccent && <span class="accent-word">{titleAccent}</span>}
+        {titleHead}{titleAccent && <span class="accent-word">{titleAccent}</span>}{titleTail}
       </h1>
       <p class="lead">{d.lead}</p>
     </header>
