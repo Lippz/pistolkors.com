@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LegalFans · Extension setup — motion draft</title>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600&display=block" rel="stylesheet">
+<link rel="stylesheet" href="../../_lib/player.css">
+<style>
+  /* The extension popup (KK 221:26768 Step 1, 221:26890 Step 6c, 221:27013 Step 7, 221:27135 Step 8) is 675×460.
+     The stage is twice that so the video stays sharp; .pop is drawn at Figma pixels and scaled ×2. */
+  * { box-sizing: border-box; }
+  p { margin: 0; }
+  .stage { background: #fff; font-family: Urbanist, sans-serif; color: #000; -webkit-font-smoothing: antialiased; overflow: hidden; }
+  .pop { position: absolute; left: 0; top: 0; width: 675px; height: 460px; transform: scale(2); transform-origin: 0 0; overflow: hidden; }
+  .abs { position: absolute; }
+  img.abs { display: block; max-width: none; }
+  .scr { position: absolute; inset: 0; }
+
+  .t28 { font-size: 28px; font-weight: 600; line-height: 1.3; letter-spacing: -.56px; }
+  .t24 { font-size: 24px; font-weight: 600; line-height: 1.3; letter-spacing: -.48px; }
+  .t18 { font-size: 18px; font-weight: 500; line-height: 1.3; letter-spacing: -.36px; }
+  .t18b { font-size: 18px; font-weight: 600; line-height: 1.3; letter-spacing: -.36px; }
+  .t14 { font-size: 14px; font-weight: 500; line-height: 1.3; letter-spacing: -.28px; }
+  .b { font-weight: 600; }
+  .blue { color: #27aae1; }
+  .ctr { white-space: nowrap; text-align: center; transform: translateX(-50%); }
+  .mid { white-space: nowrap; text-align: center; transform: translate(-50%, -50%); }
+
+  .band { left: 0; width: 675px; background: rgba(39,170,225,.1); }
+  .btn { left: 24px; top: 339px; width: 624px; height: 50px; border-radius: 16px; overflow: hidden; }
+  .btn > img { width: 624px; height: 50px; display: block; }
+  /* Progress: the label is white over the bar and dark over the track (clipped copies). */
+  .track { background: rgba(0,0,0,.05); }
+  .bar { left: 27px; top: 342px; height: 44px; border-radius: 14px; background: #39e585; }
+  .icon { width: 100px; height: 100px; display: block; }
+
+  .cursor { left: 0; top: 0; width: 19px; height: 24px; z-index: 20; transform-origin: 6px 1px; }
+  .cursor img { width: 19px; height: 24px; display: block; }
+</style>
+</head>
+<body>
+<div class="stage" id="stage"><div class="pop" id="pop">
+  <div id="main">
+    <!-- Backgrounds: Step 1 has its own crop of the contour pattern; the other steps share one. -->
+    <img class="abs" id="bg1" src="assets/layer1.svg" alt="" style="left:-2px;top:0;width:677px;height:460px">
+    <img class="abs" id="bg2" src="assets/layer.svg" alt="" style="left:-150px;top:-12px;width:849.32px;height:524px">
+
+    <!-- Bands: Step 1 has only the empty footer; the others add the header and the account line. -->
+    <div class="abs band" style="top:410px;height:50px"></div>
+    <div class="abs band" id="head" style="top:0;height:60px"><img class="abs" src="assets/logo-small.png" alt="" style="left:30px;top:21px;width:189.05px;height:18px"></div>
+    <div id="foot">
+      <p class="abs t14" style="left:24px;top:426px">Go to <span class="b blue">My Account</span></p>
+      <p class="abs t14" style="right:74px;top:426px;white-space:nowrap"><span class="b">Devin Walker</span> (@u377260716)</p>
+      <p class="abs t14 b blue" style="right:24px;top:426px">Logout</p>
+    </div>
+    <img class="abs" src="assets/close.svg" alt="" style="left:630px;top:18px;width:24px;height:24px">
+
+    <!-- Step 1 · Welcome -->
+    <div class="scr" id="s1">
+      <p class="abs t28 ctr" style="left:336px;top:49px">Welcome to</p>
+      <img class="abs" src="assets/logo-big.png" alt="" style="left:117px;top:104.44px;width:438px;height:41.13px">
+      <p class="abs t18 ctr" style="left:336px;top:188px">Connect account or Sign up</p>
+      <img class="abs" src="assets/line304.svg" alt="" style="left:168.25px;top:255.25px;width:164.5px;height:1.5px">
+      <img class="abs" src="assets/line303.svg" alt="" style="left:341.25px;top:255.25px;width:161.5px;height:1.5px">
+      <div class="abs" style="left:101px;top:226px;width:59px;height:59px;overflow:hidden"><img class="abs" src="assets/of.png" alt="" style="left:-13.98%;top:-9.03%;width:125.98%;height:125.98%"></div>
+      <img class="abs" src="assets/ellipse.svg" alt="" style="left:302px;top:222px;width:68px;height:68px">
+      <img class="abs" src="assets/link.svg" alt="" style="left:325px;top:246px;width:22px;height:22px">
+      <div class="abs" style="left:512px;top:227px;width:59px;height:57.6px;overflow:hidden"><img class="abs" src="assets/logo-big.png" alt="" style="left:-515.01%;top:0;width:1025.25%;height:100%"></div>
+    </div>
+
+    <!-- Step 6c · Last Synchronisation -->
+    <div class="scr" id="s2">
+      <p class="abs t24 ctr" style="left:337.5px;top:219px">Last Synchronisation</p>
+      <p class="abs t18 ctr" style="left:337.5px;top:260.2px"><span class="blue">Monday</span> 12 June, 2025</p>
+    </div>
+    <!-- Step 7 · In progress -->
+    <div class="scr" id="s3">
+      <p class="abs t24 ctr" style="left:338px;top:219px">Synchronisation in Progress</p>
+      <p class="abs t18 ctr" style="left:338px;top:260.2px">Synchronisation In-Progress</p>
+      <p class="abs t14 mid" style="left:335.5px;top:317px;opacity:.6">(Make sure to not close OnlyFans while we are syncing the content)</p>
+    </div>
+    <!-- Step 8 · Success -->
+    <div class="scr" id="s4">
+      <p class="abs t24 ctr" style="left:338px;top:219px">Congratulations</p>
+      <p class="abs t18 ctr" style="left:338px;top:260.2px">Synchronisation <span style="color:#2ad352">Successful</span></p>
+    </div>
+
+    <!-- The icon slot: sync → spinner → check, all at top 94 as in Figma. -->
+    <div class="abs" id="ic" style="left:288px;width:100px;height:100px">
+      <img class="abs icon" id="icSync" src="assets/sync.png" alt="">
+      <svg class="abs icon" id="icSpin" viewBox="0 0 100 100" overflow="visible">
+        <defs><linearGradient id="spinGrad" gradientUnits="userSpaceOnUse" x1="50" y1="0" x2="50" y2="100">
+          <stop offset="0" stop-color="#2af598"/><stop offset="1" stop-color="#009efd"/></linearGradient></defs>
+        <g id="spinDots" fill="none" stroke="url(#spinGrad)"></g>
+      </svg>
+      <!-- assets/check.svg (KK 222:27293), inline so the tick can draw itself. -->
+      <svg class="abs icon" id="icCheck" viewBox="0 0 100 100" overflow="visible">
+        <defs><linearGradient id="checkGrad" x1="50" y1="0" x2="50" y2="100" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#02A2F8"/><stop offset="1" stop-color="#2AD352"/></linearGradient></defs>
+        <circle id="checkDisc" cx="50" cy="50" r="50" fill="url(#checkGrad)"/>
+        <path id="checkTick" d="M26 51L41.5 66.5L73 35" stroke-width="18" stroke-linecap="round" stroke="white" fill="none"/>
+      </svg>
+    </div>
+
+    <!-- The button slot: blue (Connect, Start Scan) → progress track → outlined Close Extension. -->
+    <div class="abs btn" id="btn">
+      <img id="btnBlue" src="assets/btn-blue.png" alt="">
+      <div class="abs" id="btnOutline" style="inset:0;border:2px solid #27aae1;border-radius:16px"></div>
+      <div class="abs track" id="track" style="inset:0"></div>
+    </div>
+    <p class="abs t18b mid" id="lConnect" style="left:336px;top:364px;color:#fff">Connect / Sign up</p>
+    <p class="abs t18b mid" id="lScan" style="left:336px;top:364px;color:#fff">Start Scan Now</p>
+    <p class="abs t18b mid" id="lClose" style="left:335.5px;top:364px;color:#219ad6">Close Extension</p>
+    <div id="prog">
+      <div class="abs bar" id="bar"></div>
+      <div class="abs" id="pctDarkClip" style="top:339px;height:50px;overflow:hidden"><p class="abs t18b mid" id="pctDark" style="top:25px;color:rgba(0,0,0,.35)"><span class="pct"></span>% Complete</p></div>
+      <div class="abs" id="pctClip" style="left:27px;top:342px;height:44px;overflow:hidden"><p class="abs t18b mid" style="left:309px;top:22px;color:#fff"><span class="pct"></span>% Complete</p></div>
+    </div>
+  </div>
+
+  <div class="abs cursor" id="cursor"><img src="../../_lib/cursor-hand.png" alt=""></div>
+</div></div>
+
+<script src="../../_lib/motion.js"></script>
+<script src="../../_lib/player.js"></script>
+<script>
+// Story: Welcome → Connect / Sign up → Last Synchronisation → Start Scan Now → the progress runs to 100%
+// (the spinner turns) → Congratulations → Close Extension, and the extension opens again on Welcome.
+const T = {
+  connect: 1.6,                // click Connect / Sign up
+  toSync: 1.9,                 // Welcome gives way to Last Synchronisation
+  scan: 4.0,                   // click Start Scan Now
+  toProg: 4.25,                // the button becomes the progress track
+  run: [4.7, 8.6],             // 0 → 100 %
+  toDone: 8.8,                 // Congratulations
+  close: 10.9,                 // click Close Extension
+  dip: 11.2,                   // fade out, swap to Welcome, fade in
+  end: 12.6,
+};
+const DIP = .35, X = .5; // X: length of a screen change
+const CLICKS = [T.connect, T.scan, T.close];
+const START = [470, 300], BTN = [336, 366];
+const cursorAt = cursorPath(START, [
+  [.5, T.connect - .15, ...BTN],
+  [T.scan - 1, T.scan - .15, 360, 368],           // stays on the button, Start Scan Now takes its place
+  [T.scan + .5, T.scan + 1.2, 560, 296],
+  [T.toDone + .6, T.close - .15, 318, 364],
+  [T.dip + .1, T.end - .3, ...START],
+]);
+
+const $ = (id) => document.getElementById(id);
+const pctEls = [...document.querySelectorAll('.pct')];
+
+// Spinner: the eight circles of Figma's spinner image, set evenly on a circle and left in place. Sizes from the
+// image (in its 512 px units, smallest → largest: radius, white hole); each circle is a stroke, so the hole can grow
+// out of a disc. The size pattern walks clockwise and the gradient turns with it, so the circles change colour too;
+// the largest is always just before the smallest. At phase 0 it's the Figma picture: smallest at the bottom.
+const SIZES = [[30, 0], [43.5, 0], [45, 0], [48.5, 9], [50, 10], [55.5, 16], [65, 25], [69, 29]].map(([r, h]) => [r / 5.12, h / 5.12]);
+const RING = 186 / 5.12, SMALLEST = 4; // slots clockwise from the top; slot 4 is the bottom
+const STEPS = 6.5;                     // size steps per second
+const NS = 'http://www.w3.org/2000/svg';
+const TICK = 15.5 * Math.SQRT2 + 31.5 * Math.SQRT2; // the tick's length
+$('checkTick').style.strokeDasharray = TICK;
+$('checkDisc').style.transformOrigin = '50px 50px';
+const dots = Array.from({ length: 8 }, (_, j) => {
+  const c = document.createElementNS(NS, 'circle');
+  c.setAttribute('cx', 50 + RING * Math.sin(j * Math.PI / 4));
+  c.setAttribute('cy', 50 - RING * Math.cos(j * Math.PI / 4));
+  $('spinDots').appendChild(c);
+  return c;
+});
+function spin(phase) {
+  dots.forEach((c, j) => {
+    // Rank 0…7 (smallest → largest) falls by one each step; from 0 it grows back to 7 within one step.
+    const r = (((j - SMALLEST - phase) % 8) + 8) % 8;
+    const lo = Math.floor(r), k = r - lo;
+    const [ra, ha] = SIZES[lo], [rb, hb] = lo < 7 ? SIZES[lo + 1] : SIZES[0];
+    const R = mix(ra, rb, k), h = mix(ha, hb, k);
+    c.setAttribute('r', (R + h) / 2);
+    c.setAttribute('stroke-width', R - h);
+  });
+  $('spinGrad').setAttribute('gradientTransform', `rotate(${phase * 45} 50 50)`);
+}
+// Bar width: 0 → 445 px at 75 % (as in Figma's Step 7), → 618 px (the whole track) at 100 %.
+const barW = (k) => (k <= .75 ? 445 * k / .75 : mix(445, 618, (k - .75) / .25));
+
+// Screen k fades in over [a, a + X] rising 8 px, and out over [b, b + X].
+const show = (el, s, a, b = 1e9, y0 = 8) => {
+  const i = outC(p(s, a, a + X)), o = io(p(s, b, b + X * .6));
+  el.style.opacity = i * (1 - o);
+  el.style.transform = `translateY(${y0 * (1 - i) - 6 * o}px)`;
+};
+
+function render(t) {
+  const s = t < T.dip + DIP ? t : 0;
+  $('main').style.opacity = t < T.dip ? 1 : 1 - bump(t, T.dip, 2 * DIP) ** .6;
+
+  // Screen 1 → the others: header, footer line and the shared background come in.
+  const a = io(p(s, T.toSync, T.toSync + X));
+  $('bg2').style.opacity = a;
+  $('bg1').style.opacity = 1 - a;
+  $('head').style.opacity = $('foot').style.opacity = a;
+  $('s1').style.opacity = 1 - io(p(s, T.toSync - .1, T.toSync + X * .6));
+  $('s1').style.transform = `translateY(${-6 * p(s, T.toSync - .1, T.toSync + X * .6)}px)`;
+  show($('s2'), s, T.toSync + .3, T.toProg);
+  show($('s3'), s, T.toProg + .15, T.toDone);
+  show($('s4'), s, T.toDone + .15);
+
+  // Icon slot: in with Last Synchronisation.
+  const ic = outC(p(s, T.toSync + .3, T.toSync + .3 + X));
+  const g = io(p(s, T.toProg, T.toProg + X)), d = io(p(s, T.toDone, T.toDone + X));
+  $('ic').style.top = `${94 + 8 * (1 - ic)}px`;
+  $('ic').style.opacity = ic;
+  // One icon at a time: the sync arrows turn and go, then the spinner; the spinner shrinks away, then the check pops.
+  const so = io(p(s, T.toProg, T.toProg + .3)), sp = outC(p(s, T.toProg + .25, T.toProg + .55));
+  const spo = io(p(s, T.toDone, T.toDone + .2)), ck = p(s, T.toDone + .15, T.toDone + .35);
+  $('icSync').style.opacity = 1 - so;
+  $('icSync').style.transform = `rotate(${180 * so}deg) scale(${1 - .3 * so})`;
+  $('icSpin').style.opacity = sp * (1 - spo);
+  $('icSpin').style.transform = `scale(${mix(.7, 1, sp) - .3 * spo})`;
+  spin(Math.max(0, s - T.toProg - .25) * STEPS);
+  // The check: the disc swells in with a slight overshoot, then the tick draws itself from its short arm.
+  $('icCheck').style.opacity = ck;
+  $('checkDisc').style.transform = `scale(${mix(.5, 1, outBack(p(s, T.toDone + .15, T.toDone + .6), 1.2))})`;
+  const tick = io(p(s, T.toDone + .4, T.toDone + .8));
+  $('checkTick').style.strokeDashoffset = TICK * (1 - tick);
+  $('checkTick').style.opacity = tick > 0 ? 1 : 0;
+
+  // Button slot.
+  const pr = p(s, T.run[0], T.run[1]), k = io(pr);
+  $('btnBlue').style.opacity = 1 - g;
+  $('track').style.opacity = g * (1 - d);
+  $('btnOutline').style.opacity = d;
+  $('btn').style.filter = `brightness(${1 - .1 * Math.max(...CLICKS.map((c) => bump(s, c, .22)))})`;
+  $('lConnect').style.opacity = 1 - io(p(s, T.toSync, T.toSync + X * .6));
+  $('lScan').style.opacity = io(p(s, T.toSync + .1, T.toSync + X)) * (1 - io(p(s, T.toProg, T.toProg + .3)));
+  $('lClose').style.opacity = io(p(s, T.toDone + .2, T.toDone + X + .2));
+  $('prog').style.opacity = io(p(s, T.toProg + .15, T.toProg + X)) * (1 - io(p(s, T.toDone, T.toDone + .35)));
+  const w = barW(k);
+  $('bar').style.width = $('pctClip').style.width = `${w}px`;
+  $('pctDarkClip').style.left = `${27 + w}px`;
+  $('pctDarkClip').style.width = `${648 - 27 - w}px`;
+  $('pctDark').style.left = `${336 - 27 - w}px`;
+  $('bar').style.opacity = w > 1 ? 1 : 0;
+  pctEls.forEach((el) => (el.textContent = Math.round(100 * k)));
+
+  const [x, y] = cursorAt(t);
+  const press = Math.max(...CLICKS.map((c) => bump(t, c, .18)));
+  $('cursor').style.transform = `translate(${x - 6}px, ${y - 1}px) scale(${1 - .14 * press})`;
+}
+
+// ?figma=1…4 freezes the four Figma frames (no cursor, the spinner unturned) for D.
+const FIGMA = new URLSearchParams(location.search).get('figma');
+const AT = { 1: 0, 2: T.scan - .3, 3: null, 4: T.close - .4 };
+const figmaRender = (t) => {
+  if (FIGMA === '3') {
+    // 75 % on the bar, as in Step 7.
+    const k = .75, lo = T.run[0], hi = T.run[1];
+    let a = lo, b = hi;
+    for (let i = 0; i < 40; i++) { const m = (a + b) / 2; io(p(m, lo, hi)) < k ? (a = m) : (b = m); }
+    render(a);
+    spin(0);
+  } else render(AT[FIGMA] ?? t);
+  $('cursor').style.opacity = 0;
+};
+MotionPlayer.mount({
+  stage: $('stage'), width: 1350, height: 920, duration: T.end, render: FIGMA !== null ? figmaRender : render,
+  markers: [['connect', T.connect], ['scan', T.scan], ['run', T.run[0]], ['done', T.toDone], ['close', T.close]],
+  refs: [['Welcome (221:26768)', 'src/1-welcome.png'], ['Last sync (221:26890)', 'src/2-last-sync.png'],
+    ['In progress (221:27013)', 'src/3-progress.png'], ['Success (221:27135)', 'src/4-success.png']],
+  poster: 0,
+});
+</script>
+</body>
+</html>

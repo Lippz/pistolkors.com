@@ -78,6 +78,11 @@ show the same thing.
   progress sweeps and the hint points to the Leaks Tab → Leaks Tab opens JP-0001-DR, the other reddit copies listed one by
   one → Keyword Search in the menu brings back the search as at the start. The menu's on look moves with the screen.
   `?figma` (the fill at Figma's 151 px) and `?figma=2` lay out the two frames for D.
+- `setup/`: the browser extension's guided setup, KK 221:26768 (Welcome) and the three next to it (Last Synchronisation,
+  In Progress, Congratulations). The popup is 675×460, so the stage is 1350×920 and `.pop` is scaled ×2. Connect / Sign up →
+  Start Scan Now in the same place → the button becomes the track and runs 0 → 100 % (75 % sits at Figma's 445 px; the label is centred on the track, Figma has it 40 px right); the
+  spinner is eight SVG circles that stay in place, evenly spaced, and swell and shrink as the size pattern walks clockwise (the
+  gradient turns with it; the largest is always just before the smallest; phase 0 is Figma's image) → the check (KK 222:27293): the disc swells in, the tick draws itself → Close Extension, and the popup opens on Welcome again. `?figma=1…4` freezes the frames for D.
 
 ## Workflow
 
