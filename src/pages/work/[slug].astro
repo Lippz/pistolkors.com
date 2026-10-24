@@ -9,11 +9,15 @@ import ArrowCircle from '../../components/ArrowCircle.astro';
 import { url } from '../../lib/url';
 
 export async function getStaticPaths() {
-  const cases = (await getCollection('cases', (c) => !c.data.hidden)).sort((a, b) => a.data.order - b.data.order);
-  return cases.map((entry, i) => ({
-    params: { slug: entry.id },
-    props: { entry, next: cases[(i + 1) % cases.length] },
-  }));
+  const cases = (await getCollection('cases', (c) => !c.data.hidden && !c.data.draft)).sort((a, b) => a.data.order - b.data.order);
+  const drafts = import.meta.env.DEV ? await getCollection('cases', (c) => !c.data.hidden && c.data.draft) : [];
+  return [
+    ...cases.map((entry, i) => ({
+      params: { slug: entry.id },
+      props: { entry, next: cases[(i + 1) % cases.length] },
+    })),
+    ...drafts.map((entry) => ({ params: { slug: entry.id }, props: { entry, next: cases[0] } })),
+  ];
 }
 
 interface Props {

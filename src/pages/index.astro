@@ -13,7 +13,7 @@ import { site, facts, experience } from '../data/site';
 import { PRODUCT_SINCE, yearsSince, inWords } from '../lib/years';
 import portrait from '../assets/site/portrait.webp';
 
-const cases = (await getCollection('cases', (c) => !c.data.hidden)).sort((a, b) => a.data.order - b.data.order);
+const cases = (await getCollection('cases', (c) => !c.data.hidden && !c.data.draft)).sort((a, b) => a.data.order - b.data.order);
 const featured = cases.filter((c) => c.data.featured);
 const rest = cases.filter((c) => !c.data.featured);
 

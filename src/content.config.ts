@@ -12,6 +12,8 @@ const cases = defineCollection({
       featured: z.boolean().default(false),
       /** Hidden cases get no page and are left out of the home page and "next case" links. */
       hidden: z.boolean().default(false),
+      /** Draft cases get a page in `npm run dev` only, and stay off the home page and "next case" links. */
+      draft: z.boolean().default(false),
       client: z.string(),
       /** Outcome-style title: what was done and for whom. */
       title: z.string(),
