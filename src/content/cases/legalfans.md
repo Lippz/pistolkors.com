@@ -34,6 +34,13 @@ stats:
       label: leaks removed for clients
     - value: 35+
       label: platforms monitored
+motion:
+  video: /motion/legalfans-uploads.mp4
+  poster: /motion/legalfans-uploads.jpg
+  width: 2324
+  height: 1520
+  alt: "An admin's Uploads page on an iMac: the help next to Search explains that the switch takes a photo out of search while it stays stored; one photo is switched off, the list turns into a grid of cards where the same photo's switch is off, it is switched back on, and the grid turns back into the list"
+  caption: Every upload in one place, in or out of search
 ---
 ## Problem
 

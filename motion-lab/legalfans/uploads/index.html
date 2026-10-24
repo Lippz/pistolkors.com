@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LegalFans · Uploads — motion draft</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=block" rel="stylesheet">
+<link rel="stylesheet" href="../../_lib/player.css">
+<style>
+  /* Stage is the Figma frame (KK 242:8917 Uploads (List), 242:8952 Uploads (Grid)), 1816×1024; every number is Figma pixels.
+     The page content is 1240 wide and centred in the 1616 right of the menu, so it starts at x 388. */
+  * { box-sizing: border-box; }
+  p { margin: 0; }
+  .stage { background: #f9fcfd; font-family: Roboto, sans-serif; color: rgba(0,0,0,.88); -webkit-font-smoothing: antialiased; overflow: hidden; }
+  .abs { position: absolute; }
+  img { display: block; }
+  /* Figma sizes the 1.4 line-height boxes to whole pixels: 19.6 → 20. */
+  .b2 { font-size: 14px; line-height: 20px; letter-spacing: .25px; white-space: nowrap; }
+
+  .header { left: 0; top: 0; width: 1816px; height: 64px; background: #fff; }
+  .user { right: 24px; top: 20px; display: flex; gap: 8px; align-items: center; font-size: 12px; line-height: 16px; letter-spacing: .4px; }
+  .user img { width: 24px; height: 24px; }
+
+  .menu { left: 16px; top: 64px; width: 168px; padding: 16px 0; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .group { width: 100%; display: flex; flex-direction: column; gap: 16px; }
+  .mi { width: 100%; height: 40px; padding: 8px; display: flex; gap: 16px; align-items: center; border-radius: 4px; }
+  .mi img { width: 24px; height: 24px; }
+  .mi.on { background: rgba(1,175,241,.16); }
+  .menu .div { width: 152px; height: 1px; background: rgba(0,0,0,.12); flex: none; }
+
+  .headline { left: 388px; top: 88px; width: 1240px; height: 48px; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; }
+  .ttl { display: flex; gap: 16px; align-items: center; }
+  .ttl img { width: 36px; height: 36px; }
+  .ttl p { font-size: 34px; letter-spacing: .25px; line-height: 40px; white-space: nowrap; }
+  .actions { display: flex; gap: 24px; }
+  .actions img, .actions .view { width: 24px; height: 24px; }
+  .view { position: relative; }
+  .view img { position: absolute; inset: 0; }
+  .view .hov { position: absolute; left: -8px; top: -8px; width: 40px; height: 40px; border-radius: 20px; background: rgba(0,0,0,.06); opacity: 0; }
+  .chips { left: 412px; top: 160px; display: flex; gap: 8px; }
+  .chip { position: relative; height: 36px; justify-content: center; border-radius: 24px; display: flex; align-items: center; color: #018ccf; }
+  .chip::after { content: ""; position: absolute; inset: 0; border: 1px solid #01aff1; border-radius: 24px; }
+  .chip.on { background: rgba(1,175,241,.16); }
+
+  /* List */
+  .list { left: 388px; top: 220px; width: 1240px; height: 804px; }
+  .tr { position: absolute; left: 0; width: 1240px; height: 48px; background: #fff; }
+  .tr::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: #eee; }
+  .tr > * { position: absolute; top: 50%; transform: translateY(-50%); }
+  .tr.th p, .tr.th .h { font-size: 14px; font-weight: 500; line-height: 20px; white-space: nowrap; }
+  .tr.th .h { display: flex; align-items: center; }
+  .tr.th .h img { width: 24px; height: 24px; }
+  .tr.th .h.help { gap: 4px; }
+  .tr.th .h.help img { width: 16px; height: 16px; }
+  .thumb { left: 24px; width: 24px; height: 24px; border-radius: 4px; overflow: hidden; }
+  .thumb img { width: 24px; height: 24px; object-fit: cover; }
+  .thumb::after { content: ""; position: absolute; inset: 0; border: 1px solid rgba(0,0,0,.08); border-radius: 4px; }
+  .src { display: flex; gap: 4px; }
+  .star { color: #018ccf; }
+  .pill { height: 24px; padding: 0 12px; border-radius: 12px; display: flex; align-items: center; font-size: 14px; font-weight: 500; line-height: 20px; white-space: nowrap; background: rgba(237,175,16,.16); }
+  .trash { right: 24px; width: 24px; height: 24px; }
+  .pag { left: 388px; top: 960px; width: 1240px; height: 64px; background: #fff; font-size: 12px; line-height: 16px; letter-spacing: .4px; }
+  .pag > * { position: absolute; }
+  .pag .g { color: rgba(0,0,0,.6); }
+  .pag img { width: 24px; height: 24px; }
+
+  /* Toggle (Figma "Toggle", checked yes): the rail and the knob are the Figma exports; off is drawn under them. */
+  .tg { position: relative; width: 40px; height: 24px; }
+  .tg .rail, .tg .rail-off { position: absolute; left: 0; top: 0; width: 40px; height: 24px; }
+  .tg .rail-off { left: 3px; top: 5px; width: 34px; height: 14px; border-radius: 7px; background: rgba(0,0,0,.38); }
+  .tg .knob { position: absolute; left: 15px; top: 0; width: 26px; height: 26px; }
+  .tg .knob img { position: absolute; inset: 0; width: 26px; height: 26px; }
+  .tg .knob i { position: absolute; left: 3px; top: 2px; width: 20px; height: 20px; border-radius: 10px; background: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,.2), 0 1px 1px rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12); }
+  .tg .halo { position: absolute; left: 8px; top: -8px; width: 40px; height: 40px; border-radius: 20px; background: rgba(1,175,241,.12); opacity: 0; }
+
+  /* Grid */
+  .grid { left: 412px; top: 220px; width: 1192px; height: 804px; }
+  .card { position: absolute; width: 220px; height: 332px; border-radius: 8px; background: #fff; overflow: hidden; }
+  .card::after { content: ""; position: absolute; inset: 0; border: 1px solid rgba(0,0,0,.12); border-radius: 8px; pointer-events: none; }
+  .card .pic { position: relative; width: 220px; height: 220px; overflow: hidden; }
+  .card .pic > img { width: 220px; height: 220px; object-fit: cover; }
+  .card .pic.none > img { filter: blur(12px); opacity: .2; }
+  .card .pic.none::before { content: ""; position: absolute; inset: 0; background: #01aff1; mix-blend-mode: color; opacity: .2; }
+  .card .np { position: absolute; left: calc(50% + .5px); top: 50%; transform: translate(-50%, -50%); width: 107px; display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 12px; line-height: 16px; letter-spacing: .4px; color: rgba(0,0,0,.42); }
+  .card .np .ic { position: relative; width: 48px; height: 48px; }
+  .card .np .ic img { position: absolute; left: -10.65px; top: -7.85px; width: 66.65px; height: 66.45px; }
+  .card .info { padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .card .info .src { position: static; transform: none; }
+  .card .lk { height: 28px; display: flex; align-items: center; gap: 4px; font-size: 18px; line-height: 28px; letter-spacing: .5px; white-space: nowrap; }
+  .card .lk b { font-weight: 700; }
+  .card .inc { display: flex; align-items: center; justify-content: space-between; font-size: 12px; line-height: 16px; letter-spacing: .4px; white-space: nowrap; }
+  .gpag { left: 412px; top: 932px; width: 1192px; height: 64px; border-radius: 8px; background: #fff; font-size: 12px; line-height: 16px; letter-spacing: .4px; }
+  .gpag::after { content: ""; position: absolute; inset: 0; border: 1px solid rgba(0,0,0,.12); border-radius: 8px; }
+  .gpag > * { position: absolute; }
+  .gpag .g { color: rgba(0,0,0,.6); }
+  .gpag img { width: 24px; height: 24px; }
+
+  .tip { right: 111px; top: 268px; padding: 8px 14px; border-radius: 4px; background: #fff; font-size: 10px; line-height: 12px; letter-spacing: .4px; color: rgba(0,0,0,.87); text-align: center; white-space: nowrap; opacity: 0; z-index: 4;
+    box-shadow: 0 2px 4px rgba(0,0,0,.16), 0 4px 8px rgba(0,0,0,.08), 0 8px 12px rgba(0,0,0,.04); }
+
+  .cursor { left: 0; top: 0; width: 19px; height: 24px; z-index: 20; transform-origin: 6px 1px; }
+  .cursor img { width: 19px; height: 24px; }
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="abs header">
+    <img class="abs" src="assets/logo-a.svg" alt="" style="left:25.06px;top:26.9px;width:158.98px;height:11.74px">
+    <img class="abs" src="assets/logo-b.svg" alt="" style="left:105.12px;top:24.86px;width:14.98px;height:15.27px">
+    <div class="abs user"><p>username@mailprovider.com</p><img src="assets/logout.svg" alt=""></div>
+  </div>
+
+  <div class="abs menu">
+    <div class="mi b2"><img src="assets/m-stats.svg" alt="">Statistics</div>
+    <i class="div"></i>
+    <div class="group">
+      <div class="mi b2"><img src="assets/m-users.svg" alt="">Users</div>
+      <div class="mi b2 on"><img src="assets/m-uploads-on.svg" alt="">Uploads</div>
+      <div class="mi b2"><img src="assets/m-leaks.svg" alt="">Leaks</div>
+    </div>
+    <div class="group">
+      <div class="mi b2"><img src="assets/m-admin.svg" alt="">Administration</div>
+      <div class="mi b2"><img src="assets/m-perf.svg" alt="">Performance</div>
+      <div class="mi b2"><img src="assets/m-violators.svg" alt="">Violators</div>
+      <div class="mi b2"><img src="assets/m-partners.svg" alt="">Partners</div>
+      <div class="mi b2"><img src="assets/m-docs.svg" alt="">Documents</div>
+    </div>
+  </div>
+
+  <div class="abs headline">
+    <div class="ttl"><img src="assets/t-uploads.svg" alt=""><p>Uploads</p></div>
+    <!-- The view switch shows the other view: the grid icon in the list, the list icon in the grid. -->
+    <div class="actions"><div class="view" id="viewBtn"><i class="hov" id="viewHov"></i><img src="assets/v-grid.svg" alt="" id="icGrid"><img src="assets/v-list.svg" alt="" id="icList"></div>
+      <img src="assets/search.svg" alt=""><img src="assets/filter.svg" alt=""></div>
+  </div>
+  <div class="abs chips b2"><div class="chip on" style="width:106px">All Uploads</div><div class="chip" style="width:66px">Clear</div><div class="chip" style="width:71px">Leaks</div></div>
+
+  <div class="abs list" id="list"></div>
+  <div class="abs pag" id="pag"></div>
+  <div class="abs grid" id="grid"></div>
+  <div class="abs gpag" id="gpag"></div>
+
+  <div class="abs tip" id="tip">Toggle this switch to exclude this photo<br>from search results while keeping it<br>securely stored in the system</div>
+
+  <div class="abs cursor" id="cursor"><img src="../../_lib/cursor-hand.png" alt=""></div>
+</div>
+
+<script src="../../_lib/motion.js"></script>
+<script src="../../_lib/player.js"></script>
+<script>
+// Story: Uploads as a list → the cursor rests on Search's help: the tooltip says what the switch does → one photo is
+// taken out of search → the grid view: the same photo's card has its switch off → it goes back into search → the list
+// again, as at the start.
+const T = {
+  tip: 1.3,        // the cursor reaches the help icon
+  off: 4.1,        // click the third photo's switch: out of search
+  grid: 5.6,       // click the grid view
+  on: 8.3,         // click the same card's switch: back in search
+  list: 9.8,       // click the list view
+  end: 11.8,
+};
+const CLICKS = [T.off, T.grid, T.on, T.list];
+const START = [1640, 760];
+const $ = (id) => document.getElementById(id);
+const FIGMA = new URLSearchParams(location.search).get('figma');
+const SEL = 2;   // the photo the story switches
+
+// ---------- Data ----------
+// One list for both views, in the order of Figma's grid (its pictures: k0…k3, and a video with no preview).
+const U = (file, email, src, date, leaks, pic) => ({ file, email, src, date, leaks, pic });
+const ITEMS = FIGMA !== null ? [
+  ['Magic Vault', 'k0'], ['@devin_walker', 'k1'], ['Magic Vault', 'k2', 'Waiting'], ['@devin_walker', 'k3'], ['Magic Vault', 'k1'],
+  ['@devin_walker', 'k1'], ['@devin_walker', 'k3'], ['Magic Vault', null], ['Magic Vault', 'k2'], ['Magic Vault', 'k0'],
+].map(([src, pic, l]) => U('image0001.png', 'devin.walker@example.com', src, '9.07.2023, 11:35', l || '16', pic)) : [
+  U('IMG_2041.jpg', 'emma.carter@example.com', 'Magic Vault', '21.06.2025, 10:12', '16', 'k0'),
+  U('beach_set_03.png', 'emma.carter@example.com', '@emma.carter', '20.06.2025, 18:40', '4', 'k1'),
+  U('IMG_2077.jpg', 'jessica.sparkle@example.com', 'Magic Vault', '20.06.2025, 15:03', 'Waiting', 'k2'),
+  U('cosplay_preview.png', 'luna.skye@example.com', '@luna.skye', '19.06.2025, 21:16', '9', 'k3'),
+  U('IMG_1988.jpg', 'mia.rose@example.com', 'Magic Vault', '19.06.2025, 09:47', '2', 'k1'),
+  U('bts_shoot_12.jpg', 'jessica.sparkle@example.com', '@jessica.sparkle', '18.06.2025, 13:30', '0', 'k1'),
+  U('IMG_1952.jpg', 'emma.carter@example.com', '@emma.carter', '17.06.2025, 11:05', '23', 'k3'),
+  U('teaser_june.mp4', 'luna.skye@example.com', 'Magic Vault', '16.06.2025, 19:22', '7', null),
+  U('IMG_1907.jpg', 'mia.rose@example.com', 'Magic Vault', '15.06.2025, 08:58', '12', 'k2'),
+  U('polaroid_02.png', 'emma.carter@example.com', 'Magic Vault', '14.06.2025, 16:41', '5', 'k0'),
+];
+// Figma's list has data of its own: every row Magic Vault and the same picture, Waiting on rows 2, 5 and 6.
+const ROWS = FIGMA !== null ? ITEMS.map((u, i) => ({ ...u, src: 'Magic Vault', pic: 'k0', leaks: [1, 4, 5].includes(i) ? 'Waiting' : '16' })) : ITEMS;
+const toggle = (i) => `<div class="tg" data-i="${i}"><i class="halo"></i><i class="rail-off"></i><img class="rail" src="assets/toggle-on.svg" alt="">
+  <div class="knob"><i></i><img src="assets/knob.svg" alt=""></div></div>`;
+const srcHtml = (s) => `<div class="src b2"><span${s.startsWith('@') ? ' class="star"' : ''}>${s}</span><span class="star">★</span></div>`;
+// The video has no picture: its thumbnail is the blurred, tinted frame, like the card.
+const picHtml = (u) => `<img src="assets/${u.pic || 'k2'}.jpg" alt=""${u.pic ? '' : ' style="filter:blur(2px);opacity:.3"'}>`;
+
+$('list').innerHTML = `<div class="tr th" style="top:0"><div class="h" style="left:24px">File Name<img src="assets/sort.svg" alt=""></div>
+  <p style="left:260px">Email</p><p style="left:560px">Source</p><p style="left:760px">Upload Date &amp; Time</p><p style="left:940px">Leaks</p>
+  <div class="h help" style="left:1100px" id="help"><img src="assets/help.svg" alt="">Search</div></div>` +
+  ROWS.map((u, i) => `<div class="tr" style="top:${48 + 48 * i}px"><div class="thumb">${picHtml(u)}</div>
+    <p class="b2" style="left:60px">${u.file}</p><p class="b2" style="left:260px">${u.email}</p>
+    <div style="left:calc(50% - 12.5px);transform:translate(-50%,-50%)">${srcHtml(u.src)}</div><p class="b2" style="left:760px">${u.date}</p>
+    ${u.leaks === 'Waiting' ? '<div class="pill" style="left:940px">Waiting</div>' : `<p class="b2" style="left:940px">${u.leaks}</p>`}
+    <div style="right:100px">${toggle(i)}</div><img class="trash" src="assets/trash.svg" alt=""></div>`).join('');
+const GX = [0, 243, 486, 729, 972], GY = [0, 356];
+$('grid').innerHTML = ITEMS.map((u, i) => `<div class="card" style="left:${GX[i % 5]}px;top:${GY[Math.floor(i / 5)]}px">
+  ${u.pic ? `<div class="pic"><img src="assets/${u.pic}.jpg" alt=""></div>`
+    : `<div class="pic none"><img src="assets/k2.jpg" alt=""><div class="np"><div class="ic"><img src="assets/nopreview.svg" alt=""></div>No preview</div></div>`}
+  <div class="info">${srcHtml(u.src)}
+    ${u.leaks === 'Waiting' ? '<div class="lk"><div class="pill">Waiting</div></div>' : `<div class="lk">Leaks: <b>${u.leaks}</b></div>`}
+    <div class="inc">Include in search${toggle(i)}</div></div></div>`).join('');
+const pag = (r) => `<p class="g" style="right:${511 - r}px;top:${24 - r}px;transform:translateX(100%)">Items per page:</p><p style="right:${396 - r}px;top:${24 - r}px;transform:translateX(100%)">10</p>
+  <i style="right:${323 - r}px;top:${43 - r}px;width:73px;height:1px;background:rgba(0,0,0,.6)"></i><img src="assets/pg-drop.svg" alt="" style="right:${323 - r}px;top:${20 - r}px">
+  <p class="g" style="right:${286 - r}px;top:${24 - r}px;transform:translateX(100%)">1 — 10 of 69</p><img src="assets/pg-r144.svg" alt="" style="right:${144 - r}px;top:${20 - r}px">
+  <img src="assets/pg-r104.svg" alt="" style="right:${104 - r}px;top:${20 - r}px"><img src="assets/pg-r64.svg" alt="" style="right:${64 - r}px;top:${20 - r}px"><img src="assets/pg-r24.svg" alt="" style="right:${24 - r}px;top:${20 - r}px">`;
+$('pag').innerHTML = pag(0);
+$('gpag').innerHTML = pag(0);   // Figma's offsets are inside its 1 px border, one less than the list's
+const rows = [...$('list').querySelectorAll('.tr:not(.th)')];
+const cards = [...$('grid').children];
+const listTg = [...$('list').querySelectorAll('.tg')], gridTg = [...$('grid').querySelectorAll('.tg')];
+
+// ---------- Cursor ----------
+const rectOf = (el) => {
+  const w = el.offsetWidth, h = el.offsetHeight; let x = 0, y = 0;
+  for (; el && el !== $('stage'); el = el.offsetParent) { x += el.offsetLeft; y += el.offsetTop; }
+  return [x, y, w, h];
+};
+const R = { help: rectOf($('help').firstElementChild), view: rectOf($('viewBtn')), tgL: rectOf(listTg[SEL]), tgG: rectOf(gridTg[SEL]) };
+R.help = [R.help[0], R.help[1] - 4, R.help[2], R.help[3] + 8];
+const at = ([x, y, w, h], dx = 0, dy = 0) => [x + w / 2 + dx, y + h / 2 + dy];
+const cursorAt = cursorPath(START, [
+  [.3, T.tip, ...at(R.help, 2, 3)],
+  [T.tip + 1.9, T.off - .15, ...at(R.tgL, 4, 3)],
+  [T.off + .5, T.grid - .15, ...at(R.view, 2, 3)],
+  [T.grid + 1.1, T.on - .15, ...at(R.tgG, 4, 3)],
+  [T.on + .5, T.list - .15, ...at(R.view, 2, 3)],
+  [T.list + .5, T.end - .15, ...START],
+]);
+const inside = (r, [x, y]) => x >= r[0] && x <= r[0] + r[2] && y >= r[1] && y <= r[1] + r[3];
+const hoverOf = (r, t) => { let n = 0; for (let i = 0; i < 5; i++) if (inside(r, cursorAt(t - .035 * i))) n++; return n / 5; };
+
+// The switch: k = 1 on, 0 off. The knob slides, the blue rail and knob give way to the grey rail and white knob.
+function setToggle(el, k, halo) {
+  el.querySelector('.knob').style.transform = `translateX(${-16 * (1 - k)}px)`;
+  el.querySelector('.rail').style.opacity = k;
+  el.querySelector('.rail-off').style.opacity = 1 - k;
+  el.querySelector('.knob img').style.opacity = k;
+  el.querySelector('.knob i').style.opacity = 1 - k;
+  el.querySelector('.halo').style.opacity = halo;
+  el.querySelector('.halo').style.transform = `translateX(${-16 * (1 - k)}px)`;
+}
+
+function render(t) {
+  // Views: the list's rows go up and out one after another, then the cards rise in; back the same way.
+  const toGrid = (a) => [p(t, a + .05, a + .45), p(t, a + .35, a + 1.0)];
+  const [lo1, gi1] = toGrid(T.grid), [go2, li2] = toGrid(T.list);
+  const inGrid = t >= T.grid && t < T.list;
+  rows.forEach((el, i) => {
+    const d = .025 * i;
+    const out = inGrid ? io(p(t, T.grid + .05 + d, T.grid + .3 + d)) : 0;
+    const back = t >= T.list ? outC(p(t, T.list + .4 + d, T.list + .8 + d)) : 1;
+    el.style.opacity = t >= T.list ? back : 1 - out;
+    el.style.transform = `translateY(${t >= T.list ? 10 * (1 - back) : -8 * out}px)`;
+  });
+  const listShown = t < T.grid ? 1 : t < T.list ? 1 - lo1 : li2;
+  $('list').querySelector('.th').style.opacity = listShown;
+  $('pag').style.opacity = listShown;
+  cards.forEach((el, i) => {
+    const d = .05 * i;
+    const k = inGrid ? outC(p(t, T.grid + .4 + d, T.grid + .85 + d)) : 0;
+    const out = t >= T.list ? io(p(t, T.list + .05 + .02 * i, T.list + .3 + .02 * i)) : 0;
+    el.style.opacity = t >= T.list ? (1 - out) : k;
+    el.style.transform = `translateY(${t >= T.list ? -8 * out : 16 * (1 - k)}px)`;
+  });
+  $('gpag').style.opacity = t < T.grid ? 0 : t < T.list ? gi1 : 1 - go2;
+  $('grid').style.visibility = $('gpag').style.visibility = t > T.grid && t < T.list + .6 ? 'visible' : 'hidden';
+  $('icGrid').style.opacity = t < T.grid + .2 ? 1 : t < T.list + .2 ? 0 : 1;
+  $('icList').style.opacity = 1 - $('icGrid').style.opacity;
+
+  // The third photo: out of search from the click in the list until the click on its card.
+  const sel = FIGMA !== null ? 1 : 1 - io(p(t, T.off, T.off + .25)) + io(p(t, T.on, T.on + .25));
+  listTg.forEach((el, i) => setToggle(el, i === SEL ? sel : 1, i === SEL ? hoverOf(R.tgL, t) * (inGrid ? 0 : 1) : 0));
+  gridTg.forEach((el, i) => setToggle(el, i === SEL ? sel : 1, i === SEL ? hoverOf(R.tgG, t) * (inGrid ? 1 : 0) : 0));
+
+  // The tooltip shows while the cursor is on the help icon.
+  const tip = outC(hoverOf(R.help, t));
+  $('tip').style.opacity = tip;
+  $('tip').style.transform = `translateY(${4 * (1 - tip)}px)`;
+  $('viewHov').style.opacity = hoverOf(R.view, t);
+
+  const c = cursorAt(t);
+  const press = Math.max(...CLICKS.map((cl) => bump(t, cl, .18)));
+  $('cursor').style.transform = `translate(${c[0] - 6}px, ${c[1] - 1}px) scale(${1 - .14 * press})`;
+}
+
+// ?figma lays out the list with the tooltip (Figma draws its own cursor there), ?figma=2 the grid, with Figma's data.
+const figmaRender = () => {
+  render(FIGMA === '2' ? T.grid + 2 : T.tip + 1);
+  $('cursor').style.opacity = 0;
+  $('viewHov').style.opacity = 0;
+  document.querySelectorAll('.halo').forEach((el) => { el.style.opacity = 0; });
+};
+MotionPlayer.mount({
+  stage: $('stage'), width: 1816, height: 1024, duration: T.end, render: FIGMA !== null ? figmaRender : render,
+  markers: [['tooltip', T.tip], ['off', T.off], ['grid', T.grid], ['on', T.on], ['list', T.list]],
+  refs: [['Uploads (List) (242:8917)', 'src/1-list.png'], ['Uploads (Grid) (242:8952)', 'src/2-grid.png']],
+  poster: 0,
+});
+</script>
+</body>
+</html>

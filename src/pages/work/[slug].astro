@@ -81,8 +81,8 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
             <video
               src={url(d.motion.video)}
               poster={url(d.motion.poster)}
-              width="1920"
-              height="1080"
+              width={d.motion.width}
+              height={d.motion.height}
               muted
               loop
               playsinline

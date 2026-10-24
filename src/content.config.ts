@@ -71,6 +71,9 @@ const cases = defineCollection({
           poster: z.string(),
           alt: z.string(),
           caption: z.string().optional(),
+          /** The video's size, so the page keeps its proportions before it loads. */
+          width: z.number().default(1920),
+          height: z.number().default(1080),
         })
         .optional(),
       /** "story": written case with sections. "slides": intro + presentation slides. */

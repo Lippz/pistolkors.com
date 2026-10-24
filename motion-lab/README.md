@@ -100,6 +100,15 @@ show the same thing.
   the new row's menu (Download, Delete) → Leaks in the menu brings back the list as at the start. The data agree across the
   two tables (dates, statuses, who). Figma's Upload Document frame has a broken backdrop (menu at full height), so the loop
   uses the real Documents page behind it. `?figma=1…4` lays out each frame with Figma's own data for D.
+- `uploads/`: the admin's Uploads, 1816×1024 like the Figma frames (KK 242:8917 list, 242:8952 grid). The cursor rests on
+  Search's help (the tooltip) → the third photo is taken out of search → the grid view (rows go, cards rise in), the same
+  photo's card has its switch off → back in search → the list view, as at the start. One data list for both views, in the
+  order of Figma's grid. The switch's off look isn't in Figma: a grey rail and a white knob under the Figma on look.
+  `?figma` (the list with the tooltip) and `?figma=2` (the grid) use Figma's own data for D.
+- `uploads-imac/`: the `uploads/` loop on the iMac's screen (KK 243:9876, frame "7", 2324×1521). Not a player page: `compose.py`
+  builds the backdrop (the frame's gradient, the transparent iMac `assets/image69.png` at Figma's 2200 px, the screen's 2 px black
+  stroke) and puts the exported loop on the screen with ffmpeg. Export `uploads/` into `build/` first (see the script), then
+  `compose.py` writes `build/imac.mp4` to review, `compose.py publish` → `public/motion/legalfans-uploads.mp4`.
 
 ## Workflow
 
