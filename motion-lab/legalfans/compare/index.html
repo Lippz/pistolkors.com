@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LegalFans · Comparison — motion draft</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=block" rel="stylesheet">
+<link rel="stylesheet" href="../../_lib/player.css">
+<style>
+  /* Stage is the Figma frame (KK 238:8646 preview unavailable → 238:8686 both images), 1440×1024; every number is Figma pixels. */
+  * { box-sizing: border-box; }
+  p { margin: 0; }
+  .stage { background: #f9fcfd; font-family: Roboto, sans-serif; color: rgba(0,0,0,.88); -webkit-font-smoothing: antialiased; overflow: hidden; }
+  .abs { position: absolute; }
+
+  /* Header */
+  .header { left: 0; top: 0; width: 1440px; height: 64px; background: #fff; }
+  .logo { left: 25px; top: 24px; width: 159px; height: 20px; overflow: hidden; }
+  .logo img { position: absolute; left: -13.26px; top: -52.46px; width: 185.43px; height: 136.35px; max-width: none; display: block; }
+  .user { right: 24px; top: 20px; display: flex; gap: 8px; align-items: center; font-size: 12px; line-height: 16px; letter-spacing: .4px; }
+  .user img { width: 24px; height: 24px; display: block; }
+
+  /* Menu */
+  .menu { left: 16px; top: 64px; width: 168px; padding: 16px 0; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .group { width: 100%; display: flex; flex-direction: column; gap: 16px; }
+  .mi { width: 100%; height: 40px; padding: 8px; display: flex; gap: 16px; align-items: center; border-radius: 4px; font-size: 14px; line-height: 20px; letter-spacing: .25px; white-space: nowrap; }
+  .mi img { width: 24px; height: 24px; display: block; }
+  .mi.on { background: rgba(1,175,241,.16); }
+  .menu .div { width: 152px; height: 1px; background: rgba(0,0,0,.12); flex: none; }
+
+  /* Main: headline, then the white block with the pair centred in it. */
+  .main { left: 200px; top: 64px; width: 1240px; height: 960px; padding-top: 24px; display: flex; flex-direction: column; align-items: center; gap: 24px; }
+  .headline { width: 1240px; height: 48px; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; flex: none; }
+  .ttl { display: flex; gap: 16px; align-items: center; }
+  .ttl img { width: 36px; height: 36px; display: block; }
+  .ttl p { font-size: 34px; letter-spacing: .25px; line-height: 40px; white-space: nowrap; }
+  .counter { display: flex; gap: 32px; align-items: center; }
+  .remain { display: flex; gap: 8px; align-items: center; font-size: 24px; line-height: 29px; white-space: nowrap; }
+  .remain .lab { color: rgba(0,0,0,.42); }
+  .num { position: relative; height: 29px; overflow: hidden; }
+  .num span { display: block; }
+  .num .next { position: absolute; left: 0; top: 0; }
+  .date { height: 36px; padding: 8px 16px; border-radius: 24px; background: rgba(1,175,241,.16); display: flex; gap: 12px; align-items: center; color: #018ccf; font-size: 14px; line-height: 1.4; letter-spacing: .25px; white-space: nowrap; }
+  .date img { width: 16px; height: 16px; display: block; transform: rotate(180deg); }
+
+  .block { width: 100%; flex: 1 0 0; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 32px; overflow: hidden; }
+  .pairs { position: relative; width: 1048px; height: 572px; }
+  .pair { position: absolute; left: 0; top: 0; width: 1048px; display: flex; flex-direction: column; gap: 12px; }
+  .imgs { display: flex; gap: 24px; }
+  .card { position: relative; width: 512px; height: 512px; border-radius: 8px; flex: none; }
+  .card > img { position: absolute; inset: 0; width: 512px; height: 512px; object-fit: cover; border-radius: 8px; display: block; }
+  /* Figma strokes sit inside the box. */
+  .card::after { content: ""; position: absolute; inset: 0; border: 1px solid rgba(0,0,0,.08); border-radius: 8px; pointer-events: none; }
+  .card.empty { background: rgba(0,0,0,.04); }
+  .na { position: absolute; left: calc(50% + .5px); top: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; gap: 16px; align-items: center; }
+  .na img { width: 96px; height: 96px; display: block; }
+  .na .h6 { font-size: 20px; font-weight: 500; letter-spacing: .15px; line-height: 24px; white-space: nowrap; }
+  .na .b2 { font-size: 14px; line-height: 1.4; letter-spacing: .25px; text-align: center; white-space: nowrap; }
+  .bars { display: flex; gap: 24px; }
+  .bar { flex: 1 0 0; min-width: 0; padding: 12px; border-radius: 4px; display: flex; align-items: center; justify-content: space-between; font-size: 14px; line-height: 20px; letter-spacing: .25px; white-space: nowrap; }
+  .bar img { width: 24px; height: 24px; display: block; }
+  .bar.user-id { background: rgba(1,175,241,.16); color: #018ccf; }
+  .bar.link { background: rgba(0,0,0,.08); color: rgba(0,0,0,.64); }
+  .bar .ics { display: flex; gap: 12px; }
+
+  .btns { width: 1048px; display: flex; gap: 24px; flex: none; }
+  .btns > div { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column; align-items: center; }
+  .btn { position: relative; height: 48px; padding: 12px 16px; border-radius: 4px; display: flex; gap: 12px; align-items: center; justify-content: center; color: #fff; font-size: 14px; font-weight: 500; line-height: 16px; letter-spacing: .75px; text-transform: uppercase; white-space: nowrap; }
+  .btn img { width: 24px; height: 24px; display: block; }
+  .btn.red { width: 100%; background: #ed1c24; border: 1px solid #ed1c24; }
+  .btn.blue { width: 100%; background: #018ccf; }
+  .btn.text { color: #018ccf; }
+  /* Hover layer: render() sets its opacity from the cursor. */
+  .btn .hov { position: absolute; inset: 0; border-radius: 4px; opacity: 0; pointer-events: none; }
+  .btn.text .hov { background: rgba(1,175,241,.08); }
+  .btn.blue .hov { background: rgba(0,0,0,.12); }
+  .btn > :not(.hov):not(.rip) { position: relative; }
+  /* Press: a ripple from the click point, as in the Material buttons the admin is built on. */
+  .btn { overflow: hidden; }
+  .btn .rip { position: absolute; left: 0; top: 0; width: 2px; height: 2px; margin: -1px 0 0 -1px; border-radius: 50%; opacity: 0; pointer-events: none; }
+  .btn.text .rip { background: rgba(1,175,241,.24); }
+  .btn.blue .rip { background: rgba(255,255,255,.32); }
+
+  .cursor { left: 0; top: 0; width: 19px; height: 24px; z-index: 20; transform-origin: 6px 1px; }
+  .cursor img { width: 19px; height: 24px; display: block; }
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="abs header">
+    <div class="abs logo"><img src="assets/logo.png" alt=""></div>
+    <div class="abs user"><p>username@mailprovider.com</p><img src="assets/logout.svg" alt=""></div>
+  </div>
+
+  <div class="abs menu">
+    <div class="group">
+      <div class="mi"><img src="assets/m1.svg" alt="">Users</div>
+      <div class="mi on"><img src="assets/m2.svg" alt="">Comparison</div>
+      <div class="mi"><img src="assets/m3.svg" alt="">Leaks</div>
+      <div class="mi"><img src="assets/m4.svg" alt="">Claims</div>
+    </div>
+    <i class="div"></i>
+    <div class="mi"><img src="assets/m5.svg" alt="">Performance</div>
+  </div>
+
+  <div class="abs main">
+    <div class="headline">
+      <div class="ttl"><img src="assets/title.svg" alt=""><p>Comparison</p></div>
+      <div class="counter">
+        <div class="remain"><p class="lab">Remain:</p><div class="num"><span id="n0">25</span><span class="next" id="n1">24</span></div></div>
+        <div class="date">Date added<img src="assets/north.svg" alt=""></div>
+      </div>
+    </div>
+    <div class="block">
+      <div class="pairs">
+        <!-- 238:8646: the copy's preview couldn't be loaded -->
+        <div class="pair" id="pairA">
+          <div class="imgs">
+            <div class="card"><img src="assets/bbq.png" alt=""></div>
+            <div class="card empty"><div class="na"><img src="assets/noimg.svg" alt=""><p class="h6">Preview unavailable</p><p class="b2">Please use the link below<br>to see the leaked image</p></div></div>
+          </div>
+          <div class="bars">
+            <div class="bar user-id"><p>@u377260716</p><img src="assets/copy-blue.svg" alt=""></div>
+            <div class="bar link"><p>https://www.facebook.com/business/help/414486845999907</p><div class="ics"><img src="assets/copy.svg" alt=""><img src="assets/ext.svg" alt=""></div></div>
+          </div>
+        </div>
+        <!-- 238:8686: the next pair, both images -->
+        <div class="pair" id="pairB">
+          <div class="imgs">
+            <div class="card"><img src="assets/bbq.png" alt=""></div>
+            <div class="card"><img src="assets/bbq.png" alt=""></div>
+          </div>
+          <div class="bars">
+            <div class="bar user-id"><p>@u377260716</p><img src="assets/copy-blue.svg" alt=""></div>
+            <div class="bar link"><p>https://www.facebook.com/business/help/414486845999907</p><div class="ics"><img src="assets/copy.svg" alt=""><img src="assets/ext.svg" alt=""></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="btns">
+        <div><div class="btn red"><img src="assets/x.svg" alt=""><p>pictures do not match</p></div></div>
+        <div><div class="btn text" id="skip"><i class="hov" id="skipHov"></i><i class="rip" id="skipRip"></i><p>skip for now</p></div></div>
+        <div><div class="btn blue" id="match"><i class="hov" id="matchHov"></i><i class="rip" id="matchRip"></i><img src="assets/check.svg" alt=""><p>pictures match</p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="abs cursor" id="cursor"><img src="../../_lib/cursor-hand.png" alt=""></div>
+</div>
+
+<script src="../../_lib/motion.js"></script>
+<script src="../../_lib/player.js"></script>
+<script>
+// Story: the copy's preview is unavailable → Skip for now: the next pair slides in, Remain 25 → 24 →
+// both images side by side, the cursor rests on Pictures Match and clicks → that pair slides out the same way and
+// the first one comes back, Remain rolls to 25 again.
+const T = {
+  skip: 2.2,     // click Skip for now
+  swap: 2.35,    // the pair slides out, the next one in
+  match: 5.6,    // click Pictures Match
+  swap2: 5.75,   // the matched pair slides out, the first one in
+  end: 8.2,
+};
+const CLICKS = [T.skip, T.match];
+const START = [1190, 990];
+const $ = (id) => document.getElementById(id);
+
+// Targets and hover boxes in stage pixels, from layout offsets (they ignore transforms).
+const rectOf = (el) => {
+  const w = el.offsetWidth, h = el.offsetHeight; let x = 0, y = 0;
+  for (; el && el !== $('stage'); el = el.offsetParent) { x += el.offsetLeft; y += el.offsetTop; }
+  return [x, y, w, h];
+};
+const R = { skip: rectOf($('skip')), match: rectOf($('match')) };
+const at = ([x, y, w, h], dx = 0, dy = 0) => [x + w / 2 + dx, y + h / 2 + dy];
+const cursorAt = cursorPath(START, [
+  [.5, 1.9, ...at(R.skip, 6, 6)],
+  [T.swap + 1.1, T.match - .5, ...at(R.match, 30, 6)],
+  [T.swap2 + .6, T.end - .2, ...START],
+]);
+// Hover follows the cursor: the share of the last 0.14 s it spent inside the box.
+const hoverOf = (r, t) => {
+  let n = 0;
+  for (let i = 0; i < 5; i++) {
+    const [x, y] = cursorAt(t - .035 * i);
+    if (x >= r[0] && x <= r[0] + r[2] && y >= r[1] && y <= r[1] + r[3]) n++;
+  }
+  return n / 5;
+};
+
+// A swap: the shown pair slides out left and fades, then the next one comes in from the right.
+// One after the other: two half-transparent pairs on top of each other read as a mess.
+const slide = (el, k) => { el.style.opacity = k.op; el.style.transform = `translateX(${k.x}px)`; };
+const leaving = (t, at) => { const k = io(p(t, at, at + .35)); return { op: 1 - k, x: -40 * k }; };
+const coming = (t, at) => { const k = outC(p(t, at + .35, at + .9)); return { op: k, x: 60 * (1 - k) }; };
+
+// Press: the ripple grows from where the cursor clicked and fades.
+function ripple(el, r, t, at) {
+  const k = p(t, at, at + .5), [x, y] = cursorAt(at), d = 2 * Math.hypot(r[2], r[3]);
+  el.style.transform = `translate(${x - r[0]}px, ${y - r[1]}px) scale(${outC(k) * d / 2})`;
+  el.style.opacity = t < at ? 0 : 1 - io(k);
+}
+
+function render(t) {
+  // Skip: pair A out, pair B in. Pictures Match: pair B out the same way, pair A in, and the loop starts over.
+  if (t < T.swap2) { slide($('pairA'), leaving(t, T.swap)); slide($('pairB'), coming(t, T.swap)); }
+  else { slide($('pairB'), leaving(t, T.swap2)); slide($('pairA'), coming(t, T.swap2)); }
+
+  // Remain: the old number rolls up and out, the new one up from below: 25 → 24, then back to 25 for the loop.
+  const first = t < T.swap2, at = first ? T.swap : T.swap2;
+  const roll = io(p(t, at + .1, at + .5));
+  $('n0').textContent = first ? '25' : '24';
+  $('n1').textContent = first ? '24' : '25';
+  $('n0').style.transform = `translateY(${-29 * roll}px)`;
+  $('n0').style.opacity = 1 - roll;
+  $('n1').style.transform = `translateY(${29 * (1 - roll)}px)`;
+  $('n1').style.opacity = roll;
+
+  $('skipHov').style.opacity = hoverOf(R.skip, t);
+  $('matchHov').style.opacity = hoverOf(R.match, t);
+  $('skip').style.transform = `scale(${1 - .03 * bump(t, T.skip, .2)})`;
+  $('match').style.transform = `scale(${1 - .03 * bump(t, T.match, .2)})`;
+  ripple($('skipRip'), R.skip, t, T.skip);
+  ripple($('matchRip'), R.match, t, T.match);
+
+  const [x, y] = cursorAt(t);
+  const press = Math.max(...CLICKS.map((c) => bump(t, c, .18)));
+  $('cursor').style.transform = `translate(${x - 6}px, ${y - 1}px) scale(${1 - .14 * press})`;
+}
+
+// ?figma lays out the first frame for D, ?figma=2 the second (no cursor, no hover).
+const FIGMA = new URLSearchParams(location.search).get('figma');
+const figmaRender = () => {
+  render(FIGMA === '2' ? T.swap + 1.2 : 0);
+  $('cursor').style.opacity = 0;
+  $('skipHov').style.opacity = $('matchHov').style.opacity = 0;
+};
+MotionPlayer.mount({
+  stage: $('stage'), width: 1440, height: 1024, duration: T.end, render: FIGMA !== null ? figmaRender : render,
+  markers: [['skip', T.skip], ['match', T.match]],
+  refs: [['Preview unavailable (238:8646)', 'src/1-unavailable.png'], ['Both images (238:8686)', 'src/2-match.png']],
+  poster: 0,
+});
+</script>
+</body>
+</html>

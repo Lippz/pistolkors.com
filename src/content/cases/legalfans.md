@@ -159,15 +159,16 @@ Every item in the vault is matched against copies across the web. Emma can also 
 
 Fully automatic matching produced false positives, and a wrong takedown damages trust and creates legal risk. We added operator validation between detection and legal action, so every case a lawyer receives has already been checked by a person.
 
-<div class="carousel">
+<figure class="case-motion" data-lightbox-group>
+<video src="../../motion/legalfans-compare.mp4" poster="../../motion/legalfans-compare.jpg" width="1440" height="1024" muted loop playsinline preload="metadata" aria-label="On the Comparison screen, with 25 pairs remaining, the suspected copy's preview is unavailable, so the operator clicks Skip for now; the next pair slides in with the original and the copy side by side, 24 remaining, and the operator clicks Pictures match" data-label="On the Comparison screen, with 25 pairs remaining, the suspected copy's preview is unavailable, so the operator clicks Skip for now; the next pair slides in with the original and the copy side by side, 24 remaining, and the operator clicks Pictures match"></video>
+<figcaption class="eyebrow">Comparison view — the operator checks the original against the suspected copy before a case goes to a lawyer</figcaption>
+</figure>
 
-![Comparison screen where the preview of the suspected copy is unavailable and the operator is asked to use the link](../../assets/cases/legalfans/cmp-unavailable.webp "Preview unavailable")
+## Takedown
 
-![Comparison screen with the original and the suspected copy side by side, and the Pictures match or do not match buttons](../../assets/cases/legalfans/cmp-match.webp "Both images side by side")
+### Validated cases go legal
 
-</div>
-
-*Comparison view — the operator checks the original against the suspected copy before a case goes to a lawyer.*
+Only confirmed leaks reach the legal team. From there each one moves through the same statuses, Found, Requested, Pending and Completed or Canceled, so the team sees where every takedown stands and filters the list down to the stage that needs work. Copies the scan missed don't wait for the next one: the team adds them by hand, one link at a time or as a CSV or XLS file with an agency's whole list.
 
 <div class="carousel">
 
@@ -177,13 +178,9 @@ Fully automatic matching produced false positives, and a wrong takedown damages 
 
 </div>
 
-*Leaks — every detected copy in one list, with manual entry for anything the AI missed.*
+*Leaks — every takedown in one list by status, with manual entry for copies the AI missed.*
 
-## Takedown
-
-### Validated cases go legal
-
-Only confirmed leaks reach the lawyers, together with the paperwork behind them. Emma never has to file anything herself.
+The paperwork behind each takedown is kept with the creator it belongs to. Emma never has to file anything herself.
 
 <div class="carousel">
 

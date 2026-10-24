@@ -89,6 +89,11 @@ show the same thing.
   detailed flow, which grows out of them connector by connector; then the high-level flow draws itself again (last frame = first).
   Nodes, texts and connector boxes come from Figma (`assets/data.js`, see `tools/README.md`); connector routes are rebuilt from
   their magnets. `tools/frames.mjs <dir> 4.5 …` saves stills, `tools/diff.py still ref out` diffs one against a Figma frame.
+- `compare/`: the operator's Comparison, 1440×1024 (KK 238:8646 preview unavailable, 238:8686 both images). The copy's
+  preview is unavailable → Skip for now: the pair slides out, the next one in, Remain rolls 25 → 24 → the cursor rests on
+  Pictures Match and clicks (each press has a ripple from the click point) → the matched pair slides out the same way, the
+  first one comes back and Remain rolls to 25 again (last frame = first). The sort arrow stays ↓ (Figma's second frame has ↑).
+  Hover comes from the cursor. `?figma` and `?figma=2` lay out the two frames for D.
 
 ## Workflow
 
