@@ -35,7 +35,6 @@ stats:
     - value: 35+
       label: platforms monitored
 ---
-
 ## Problem
 
 ### Creators were fighting leaks by hand — and losing
@@ -94,13 +93,12 @@ Leaked content means lost income, stress and damage to a creator’s reputation.
 ### Her path through the product
 
 <ol class="flow">
-<li><span>01 · Creator</span>Signs in securely</li>
-<li><span>02 · Creator</span>Links OnlyFans account</li>
-<li><span>03 · Creator</span>Installs the extension</li>
-<li><span>04 · AI</span>Scans the web for copies</li>
-<li class="is-accent"><span>05 · Operator</span>Validates each match</li>
-<li class="is-accent"><span>06 · Lawyer</span>Sends the takedown</li>
-<li><span>07 · Result</span>Leak is removed</li>
+<li><span>Creator</span>Connects her accounts</li>
+<li><span>Creator</span>Adds her originals</li>
+<li><span>AI</span>Scans the web for copies</li>
+<li class="is-accent"><span>Operator</span>Validates each match</li>
+<li class="is-accent"><span>Lawyer</span>Sends the takedown</li>
+<li><span>Creator</span>Sees the leak removed</li>
 </ol>
 
 ### From the first flow to the detailed one
@@ -110,11 +108,54 @@ Leaked content means lost income, stress and damage to a creator’s reputation.
 <figcaption class="eyebrow">From a first flow and its wireframes to the detailed flow</figcaption>
 </figure>
 
-## Key decisions
+The rest of this case follows Emma through these six steps.
 
-### Three calls that shaped the product
+## Setup
 
-#### AI finds, a human confirms
+### Guided setup for non-technical users
+
+Connecting an account and installing an extension are where people give up. The extension walks creators through it step by step — connect, synchronise, done — and always shows how far along they are.
+
+<figure class="case-motion" data-lightbox-group>
+<video src="../../motion/legalfans-setup.mp4" poster="../../motion/legalfans-setup.jpg" width="1350" height="920" muted loop playsinline preload="metadata" aria-label="The extension welcomes the creator and offers to connect an OnlyFans account or sign up; after Connect it shows the last synchronisation, Monday 12 June, 2025, and Start Scan Now turns the button into a progress bar that runs to 100% while the circles above pulse and a note asks not to close OnlyFans; then a check draws itself, Synchronisation Successful, and Close Extension" data-label="The extension welcomes the creator and offers to connect an OnlyFans account or sign up; after Connect it shows the last synchronisation, Monday 12 June, 2025, and Start Scan Now turns the button into a progress bar that runs to 100% while the circles above pulse and a note asks not to close OnlyFans; then a check draws itself, Synchronisation Successful, and Close Extension"></video>
+<figcaption class="eyebrow">Connect, synchronise, done</figcaption>
+</figure>
+
+On My Platforms she lists every other place she publishes, so the team knows where to look.
+
+<figure class="case-motion" data-lightbox-group>
+<video src="../../motion/legalfans-platforms.mp4" poster="../../motion/legalfans-platforms.jpg" width="1440" height="1024" muted loop playsinline preload="metadata" aria-label="On My Platforms, a creator with no platforms yet has picked Fansly and a username; turning on log-in information opens email and password fields, and after Submit and validate the empty-state illustration gives way to the table: Fansly is added, then Onlyfans, LoyalFans and Friends2Follow join it one by one" data-label="On My Platforms, a creator with no platforms yet has picked Fansly and a username; turning on log-in information opens email and password fields, and after Submit and validate the empty-state illustration gives way to the table: Fansly is added, then Onlyfans, LoyalFans and Friends2Follow join it one by one"></video>
+</figure>
+
+*My Platforms — cam sites and socials the team monitors on the creator’s behalf.*
+
+## Her content
+
+### One vault for everything worth protecting
+
+Detection needs originals to compare against. Whatever the extension syncs, and anything Emma uploads by hand, lands in the Magic Vault, and each item shows whether it has been scanned and how many leaks it has.
+
+<figure class="case-motion" data-lightbox-group>
+<video src="../../motion/legalfans-vault.mp4" poster="../../motion/legalfans-vault.jpg" width="1440" height="1024" muted loop playsinline preload="metadata" aria-label="In the Magic Vault grid of thumbnails, filters and a media counter, the cursor rests on an item waiting for a scan, then opens a kitten photo: item ID-587945, manually uploaded and scanned, 16 leaks, with the platforms, claim IDs and statuses Resolved, Found and Cancelled; the dialog closes back to the grid" data-label="In the Magic Vault grid of thumbnails, filters and a media counter, the cursor rests on an item waiting for a scan, then opens a kitten photo: item ID-587945, manually uploaded and scanned, 16 leaks, with the platforms, claim IDs and statuses Resolved, Found and Cancelled; the dialog closes back to the grid"></video>
+</figure>
+
+*Magic Vault — where creators add and manage all their content.*
+
+## Detection
+
+### AI scans, keyword search fills the gaps
+
+Every item in the vault is matched against copies across the web. Emma can also search by keyword herself; each hit becomes a leak with its own page and status.
+
+<figure class="case-motion" data-lightbox-group>
+<video src="../../motion/legalfans-leaks.mp4" poster="../../motion/legalfans-leaks.jpg" width="1440" height="1024" muted loop playsinline preload="metadata" aria-label="On Keyword Search, the query Jessica Sparkle + Onlyfans + xxx photo leak is searched across Google, Yahoo and Bing; while the progress runs, the hint points to the Leaks Tab, which opens leak JP-0001-DR: the preview found on reddit.com, its link, and the other leaks of the same image with statuses from Requested to Completed; Keyword Search in the menu brings back the search" data-label="On Keyword Search, the query Jessica Sparkle + Onlyfans + xxx photo leak is searched across Google, Yahoo and Bing; while the progress runs, the hint points to the Leaks Tab, which opens leak JP-0001-DR: the preview found on reddit.com, its link, and the other leaks of the same image with statuses from Requested to Completed; Keyword Search in the menu brings back the search"></video>
+</figure>
+
+*Keyword search and leaks — search by keyword, then one leak in detail.*
+
+## Validation
+
+### AI finds, a human confirms
 
 Fully automatic matching produced false positives, and a wrong takedown damages trust and creates legal risk. We added operator validation between detection and legal action, so every case a lawyer receives has already been checked by a person.
 
@@ -128,54 +169,6 @@ Fully automatic matching produced false positives, and a wrong takedown damages 
 
 *Comparison view — the operator checks the original against the suspected copy before a case goes to a lawyer.*
 
-#### A dashboard that answers one question: am I protected?
-
-Creators don’t want to manage cases; they want to know they’re covered. The statistics view leads with leaks detected and removed, and keeps the legal detail one level down. Even the empty state explains what will appear there.
-
-<figure class="case-motion" data-lightbox-group>
-<video src="../../motion/legalfans-stats.mp4" poster="../../motion/legalfans-stats.jpg" width="1440" height="1024" muted loop playsinline preload="metadata" aria-label="A creator with no data yet sees the empty statistics view, which suggests adding media to the Magic Vault or installing the extension; switching to all creators fills the dashboard: leaks detected and removed, removal percentage, top creator position, total media, the current leaks donut and upload dynamics, and the red slice shows 19 leaks found" data-label="A creator with no data yet sees the empty statistics view, which suggests adding media to the Magic Vault or installing the extension; switching to all creators fills the dashboard: leaks detected and removed, removal percentage, top creator position, total media, the current leaks donut and upload dynamics, and the red slice shows 19 leaks found"></video>
-<figcaption class="eyebrow">From the empty state to the dashboard with data</figcaption>
-</figure>
-
-#### Guided setup for non-technical users
-
-Connecting an account and installing an extension are where people give up. The extension walks creators through it step by step — connect, synchronise, done — and always shows how far along they are.
-
-<figure class="case-motion" data-lightbox-group>
-<video src="../../motion/legalfans-setup.mp4" poster="../../motion/legalfans-setup.jpg" width="1350" height="920" muted loop playsinline preload="metadata" aria-label="The extension welcomes the creator and offers to connect an OnlyFans account or sign up; after Connect it shows the last synchronisation, Monday 12 June, 2025, and Start Scan Now turns the button into a progress bar that runs to 100% while the circles above pulse and a note asks not to close OnlyFans; then a check draws itself, Synchronisation Successful, and Close Extension" data-label="The extension welcomes the creator and offers to connect an OnlyFans account or sign up; after Connect it shows the last synchronisation, Monday 12 June, 2025, and Start Scan Now turns the button into a progress bar that runs to 100% while the circles above pulse and a note asks not to close OnlyFans; then a check draws itself, Synchronisation Successful, and Close Extension"></video>
-<figcaption class="eyebrow">Connect, synchronise, done</figcaption>
-</figure>
-
-## Final screens
-
-### The creator view
-
-<figure class="case-motion" data-lightbox-group>
-<video src="../../motion/legalfans-vault.mp4" poster="../../motion/legalfans-vault.jpg" width="1440" height="1024" muted loop playsinline preload="metadata" aria-label="In the Magic Vault grid of thumbnails, filters and a media counter, the cursor rests on an item waiting for a scan, then opens a kitten photo: item ID-587945, manually uploaded and scanned, 16 leaks, with the platforms, claim IDs and statuses Resolved, Found and Cancelled; the dialog closes back to the grid" data-label="In the Magic Vault grid of thumbnails, filters and a media counter, the cursor rests on an item waiting for a scan, then opens a kitten photo: item ID-587945, manually uploaded and scanned, 16 leaks, with the platforms, claim IDs and statuses Resolved, Found and Cancelled; the dialog closes back to the grid"></video>
-</figure>
-
-*Magic Vault — where creators add and manage all their content.*
-
-<figure class="case-motion" data-lightbox-group>
-<video src="../../motion/legalfans-leaks.mp4" poster="../../motion/legalfans-leaks.jpg" width="1440" height="1024" muted loop playsinline preload="metadata" aria-label="On Keyword Search, the query Jessica Sparkle + Onlyfans + xxx photo leak is searched across Google, Yahoo and Bing; while the progress runs, the hint points to the Leaks Tab, which opens leak JP-0001-DR: the preview found on reddit.com, its link, and the other leaks of the same image with statuses from Requested to Completed; Keyword Search in the menu brings back the search" data-label="On Keyword Search, the query Jessica Sparkle + Onlyfans + xxx photo leak is searched across Google, Yahoo and Bing; while the progress runs, the hint points to the Leaks Tab, which opens leak JP-0001-DR: the preview found on reddit.com, its link, and the other leaks of the same image with statuses from Requested to Completed; Keyword Search in the menu brings back the search"></video>
-</figure>
-
-*Keyword search and leaks — search by keyword, then one leak in detail.*
-
-<figure class="case-motion" data-lightbox-group>
-<video src="../../motion/legalfans-platforms.mp4" poster="../../motion/legalfans-platforms.jpg" width="1440" height="1024" muted loop playsinline preload="metadata" aria-label="On My Platforms, a creator with no platforms yet has picked Fansly and a username; turning on log-in information opens email and password fields, and after Submit and validate the empty-state illustration gives way to the table: Fansly is added, then Onlyfans, LoyalFans and Friends2Follow join it one by one" data-label="On My Platforms, a creator with no platforms yet has picked Fansly and a username; turning on log-in information opens email and password fields, and after Submit and validate the empty-state illustration gives way to the table: Fansly is added, then Onlyfans, LoyalFans and Friends2Follow join it one by one"></video>
-</figure>
-
-*My Platforms — cam sites and socials the team monitors on the creator’s behalf.*
-
-<figure class="case-motion" data-lightbox-group>
-<video src="../../motion/legalfans-account.mp4" poster="../../motion/legalfans-account.jpg" width="1440" height="1024" muted loop playsinline preload="metadata" aria-label="On My Account, a creator on the Basic Plan with the next charge on 02.12.2025 clicks Upgrade; the subscription plans open, Basic, Advanced and Premium at $69, $129 and $149 a license, the cursor rests on Premium's Choose plan, and Cancel closes the plans back to the account" data-label="On My Account, a creator on the Basic Plan with the next charge on 02.12.2025 clicks Upgrade; the subscription plans open, Basic, Advanced and Premium at $69, $129 and $149 a license, the cursor rests on Premium's Choose plan, and Cancel closes the plans back to the account"></video>
-</figure>
-
-*My Account — profile and subscription upgrade.*
-
-### The admin panel
-
 <div class="carousel">
 
 ![Admin leaks list filtered by status](../../assets/cases/legalfans/ap-leaks.webp "Leaks list")
@@ -186,6 +179,12 @@ Connecting an account and installing an extension are where people give up. The 
 
 *Leaks — every detected copy in one list, with manual entry for anything the AI missed.*
 
+## Takedown
+
+### Validated cases go legal
+
+Only confirmed leaks reach the lawyers, together with the paperwork behind them. Emma never has to file anything herself.
+
 <div class="carousel">
 
 ![Admin documents list with download and delete actions](../../assets/cases/legalfans/ap-documents.webp "Documents list")
@@ -195,6 +194,25 @@ Connecting an account and installing an extension are where people give up. The 
 </div>
 
 *Documents — the legal paperwork behind each takedown.*
+
+## Result
+
+### A dashboard that answers one question: am I protected?
+
+Creators don’t want to manage cases; they want to know they’re covered. The statistics view leads with leaks detected and removed, and keeps the legal detail one level down. Even the empty state explains what will appear there.
+
+<figure class="case-motion" data-lightbox-group>
+<video src="../../motion/legalfans-stats.mp4" poster="../../motion/legalfans-stats.jpg" width="1440" height="1024" muted loop playsinline preload="metadata" aria-label="A creator with no data yet sees the empty statistics view, which suggests adding media to the Magic Vault or installing the extension; switching to all creators fills the dashboard: leaks detected and removed, removal percentage, top creator position, total media, the current leaks donut and upload dynamics, and the red slice shows 19 leaks found" data-label="A creator with no data yet sees the empty statistics view, which suggests adding media to the Magic Vault or installing the extension; switching to all creators fills the dashboard: leaks detected and removed, removal percentage, top creator position, total media, the current leaks donut and upload dynamics, and the red slice shows 19 leaks found"></video>
+<figcaption class="eyebrow">From the empty state to the dashboard with data</figcaption>
+</figure>
+
+Everything else, like her profile and subscription, stays out of the way in My Account.
+
+<figure class="case-motion" data-lightbox-group>
+<video src="../../motion/legalfans-account.mp4" poster="../../motion/legalfans-account.jpg" width="1440" height="1024" muted loop playsinline preload="metadata" aria-label="On My Account, a creator on the Basic Plan with the next charge on 02.12.2025 clicks Upgrade; the subscription plans open, Basic, Advanced and Premium at $69, $129 and $149 a license, the cursor rests on Premium's Choose plan, and Cancel closes the plans back to the account" data-label="On My Account, a creator on the Basic Plan with the next charge on 02.12.2025 clicks Upgrade; the subscription plans open, Basic, Advanced and Premium at $69, $129 and $149 a license, the cursor rests on Premium's Choose plan, and Cancel closes the plans back to the account"></video>
+</figure>
+
+*My Account — profile and subscription upgrade.*
 
 ## Lessons
 
