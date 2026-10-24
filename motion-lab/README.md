@@ -83,6 +83,12 @@ show the same thing.
   Start Scan Now in the same place → the button becomes the track and runs 0 → 100 % (75 % sits at Figma's 445 px; the label is centred on the track, Figma has it 40 px right); the
   spinner is eight SVG circles that stay in place, evenly spaced, and swell and shrink as the size pattern walks clockwise (the
   gradient turns with it; the largest is always just before the smallest; phase 0 is Figma's image) → the check (KK 222:27293): the disc swells in, the tick draws itself → Close Extension, and the popup opens on Welcome again. `?figma=1…4` freezes the frames for D.
+- `flow/`: user flow research, 1440×1024 (KK, page LF, frames "1"…"6", 232:4117 → 233:4206). The high-level flow lights
+  Statistics, which opens into its screen; Statistics, My Account, Magic Vault and Leak are sketched in pencil and shaded in one
+  after another; the Leak screen shrinks back into Leaks, the four researched steps light up and move to their places in the
+  detailed flow, which grows out of them connector by connector; then the high-level flow draws itself again (last frame = first).
+  Nodes, texts and connector boxes come from Figma (`assets/data.js`, see `tools/README.md`); connector routes are rebuilt from
+  their magnets. `tools/frames.mjs <dir> 4.5 …` saves stills, `tools/diff.py still ref out` diffs one against a Figma frame.
 
 ## Workflow
 

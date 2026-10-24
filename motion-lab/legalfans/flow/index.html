@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LegalFans user flow — motion draft</title>
+<link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400&display=block" rel="stylesheet">
+<link rel="stylesheet" href="../../_lib/player.css">
+<style>
+  /* Stage is the Figma frame (KK, page LF, frames "1"…"6", 232:4117 → 233:4206); numbers are Figma px. */
+  * { box-sizing: border-box; }
+  .stage { background: #eee; font-family: Arimo, Arial, sans-serif; -webkit-font-smoothing: antialiased; overflow: hidden; }
+  #flow, #wf, .layer { position: absolute; left: 0; top: 0; width: 1440px; height: 1024px; transform-origin: 0 0; }
+  .node { position: absolute; display: flex; align-items: center; justify-content: center; }
+  .node .lbl { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); text-align: center; line-height: normal; white-space: pre; }
+  .node svg { position: absolute; inset: 0; }
+  .txt { position: absolute; line-height: normal; white-space: pre; color: #424242; }
+  .edge, .arrow { fill: none; stroke: #424242; stroke-linecap: butt; stroke-linejoin: miter; }
+  .pencil { fill: none; stroke: #4a4a4a; stroke-linecap: round; stroke-linejoin: round; }
+  .pencil.a { stroke-width: 2.4; }
+  .pencil.b { stroke-width: 1.3; opacity: .55; }
+  .scribble { fill: none; stroke: #fff; stroke-width: 170; stroke-linecap: round; stroke-linejoin: round; }
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div id="flow">
+    <svg class="layer" id="under" width="1440" height="1024"></svg>
+    <div class="layer" id="nodes"></div>
+    <svg class="layer" id="edges" width="1440" height="1024"><defs id="edefs"></defs></svg>
+    <div class="layer" id="texts"></div>
+  </div>
+  <svg id="wf" width="1440" height="1024" viewBox="0 0 1440 1024">
+    <defs id="defs"><clipPath id="portalClip"><rect id="clipRect" x="0" y="0" width="1440" height="1024"/></clipPath></defs>
+    <rect id="portal" fill="#eee" stroke="#424242" stroke-width="2"/>
+    <text id="portalLabel" text-anchor="middle" dominant-baseline="central" font-size="18" fill="#fff"></text>
+    <g id="wfs"></g>
+  </svg>
+</div>
+
+<script src="../../_lib/motion.js"></script>
+<script src="../../_lib/player.js"></script>
+<script src="assets/data.js"></script>
+<script>
+const SLOW = 1; // stretch every beat at once
+const NS = 'http://www.w3.org/2000/svg';
+const $ = (id) => document.getElementById(id);
+const make = (tag, attrs = {}, parent) => {
+  const n = document.createElementNS(NS, tag);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(n);
+  return n;
+};
+const div = (cls, parent, text) => { const d = document.createElement('div'); d.className = cls; if (text !== undefined) d.textContent = text; parent.appendChild(d); return d; };
+
+// ---------- Beats ----------
+const WF = 3.8 * SLOW;           // one wireframe: sketch, fill, hold, leave
+const SK = { sketchDur: 1.05 * SLOW, fill: .75 * SLOW, fillDur: 1.0 * SLOW, clear: 1.6 * SLOW, clearDur: .5 * SLOW, out: WF - .55 * SLOW, outDur: .75 * SLOW };
+const T = {
+  lit: 1.3 * SLOW,               // frame 1 holds, then Statistics lights up
+  dive: 1.75 * SLOW,             // …and opens into its screen
+  diveEnd: 2.65 * SLOW,
+};
+T.wf = T.diveEnd - .15 * SLOW;   // Statistics, My Account, Magic Vault, Leak
+T.exit = T.wf + 3 * WF + SK.out; // the Leak screen shrinks back into Leaks
+T.exitEnd = T.exit + .95 * SLOW;
+T.visited = T.exitEnd - .1 * SLOW; // the four researched steps light up
+T.morph = T.exitEnd + .75 * SLOW;  // frame 1 rearranges into frame 6
+T.morphEnd = T.morph + 1.3 * SLOW;
+T.grow = T.morphEnd - .25 * SLOW;  // frame 6 grows out of the steps that moved
+// T.grown, T.fade, T.rb (frame 1 rebuilt) and T.end are set once the growth is scheduled
+
+// ---------- Geometry ----------
+const geo = (list) => Object.fromEntries(list.map(([name, kind, x, y, w, h, fs, label]) => [name, { name, kind, x, y, w, h, fs, label }]));
+const N1 = geo(F1.nodes), N6 = geo(F6.nodes);
+// frame 1 step → the same step in frame 6
+const PAIRS = [['c:login', 'c:login-screen'], ['c:stats', 'c:stats'], ['c:sources', 'c:sources'], ['c:account', 'c:account'], ['c:vault', 'c:vault'], ['c:leaks', 'c:leaks'],
+  ['o:review', 'o:review'], ['o:confirm', 'o:confirm'], ['a:login', 'a:login'], ['a:stats', 'a:stats'], ['a:leaks', 'a:leaks'], ['a:users', 'a:users'], ['a:violators', 'a:violators']];
+const TO6 = Object.fromEntries(PAIRS);
+const VISITED = ['c:leaks', 'c:stats', 'c:account', 'c:vault']; // in the order they light up on the way back
+const EXT1 = N1['c:ext'], EXT6 = F6.rects.find((r) => r[0] === 'ext-group');
+
+// Connector centerline from its box and magnets (Figma routes elbows through the midpoint)
+function route([, , sm, em, x, y, w, h], a, b) {
+  const mag = (n, m) => m === 'R' ? [n.x + n.w, n.y + n.h / 2] : m === 'L' ? [n.x, n.y + n.h / 2] : m === 'T' ? [n.x + n.w / 2, n.y] : [n.x + n.w / 2, n.y + n.h];
+  const corners = [[x, y], [x + w, y], [x, y + h], [x + w, y + h]];
+  const near = ([px, py]) => corners.reduce((best, c) => (Math.hypot(c[0] - px, c[1] - py) < Math.hypot(best[0] - px, best[1] - py) ? c : best));
+  const s = near(mag(a, sm)), e = near(mag(b, em));
+  const hs = sm === 'L' || sm === 'R', he = em === 'L' || em === 'R';
+  if (hs && he) return Math.abs(s[1] - e[1]) < .5 ? [s, e] : [s, [(s[0] + e[0]) / 2, s[1]], [(s[0] + e[0]) / 2, e[1]], e];
+  if (!hs && !he) return Math.abs(s[0] - e[0]) < .5 ? [s, e] : [s, [s[0], (s[1] + e[1]) / 2], [e[0], (s[1] + e[1]) / 2], e];
+  return hs ? [s, [e[0], s[1]], e] : [s, [s[0], e[1]], e];
+}
+// Polyline with circular corners
+function rounded(pts, r) {
+  let d = `M${pts[0][0]} ${pts[0][1]}`;
+  for (let i = 1; i < pts.length - 1; i++) {
+    const [px, py] = pts[i - 1], [cx, cy] = pts[i], [nx, ny] = pts[i + 1];
+    const lin = Math.hypot(cx - px, cy - py), lout = Math.hypot(nx - cx, ny - cy);
+    const rr = Math.min(r, lin * (i === 1 ? 1 : .5), lout * (i === pts.length - 2 ? 1 : .5));
+    const ax = cx - (cx - px) / lin * rr, ay = cy - (cy - py) / lin * rr, bx = cx + (nx - cx) / lout * rr, by = cy + (ny - cy) / lout * rr;
+    const k = .5523 * rr;
+    d += ` L${ax} ${ay} C${ax + (cx - px) / lin * k} ${ay + (cy - py) / lin * k} ${bx - (nx - cx) / lout * k} ${by - (ny - cy) / lout * k} ${bx} ${by}`;
+  }
+  const [lx, ly] = pts[pts.length - 1];
+  return d + ` L${lx} ${ly}`;
+}
+
+let maskN = 0;
+function buildEdges(F, N, radius) {
+  return F.conns.map((c) => {
+    const [s, e, , , , , , , dashed, sw] = c;
+    const pts = route(c, N[s], N[e]);
+    const g = make('g', {}, $('edges'));
+    const d = rounded(pts, radius);
+    const path = make('path', { class: 'edge', d, pathLength: 1, 'stroke-width': sw }, g);
+    const len = path.getTotalLength();
+    const [tx, ty] = pts[pts.length - 1], [bx, by] = pts[pts.length - 2];
+    const a = Math.atan2(ty - by, tx - bx), arm = 4.5 * sw;
+    const pt = (k) => `${tx + arm * Math.cos(a + k * Math.PI * .75)} ${ty + arm * Math.sin(a + k * Math.PI * .75)}`;
+    const arrow = make('path', { class: 'arrow', d: `M${pt(1)} L${tx} ${ty} L${pt(-1)}`, 'stroke-width': sw }, g);
+    let reveal = null;
+    if (dashed) {
+      // dashes can't use the dash-offset draw, so a solid twin in a mask draws them on
+      const m = make('mask', { id: 'em' + ++maskN, maskUnits: 'userSpaceOnUse', x: 0, y: 0, width: 1440, height: 1024 }, $('edefs'));
+      reveal = make('path', { d, pathLength: 1, fill: 'none', stroke: '#fff', 'stroke-width': 8 }, m);
+      path.setAttribute('pathLength', '');
+      path.removeAttribute('pathLength');
+      path.style.strokeDasharray = '5 4';
+      path.setAttribute('mask', `url(#em${maskN})`);
+    }
+    return { s, e, g, path, arrow, reveal, len, id: s + '>' + e };
+  });
+}
+const E1 = buildEdges(F1, N1, 12), E6 = buildEdges(F6, N6, 8);
+
+// ---------- Growth: when each node pops, spreading along the connectors ----------
+const GAP = .1 * SLOW, POP = .4 * SLOW;
+const edgeDur = (e) => clamp(e.len / 650, .32, .75) * SLOW;
+function grow(edges, seeds, start) {
+  const appear = {}, edgeAt = {};
+  seeds.forEach((id) => (appear[id] = start));
+  for (;;) {
+    let best = null;
+    for (const e of edges) {
+      const sIn = e.s in appear, eIn = e.e in appear;
+      if (sIn === eIn) continue;
+      // a node reached against an arrow waits about as long as one reached along it, so the wave stays even
+      const at = sIn ? appear[e.s] + GAP + edgeDur(e) : appear[e.e] + GAP + edgeDur(e) * .8 + .1 * SLOW;
+      if (!best || at < best.at) best = { e, at, node: sIn ? e.e : e.s };
+    }
+    if (!best) break;
+    appear[best.node] = best.at;
+  }
+  for (const e of edges) {
+    const forward = appear[e.s] <= appear[e.e];
+    edgeAt[e.id] = forward && Math.abs(appear[e.e] - (appear[e.s] + GAP + edgeDur(e))) < 1e-6
+      ? appear[e.s] + GAP
+      : Math.max(appear[e.s], appear[e.e]) + GAP + (seeds.includes(e.s) && seeds.includes(e.e) ? 0 : POP * .5);
+  }
+  const end = Math.max(...edges.map((e) => edgeAt[e.id] + edgeDur(e)), ...Object.values(appear).map((a) => a + POP));
+  return { appear, edgeAt, end };
+}
+const G6 = grow(E6, PAIRS.map(([, b]) => b), T.grow);
+T.grown = G6.end;
+T.fade = T.grown + 3.2 * SLOW;
+T.rb = T.fade + .9 * SLOW;
+const G1 = grow(E1, ['c:login', 'a:login'], T.rb + .25 * SLOW);
+T.end = G1.end + .6 * SLOW;
+
+// ---------- Nodes ----------
+const DARK = [66, 66, 66], WHITE = [255, 255, 255], BLACK = [0, 0, 0];
+const rgb = (a, b, k) => `rgb(${a.map((v, i) => Math.round(mix(v, b[i], k))).join(',')})`;
+const look = (kind, f6) => ({
+  bg: kind === 'key' ? DARK : WHITE,
+  border: kind === 'box' ? (f6 ? 1.5 : 2) : 0,
+  radius: kind === 'key' ? (f6 ? 6 : 8) : 4,
+  fg: kind === 'key' ? WHITE : BLACK,
+  op: kind === 'key' ? 1 : .88,
+});
+function makeNode(n) {
+  const el = div('node', $('nodes'));
+  if (n.kind === 'diamond') {
+    const s = n.w;
+    el.innerHTML = `<svg width="${s}" height="${s}" viewBox="0 0 ${s} ${s}"><path d="M${s / 2} 1 L${s - 1} ${s / 2} L${s / 2} ${s - 1} L1 ${s / 2} Z" fill="#fff" stroke="#424242" stroke-width="1.5"/></svg>`;
+  }
+  return el;
+}
+const nodeEls = [];
+for (const [a, b] of PAIRS) {
+  const el = makeNode(N6[b]);
+  const l1 = div('lbl', el, N1[a].label), l6 = N1[a].label === N6[b].label ? null : div('lbl', el, N6[b].label);
+  nodeEls.push({ el, n1: N1[a], n6: N6[b], l1, l6, id1: a, id6: b });
+}
+for (const id in N6) {
+  if (Object.values(TO6).includes(id)) continue;
+  const n = N6[id], el = makeNode(n);
+  const l = div('lbl', el, n.label);
+  nodeEls.push({ el, n6: n, l6only: l, id6: id });
+}
+
+// Free texts, dashed groups and dividers
+const T1 = Object.fromEntries(F1.texts.map((t) => [t[0], t])), T6 = Object.fromEntries(F6.texts.filter((t) => t[0] !== 'legend').map((t) => [t[0], t]));
+const textEl = ([, x, y, fs, op, s]) => { const d = div('txt', $('texts'), s); Object.assign(d.style, { left: x + 'px', top: y + 'px', fontSize: fs + 'px' }); d.dataset.op = op; return d; };
+const texts = {
+  title: textEl(T1.title), sub1: textEl(T1.sub), sub6: textEl(T6.sub),
+  lanes: ['c', 'o', 'a'].map((k) => ({ el: textEl(T1['lane:' + k]), a: T1['lane:' + k], b: T6['lane:' + k] })),
+  lane2: ['c2', 'o2', 'a2'].map((k) => textEl(T1['lane:' + k])),
+  notes1: F1.texts.filter((t) => t[0].startsWith('note:')).map((t) => ({ el: textEl(t), edge: t[0].slice(5) })),
+  notes6: F6.texts.filter((t) => t[0].startsWith('note:') || t[0] === 'ext-label').map((t) => ({ el: textEl(t), key: t[0] })),
+  legend: F6.texts.filter((t) => t[0] === 'legend').map(textEl),
+};
+const extLabel1 = div('lbl', div('node', $('nodes')), EXT1.label);
+const extBox1 = extLabel1.parentNode;
+const extRect = make('rect', { fill: 'none', stroke: '#424242' }, $('under'));
+const dividers = [0, 1].map((i) => ({ el: make('rect', { fill: '#b5b5b5', height: 1, width: 1360, x: 40 }, $('under')), a: F1.rects[i][2], b: F6.rects[i + 1][2] }));
+
+// ---------- Wireframes ----------
+function rng(seed) { let s = seed * 9301 + 49297; return () => ((s = (s * 9301 + 49297) % 233280) / 233280); }
+function roughLine(x1, y1, x2, y2, r) {
+  const len = Math.hypot(x2 - x1, y2 - y1) || 1, ux = (x2 - x1) / len, uy = (y2 - y1) / len;
+  const o1 = Math.min(10, len * .05) * (r() - .15), o2 = Math.min(10, len * .05) * (r() - .15);
+  const ax = x1 - ux * o1, ay = y1 - uy * o1, bx = x2 + ux * o2, by = y2 + uy * o2;
+  const bend = (r() - .5) * Math.min(14, 2 + len * .009);
+  const mx = (ax + bx) / 2 - uy * bend, my = (ay + by) / 2 + ux * bend;
+  return `M${ax.toFixed(1)} ${ay.toFixed(1)} Q${mx.toFixed(1)} ${my.toFixed(1)} ${bx.toFixed(1)} ${by.toFixed(1)}`;
+}
+// A word or a line of text, written as a loose cursive scrawl
+function scrawl(x, y, w, h, r) {
+  let d = `M${x} ${y + h * .6}`;
+  const n = Math.max(3, Math.round(w / (h * .55)));
+  for (let i = 1; i <= n; i++) {
+    const px = x + (w * i) / n, up = i % 2 ? y + h * (.12 + r() * .15) : y + h * (.78 + r() * .12);
+    d += ` Q${(px - w / n / 2).toFixed(1)} ${up.toFixed(1)} ${px.toFixed(1)} ${(y + h * (.5 + (r() - .5) * .2)).toFixed(1)}`;
+  }
+  return d;
+}
+function sketchPaths([kind, x, y, w, h, ...rest], r) {
+  if (kind === 'r') {
+    if (x === 0 && y === 0 && w === 1440) return [roughLine(0, h, 1440, h, r)]; // the header: its bottom edge
+    return [roughLine(x, y, x + w, y, r), roughLine(x + w, y, x + w, y + h, r), roughLine(x + w, y + h, x, y + h, r), roughLine(x, y + h, x, y, r)];
+  }
+  if (kind === 'c') { const c = w / 2; return [`M${x + w} ${y + c} A${c} ${c} 0 1 1 ${x + w - .1} ${y + c - 2}`]; }
+  if (kind === 'w') {
+    const lines = h >= 60 ? 2 : 1, lh = h / lines;
+    return Array.from({ length: lines }, (_, i) => scrawl(x, y + i * lh + lh * .2, i === lines - 1 && lines > 1 ? w * .6 : w, Math.min(lh * .6, 30), r));
+  }
+  if (kind === 'v') {
+    const [d, a, c, b, dd] = rest;
+    const [, X1, Y1, X2, Y2] = d.match(/M ([-\d.]+) ([-\d.]+) L ([-\d.]+) ([-\d.]+)/).map(Number);
+    const tr = (X, Y) => [x + a * X + c * Y, y + b * X + dd * Y];
+    return [roughLine(...tr(X1, Y1), ...tr(X2, Y2), r)];
+  }
+  return [];
+}
+const WIRES = [['Statistics', 'stats'], ['My Account', 'account'], ['Magic Vault', 'vault'], ['Leak', 'leak']];
+const wfEls = WIRES.map(([name, key], i) => {
+  const outer = make('g', i === 3 ? { 'clip-path': 'url(#portalClip)' } : {}, $('wfs'));
+  const g = make('g', {}, outer);
+  const mask = make('mask', { id: 'reveal' + i, maskUnits: 'userSpaceOnUse', x: -200, y: -200, width: 1840, height: 1424 }, $('defs'));
+  make('rect', { x: -200, y: -200, width: 1840, height: 1424, fill: '#000' }, mask);
+  // zigzag scribble, top-left to bottom-right, like shading a page in with a marker
+  // the screen is full bleed, so the zigzag turns outside the stage and its edges never show
+  let d = 'M-40 -40', y = -40, left = false;
+  const r0 = rng(i + 40);
+  while (y < 1100) { y += 72; d += ` L${left ? -40 + r0() * 30 : 1480 - r0() * 30} ${y}`; left = !left; }
+  const scrib = make('path', { class: 'scribble', d, pathLength: 1 }, mask);
+  make('image', { href: `assets/wf-${key}.png`, x: 0, y: 0, width: 1440, height: 1024, mask: `url(#reveal${i})` }, g);
+  const sketch = make('g', {}, g);
+  const r = rng(i * 7 + 3);
+  const strokes = [];
+  for (const shape of WIRE_SHAPES[key]) for (const sd of sketchPaths(shape, r)) {
+    const pa = make('path', { class: 'pencil a', d: sd, pathLength: 1 }, sketch);
+    // second, lighter pass a hair off the first (arcs keep their flags)
+    const pb = make('path', { class: 'pencil b', d: sd.includes('A') ? sd : sd.replace(/-?\d+\.?\d*/g, (v) => (+v + (r() - .5) * 5).toFixed(1)), pathLength: 1 }, sketch);
+    strokes.push({ pa, pb, len: pa.getTotalLength() });
+  }
+  // each stroke gets a share of the sketch time by its length; they overlap like a quick hand
+  const total = strokes.reduce((s, k) => s + Math.sqrt(k.len), 0);
+  let acc = 0;
+  for (const s of strokes) {
+    s.at = (acc / total) * SK.sketchDur * .82;
+    s.dur = Math.max(.1, (Math.sqrt(s.len) / total) * SK.sketchDur * 2.2);
+    acc += Math.sqrt(s.len);
+  }
+  return { name, g, outer, scrib, sketch, strokes, start: T.wf + i * WF };
+});
+
+// ---------- Render ----------
+const zoomAt = (el, cx, cy, z) => { el.style.transform = z === 1 ? '' : `translate(${cx}px, ${cy}px) scale(${z}) translate(${-cx}px, ${-cy}px)`; };
+const center = (n) => [n.x + n.w / 2, n.y + n.h / 2];
+const lerpRect = (a, b, k) => ({ x: mix(a.x, b.x, k), y: mix(a.y, b.y, k), w: mix(a.w, b.w, k), h: mix(a.h, b.h, k) });
+const FULL = { x: 0, y: 0, w: 1440, h: 1024 };
+const popK = (t, at) => (at === undefined ? 0 : p(t, at, at + POP));
+const popScale = (k) => mix(.55, 1, outBack(k, 1.5));
+
+function render(t) {
+  // Phases
+  const dive = io(p(t, T.dive, T.diveEnd));
+  const exit = io(p(t, T.exit, T.exitEnd));
+  const inWires = t >= T.diveEnd && t < T.exit;
+  const morph = t < T.fade + .7 * SLOW ? io(p(t, T.morph, T.morphEnd)) : 0;
+  const f6Vis = 1 - p(t, T.fade, T.fade + .7 * SLOW);
+  const rebuilding = t >= T.fade + .7 * SLOW;
+
+  // The flow zooms into Statistics, and back out of Leaks
+  const flow = $('flow');
+  if (t < T.exit) {
+    const [cx, cy] = center(N1['c:stats']);
+    zoomAt(flow, cx, cy, mix(1, 3.2, dive));
+    flow.style.opacity = inWires ? 0 : 1 - p(dive, .3, .9);
+  } else {
+    const [cx, cy] = center(N1['c:leaks']);
+    zoomAt(flow, cx, cy, mix(3.2, 1, exit));
+    flow.style.opacity = p(exit, .2, .8);
+  }
+
+  // Portal: the lit node grows into the screen, and the last screen shrinks back into its node
+  const portal = $('portal');
+  let pr = null, pFill = 0, pStroke = 0, pLabel = 0;
+  if (t >= T.dive && t < T.wf + .5 * SLOW) { pr = lerpRect(N1['c:stats'], FULL, dive); pFill = 1 - p(dive, 0, .3); pStroke = 1 - p(dive, .85, 1); pLabel = 1 - p(dive, 0, .25); }
+  if (t >= T.exit && t < T.exitEnd) { pr = lerpRect(FULL, N1['c:leaks'], exit); pFill = p(exit, .7, 1); pStroke = p(exit, 0, .2); pLabel = p(exit, .75, 1); }
+  portal.style.display = pr ? '' : 'none';
+  const pl = $('portalLabel');
+  pl.style.display = pr && pLabel > 0 ? '' : 'none';
+  if (pr) { pl.textContent = t < T.exit ? 'Statistics' : 'Leaks'; pl.setAttribute('x', pr.x + pr.w / 2); pl.setAttribute('y', pr.y + pr.h / 2); pl.style.opacity = pLabel; }
+  if (pr) {
+    portal.setAttribute('x', pr.x + 1); portal.setAttribute('y', pr.y + 1);
+    portal.setAttribute('width', Math.max(0, pr.w - 2)); portal.setAttribute('height', Math.max(0, pr.h - 2));
+    portal.setAttribute('rx', mix(4, 0, Math.min(1, pr.w / 1440)));
+    portal.setAttribute('fill', rgb([238, 238, 238], DARK, pFill));
+    portal.setAttribute('stroke-opacity', pStroke);
+  }
+  const clip = t >= T.exit ? pr || N1['c:leaks'] : FULL;
+  $('clipRect').setAttribute('x', clip.x); $('clipRect').setAttribute('y', clip.y);
+  $('clipRect').setAttribute('width', clip.w); $('clipRect').setAttribute('height', clip.h);
+
+  // Lit steps: Statistics before the dive; the four researched steps on the way back, carried into frame 6
+  const visitedK = (id) => {
+    const i = VISITED.indexOf(id);
+    if (i < 0 || t < T.exit) return 0;
+    const at = i === 0 ? T.exitEnd - .05 * SLOW : T.visited + i * .18 * SLOW;
+    return p(t, at, at + .25 * SLOW) * (1 - p(t, T.morphEnd - .1 * SLOW, T.morphEnd + .5 * SLOW));
+  };
+  const litOf = (id1) => (id1 === 'c:stats' && t < T.exit ? p(t, T.lit, T.lit + .35 * SLOW) : visitedK(id1)) * (rebuilding ? 0 : 1);
+
+  // Nodes
+  for (const ne of nodeEls) {
+    const st = ne.el.style;
+    let r, kind, lookK = morph, op, scale = 1, lit = 0;
+    if (ne.n1) {
+      r = lerpRect(ne.n1, ne.n6, morph);
+      // Review and Confirm Leak swap sides: one passes under the other
+      if (ne.id1 === 'o:review') r.y += 46 * Math.sin(Math.PI * morph);
+      if (ne.id1 === 'o:confirm') r.y -= 46 * Math.sin(Math.PI * morph);
+      kind = ne.n6.kind;
+      lit = litOf(ne.id1);
+      if (rebuilding) { const k = popK(t, G1.appear[ne.id1]); op = clamp(k * 2.5); scale = popScale(k); }
+      else op = f6Vis;
+      // a Statistics press just before it opens
+      if (ne.id1 === 'c:stats') scale *= 1 - .05 * bump(t, T.lit + .1 * SLOW, .3 * SLOW);
+    } else {
+      if (t < T.morph || rebuilding) { st.display = 'none'; continue; }
+      r = ne.n6; kind = ne.n6.kind; lookK = 1;
+      const k = popK(t, G6.appear[ne.id6]);
+      op = clamp(k * 2.5) * f6Vis; scale = popScale(k);
+      if (ne.id6.startsWith('legend:')) { op = p(t, T.grown - .3 * SLOW, T.grown + .1 * SLOW) * f6Vis; scale = 1; }
+    }
+    st.display = '';
+    const a = look(kind, false), b = look(kind, true);
+    const border = mix(a.border, b.border, lookK), radius = mix(a.radius, b.radius, lookK);
+    Object.assign(st, {
+      left: r.x + 'px', top: r.y + 'px', width: r.w + 'px', height: r.h + 'px', opacity: op,
+      transform: scale === 1 ? '' : `scale(${scale})`,
+      borderRadius: radius + 'px',
+      background: kind === 'diamond' ? 'none' : rgb(a.bg, DARK, lit),
+      boxShadow: border ? `inset 0 0 0 ${border}px #424242` : 'none',
+    });
+    const fs = ne.n1 ? mix(ne.n1.fs, ne.n6.fs, morph) : ne.n6.fs;
+    const color = rgb(a.fg, WHITE, lit), lop = mix(a.op, 1, lit);
+    if (ne.l1) {
+      // a renamed step swaps its label at mid-move, one out before the other comes in
+      Object.assign(ne.l1.style, { fontSize: fs + 'px', color, opacity: lop * (ne.l6 ? 1 - p(morph, .1, .42) : 1) });
+      if (ne.l6) Object.assign(ne.l6.style, { fontSize: fs + 'px', color, opacity: lop * p(morph, .5, .82) });
+    } else Object.assign(ne.l6only.style, { fontSize: fs + 'px', color, opacity: lop });
+  }
+
+  // The browser extension: frame 1's dashed box becomes frame 6's dashed group
+  {
+    const g6 = { x: EXT6[1], y: EXT6[2], w: EXT6[3], h: EXT6[4] };
+    const r = lerpRect(EXT1, g6, morph);
+    const sw = mix(2, 1, morph);
+    let op = f6Vis, scale = 1;
+    if (rebuilding) { const k = popK(t, G1.appear['c:ext']); op = clamp(k * 2.5); scale = popScale(k); }
+    Object.entries({ x: r.x + sw / 2, y: r.y + sw / 2, width: r.w - sw, height: r.h - sw, rx: mix(4, 8, morph), 'stroke-width': sw, 'stroke-opacity': mix(1, .6, morph), 'stroke-dasharray': `${mix(6, 5, morph)} 4` })
+      .forEach(([k, v]) => extRect.setAttribute(k, v));
+    extRect.style.opacity = op;
+    const [cx, cy] = center(r);
+    extRect.setAttribute('transform', scale === 1 ? '' : `translate(${cx} ${cy}) scale(${scale}) translate(${-cx} ${-cy})`);
+    Object.assign(extBox1.style, { left: r.x + 'px', top: r.y + 'px', width: r.w + 'px', height: r.h + 'px', opacity: op * (1 - p(morph, 0, .35)), transform: scale === 1 ? '' : `scale(${scale})` });
+    Object.assign(extLabel1.style, { fontSize: '18px', color: '#000', opacity: .88 });
+  }
+
+  // Edges: frame 1 drawn (fades as it rearranges, draws again at the end); frame 6 grows
+  const drawEdge = (e, k, op) => {
+    if (e.reveal) { e.reveal.style.strokeDasharray = '1 2'; e.reveal.style.strokeDashoffset = 1 - k; }
+    else { e.path.style.strokeDasharray = '1 2'; e.path.style.strokeDashoffset = 1 - k; }
+    e.path.style.opacity = k > 0 ? 1 : 0;
+    e.arrow.style.opacity = p(k, .9, 1);
+    e.g.style.opacity = op;
+  };
+  const e1k = {};
+  for (const e of E1) {
+    const k = rebuilding ? io(p(t, G1.edgeAt[e.id], G1.edgeAt[e.id] + edgeDur(e))) : 1;
+    const op = rebuilding ? 1 : 1 - p(t, T.morph, T.morph + .3 * SLOW);
+    drawEdge(e, k, op);
+    e1k[e.id] = k * op;
+  }
+  for (const e of E6) {
+    const k = t < T.morph || rebuilding ? 0 : io(p(t, G6.edgeAt[e.id], G6.edgeAt[e.id] + edgeDur(e)));
+    drawEdge(e, k, f6Vis);
+  }
+
+  // Texts
+  texts.title.style.opacity = 1;
+  const rbIn = p(t, T.rb, T.rb + .45 * SLOW);
+  const f1TextOp = rebuilding ? rbIn : 1 - p(t, T.morph, T.morph + .5 * SLOW);
+  texts.sub1.style.opacity = .8 * f1TextOp;
+  texts.sub6.style.opacity = .8 * (rebuilding ? 0 : p(t, T.morph + .3 * SLOW, T.morph + .9 * SLOW) * f6Vis);
+  for (const l of texts.lanes) {
+    l.el.style.top = mix(l.a[2], l.b[2], morph) + 'px';
+    l.el.style.opacity = rebuilding ? rbIn : f6Vis;
+  }
+  texts.lane2.forEach((el) => (el.style.opacity = .7 * f1TextOp));
+  for (const d of dividers) { d.el.setAttribute('y', mix(d.a, d.b, morph)); d.el.style.opacity = rebuilding ? rbIn : f6Vis; }
+  for (const n of texts.notes1) n.el.style.opacity = .7 * p(e1k[n.edge] ?? 0, .5, 1) * (rebuilding ? 1 : 1 - p(t, T.morph, T.morph + .3 * SLOW));
+  for (const n of texts.notes6) {
+    const node = n.key.startsWith('note:') ? n.key.slice(5).replace(/2$/, '') : null;
+    const at = n.key === 'ext-label' ? T.morph + .4 * SLOW : n.key === 'note:o:confirm' ? G6.appear['o:match'] : n.key === 'note:o:confirm2' ? T.morphEnd : G6.appear[node];
+    n.el.style.opacity = (rebuilding ? 0 : p(t, at, at + .4 * SLOW) * f6Vis) * n.el.dataset.op;
+  }
+  for (const el of texts.legend) el.style.opacity = (rebuilding ? 0 : p(t, T.grown - .3 * SLOW, T.grown + .1 * SLOW) * f6Vis) * el.dataset.op;
+
+  // Wireframes: pencil outline, the screen shaded in, the pencil lifts, the screen leaves
+  wfEls.forEach((w, i) => {
+    const lt = t - w.start;
+    const last = i === wfEls.length - 1;
+    const visible = lt > -0.01 && (last ? t < T.exitEnd : lt < SK.out + SK.outDur + .01);
+    w.outer.style.display = visible ? '' : 'none';
+    if (!visible) return;
+    for (const s of w.strokes) {
+      const k = outC(p(lt, s.at, s.at + s.dur));
+      s.pa.style.strokeDasharray = s.pb.style.strokeDasharray = '1 2';
+      s.pa.style.strokeDashoffset = 1 - k;
+      s.pb.style.strokeDashoffset = 1 - p(k, .15, 1);
+    }
+    w.sketch.style.opacity = 1 - io(p(lt, SK.clear, SK.clear + SK.clearDur));
+    w.scrib.style.strokeDasharray = '1 2';
+    w.scrib.style.strokeDashoffset = 1 - io(p(lt, SK.fill, SK.fill + SK.fillDur));
+    if (!last) {
+      // slides off to the left, picking up speed
+      const out = p(lt, SK.out, SK.out + SK.outDur);
+      w.g.setAttribute('transform', `translate(${-1360 * out * out * (3 - 2 * out) * mix(.6, 1, out)} 0)`);
+    } else if (t >= T.exit) {
+      // shrinks with the portal, keeping its proportions, and fades before it lands
+      const s = pr.w / 1440;
+      w.g.setAttribute('transform', `translate(${pr.x} ${pr.y + pr.h / 2 - 512 * s}) scale(${s})`);
+      w.g.style.opacity = 1 - p(exit, .45, .85);
+    } else { w.g.setAttribute('transform', ''); w.g.style.opacity = 1; }
+  });
+}
+
+const markers = [['flow 1', 0], ['Statistics', T.wf], ['Account', T.wf + WF], ['Vault', T.wf + 2 * WF], ['Leak', T.wf + 3 * WF], ['back', T.exit], ['flow 6', T.morph], ['grown', T.grown], ['rebuild', T.rb]];
+MotionPlayer.mount({
+  stage: $('stage'), width: 1440, height: 1024, duration: T.end, render, markers,
+  refs: [['1 · Flow', 'src/1-flow.png'], ['2 · Statistics', 'src/2-stats.png'], ['3 · My Account', 'src/3-account.png'], ['4 · Magic Vault', 'src/4-vault.png'], ['5 · Leak', 'src/5-leak.png'], ['6 · Detailed flow', 'src/6-flow.png']],
+  poster: 0, // first frame, so the case page doesn't jump from the poster to the start
+});
+</script>
+</body>
+</html>

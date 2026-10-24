@@ -103,25 +103,12 @@ Leaked content means lost income, stress and damage to a creator’s reputation.
 <li><span>07 · Result</span>Leak is removed</li>
 </ol>
 
-![Overall user flow split into creator, extension, operator and admin lanes](../../assets/cases/legalfans/user-flow.webp)
+### From the first flow to the detailed one
 
-*Overall flow across the creator app, the browser extension, operators and admins.*
-
-### First wireframes of the core screens
-
-<div class="carousel">
-
-![Wireframe of the Statistics screen: leak counts, removal rate, a donut chart and upload dynamics](../../assets/cases/legalfans/wf-statistics.webp "Statistics")
-
-![Wireframe of the My Account screen: profile, account type and password change](../../assets/cases/legalfans/wf-account.webp "My Account")
-
-![Wireframe of the Magic Vault screen: a grid of uploaded media with search toggles](../../assets/cases/legalfans/wf-vault.webp "Magic Vault")
-
-![Wireframe of a single leak: preview, other leaks and details](../../assets/cases/legalfans/wf-leak.webp "Leak details")
-
-</div>
-
-*Low-fidelity wireframes: the first pass focused on making every screen usable for non-technical creators.*
+<figure class="case-motion" data-lightbox-group>
+<video src="../../motion/legalfans-flow.mp4" poster="../../motion/legalfans-flow.jpg" width="1440" height="1024" muted loop playsinline preload="metadata" aria-label="A first, high-level flow shows the creator, operator and admin lanes; Statistics opens into its low-fidelity wireframe, and the Statistics, My Account, Magic Vault and Leak wireframes are sketched in pencil and shaded in one after another; the Leak screen shrinks back into the flow, the four researched steps light up and move into a detailed flow that grows around them: sign-up, sources, the vault, leaks and search settings, the browser extension, the operator's match check and the admin sections" data-label="A first, high-level flow shows the creator, operator and admin lanes; Statistics opens into its low-fidelity wireframe, and the Statistics, My Account, Magic Vault and Leak wireframes are sketched in pencil and shaded in one after another; the Leak screen shrinks back into the flow, the four researched steps light up and move into a detailed flow that grows around them: sign-up, sources, the vault, leaks and search settings, the browser extension, the operator's match check and the admin sections"></video>
+<figcaption class="eyebrow">From a first flow and its wireframes to the detailed flow</figcaption>
+</figure>
 
 ## Key decisions
 
