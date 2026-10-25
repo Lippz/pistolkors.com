@@ -410,7 +410,24 @@ const mess = [
     moveTo(swipeDir > 0 ? { y: next.start, el: next.el } : { y: here.end, el: here.el });
   }
 
+  // Links to a section of this page — the menu, the logo, the buttons — move the page like
+  // a section change does, so the heading's bar sets off with the click instead of waiting
+  // for the browser's own smooth scroll to finish. The header's handlers still close the
+  // menu; the address still gets the section's hash.
+  function onLinkClick(e: MouseEvent) {
+    if (e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const link = (e.target as Element).closest<HTMLAnchorElement>('a[href]');
+    if (!link || link.origin !== location.origin || link.pathname !== location.pathname) return;
+    const target = link.hash ? document.getElementById(decodeURIComponent(link.hash.slice(1))) : scenes[0];
+    const section = target && sectionsNow().find((s) => s.el === target || s.el.contains(target));
+    if (!section) return;
+    e.preventDefault();
+    if (link.hash !== location.hash) history.pushState(null, '', link.pathname + location.search + link.hash);
+    moveTo({ y: section.start, el: section.el });
+  }
+
   if (scenes.length) {
+    document.addEventListener('click', onLinkClick);
     window.addEventListener('wheel', onWheel, { passive: false });
     window.addEventListener('keydown', onKey);
     window.addEventListener('scroll', onScroll, { passive: true });
