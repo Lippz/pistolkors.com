@@ -26,7 +26,7 @@ const year = new Date().getFullYear();
         <div class="footer__main">
           <p class="eyebrow footer__eyebrow">Contact</p>
           <h2 class="h-hero">
-            Hiring a senior product designer? Let’s <span class="accent-word">talk.</span>
+            <span class="bar-left"><b>Let’s talk</b></span> if you’re hiring a senior product designer
           </h2>
           <div class="footer__actions">
             <div class="footer__email-group">
@@ -144,6 +144,7 @@ const year = new Date().getFullYear();
 
 <style>
   .footer {
+    overflow-x: clip; /* the heading's red bar runs off the left edge */
     margin-top: clamp(96px, 12vw, 144px);
     border-top: 1px solid var(--night-edge);
     background: var(--night);

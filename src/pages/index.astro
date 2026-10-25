@@ -46,7 +46,7 @@ const mess = [
       </h1>
     </div>
     <div class="hero__ctas">
-      <a href="#work" class="btn btn--accent">View recent works</a>
+      <a href="#work" class="btn btn--accent hero__work">View recent works</a>
       <div class="btn-split" role="group" aria-label="CV (PDF)">
         <a href={site.cv} class="btn-split__part" download>Download CV (PDF)</a>
         <a href={site.cv} class="btn-split__part" target="_blank" rel="noopener">View CV</a>
@@ -56,7 +56,7 @@ const mess = [
 
   <section class="intro container">
     <p class="intro__text">
-      Senior Product Designer at Existek, with{' '}
+      <span class="intro__role">Senior Product Designer</span> at Existek, with{' '}
       <span data-since={PRODUCT_SINCE} data-as="word">{inWords(yearsSince(PRODUCT_SINCE))}</span> years in product design
       across healthcare, legal-tech, e-commerce and construction. I run discovery, build the system and sweat the
       interaction details.
@@ -84,7 +84,7 @@ const mess = [
   <section id="work" class="work">
     <div class="container work__inner">
       <div class="section-head">
-        <h2 class="h2">Recent works</h2>
+        <h2 class="h2"><span class="bar-left"><b>Recent</b> works</span></h2>
       </div>
 
       {featured.map((entry, i) => <CaseFeature entry={entry} index={i + 1} flip={i % 2 === 1} />)}
@@ -108,7 +108,7 @@ const mess = [
       <Image src={portrait} alt="Pylyp Pistolkors" sizes="(min-width: 1024px) 40vw, 100vw" />
     </div>
     <div class="about__body">
-      <h2 class="h2">About</h2>
+      <h2 class="h2"><span class="bar-right"><b>About</b></span></h2>
       <p class="about__text">
         I started in 2005 animating casino games and banner ads, moved into product design at RIA.com, and now lead
         design at Existek — on LinkHMS, our own hospital system, and on client products. The motion background is my edge: I prototype
@@ -262,6 +262,35 @@ const mess = [
       calc((100svh - var(--header-h) - 1px - 2 * var(--gutter) - 160px) / 2.85)
     );
     line-height: 0.95;
+    isolation: isolate; /* keeps the red bar under "obvious" above the page background */
+  }
+  /* "obvious" is marked with a red bar that starts just before the word and runs on past the
+     right edge of the screen (the body clips what overflows). The word turns dark on it. */
+  .hero__accent {
+    position: relative;
+    display: inline-block;
+    padding: 0 0.12em;
+    margin: 0 -0.12em;
+    color: var(--on-accent);
+    /* Same face as the rest of the title, just heavier. */
+    font-family: inherit;
+    font-size: inherit;
+    font-style: normal;
+    font-weight: 700;
+    letter-spacing: inherit;
+  }
+  .hero__accent::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    top: 0.04em;
+    bottom: -0.02em;
+    left: 0.08em; /* the padding less a hair, so the bar starts at the word, not in the space */
+    right: -100vw;
+    background: var(--accent);
+  }
+  .hero__work {
+    text-transform: uppercase;
   }
   .sr-only {
     position: absolute;
@@ -302,18 +331,15 @@ const mess = [
   }
   /* Hovering "obvious" sends a glint across the word, once per hover: the red is painted as
      a background clipped to the letters, with a light band that slides from right to left.
-     The padding lets the italic overhang keep its paint; the negative margin cancels it. */
+     The padding above keeps the paint from being cut at the letters' edges. */
   @supports (background-clip: text) or (-webkit-background-clip: text) {
     @media (hover: hover) and (prefers-reduced-motion: no-preference) {
       .hero__accent {
-        display: inline-block;
-        padding: 0 0.12em;
-        margin: 0 -0.12em;
         background: linear-gradient(
             105deg,
-            var(--accent) 42%,
+            var(--on-accent) 42%,
             color-mix(in srgb, var(--accent) 25%, #ffffff) 50%,
-            var(--accent) 58%
+            var(--on-accent) 58%
           )
           100% 0 / 300% 100% no-repeat;
         -webkit-background-clip: text;
@@ -421,6 +447,11 @@ const mess = [
     letter-spacing: -0.02em;
     color: var(--ink-2);
     text-wrap: pretty;
+  }
+  /* The role picks up the hero's red. accent-ink: on light paper the text can drop below
+     24px, where the plain brand red is too faint. */
+  .intro__role {
+    color: var(--accent-ink);
   }
   .facts {
     margin: clamp(40px, 5vw, 64px) 0 0;

@@ -114,6 +114,11 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
+/* The hero's red bar runs past the right edge of the screen; clip (unlike hidden) cuts it
+   off without making main a scroll box, so nothing can scroll sideways. */
+main {
+  overflow-x: clip;
+}
 img,
 video {
   display: block;
@@ -190,6 +195,42 @@ dd {
   font-weight: 400;
   letter-spacing: -0.02em;
   color: var(--accent);
+}
+/* Heading text set on a red bar, like "obvious" in the hero, that runs off one edge of the
+   screen (main clips what overflows). isolation keeps the bar behind the letters yet above
+   the page. A <b> inside goes to 700. */
+.bar-left,
+.bar-right {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+  color: var(--on-accent);
+}
+.bar-left::before,
+.bar-right::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  /* Exactly the line's height, so in a heading of several lines it never covers the
+     descenders above or the capitals below. */
+  top: 0;
+  bottom: 0;
+  background: var(--accent);
+}
+.bar-left::before {
+  left: -100vw;
+  right: -0.1em;
+}
+/* The heading's word space is narrow; a little margin keeps it clear of the bar. */
+.bar-right {
+  margin-left: 0.1em;
+}
+.bar-right::before {
+  left: -0.08em;
+  right: -100vw;
+}
+:is(.bar-left, .bar-right) b {
+  font-weight: 700;
 }
 .h-hero,
 .h1,
