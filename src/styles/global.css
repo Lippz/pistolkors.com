@@ -186,10 +186,18 @@ dd {
   text-transform: uppercase;
   color: var(--muted);
 }
-/* The accent word(s) of a title: the same face, heavier, in the brand red. */
+/* The accent word(s) of a case title: the same face, heavier, dark on a red bar that hugs
+   the words — the bars of the home page, held still. The bar is a background one line
+   high (titles are set solid, 1em), so it never covers the descenders of the line above;
+   if the accent wraps, each line gets its own bar with its own ends. */
 .accent-word {
+  padding: 0 0.08em;
+  margin: 0 0.02em;
   font-weight: 700;
-  color: var(--accent);
+  color: var(--on-accent);
+  background: linear-gradient(var(--accent), var(--accent)) 0 50% / 100% 1lh no-repeat;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 /* Heading text set on a red bar, like "obvious" in the hero, that runs off one edge of the
    screen (main clips what overflows). The heading isolates, so the bar sits behind the
