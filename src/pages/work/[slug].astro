@@ -30,7 +30,7 @@ const d = entry.data;
 const { Content, headings } = await render(entry);
 const toc = headings.filter((h) => h.depth === 2);
 
-// Split the title so the accent word(s) get the italic serif treatment, wherever they sit in it.
+// Split the title so the accent word(s) get the bold red treatment, wherever they sit in it.
 const accentAt = d.accent ? d.title.lastIndexOf(d.accent) : -1;
 const titleHead = accentAt >= 0 ? d.title.slice(0, accentAt) : d.title;
 const titleAccent = accentAt >= 0 ? d.accent : undefined;

@@ -26,7 +26,6 @@
 
   --sans: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
   --mono: 'Geist Mono Variable', ui-monospace, 'SF Mono', monospace;
-  --serif: 'DM Serif Display', Georgia, serif;
   --display: 'Big Shoulders Display Variable', 'Arial Narrow', sans-serif;
 
   --gutter: clamp(20px, 5.5vw, 80px);
@@ -187,13 +186,9 @@ dd {
   text-transform: uppercase;
   color: var(--muted);
 }
-/* The serif's lowercase sits lower than Geist's; 1.07em evens out the x-heights. */
+/* The accent word(s) of a title: the same face, heavier, in the brand red. */
 .accent-word {
-  font-family: var(--serif);
-  font-size: 1.07em;
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: -0.02em;
+  font-weight: 700;
   color: var(--accent);
 }
 /* Heading text set on a red bar, like "obvious" in the hero, that runs off one edge of the
@@ -696,9 +691,7 @@ a:hover .frame img {
 .prose h4::before {
   content: counter(decision);
   flex-shrink: 0;
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 400;
+  font-weight: 700;
   font-size: 2.5rem;
   line-height: 1;
   color: var(--accent);
@@ -739,9 +732,10 @@ a:hover .frame img {
   padding: 28px;
   border-radius: 12px;
   background: var(--surface);
-  font-family: var(--serif);
   font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  font-weight: 500;
   line-height: 1.3;
+  letter-spacing: -0.015em;
   color: var(--ink);
 }
 /* The line after the quote: who said it. */

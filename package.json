@@ -13,7 +13,6 @@
     "@fontsource-variable/big-shoulders-display": "^5.3.0",
     "@fontsource-variable/geist": "^5.3.0",
     "@fontsource-variable/geist-mono": "^5.3.0",
-    "@fontsource/dm-serif-display": "^5.3.0",
     "astro": "^7.3.5"
   },
   "devDependencies": {

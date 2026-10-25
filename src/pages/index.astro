@@ -41,7 +41,7 @@ const mess = [
           <span class="mess">
             {mess.map((l, i) => <span style={`--y:${l.y}em;--r:${l.r}deg;--w:${l.w};--i:${i}`}>{l.c}</span>)}
           </span>{' '}
-          products feel <span class="accent-word bar-right hero__accent">obvious</span>
+          products feel <span class="bar-right hero__accent">obvious</span>
         </span>
       </h1>
     </div>
@@ -470,12 +470,7 @@ const mess = [
     padding: 0 0.12em;
     margin: 0 -0.12em;
     --bar-from: 0.08em; /* the padding less a hair, so the bar starts at the word, not in the space */
-    /* Same face as the rest of the title, just heavier. */
-    font-family: inherit;
-    font-size: inherit;
-    font-style: normal;
     font-weight: 700;
-    letter-spacing: inherit;
   }
   .hero__accent::before {
     content: '';

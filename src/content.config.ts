@@ -17,7 +17,7 @@ const cases = defineCollection({
       client: z.string(),
       /** Outcome-style title: what was done and for whom. */
       title: z.string(),
-      /** Word(s) of the title set in the italic serif accent (the last occurrence). */
+      /** Word(s) of the title set as the accent, bold and red (the last occurrence). */
       accent: z.string().optional(),
       /** One or two sentences for the home page card. */
       summary: z.string(),
