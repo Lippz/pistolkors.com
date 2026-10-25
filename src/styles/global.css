@@ -232,6 +232,31 @@ dd {
 :is(.bar-left, .bar-right) b {
   font-weight: 700;
 }
+/* On the home page a script hands the bar from heading to heading (bars-live on <html>,
+   is-on on the one heading that has it). A bar that is off waits beyond its edge of the
+   screen and its word keeps the heading's own colour. Coming in, the bar slides onto the
+   word and the word darkens as it arrives; going out, the word lightens first. */
+/* Most of the way is off screen, so the bar comes in fast and eases onto the word, and
+   leaves slowly at first and then speeds away. */
+.bars-live :is(.bar-left, .bar-right)::before {
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.bars-live :is(.bar-left, .bar-right):not(.is-on)::before {
+  transition-timing-function: cubic-bezier(0.64, 0, 0.78, 0);
+}
+.bars-live :is(.bar-left, .bar-right) {
+  transition: color 0.2s ease 0.15s;
+}
+.bars-live :is(.bar-left, .bar-right):not(.is-on) {
+  color: inherit;
+  transition-delay: 0s;
+}
+.bars-live .bar-left:not(.is-on)::before {
+  transform: translateX(-100vw);
+}
+.bars-live .bar-right:not(.is-on)::before {
+  transform: translateX(100vw);
+}
 .h-hero,
 .h1,
 .h2,

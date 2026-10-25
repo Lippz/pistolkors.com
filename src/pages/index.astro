@@ -41,7 +41,7 @@ const mess = [
           <span class="mess">
             {mess.map((l, i) => <span style={`--y:${l.y}em;--r:${l.r}deg;--w:${l.w};--i:${i}`}>{l.c}</span>)}
           </span>{' '}
-          products feel <span class="accent-word hero__accent">obvious</span>
+          products feel <span class="accent-word bar-right hero__accent">obvious</span>
         </span>
       </h1>
     </div>
@@ -84,7 +84,7 @@ const mess = [
   <section id="work" class="work">
     <div class="container work__inner">
       <div class="section-head">
-        <h2 class="h2"><span class="bar-left"><b>Recent</b> works</span></h2>
+        <h2 class="h2"><span class="bar-left"><b>Recent</b></span> works</h2>
       </div>
 
       {featured.map((entry, i) => <CaseFeature entry={entry} index={i + 1} flip={i % 2 === 1} />)}
@@ -162,72 +162,210 @@ const mess = [
     }, 1500);
   }
 
-  // Soft section snap. When scrolling comes to rest close to the start of a section — within
-  // a fifth of the screen — the page glides the rest of the way so the section sits right
-  // under the header; the footer glides to the bottom the same way. It only ever glides on
-  // in the direction you were scrolling: a little way down into a section stays where you
-  // left it instead of being pulled back to the section's start. CSS snapping
-  // does this too, but with a quick jump that can't be slowed down. Any new scroll input
-  // stops the glide; with reduced motion the page just steps into place.
+  // Sections the page snaps to (see onScroll below), and the header they sit under.
   const scenes = [
     ...document.querySelectorAll<HTMLElement>('main :is(.hero, .intro, #work, #words, #how, #ai, #lab, #about)'),
   ];
   const header = document.querySelector<HTMLElement>('.header');
   const calm = matchMedia('(prefers-reduced-motion: reduce)');
+
+  // The red bar is handed from heading to heading, one at a time. A heading holds it while
+  // the page rests at the start of its section: it arrives as the page snaps there (see
+  // snapTo below) and leaves the moment you scroll on, a few percent of the screen either
+  // way, while its word is still in view. When the next heading takes it the
+  // bar slides off one word and in under the other. Bars that are off wait beyond their
+  // edge of the screen — out to the right, in from the left, and so on. Without the
+  // script, or with reduced motion, every bar simply stays in place.
+  const bars = calm.matches
+    ? []
+    : [...document.querySelectorAll<HTMLElement>(':is(main, .footer) :is(.bar-left, .bar-right)')];
+  let barOn: HTMLElement | undefined;
+  let barLanding = false; // the bar was handed over by a glide that is still running
+  const showBar = (bar: HTMLElement | undefined) => {
+    if (bar === barOn) return;
+    barOn?.classList.remove('is-on');
+    bar?.classList.add('is-on');
+    barOn = bar;
+  };
+  // Where the page rests for a section: its start right under the header. The footer rests
+  // at the bottom of the page, or at its own start when it is taller than the screen, so
+  // its heading stays in view. The snap uses the same stops.
+  const footer = document.querySelector<HTMLElement>('.footer');
+  const restOf = (el: HTMLElement) => {
+    const start = el.getBoundingClientRect().top + scrollY - (header?.offsetHeight ?? 0);
+    return el === footer ? Math.min(start, document.documentElement.scrollHeight - innerHeight) : start;
+  };
+  const heroBar = bars.find((bar) => bar.closest('.hero'));
+  const restFor = (bar: HTMLElement) => restOf(scenes.find((s) => s.contains(bar)) ?? footer ?? bar);
+  let barQueued = false;
+  const pickBar = () => {
+    barQueued = false;
+    if (barLanding) return;
+    const top = header?.getBoundingClientRect().bottom ?? 0;
+    showBar(
+      bars
+        .filter((bar) => {
+          if (bar.getBoundingClientRect().top < top) return false;
+          // "obvious" is the page's opening line: it keeps the bar all through the first
+          // screen, until the page snaps on to the next section.
+          if (bar === heroBar) return true;
+          return Math.abs(scrollY - restFor(bar)) < innerHeight * 0.04;
+        })
+        .at(-1),
+    );
+  };
+  if (bars.length) {
+    pickBar();
+    document.documentElement.classList.add('bars-live');
+    const queue = () => {
+      if (!barQueued) {
+        barQueued = true;
+        requestAnimationFrame(pickBar);
+      }
+    };
+    window.addEventListener('scroll', queue, { passive: true });
+    window.addEventListener('resize', queue);
+  }
   let glide = 0;
   let lastY = scrollY;
-  let heading = 0; // 1 while scrolling down, -1 up
+  let lockedUntil = 0; // after landing, scroll input is swallowed until then
+  let landedAt = 0;
+  let userScrolledAt = -Infinity; // wheel, drag or scroll key; links and taps don't count
+  let touchY = 0;
 
-  const stopGlide = () => {
-    cancelAnimationFrame(glide);
-    glide = 0;
-  };
-  const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
+  const stopsNow = () => [...scenes, ...(footer ? [footer] : [])].map((el) => ({ y: restOf(el), el }));
 
-  function settle() {
-    if (glide) return;
-    const top = header?.offsetHeight ?? 0;
-    const end = document.documentElement.scrollHeight - innerHeight;
-    const stops = [...scenes.map((el) => el.getBoundingClientRect().top + scrollY - top), end];
-    const ahead = stops.filter((y) => (y - scrollY) * heading > 2);
-    if (!ahead.length) return;
-    const near = ahead.reduce((a, b) => (Math.abs(b - scrollY) < Math.abs(a - scrollY) ? b : a));
-    const distance = near - scrollY;
-    if (Math.abs(distance) > innerHeight * 0.2) return;
+  // speed: how fast the page was already moving (px/ms), so the snap carries on from it
+  // instead of kicking off at its own pace.
+  function snapTo(stop: { y: number; el: HTMLElement | null }, speed = 0) {
+    // The section's heading takes the bar as the snap begins, so it lands with the page; a
+    // section without one (the intro) just sends the last bar away.
+    const bar = stop.el?.querySelector<HTMLElement>('.bar-left, .bar-right');
+    if (bars.length) {
+      showBar(bar && bars.includes(bar) ? bar : undefined);
+      barLanding = true;
+    }
+    const land = () => {
+      glide = 0;
+      barLanding = false;
+      landedAt = performance.now();
+      lockedUntil = landedAt + 450;
+      lastY = scrollY;
+    };
     if (calm.matches) {
-      window.scrollTo({ top: near, behavior: 'instant' });
+      window.scrollTo({ top: stop.y, behavior: 'instant' });
+      land();
       return;
     }
-    // Slower the further it has to go: 600ms for a nudge, up to a second.
-    const duration = Math.min(1000, 600 + Math.abs(distance) * 1.5);
     const from = scrollY;
+    const distance = stop.y - from;
+    const duration = 260 + Math.min(200, Math.abs(distance) * 0.3);
+    // A Hermite curve: leaves at the speed the page already had and comes to rest on the
+    // stop. The starting push is capped at twice the distance so it never overshoots, and
+    // dropped when the page was moving the other way (snapping back to a crossed stop).
+    const push = Math.sign(speed) === Math.sign(distance) ? Math.min(Math.abs(speed * duration), 2 * Math.abs(distance)) * Math.sign(distance) : 0;
+    const curve = (t: number) => push * (t ** 3 - 2 * t ** 2 + t) + distance * (3 * t ** 2 - 2 * t ** 3);
     const start = performance.now();
     const step = (now: number) => {
-      const t = Math.min(1, (now - start) / duration);
-      window.scrollTo({ top: from + distance * ease(t), behavior: 'instant' });
-      glide = t < 1 ? requestAnimationFrame(step) : 0;
+      // A frame's timestamp can be from just before the snap started; never run backwards.
+      const t = Math.min(1, Math.max(0, (now - start) / duration));
+      window.scrollTo({ top: from + curve(t), behavior: 'instant' });
+      if (t < 1) glide = requestAnimationFrame(step);
+      else land();
     };
     glide = requestAnimationFrame(step);
   }
 
+  // Section snap. As soon as the next section's top rises above the bottom 15% of the
+  // screen — or the page crosses a section's start in one go — the page snaps to it, so
+  // the section sits just under the header (the footer snaps to the bottom). Scrolling
+  // up, a section snaps back to its start once you are less than that far into it. Then
+  // the page holds still for a
+  // moment so one flick moves one section: input is swallowed for about half a second,
+  // and a trackpad's fading momentum for as long as it lasts. Only scrolling by hand
+  // snaps; links and buttons that scroll the page glide past sections untouched. With
+  // reduced motion the page steps instead of gliding.
+  const snapAhead = (from: number, to: number) => {
+    const dir = Math.sign(to - from);
+    if (!dir) return undefined;
+    const zone = innerHeight * 0.85 - (header?.offsetHeight ?? 0);
+    // A stop the move crosses, or one it ends within the zone of.
+    return stopsNow()
+      .filter((s) => (s.y - from) * dir > 2 && (s.y - to) * dir <= zone)
+      .sort((a, b) => (a.y - b.y) * dir)[0];
+  };
+
+  // Touch, keys and the scrollbar are judged once the page has moved. The wheel is judged
+  // before it moves the page (below): letting the browser start its own smooth scroll and
+  // then snapping on top of it makes the two fight, and the page jerks.
+  let lastScrollAt = 0;
+  function onScroll() {
+    const y = scrollY;
+    const prev = lastY;
+    lastY = y;
+    const now = performance.now();
+    const since = now - lastScrollAt;
+    lastScrollAt = now;
+    if (glide || now < lockedUntil || now - lastWheelAt < 250) return;
+    if (now - userScrolledAt > 1200) return;
+    const hit = snapAhead(prev, y);
+    if (hit) snapTo(hit, since < 100 ? (y - prev) / since : 0);
+  }
+
+  let lastWheelAt = -Infinity;
+  let lastWheel = 0;
+  // The image viewer (a modal dialog) scrolls on its own; pinch-zoom is not a scroll.
+  const notThePage = (e: Event) => (e as WheelEvent).ctrlKey || document.querySelector('dialog[open]') !== null;
+  function onWheel(e: WheelEvent) {
+    if (notThePage(e)) return;
+    const now = performance.now();
+    const gap = now - lastWheelAt;
+    const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? innerHeight : 1;
+    const delta = e.deltaY * unit;
+    const fading = gap < 120 && Math.abs(delta) <= Math.abs(lastWheel) + 1;
+    lastWheelAt = now;
+    lastWheel = delta;
+    if (glide) return e.preventDefault();
+    // The hold: half a second always, then a trackpad's fading momentum too (a fresh
+    // flick — after a pause or harder than the last event — gets through).
+    const held = now - landedAt;
+    if (held < 450 || (held < 3000 && fading && lockedUntil > landedAt)) return e.preventDefault();
+    lockedUntil = 0;
+    userScrolledAt = now;
+    const end = document.documentElement.scrollHeight - innerHeight;
+    const hit = snapAhead(scrollY, Math.max(0, Math.min(end, scrollY + delta)));
+    if (hit) {
+      e.preventDefault();
+      // A wheel notch moves the page over about a tenth of a second; trackpad events
+      // come every frame and each carries that frame's move.
+      snapTo(hit, delta / Math.min(120, Math.max(16, gap)));
+    }
+  }
+
+  const locked = () => glide !== 0 || performance.now() < lockedUntil;
+  const swallow = (e: Event) => {
+    if (!locked() || notThePage(e)) return false;
+    e.preventDefault();
+    // Momentum keeps the hold going a little, but never past 1.2s after landing.
+    if (!glide) lockedUntil = Math.min(Math.max(lockedUntil, performance.now() + 150), landedAt + 1200);
+    return true;
+  };
+  const scrollKeys = new Set(['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', ' ', 'Home', 'End']);
+
   if (scenes.length) {
-    window.addEventListener('scroll', () => {
-      if (!glide && scrollY !== lastY) heading = Math.sign(scrollY - lastY);
-      lastY = scrollY;
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('wheel', onWheel, { passive: false });
+    window.addEventListener('touchstart', (e) => {
+      touchY = e.touches[0]?.clientY ?? 0;
     }, { passive: true });
-    // scrollend where supported; elsewhere, a short pause after the last scroll event.
-    if ('onscrollend' in document.documentElement) {
-      window.addEventListener('scrollend', settle);
-    } else {
-      let idle = 0;
-      window.addEventListener('scroll', () => {
-        clearTimeout(idle);
-        idle = window.setTimeout(settle, 150);
-      }, { passive: true });
-    }
-    for (const type of ['wheel', 'touchstart', 'keydown', 'pointerdown'] as const) {
-      window.addEventListener(type, stopGlide, { passive: true });
-    }
+    window.addEventListener('touchmove', (e) => {
+      // Only a real drag counts as scrolling by hand, not a tap.
+      if (!swallow(e) && Math.abs((e.touches[0]?.clientY ?? 0) - touchY) > 8) userScrolledAt = performance.now();
+    }, { passive: false });
+    window.addEventListener('keydown', (e) => {
+      if (!scrollKeys.has(e.key) || (e.target as HTMLElement).closest('input, textarea, button, [contenteditable]')) return;
+      if (!swallow(e)) userScrolledAt = performance.now();
+    });
   }
 </script>
 
@@ -264,13 +402,16 @@ const mess = [
     line-height: 0.95;
     isolation: isolate; /* keeps the red bar under "obvious" above the page background */
   }
-  /* "obvious" is marked with a red bar that starts just before the word and runs on past the
-     right edge of the screen (the body clips what overflows). The word turns dark on it. */
+  /* "obvious" is a bar-right like the section headings, tuned for the hero: a heavier word
+     and a bar fitted to the tighter line. */
   .hero__accent {
     position: relative;
     display: inline-block;
     padding: 0 0.12em;
     margin: 0 -0.12em;
+    /* The title isolates instead: the glint paints the letters as this span's background,
+       which the bar would cover if the span were its own stacking context. */
+    isolation: auto;
     color: var(--on-accent);
     /* Same face as the rest of the title, just heavier. */
     font-family: inherit;
