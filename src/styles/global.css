@@ -197,14 +197,17 @@ dd {
   color: var(--accent);
 }
 /* Heading text set on a red bar, like "obvious" in the hero, that runs off one edge of the
-   screen (main clips what overflows). isolation keeps the bar behind the letters yet above
-   the page. A <b> inside goes to 700. */
+   screen (main clips what overflows). The heading isolates, so the bar sits behind the
+   letters yet above the page. A <b> inside goes to 700.
+   --bar-from / --bar-to: where the bar starts before the word or ends after it. */
 .bar-left,
 .bar-right {
   position: relative;
   display: inline-block;
-  isolation: isolate;
   color: var(--on-accent);
+}
+:has(> :is(.bar-left, .bar-right)) {
+  isolation: isolate;
 }
 .bar-left::before,
 .bar-right::before {
@@ -217,45 +220,81 @@ dd {
   bottom: 0;
   background: var(--accent);
 }
+.bar-left {
+  --bar-to: 0.1em;
+}
 .bar-left::before {
   left: -100vw;
-  right: -0.1em;
+  right: calc(-1 * var(--bar-to));
 }
 /* The heading's word space is narrow; a little margin keeps it clear of the bar. */
 .bar-right {
+  --bar-from: -0.08em;
   margin-left: 0.1em;
 }
 .bar-right::before {
-  left: -0.08em;
+  left: var(--bar-from);
   right: -100vw;
 }
 :is(.bar-left, .bar-right) b {
   font-weight: 700;
 }
+
 /* On the home page a script hands the bar from heading to heading (bars-live on <html>,
    is-on on the one heading that has it). A bar that is off waits beyond its edge of the
-   screen and its word keeps the heading's own colour. Coming in, the bar slides onto the
-   word and the word darkens as it arrives; going out, the word lightens first. */
-/* Most of the way is off screen, so the bar comes in fast and eases onto the word, and
-   leaves slowly at first and then speeds away. */
-.bars-live :is(.bar-left, .bar-right)::before {
-  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+   screen. One animated length, --bar-shift, moves the bar and, in the letters, the line
+   between the heading's own colour and the dark of the bar — so the bar's edge works as
+   a mask: letters turn dark exactly where it covers them. The letters are painted by a
+   background clipped to the text; the fill is transparent so currentColor still holds
+   the heading's colour for the uncovered part. */
+@property --bar-shift {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
 }
-.bars-live :is(.bar-left, .bar-right):not(.is-on)::before {
-  transition-timing-function: cubic-bezier(0.64, 0, 0.78, 0);
+/* How the bar comes in. The home page's section snap reads these too, so scrolling down
+   the page lands on a section in step with its bar. */
+:root {
+  --bar-in-duration: 0.9s;
+  --bar-in-ease: cubic-bezier(0.45, 0, 0.2, 1);
 }
 .bars-live :is(.bar-left, .bar-right) {
-  transition: color 0.2s ease 0.15s;
-}
-.bars-live :is(.bar-left, .bar-right):not(.is-on) {
   color: inherit;
-  transition-delay: 0s;
+  -webkit-text-fill-color: transparent;
+  background-image: var(--bar-paint);
+  -webkit-background-clip: text;
+  background-clip: text;
+  /* Coming in, the bar eases out of the edge and slowly settles onto the word. */
+  transition: --bar-shift var(--bar-in-duration) var(--bar-in-ease);
 }
-.bars-live .bar-left:not(.is-on)::before {
-  transform: translateX(-100vw);
+/* Leaving is quick and starts at once, so the bar is gone from its word before the page
+   has carried the heading away. */
+.bars-live :is(.bar-left, .bar-right):not(.is-on) {
+  transition-duration: 0.45s;
+  transition-timing-function: cubic-bezier(0.3, 0, 0.8, 0.4);
 }
-.bars-live .bar-right:not(.is-on)::before {
-  transform: translateX(100vw);
+.bars-live :is(.bar-left, .bar-right)::before {
+  transform: translateX(var(--bar-shift));
+}
+.bars-live .bar-left {
+  --bar-paint: linear-gradient(
+    90deg,
+    var(--on-accent) calc(100% + var(--bar-to) + var(--bar-shift)),
+    currentColor 0
+  );
+}
+.bars-live .bar-left:not(.is-on) {
+  --bar-shift: -100vw;
+}
+.bars-live .bar-right {
+  --bar-paint: linear-gradient(
+    90deg,
+    currentColor calc(var(--bar-from) + var(--bar-shift)),
+    var(--on-accent) 0
+  );
+}
+.bars-live .bar-right:not(.is-on) {
+  --bar-shift: 100vw;
 }
 .h-hero,
 .h1,

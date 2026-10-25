@@ -162,54 +162,85 @@ const mess = [
     }, 1500);
   }
 
-  // Sections the page snaps to (see onScroll below), and the header they sit under.
+  // The page moves section by section. Inside a section taller than the screen (the
+  // works, the quotes, About on a phone) scrolling is ordinary, up to the section's edge:
+  // its start right under the header, or its end at the bottom of the screen. From an edge
+  // the next gesture moves on to the neighbouring section — down to the next one's start,
+  // up to the previous one's end, so nothing is skipped. A short section is all edge, so
+  // one notch moves past it.
   const scenes = [
     ...document.querySelectorAll<HTMLElement>('main :is(.hero, .intro, #work, #words, #how, #ai, #lab, #about)'),
   ];
   const header = document.querySelector<HTMLElement>('.header');
+  const footer = document.querySelector<HTMLElement>('.footer');
   const calm = matchMedia('(prefers-reduced-motion: reduce)');
 
+  type Stop = { y: number; el: HTMLElement };
+  type Section = { start: number; end: number; el: HTMLElement };
+  // Layout position, ignoring transforms (the reveal and section animations move things).
+  const docTop = (el: HTMLElement) => {
+    let y = 0;
+    for (let n: HTMLElement | null = el; n; n = n.offsetParent as HTMLElement | null) y += n.offsetTop;
+    return y;
+  };
+  let sectionCache: { at: number; sections: Section[] } | undefined;
+  const sectionsNow = (): Section[] => {
+    if (sectionCache && performance.now() - sectionCache.at < 500) return sectionCache.sections;
+    const top = header?.offsetHeight ?? 0;
+    const last = document.documentElement.scrollHeight - innerHeight;
+    const clamp = (y: number) => Math.max(0, Math.min(last, Math.round(y)));
+    const sections = [...scenes, ...(footer ? [footer] : [])].map((el) => {
+      const start = clamp(docTop(el) - top);
+      const end = el === footer ? last : clamp(docTop(el) + el.offsetHeight - innerHeight);
+      return { start, end: Math.max(start, end), el };
+    });
+    sectionCache = { at: performance.now(), sections };
+    return sections;
+  };
+  window.addEventListener('resize', () => (sectionCache = undefined));
+  // The section the page is in: the last one whose start it has reached.
+  const sectionAt = (y: number) => {
+    const sections = sectionsNow();
+    let i = 0;
+    while (i + 1 < sections.length && sections[i + 1].start <= y + 2) i++;
+    return { sections, i };
+  };
+
   // The red bar is handed from heading to heading, one at a time. A heading holds it while
-  // the page rests at the start of its section: it arrives as the page snaps there (see
-  // snapTo below) and leaves the moment you scroll on, a few percent of the screen either
-  // way, while its word is still in view. When the next heading takes it the
-  // bar slides off one word and in under the other. Bars that are off wait beyond their
-  // edge of the screen — out to the right, in from the left, and so on. Without the
-  // script, or with reduced motion, every bar simply stays in place.
+  // the page rests at the start of its section: the bar arrives as the page moves there and
+  // leaves the moment you scroll on, a few percent of the screen either way. When the next
+  // heading takes it the bar slides off one word and in under the other. Bars that are off
+  // wait beyond their edge of the screen — out to the right, in from the left, and so on.
+  // Without the script, or with reduced motion, every bar simply stays in place.
   const bars = calm.matches
     ? []
     : [...document.querySelectorAll<HTMLElement>(':is(main, .footer) :is(.bar-left, .bar-right)')];
   let barOn: HTMLElement | undefined;
-  let barLanding = false; // the bar was handed over by a glide that is still running
+  let barLanding = false; // the bar was handed over by a move that is still running
   const showBar = (bar: HTMLElement | undefined) => {
     if (bar === barOn) return;
     barOn?.classList.remove('is-on');
     bar?.classList.add('is-on');
     barOn = bar;
   };
-  // Where the page rests for a section: its start right under the header. The footer rests
-  // at the bottom of the page, or at its own start when it is taller than the screen, so
-  // its heading stays in view. The snap uses the same stops.
-  const footer = document.querySelector<HTMLElement>('.footer');
-  const restOf = (el: HTMLElement) => {
-    const start = el.getBoundingClientRect().top + scrollY - (header?.offsetHeight ?? 0);
-    return el === footer ? Math.min(start, document.documentElement.scrollHeight - innerHeight) : start;
-  };
   const heroBar = bars.find((bar) => bar.closest('.hero'));
-  const restFor = (bar: HTMLElement) => restOf(scenes.find((s) => s.contains(bar)) ?? footer ?? bar);
+  // "Recent works" names everything below it, so it keeps the bar for as long as the page
+  // is inside the section, not only at its start.
+  const workBar = bars.find((bar) => bar.closest('#work'));
+  const restFor = (bar: HTMLElement) => sectionsNow().find((s) => s.el.contains(bar))?.start ?? 0;
   let barQueued = false;
   const pickBar = () => {
     barQueued = false;
     if (barLanding) return;
-    const top = header?.getBoundingClientRect().bottom ?? 0;
     showBar(
       bars
         .filter((bar) => {
-          if (bar.getBoundingClientRect().top < top) return false;
-          // "obvious" is the page's opening line: it keeps the bar all through the first
-          // screen, until the page snaps on to the next section.
-          if (bar === heroBar) return true;
-          return Math.abs(scrollY - restFor(bar)) < innerHeight * 0.04;
+          if (bar === workBar) {
+            const work = sectionsNow().find((s) => s.el.contains(bar));
+            return !!work && scrollY > work.start - innerHeight * 0.04 && scrollY < work.end + innerHeight * 0.04;
+          }
+          // "obvious" is the page's opening line: it keeps the bar a touch longer.
+          return Math.abs(scrollY - restFor(bar)) < innerHeight * (bar === heroBar ? 0.05 : 0.04);
         })
         .at(-1),
     );
@@ -226,32 +257,41 @@ const mess = [
     window.addEventListener('scroll', queue, { passive: true });
     window.addEventListener('resize', queue);
   }
+
+  // A move to another section runs exactly like the bar comes in — same length, same
+  // curve, read from the --bar-in-* properties in global.css — so page and bar arrive
+  // together. Reaching a section's edge from inside it is just a short ease.
+  const rootStyle = getComputedStyle(document.documentElement);
+  const moveDuration = parseFloat(rootStyle.getPropertyValue('--bar-in-duration')) * 1000 || 900;
+  const [x1, y1, x2, y2] = (rootStyle.getPropertyValue('--bar-in-ease').match(/-?[\d.]+/g) ?? ['0.45', '0', '0.2', '1']).map(Number);
+  const bezier = (p1: number, p2: number, t: number) => 3 * p1 * t * (1 - t) ** 2 + 3 * p2 * t ** 2 * (1 - t) + t ** 3;
+  const moveEase = (x: number) => {
+    // Find the curve's t for this point in time (x), then its progress (y).
+    let lo = 0;
+    let hi = 1;
+    for (let i = 0; i < 20; i++) {
+      const mid = (lo + hi) / 2;
+      if (bezier(x1, x2, mid) < x) lo = mid;
+      else hi = mid;
+    }
+    return bezier(y1, y2, (lo + hi) / 2);
+  };
+  const easeOut = (t: number) => 1 - (1 - t) ** 3;
+
   let glide = 0;
-  let lastY = scrollY;
-  let lockedUntil = 0; // after landing, scroll input is swallowed until then
-  let landedAt = 0;
-  let userScrolledAt = -Infinity; // wheel, drag or scroll key; links and taps don't count
-  let touchY = 0;
-
-  const stopsNow = () => [...scenes, ...(footer ? [footer] : [])].map((el) => ({ y: restOf(el), el }));
-
-  // speed: how fast the page was already moving (px/ms), so the snap carries on from it
-  // instead of kicking off at its own pace.
-  function snapTo(stop: { y: number; el: HTMLElement | null }, speed = 0) {
-    // The section's heading takes the bar as the snap begins, so it lands with the page; a
-    // section without one (the intro) just sends the last bar away.
-    const bar = stop.el?.querySelector<HTMLElement>('.bar-left, .bar-right');
-    if (bars.length) {
-      showBar(bar && bars.includes(bar) ? bar : undefined);
+  function moveTo(stop: Stop, short = false) {
+    // The section's heading takes the bar as the move begins, so it lands with the page;
+    // a stop away from a heading sends the last bar away.
+    if (bars.length && !short) {
+      showBar(bars.find((bar) => Math.abs(restFor(bar) - stop.y) < 2));
       barLanding = true;
     }
     const land = () => {
       glide = 0;
       barLanding = false;
-      landedAt = performance.now();
-      lockedUntil = landedAt + 450;
       lastY = scrollY;
     };
+    cancelAnimationFrame(glide);
     if (calm.matches) {
       window.scrollTo({ top: stop.y, behavior: 'instant' });
       land();
@@ -259,113 +299,133 @@ const mess = [
     }
     const from = scrollY;
     const distance = stop.y - from;
-    const duration = 260 + Math.min(200, Math.abs(distance) * 0.3);
-    // A Hermite curve: leaves at the speed the page already had and comes to rest on the
-    // stop. The starting push is capped at twice the distance so it never overshoots, and
-    // dropped when the page was moving the other way (snapping back to a crossed stop).
-    const push = Math.sign(speed) === Math.sign(distance) ? Math.min(Math.abs(speed * duration), 2 * Math.abs(distance)) * Math.sign(distance) : 0;
-    const curve = (t: number) => push * (t ** 3 - 2 * t ** 2 + t) + distance * (3 * t ** 2 - 2 * t ** 3);
+    const duration = short ? 300 : moveDuration;
+    const ease = short ? easeOut : moveEase;
     const start = performance.now();
-    const step = (now: number) => {
-      // A frame's timestamp can be from just before the snap started; never run backwards.
+    const tick = (now: number) => {
+      // A frame's timestamp can be from just before the move started; never run backwards.
       const t = Math.min(1, Math.max(0, (now - start) / duration));
-      window.scrollTo({ top: from + curve(t), behavior: 'instant' });
-      if (t < 1) glide = requestAnimationFrame(step);
+      window.scrollTo({ top: from + distance * ease(t), behavior: 'instant' });
+      if (t < 1) glide = requestAnimationFrame(tick);
       else land();
     };
-    glide = requestAnimationFrame(step);
+    glide = requestAnimationFrame(tick);
   }
 
-  // Section snap. As soon as the next section's top rises above the bottom 15% of the
-  // screen — or the page crosses a section's start in one go — the page snaps to it, so
-  // the section sits just under the header (the footer snaps to the bottom). Scrolling
-  // up, a section snaps back to its start once you are less than that far into it. Then
-  // the page holds still for a
-  // moment so one flick moves one section: input is swallowed for about half a second,
-  // and a trackpad's fading momentum for as long as it lasts. Only scrolling by hand
-  // snaps; links and buttons that scroll the page glide past sections untouched. With
-  // reduced motion the page steps instead of gliding.
-  const snapAhead = (from: number, to: number) => {
-    const dir = Math.sign(to - from);
-    if (!dir) return undefined;
-    const zone = innerHeight * 0.85 - (header?.offsetHeight ?? 0);
-    // A stop the move crosses, or one it ends within the zone of.
-    return stopsNow()
-      .filter((s) => (s.y - from) * dir > 2 && (s.y - to) * dir <= zone)
-      .sort((a, b) => (a.y - b.y) * dir)[0];
-  };
-
-  // Touch, keys and the scrollbar are judged once the page has moved. The wheel is judged
-  // before it moves the page (below): letting the browser start its own smooth scroll and
-  // then snapping on top of it makes the two fight, and the page jerks.
-  let lastScrollAt = 0;
-  function onScroll() {
+  // Where a move of `delta` pixels from here should go. Inside a section it is ordinary
+  // scrolling (undefined), cut short at the section's edge; at an edge it is the
+  // neighbouring section — if `leave` allows leaving.
+  type Plan = { to: Stop; short: boolean } | 'stay' | undefined;
+  function plan(delta: number, leave: boolean): Plan {
+    const dir = Math.sign(delta);
+    const { sections, i } = sectionAt(scrollY);
+    const here = sections[i];
     const y = scrollY;
-    const prev = lastY;
-    lastY = y;
-    const now = performance.now();
-    const since = now - lastScrollAt;
-    lastScrollAt = now;
-    if (glide || now < lockedUntil || now - lastWheelAt < 250) return;
-    if (now - userScrolledAt > 1200) return;
-    const hit = snapAhead(prev, y);
-    if (hit) snapTo(hit, since < 100 ? (y - prev) / since : 0);
+    if (dir > 0) {
+      if (y < here.end - 2) return y + delta <= here.end ? undefined : { to: { y: here.end, el: here.el }, short: true };
+      const next = sections[i + 1];
+      if (!next) return 'stay';
+      return leave ? { to: { y: next.start, el: next.el }, short: false } : 'stay';
+    }
+    if (y > here.start + 2) {
+      // Between this section's end and the next one's start belongs to neither: go back up
+      // to the end like any other edge.
+      if (y > here.end + 2) return leave ? { to: { y: here.end, el: here.el }, short: false } : 'stay';
+      return y + delta >= here.start ? undefined : { to: { y: here.start, el: here.el }, short: true };
+    }
+    const prev = sections[i - 1];
+    if (!prev) return 'stay';
+    return leave ? { to: { y: prev.end, el: prev.el }, short: false } : 'stay';
   }
 
-  let lastWheelAt = -Infinity;
-  let lastWheel = 0;
-  // The image viewer (a modal dialog) scrolls on its own; pinch-zoom is not a scroll.
+  // The wheel. A gesture is a run of wheel events with no pause longer than 200ms — a
+  // notch (smooth-scrolling wheels send several events for one), or a trackpad flick and
+  // all its momentum. A gesture that starts at a section's edge moves to the next section,
+  // once; one that starts inside scrolls normally and stops at the edge, even if its
+  // momentum would carry on. Sideways scrolling (the Motion lab carousel) is left alone,
+  // as are pinch-zoom and the image viewer.
   const notThePage = (e: Event) => (e as WheelEvent).ctrlKey || document.querySelector('dialog[open]') !== null;
+  let lastWheelAt = -Infinity;
+  let gestureSpent = false; // this gesture has already moved the page by itself
   function onWheel(e: WheelEvent) {
-    if (notThePage(e)) return;
+    if (notThePage(e) || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
     const now = performance.now();
-    const gap = now - lastWheelAt;
+    const fresh = now - lastWheelAt > 200;
+    lastWheelAt = now;
+    if (fresh) gestureSpent = false;
+    if (glide || gestureSpent) return e.preventDefault();
     const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? innerHeight : 1;
     const delta = e.deltaY * unit;
-    const fading = gap < 120 && Math.abs(delta) <= Math.abs(lastWheel) + 1;
-    lastWheelAt = now;
-    lastWheel = delta;
-    if (glide) return e.preventDefault();
-    // The hold: half a second always, then a trackpad's fading momentum too (a fresh
-    // flick — after a pause or harder than the last event — gets through).
-    const held = now - landedAt;
-    if (held < 450 || (held < 3000 && fading && lockedUntil > landedAt)) return e.preventDefault();
-    lockedUntil = 0;
-    userScrolledAt = now;
-    const end = document.documentElement.scrollHeight - innerHeight;
-    const hit = snapAhead(scrollY, Math.max(0, Math.min(end, scrollY + delta)));
-    if (hit) {
-      e.preventDefault();
-      // A wheel notch moves the page over about a tenth of a second; trackpad events
-      // come every frame and each carries that frame's move.
-      snapTo(hit, delta / Math.min(120, Math.max(16, gap)));
-    }
+    if (!delta) return;
+    // Only a gesture's first event may leave the section.
+    const next = plan(delta, fresh);
+    if (next === undefined) return; // ordinary scrolling inside the section
+    e.preventDefault();
+    if (next === 'stay') return;
+    gestureSpent = true;
+    moveTo(next.to, next.short);
   }
 
-  const locked = () => glide !== 0 || performance.now() < lockedUntil;
-  const swallow = (e: Event) => {
-    if (!locked() || notThePage(e)) return false;
+  // Page keys work the same way: inside a section they scroll as usual, at its edge they
+  // move to the next section. Home and End go to the top and the bottom.
+  function onKey(e: KeyboardEvent) {
+    if (notThePage(e) || e.altKey || e.ctrlKey || e.metaKey) return;
+    if ((e.target as HTMLElement).closest('input, textarea, select, [contenteditable]')) return;
+    const page = innerHeight - (header?.offsetHeight ?? 0) - 40;
+    const delta =
+      ({ ArrowDown: 80, ArrowUp: -80, PageDown: page, PageUp: -page } as Record<string, number>)[e.key] ??
+      (e.key === ' ' && !(e.target as HTMLElement).closest('button, a') ? (e.shiftKey ? -page : page) : 0);
+    if (e.key === 'Home' || e.key === 'End') {
+      e.preventDefault();
+      const sections = sectionsNow();
+      const s = e.key === 'Home' ? sections[0] : sections.at(-1);
+      if (s && !glide) moveTo({ y: e.key === 'Home' ? s.start : s.end, el: s.el });
+      return;
+    }
+    if (!delta) return;
+    if (glide) return e.preventDefault();
+    const next = plan(delta, true);
+    if (next === undefined) return;
     e.preventDefault();
-    // Momentum keeps the hold going a little, but never past 1.2s after landing.
-    if (!glide) lockedUntil = Math.min(Math.max(lockedUntil, performance.now() + 150), landedAt + 1200);
-    return true;
-  };
-  const scrollKeys = new Set(['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', ' ', 'Home', 'End']);
+    if (next !== 'stay') moveTo(next.to, next.short);
+  }
+
+  // Touch scrolls natively. If a swipe leaves the page between two sections — the end of
+  // one and the start of the next both partly on screen — it moves on to the section in
+  // the swipe's direction.
+  let lastY = scrollY;
+  let swipeDir = 0;
+  let touchedAt = -Infinity;
+  function onScroll() {
+    if (glide) return;
+    if (scrollY !== lastY) swipeDir = Math.sign(scrollY - lastY);
+    lastY = scrollY;
+  }
+  function settle() {
+    if (glide || performance.now() - touchedAt > 1500 || !swipeDir) return;
+    const { sections, i } = sectionAt(scrollY);
+    const here = sections[i];
+    const next = sections[i + 1];
+    if (!next || scrollY <= here.end + 2) return;
+    moveTo(swipeDir > 0 ? { y: next.start, el: next.el } : { y: here.end, el: here.el });
+  }
 
   if (scenes.length) {
-    window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('wheel', onWheel, { passive: false });
-    window.addEventListener('touchstart', (e) => {
-      touchY = e.touches[0]?.clientY ?? 0;
-    }, { passive: true });
-    window.addEventListener('touchmove', (e) => {
-      // Only a real drag counts as scrolling by hand, not a tap.
-      if (!swallow(e) && Math.abs((e.touches[0]?.clientY ?? 0) - touchY) > 8) userScrolledAt = performance.now();
-    }, { passive: false });
-    window.addEventListener('keydown', (e) => {
-      if (!scrollKeys.has(e.key) || (e.target as HTMLElement).closest('input, textarea, button, [contenteditable]')) return;
-      if (!swallow(e)) userScrolledAt = performance.now();
-    });
+    window.addEventListener('keydown', onKey);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('touchmove', () => (touchedAt = performance.now()), { passive: true });
+    window.addEventListener('touchend', () => (touchedAt = performance.now()), { passive: true });
+    // scrollend where supported; elsewhere, a short pause after the last scroll event.
+    if ('onscrollend' in document.documentElement) {
+      window.addEventListener('scrollend', settle);
+    } else {
+      let idle = 0;
+      window.addEventListener('scroll', () => {
+        clearTimeout(idle);
+        idle = window.setTimeout(settle, 150);
+      }, { passive: true });
+    }
   }
 </script>
 
@@ -409,10 +469,7 @@ const mess = [
     display: inline-block;
     padding: 0 0.12em;
     margin: 0 -0.12em;
-    /* The title isolates instead: the glint paints the letters as this span's background,
-       which the bar would cover if the span were its own stacking context. */
-    isolation: auto;
-    color: var(--on-accent);
+    --bar-from: 0.08em; /* the padding less a hair, so the bar starts at the word, not in the space */
     /* Same face as the rest of the title, just heavier. */
     font-family: inherit;
     font-size: inherit;
@@ -426,7 +483,7 @@ const mess = [
     z-index: -1;
     top: 0.04em;
     bottom: -0.02em;
-    left: 0.08em; /* the padding less a hair, so the bar starts at the word, not in the space */
+    left: var(--bar-from);
     right: -100vw;
     background: var(--accent);
   }
@@ -470,22 +527,28 @@ const mess = [
       }
     }
   }
-  /* Hovering "obvious" sends a glint across the word, once per hover: the red is painted as
-     a background clipped to the letters, with a light band that slides from right to left.
-     The padding above keeps the paint from being cut at the letters' edges. */
+  /* Hovering "obvious" sends a glint across the word, once per hover: the letters are
+     painted as a background clipped to them, and a light band slides over them from right
+     to left. Under the band lies the bar's mask (--bar-paint, see global.css), or plain
+     dark letters where the bars don't move. The padding above keeps the paint from being
+     cut at the letters' edges. */
   @supports (background-clip: text) or (-webkit-background-clip: text) {
     @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-      .hero__accent {
-        background: linear-gradient(
+      .hero .hero__accent {
+        background-image:
+          linear-gradient(
             105deg,
-            var(--on-accent) 42%,
+            transparent 42%,
             color-mix(in srgb, var(--accent) 25%, #ffffff) 50%,
-            var(--on-accent) 58%
-          )
-          100% 0 / 300% 100% no-repeat;
+            transparent 58%
+          ),
+          var(--bar-paint, linear-gradient(var(--on-accent), var(--on-accent)));
+        background-size: 300% 100%, 100% 100%;
+        background-position: 100% 0, 0 0;
+        background-repeat: no-repeat;
         -webkit-background-clip: text;
         background-clip: text;
-        color: transparent;
+        -webkit-text-fill-color: transparent;
       }
       /* Set by the script below on pointer enter and cleared when the glint ends, so it
          always plays to the end even if the pointer leaves halfway. */
