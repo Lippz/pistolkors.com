@@ -59,7 +59,7 @@ export const experience = [
 ];
 
 /**
- * Motion lab tiles. Put files in /public/motion/ and set `video` (mp4/webm loop)
+ * Interactions tiles (the section was called Motion lab). Put files in /public/motion/ and set `video` (mp4/webm loop)
  * and `poster` (first frame). Tiles without a video only show in `npm run dev`;
  * the whole section stays hidden on the live site until at least one has one.
  */
@@ -75,6 +75,12 @@ export const motion: { title: string; kind: string; video?: string; poster?: str
     kind: 'Product · Healthcare',
     video: '/motion/linkhms-reports.mp4',
     poster: '/motion/linkhms-reports.jpg',
+  },
+  {
+    title: 'LinkHMS patient portal: test results and a booking, from the patient’s side',
+    kind: 'Product · Healthcare',
+    video: '/motion/linkhms-patient-portal.mp4',
+    poster: '/motion/linkhms-patient-portal.jpg',
   },
   {
     title: 'LegalFans extension: connect, synchronise, done',
@@ -153,7 +159,7 @@ export const capabilities: {
     title: 'Motion & prototyping',
     text: 'Twenty years of animation, so interactions are shown, not described.',
     deliverables: ['Interaction prototypes', 'Motion loops', 'Coded demos'],
-    proof: { label: 'Motion lab', href: '/#lab' },
+    proof: { label: 'Interactions', href: '/#lab' },
   },
 ];
 

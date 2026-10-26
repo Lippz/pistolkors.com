@@ -402,7 +402,7 @@ const mess = [
   // notch (smooth-scrolling wheels send several events for one), or a trackpad flick and
   // all its momentum. A gesture that starts at a section's edge moves to the next section,
   // once; one that starts inside scrolls normally and stops at the edge, even if its
-  // momentum would carry on. Sideways scrolling (the Motion lab carousel) is left alone,
+  // momentum would carry on. Sideways scrolling (the Interactions carousel) is left alone,
   // as are pinch-zoom and the image viewer.
   const notThePage = (e: Event) => (e as WheelEvent).ctrlKey || document.querySelector('dialog[open]') !== null;
   let lastWheelAt = -Infinity;

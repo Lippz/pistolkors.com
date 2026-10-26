@@ -17,7 +17,7 @@ const showWords = import.meta.env.DEV || testimonials.some((t) => !t.placeholder
 const nav = [
   { label: 'Recent works', href: url('/#work'), key: 'work' },
   ...(showWords ? [{ label: 'People', href: url('/#words'), key: 'words' }] : []),
-  ...(showLab ? [{ label: 'Motion lab', href: url('/#lab'), key: 'lab' }] : []),
+  ...(showLab ? [{ label: 'Interactions', href: url('/#lab'), key: 'lab' }] : []),
   { label: 'How I work', href: url('/#how'), key: 'how' },
   { label: 'AI pipeline', href: url('/#ai'), key: 'ai' },
   { label: 'About', href: url('/#about'), key: 'about' },
