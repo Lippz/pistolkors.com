@@ -37,7 +37,7 @@ const mess = [
       <h1 class="h-hero hero__title">
         <span class="sr-only">I help complex products feel obvious</span>
         <span aria-hidden="true">
-          I help{' '}
+          <span class="lead-in">I help</span>{' '}
           <span class="mess">
             {mess.map((l, i) => <span style={`--y:${l.y}em;--r:${l.r}deg;--w:${l.w};--i:${i}`}>{l.c}</span>)}
           </span>{' '}
@@ -53,6 +53,19 @@ const mess = [
       </div>
     </div>
   </section>
+  <!-- Hide the bar under "obvious" before the first paint; the page script draws it in
+       after "complex" has shown off. Six seconds on, it shows anyway, in case that script
+       never runs. -->
+  <script is:inline>
+    (function () {
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches || scrollY > 2) return;
+      var root = document.documentElement;
+      root.classList.add('hero-wait');
+      setTimeout(function () {
+        root.classList.remove('hero-wait');
+      }, 6000);
+    })();
+  </script>
 
   <section class="intro container">
     <p class="intro__text">
@@ -147,19 +160,60 @@ const mess = [
 <script>
   // "obvious" glint: start on pointer enter, let it finish on its own, and ignore new
   // hovers until it has. The CSS only runs it where hover and motion are welcome.
+  // Not while the bar is still to be drawn: the glint is a light band over it.
+  const root = document.documentElement;
   const accent = document.querySelector<HTMLElement>('.hero__accent');
-  accent?.addEventListener('pointerenter', () => accent.classList.add('is-glinting'));
-  accent?.addEventListener('animationend', () => accent.classList.remove('is-glinting'));
+  accent?.addEventListener('pointerenter', () => {
+    if (!root.classList.contains('hero-wait')) accent.classList.add('is-glinting');
+  });
+  accent?.addEventListener('animationend', (e) => {
+    if (e.animationName.includes('glint')) accent.classList.remove('is-glinting');
+  });
 
-  // "complex" shows off once by itself: 1.5s after the page loads its letters fall out of
-  // line, hold for a moment and settle back — a hint that the word reacts to the pointer.
-  // The CSS only moves them where motion is welcome.
-  const mess = document.querySelector<HTMLElement>('.mess');
-  if (mess) {
+  // As the page opens, a red bar sweeps along "I help" (see the CSS): out of the left edge
+  // of the screen to the end of "help", where it collapses. The CSS only runs it where
+  // motion is welcome. "complex" used to throw its letters out of line meanwhile, a hint
+  // that the word reacts to the pointer; that is off for now (is-messy, commented out
+  // below and in the CSS).
+  const sweepAt = 0;
+  const sweepFor = 900;
+  const overlap = 500; // "obvious" starts this much before the sweep has finished
+  const leadIn = document.querySelector<HTMLElement>('.lead-in');
+  if (leadIn) {
+    // How far the bar comes from (the screen's edge) and goes to (just past "help"),
+    // measured from the start of the words.
+    const fontSize = parseFloat(getComputedStyle(leadIn).fontSize);
+    leadIn.style.setProperty('--to-edge', `${Math.ceil(leadIn.getBoundingClientRect().left)}px`);
+    leadIn.style.setProperty('--sweep-end', `${leadIn.offsetWidth + fontSize * 0.04}px`);
+    leadIn.style.setProperty('--sweep', `${sweepFor}ms`);
+    leadIn.classList.add('sweep-ready');
     setTimeout(() => {
-      mess.classList.add('is-messy');
-      setTimeout(() => mess.classList.remove('is-messy'), 900);
-    }, 1500);
+      leadIn.classList.add('is-sweeping');
+      // document.querySelector('.mess')?.classList.add('is-messy');
+      setTimeout(() => leadIn.classList.remove('is-sweeping'), sweepFor);
+    }, sweepAt);
+  }
+
+  // Then "obvious" draws its bar, out to the screen's edge, setting off just before the
+  // sweep has finished collapsing so the two overlap a little.
+  // Skipped if the page has already been scrolled away from the top, or once the user has
+  // moved on.
+  if (accent && root.classList.contains('hero-wait')) {
+    const done = () => {
+      accent.classList.remove('is-drawing');
+      root.classList.remove('hero-wait');
+    };
+    accent.addEventListener('animationend', (e) => {
+      if (e.animationName.includes('hero-bar-draw')) done();
+    });
+    if (scrollY > 2) done();
+    else
+      setTimeout(() => {
+        if (!accent.classList.contains('is-on')) return done();
+        const start = accent.getBoundingClientRect().left + parseFloat(getComputedStyle(accent).fontSize) * 0.08;
+        accent.style.setProperty('--bar-reach', `${Math.ceil(innerWidth - start)}px`);
+        accent.classList.add('is-drawing');
+      }, sweepAt + sweepFor - overlap);
   }
 
   // The page moves section by section. Inside a section taller than the screen (the
@@ -224,8 +278,9 @@ const mess = [
     barOn = bar;
   };
   const heroBar = bars.find((bar) => bar.closest('.hero'));
-  // "Recent works" names everything below it, so it keeps the bar for as long as the page
-  // is inside the section, not only at its start.
+  // "Recent works" names everything below it, so it keeps the bar for as long as the
+  // section is in focus — running through the middle of the screen under the header —
+  // not only at its start.
   const workBar = bars.find((bar) => bar.closest('#work'));
   const restFor = (bar: HTMLElement) => sectionsNow().find((s) => s.el.contains(bar))?.start ?? 0;
   let barQueued = false;
@@ -236,8 +291,10 @@ const mess = [
       bars
         .filter((bar) => {
           if (bar === workBar) {
-            const work = sectionsNow().find((s) => s.el.contains(bar));
-            return !!work && scrollY > work.start - innerHeight * 0.04 && scrollY < work.end + innerHeight * 0.04;
+            const work = bar.closest<HTMLElement>('section')?.getBoundingClientRect();
+            const top = header?.offsetHeight ?? 0;
+            const middle = top + (innerHeight - top) / 2;
+            return !!work && work.top <= middle && work.bottom >= middle;
           }
           // "obvious" is the page's opening line: it keeps the bar a touch longer.
           return Math.abs(scrollY - restFor(bar)) < innerHeight * (bar === heroBar ? 0.05 : 0.04);
@@ -283,7 +340,10 @@ const mess = [
     // The section's heading takes the bar as the move begins, so it lands with the page;
     // a stop away from a heading sends the last bar away.
     if (bars.length && !short) {
-      showBar(bars.find((bar) => Math.abs(restFor(bar) - stop.y) < 2));
+      showBar(
+        bars.find((bar) => Math.abs(restFor(bar) - stop.y) < 2) ??
+          (workBar && stop.el.contains(workBar) ? workBar : undefined),
+      );
       barLanding = true;
     }
     const land = () => {
@@ -347,8 +407,18 @@ const mess = [
   const notThePage = (e: Event) => (e as WheelEvent).ctrlKey || document.querySelector('dialog[open]') !== null;
   let lastWheelAt = -Infinity;
   let gestureSpent = false; // this gesture has already moved the page by itself
+  // A mostly sideways gesture over something that scrolls sideways is left to it; anywhere
+  // else its vertical part is the page's, or a slanted trackpad swipe would carry the page
+  // past a section's edge.
+  const scrollsSideways = (target: EventTarget | null) => {
+    for (let n = target instanceof Element ? target : null; n && n !== document.body; n = n.parentElement) {
+      if (n.scrollWidth > n.clientWidth + 1 && /auto|scroll/.test(getComputedStyle(n).overflowX)) return true;
+    }
+    return false;
+  };
   function onWheel(e: WheelEvent) {
-    if (notThePage(e) || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+    if (notThePage(e)) return;
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY) && scrollsSideways(e.target)) return;
     const now = performance.now();
     const fresh = now - lastWheelAt > 200;
     lastWheelAt = now;
@@ -498,6 +568,40 @@ const mess = [
     left: var(--bar-from);
     right: -100vw;
     background: var(--accent);
+    clip-path: inset(0 max(0px, calc(100% - var(--bar-grow))) 0 0);
+  }
+  /* Once "complex" has shown off, the bar draws itself under "obvious": from the left of
+     the o out to the edge of the screen, the letters darkening as it passes. --bar-grow is
+     how far it has got (no limit by default); html.hero-wait, set by the inline script
+     under the hero, holds it at nothing until the script below starts the draw. */
+  @property --bar-grow {
+    syntax: '<length>';
+    inherits: true;
+    initial-value: 10000px;
+  }
+  :global(html.hero-wait) .hero__accent {
+    --bar-grow: 0px;
+    color: inherit;
+  }
+  :global(.bars-live) .hero .hero__accent {
+    --bar-paint: linear-gradient(
+      90deg,
+      currentColor calc(var(--bar-from) + var(--bar-shift)),
+      var(--on-accent) 0,
+      var(--on-accent) calc(var(--bar-from) + var(--bar-grow)),
+      currentColor 0
+    );
+  }
+  .hero__accent.is-drawing {
+    animation: hero-bar-draw 1s cubic-bezier(0.65, 0, 0.35, 1) both;
+  }
+  @keyframes hero-bar-draw {
+    from {
+      --bar-grow: 0px;
+    }
+    to {
+      --bar-grow: var(--bar-reach, 100vw);
+    }
   }
   .hero__work {
     text-transform: uppercase;
@@ -514,6 +618,75 @@ const mess = [
   .mess {
     white-space: nowrap;
   }
+  /* As the page opens, a red bar sweeps along "I help": out of the left edge of the screen
+     to the end of "help", then it collapses into that point — after which the bar under
+     "obvious" takes over. Two animated lengths, --cover-from and --cover-to (measured from
+     the start of the words), are the stretch the bar covers: they cut the bar out of a
+     strip that starts at the screen's edge, and they turn the letters dark under it, so
+     the bar's edges work as a mask. The script sets --to-edge (from the screen's edge to
+     the words) and --sweep-end (from the words to just past "help"), then marks them
+     sweep-ready. */
+  @property --cover-from {
+    syntax: '<length>';
+    inherits: true;
+    initial-value: 0px;
+  }
+  @property --cover-to {
+    syntax: '<length>';
+    inherits: true;
+    initial-value: 0px;
+  }
+  .lead-in {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+  }
+  .lead-in::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    top: 0.04em;
+    bottom: -0.02em;
+    left: calc(-1 * var(--to-edge, 100vw));
+    right: -0.04em;
+    background: var(--accent);
+    clip-path: inset(
+      0 calc(100% - var(--to-edge, 100vw) - var(--cover-to)) 0 calc(var(--cover-from) + var(--to-edge, 100vw))
+    );
+  }
+  .lead-in.sweep-ready {
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(
+      90deg,
+      currentColor var(--cover-from),
+      var(--on-accent) 0,
+      var(--on-accent) var(--cover-to),
+      currentColor 0
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .lead-in.is-sweeping {
+      animation: lead-in-sweep var(--sweep, 0.9s) linear both;
+    }
+  }
+  @keyframes lead-in-sweep {
+    0% {
+      --cover-from: calc(-1 * var(--to-edge));
+      --cover-to: calc(-1 * var(--to-edge));
+      animation-timing-function: cubic-bezier(0.3, 0, 0.2, 1);
+    }
+    50% {
+      --cover-from: calc(-1 * var(--to-edge));
+      --cover-to: var(--sweep-end);
+      animation-timing-function: cubic-bezier(0.6, 0, 0.4, 1);
+    }
+    100% {
+      --cover-from: var(--sweep-end);
+      --cover-to: var(--sweep-end);
+    }
+  }
   .mess > span {
     display: inline-block;
   }
@@ -526,12 +699,13 @@ const mess = [
         font-weight 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.15);
       transition-delay: calc(var(--i) * 25ms);
     }
-    /* Hovering "complex" throws its letters out of line; leaving lets them settle again.
-       The script below does the same once, on its own, shortly after the page opens. */
+    /* Hovering "complex" throws its letters out of line; leaving lets them settle again. */
+    /* Off for now: the script used to do the same once, on its own, as the page opened.
     .mess.is-messy > span {
       transform: translateY(var(--y)) rotate(var(--r));
       font-weight: var(--w);
     }
+    */
     @media (hover: hover) {
       .mess:hover > span {
         transform: translateY(var(--y)) rotate(var(--r));
@@ -964,6 +1138,10 @@ const mess = [
     .hero__ctas .btn,
     .btn-split {
       flex: 1 1 100%;
+    }
+    /* Stacked, the CV comes first and the red button sits at the bottom, under the thumb. */
+    .hero__ctas .btn-split {
+      order: -1;
     }
     .facts {
       grid-template-columns: 1fr;
