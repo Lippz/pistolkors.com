@@ -172,22 +172,18 @@ export const ai = {
     {
       title: 'Explore',
       text: 'Agents draft layout and flow variants, so I compare more options before committing to one.',
-      tools: ['Claude', 'ChatGPT', 'Figma Make'],
     },
     {
       title: 'Prototype',
       text: 'Interactions run in real code, so the team tests how the product behaves, not how it looks.',
-      tools: ['Cursor', 'Claude Code', 'Codex'],
     },
     {
       title: 'Design system ↔ code',
       text: 'Through Figma MCP, tokens and components stay in step between Figma and code, and developers stay on the roadmap.',
-      tools: ['Figma MCP', 'Claude Code'],
     },
     {
       title: 'Document',
       text: 'Specs, hand-off notes and component docs are drafted by AI and edited by me.',
-      tools: ['Claude', 'ChatGPT'],
     },
   ],
   caseStudy: {

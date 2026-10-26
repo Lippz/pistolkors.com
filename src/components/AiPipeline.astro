@@ -22,14 +22,12 @@ import { url } from '../lib/url';
           <p class="eyebrow step__idx">{String(i + 1).padStart(2, '0')}</p>
           <h3 class="step__title">{s.title}</h3>
           <p class="step__text">{s.text}</p>
-          <ul class="step__tools" role="list" aria-label="Tools">
-            {s.tools.map((t) => <li>{t}</li>)}
-          </ul>
         </li>
       ))
     }
   </ol>
 
+  {/* Proof cards (a case and this site) are hidden for now.
   <div class="ai__proof">
     <a href={url(ai.caseStudy.href)} class="proof proof--case arrow-trigger reveal">
       <p class="eyebrow proof__label">In practice · {ai.caseStudy.label}</p>
@@ -44,6 +42,7 @@ import { url } from '../lib/url';
       <p class="proof__site">{ai.site}</p>
     </div>
   </div>
+  */}
 </section>
 
 <style>
@@ -93,22 +92,6 @@ import { url } from '../lib/url';
     line-height: 1.55;
     color: var(--ink-3);
     text-wrap: pretty;
-  }
-  .step__tools {
-    margin-top: auto;
-    padding: 20px 0 0;
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  .step__tools li {
-    padding: 4px 10px;
-    border: 1px solid var(--chip-line);
-    border-radius: 999px;
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--muted);
   }
 
   .ai__proof {
