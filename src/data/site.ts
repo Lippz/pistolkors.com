@@ -76,6 +76,18 @@ export const motion: { title: string; kind: string; video?: string; poster?: str
     video: '/motion/linkhms-reports.mp4',
     poster: '/motion/linkhms-reports.jpg',
   },
+  {
+    title: 'LegalFans extension: connect, synchronise, done',
+    kind: 'Product · B2B SaaS',
+    video: '/motion/legalfans-setup.mp4',
+    poster: '/motion/legalfans-setup.jpg',
+  },
+  {
+    title: 'LegalFans Magic Vault: all her content in one place, each item with its leaks',
+    kind: 'Product · B2B SaaS',
+    video: '/motion/legalfans-vault.mp4',
+    poster: '/motion/legalfans-vault.jpg',
+  },
 ];
 
 /**
