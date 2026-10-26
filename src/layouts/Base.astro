@@ -91,5 +91,14 @@ const ogImage = image ? new URL(image, Astro.site).href : undefined;
         });
       })();
     </script>
+
+    <!-- A loop drops its poster as soon as play() is called, before the first frame is
+         decoded, so it blinks the first time it starts. The poster painted under the video
+         stays until the frames cover it. -->
+    <script is:inline>
+      document.querySelectorAll('video[poster]').forEach(function (v) {
+        v.style.background = 'url("' + v.poster + '") center / cover no-repeat';
+      });
+    </script>
   </body>
 </html>

@@ -195,6 +195,7 @@
       tile.pause();
       const at = tile.currentTime;
       vid.poster = tile.poster;
+      vid.style.background = tile.style.background;
       vid.controls = reduced.matches;
       if (vid.getAttribute('src') !== it.full) vid.src = it.full;
       const go = () => {
