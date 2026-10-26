@@ -3,6 +3,11 @@ import '@fontsource-variable/geist';
 import '@fontsource-variable/geist-mono';
 import '@fontsource-variable/big-shoulders-display';
 import '../styles/global.css';
+// Latin subsets, preloaded so the first paint already uses them instead of
+// swapping from the fallback fonts a moment later.
+import geistWoff2 from '@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url';
+import geistMonoWoff2 from '@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2?url';
+import displayWoff2 from '@fontsource-variable/big-shoulders-display/files/big-shoulders-display-latin-wght-normal.woff2?url';
 
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -31,6 +36,9 @@ const ogImage = image ? new URL(image, Astro.site).href : undefined;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
+    {[geistWoff2, geistMonoWoff2, displayWoff2].map((href) => (
+      <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />
+    ))}
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />

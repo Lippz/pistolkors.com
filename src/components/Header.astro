@@ -27,7 +27,7 @@ const nav = [
 <header class="header">
   <div class="container header__inner">
     <a href={url('/')} class="header__brand" aria-label="Pylyp Pistolkors — home">
-      <Wordmark intro />
+      <Wordmark intro outlined />
     </a>
 
     <button class="header__toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
@@ -187,6 +187,11 @@ const nav = [
     align-items: center;
     font-size: 22px;
     line-height: 1;
+  }
+  /* A slightly larger shield here than in the footer lockup. */
+  .header__brand :global(.wordmark .wordmark__mark) {
+    width: 1.5em;
+    height: 1.5em;
   }
   .header__brand:hover {
     color: var(--ink);
