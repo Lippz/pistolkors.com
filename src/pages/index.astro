@@ -449,24 +449,25 @@ const mess = [
 
   // Where a move of `delta` pixels from `y` should go. Inside a section it is ordinary
   // scrolling (undefined), cut short at the section's edge; at an edge it is the
-  // neighbouring section — if `leave` allows leaving. Where there is a neighbour, within
-  // `slack` of the edge counts as at it.
+  // neighbouring section — if `leave` allows leaving. A section that runs past the screen
+  // by no more than `oneStop` is all edge, where there is a neighbour to move on to.
   type Plan = { to: Stop; short: boolean } | 'stay' | undefined;
-  function plan(delta: number, leave: boolean, y = scrollY, slack = 2): Plan {
+  function plan(delta: number, leave: boolean, y = scrollY, oneStop = 0): Plan {
     const dir = Math.sign(delta);
     const { sections, i } = sectionAt(y);
     const here = sections[i];
+    const whole = here.end - here.start <= oneStop;
     if (dir > 0) {
       const next = sections[i + 1];
-      if (y < here.end - (next ? slack : 2)) return y + delta <= here.end ? undefined : { to: { y: here.end, el: here.el }, short: true };
+      if (!(whole && next) && y < here.end - 2) return y + delta <= here.end ? undefined : { to: { y: here.end, el: here.el }, short: true };
       if (!next) return 'stay';
       return leave ? { to: { y: next.start, el: next.el }, short: false } : 'stay';
     }
+    // Between this section's end and the next one's start belongs to neither: go back up
+    // to the end like any other edge.
+    if (y > here.end + 2) return leave ? { to: { y: here.end, el: here.el }, short: false } : 'stay';
     const prev = sections[i - 1];
-    if (y > here.start + (prev ? slack : 2)) {
-      // Between this section's end and the next one's start belongs to neither: go back up
-      // to the end like any other edge.
-      if (y > here.end + 2) return leave ? { to: { y: here.end, el: here.el }, short: false } : 'stay';
+    if (!(whole && prev) && y > here.start + 2) {
       return y + delta >= here.start ? undefined : { to: { y: here.start, el: here.el }, short: true };
     }
     if (!prev) return 'stay';
@@ -480,9 +481,10 @@ const mess = [
   // momentum would carry on. Sideways scrolling (the Interactions carousel) is left alone,
   // as are pinch-zoom and the image viewer.
   // A section only a little taller than the screen (People, How I work) would take two
-  // gestures, one for the rest of it and one to move on, so for a gesture's start the
-  // last third of the screen before an edge counts as the edge: the move passes the rest
-  // on its way, and the way back lands on the section's end, where it can be seen.
+  // gestures, one for the rest of it and one to move on, so one that runs past the screen
+  // by no more than a third of it is a single stop: the move passes the rest on its way,
+  // and the way back lands on the section's end, where it can be seen. A taller section
+  // (About) scrolls to its very edge as before, so nothing at its bottom is skipped.
   // All the page's wheel scrolling is the script's, inside a section too: once a browser
   // lets a gesture's first event through, it scrolls the rest of it, momentum included,
   // and no longer lets the script stop it, so at a section's edge the two pulled the page
@@ -514,8 +516,7 @@ const mess = [
     // Counted from where the wheel is already taking the page, so quick notches add up
     // exactly to the section's edge. Only a gesture's first event may leave the section.
     const y = wheelTarget ?? scrollY;
-    const slack = fresh ? (innerHeight - (header?.offsetHeight ?? 0)) / 3 : 2;
-    const next = plan(delta, fresh, y, slack);
+    const next = plan(delta, fresh, y, (innerHeight - (header?.offsetHeight ?? 0)) / 3);
     if (next === undefined) return wheelTo(y + delta);
     if (next === 'stay') return;
     gestureSpent = true;
