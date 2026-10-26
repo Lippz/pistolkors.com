@@ -116,7 +116,7 @@ const mess = [
 
   <AiPipeline />
 
-  <section id="about" class="about container">
+  <section id="about" class="about container" data-scroll-to-end>
     <div class="about__photo frame reveal">
       <Image src={portrait} alt="Pylyp Pistolkors" sizes="(min-width: 1024px) 40vw, 100vw" />
     </div>
@@ -450,13 +450,14 @@ const mess = [
   // Where a move of `delta` pixels from `y` should go. Inside a section it is ordinary
   // scrolling (undefined), cut short at the section's edge; at an edge it is the
   // neighbouring section — if `leave` allows leaving. A section that runs past the screen
-  // by no more than `oneStop` is all edge, where there is a neighbour to move on to.
+  // by no more than `oneStop` is all edge, where there is a neighbour to move on to, unless
+  // it is marked data-scroll-to-end.
   type Plan = { to: Stop; short: boolean } | 'stay' | undefined;
   function plan(delta: number, leave: boolean, y = scrollY, oneStop = 0): Plan {
     const dir = Math.sign(delta);
     const { sections, i } = sectionAt(y);
     const here = sections[i];
-    const whole = here.end - here.start <= oneStop;
+    const whole = here.end - here.start <= oneStop && !('scrollToEnd' in here.el.dataset);
     if (dir > 0) {
       const next = sections[i + 1];
       if (!(whole && next) && y < here.end - 2) return y + delta <= here.end ? undefined : { to: { y: here.end, el: here.el }, short: true };
@@ -484,7 +485,8 @@ const mess = [
   // gestures, one for the rest of it and one to move on, so one that runs past the screen
   // by no more than a third of it is a single stop: the move passes the rest on its way,
   // and the way back lands on the section's end, where it can be seen. A taller section
-  // (About) scrolls to its very edge as before, so nothing at its bottom is skipped.
+  // scrolls to its very edge as before, and so does one marked data-scroll-to-end (About,
+  // whose CV button is at the bottom), however little it runs past the screen.
   // All the page's wheel scrolling is the script's, inside a section too: once a browser
   // lets a gesture's first event through, it scrolls the rest of it, momentum included,
   // and no longer lets the script stop it, so at a section's edge the two pulled the page
