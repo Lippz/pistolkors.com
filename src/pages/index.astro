@@ -294,8 +294,12 @@ const mess = [
   };
   // A finger scrolls natively and rarely stops exactly at a section's start, so on touch
   // screens every heading holds the bar the way "Recent works" does, while its section is
-  // in focus. The footer is too short to reach the middle; it takes the bar at the bottom.
+  // in focus. A footer too short to reach the middle still takes the bar at the bottom.
+  // Where scroll-driven animations work, iOS doesn't draw a transition that starts while a
+  // finger moves the page, so there the styles below tie those bars to scrolling instead
+  // and the script keeps only "obvious", which has its own entrance.
   const touch = matchMedia('(hover: none)');
+  const scrollBars = CSS.supports('animation-timeline', 'view()');
   let barQueued = false;
   const pickBar = () => {
     barQueued = false;
@@ -304,8 +308,9 @@ const mess = [
       bars
         .filter((bar) => {
           if (touch.matches) {
-            if (footer?.contains(bar)) return scrollY >= document.documentElement.scrollHeight - innerHeight - 2;
-            return inFocus(bar);
+            if (scrollBars && bar !== heroBar) return false;
+            const atBottom = scrollY >= document.documentElement.scrollHeight - innerHeight - 2;
+            return inFocus(bar) || (atBottom && !!footer?.contains(bar));
           }
           if (bar === workBar) return inFocus(bar);
           // "obvious" is the page's opening line: it keeps the bar a touch longer.
@@ -923,6 +928,73 @@ const mess = [
       :global(main :is(#words, #how, #ai, #lab, #about) > * .reveal) {
         animation: none;
       }
+    }
+  }
+  /* On touch screens the red bars move with the finger. A bar slides in as its heading
+     rises through the lower part of the screen, on the heading's own timeline, and slides
+     back out as its section's end passes the middle of the screen under the header, on
+     the section's timeline (the footer gets one too).
+     iOS doesn't draw a transition that starts mid-scroll, so the script's class switch
+     would only ever show the bar's ends. "obvious" keeps the script: it draws itself in. */
+  @media (hover: none) and (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      :global(.footer) {
+        view-timeline: --scene block;
+        view-timeline-inset: calc(var(--header-h) + 1px) 0px;
+      }
+      :global(.bars-live :is(main, .footer) .bar-left) {
+        animation:
+          bar-in-left linear both,
+          bar-out-left linear forwards;
+      }
+      :global(.bars-live :is(main, .footer) .bar-right:not(.hero__accent)) {
+        animation:
+          bar-in-right linear both,
+          bar-out-right linear forwards;
+      }
+      /* Timelines apart from the shorthand, as above. */
+      :global(.bars-live :is(main, .footer) :is(.bar-left, .bar-right):not(.hero__accent)) {
+        animation-timeline: view(), --scene;
+        animation-range:
+          cover 15svh cover 40svh,
+          exit calc((100svh - var(--header-h)) * 0.5) exit calc((100svh - var(--header-h)) * 0.8);
+      }
+    }
+  }
+  @keyframes bar-in-left {
+    from {
+      --bar-shift: -100vw;
+      animation-timing-function: cubic-bezier(0.45, 0, 0.2, 1);
+    }
+    to {
+      --bar-shift: 0px;
+    }
+  }
+  @keyframes bar-out-left {
+    from {
+      --bar-shift: 0px;
+      animation-timing-function: cubic-bezier(0.3, 0, 0.8, 0.4);
+    }
+    to {
+      --bar-shift: -100vw;
+    }
+  }
+  @keyframes bar-in-right {
+    from {
+      --bar-shift: 100vw;
+      animation-timing-function: cubic-bezier(0.45, 0, 0.2, 1);
+    }
+    to {
+      --bar-shift: 0px;
+    }
+  }
+  @keyframes bar-out-right {
+    from {
+      --bar-shift: 0px;
+      animation-timing-function: cubic-bezier(0.3, 0, 0.8, 0.4);
+    }
+    to {
+      --bar-shift: 100vw;
     }
   }
   /* One section per screen. Every section is at least a full screen tall (under the
