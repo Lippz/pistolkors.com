@@ -252,6 +252,25 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
     measure();
     new ResizeObserver(measure).observe(list);
     list.classList.add('is-ready');
+
+    // On a phone the row scrolls sideways: a red bar under it shows how much is in view
+    // and where. Hidden whenever everything fits.
+    const bar = document.createElement('div');
+    bar.className = 'cards-bar';
+    bar.setAttribute('aria-hidden', 'true');
+    const thumb = document.createElement('i');
+    bar.append(thumb);
+    list.after(bar);
+    const track = () => {
+      const { scrollLeft, scrollWidth, clientWidth } = list;
+      bar.hidden = scrollWidth <= clientWidth + 1;
+      if (bar.hidden) return;
+      thumb.style.width = `${(clientWidth / scrollWidth) * 100}%`;
+      thumb.style.translate = `${(scrollLeft / clientWidth) * 100}% 0`;
+    };
+    list.addEventListener('scroll', track, { passive: true });
+    new ResizeObserver(track).observe(list);
+    track();
   });
 
   // Product loops (the one under the results and any in the text) play while at least half

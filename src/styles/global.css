@@ -984,6 +984,23 @@ a:hover .frame img {
     animation: none;
   }
 }
+/* The scroll bar the page script puts under a swipeable row of cards. */
+.prose .cards-bar {
+  height: 3px;
+  margin-top: 20px;
+  border-radius: 3px;
+  background: var(--line);
+  overflow: hidden;
+}
+.prose .cards-bar > i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent);
+}
+.prose .cards-bar[hidden] {
+  display: none;
+}
 /* Cards rise in one after another as they scroll in: each card in a row of three
  * starts its reveal a little later in its own entry range. Same keyframes as .reveal. */
 @media (prefers-reduced-motion: no-preference) {
