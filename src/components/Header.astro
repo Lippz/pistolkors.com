@@ -46,6 +46,7 @@ const nav = [
         ))
       }
       <a href={url('/#contact')} class="btn btn--ink">Get in touch</a>
+      <span class="header__bar" aria-hidden="true"></span>
     </nav>
 
     <button class="theme-toggle" type="button" aria-label="Switch to dark theme">
@@ -101,12 +102,87 @@ const nav = [
     }
   });
 
+  // One underline that travels between menu items. Its edges move separately: the leading
+  // edge sets off first and the trailing one follows, so the bar stretches on the way.
+  const bar = nav?.querySelector<HTMLElement>('.header__bar');
+  let barOn: HTMLAnchorElement | undefined;
+  const placeBar = (a: HTMLAnchorElement | undefined, lead: 'left' | 'right' | 'none') => {
+    if (!bar || !nav) return;
+    bar.dataset.lead = lead;
+    if (!a) return;
+    const n = nav.getBoundingClientRect();
+    const r = a.getBoundingClientRect();
+    bar.style.top = `${r.bottom - n.top + 2}px`;
+    bar.style.left = `${r.left - n.left}px`;
+    bar.style.right = `${n.right - r.right}px`;
+  };
+  const moveBar = (a: HTMLAnchorElement | undefined) => {
+    if (!bar || !nav || a === barOn) return;
+    const from = barOn;
+    barOn = a;
+    if (a && !from) {
+      // Appears: starts as a dot on the item's left edge and grows to the right.
+      placeBar(a, 'none');
+      bar.style.right = `${nav.getBoundingClientRect().right - a.getBoundingClientRect().left}px`;
+      bar.getBoundingClientRect();
+      bar.classList.add('is-on');
+      placeBar(a, 'right');
+    } else if (a && from) {
+      const right = a.getBoundingClientRect().left > from.getBoundingClientRect().left;
+      placeBar(a, right ? 'right' : 'left');
+    } else if (from) {
+      // Leaves: shrinks into the edge it was heading for (left above the first section).
+      const n = nav.getBoundingClientRect();
+      const r = from.getBoundingClientRect();
+      const toLeft = from === spyLinks[0]?.a;
+      bar.dataset.lead = toLeft ? 'left' : 'right';
+      if (toLeft) bar.style.right = `${n.right - r.left}px`;
+      else bar.style.left = `${r.right - n.left}px`;
+      bar.classList.remove('is-on');
+    }
+  };
+  // Re-measure without animating when the layout shifts (resize, late web fonts).
+  const snapBar = () => {
+    if (!bar || !barOn) return;
+    placeBar(barOn, 'none');
+  };
+  window.addEventListener('resize', snapBar);
+  document.fonts?.ready.then(snapBar);
+  const pageLink = nav?.querySelector<HTMLAnchorElement>('a[aria-current="page"]');
+  if (pageLink) {
+    barOn = pageLink;
+    bar?.classList.add('is-on');
+    placeBar(pageLink, 'none');
+  }
+
   // Scroll spy: underline the menu item whose section sits under the header.
   const spyLinks = [...(nav?.querySelectorAll<HTMLAnchorElement>('a[href*="#"]:not(.btn)') ?? [])]
     .map((a) => ({ a, el: document.getElementById(a.hash.slice(1)) }))
     .filter((l): l is { a: HTMLAnchorElement; el: HTMLElement } => !!l.el && l.a.pathname === location.pathname);
   if (spyLinks.length) {
     let ticking = false;
+    // A click picks its item at once; the spy holds off until the page arrives there (or
+    // stops somewhere else), so the bar doesn't trail through every section on the way.
+    let picked: HTMLAnchorElement | undefined;
+    let settle = 0;
+    const holdUntilStill = () => {
+      clearTimeout(settle);
+      settle = window.setTimeout(() => {
+        picked = undefined;
+        update();
+      }, 400);
+    };
+    const mark = (active: HTMLAnchorElement | undefined) => {
+      spyLinks.forEach(({ a }) => a.classList.toggle('is-active', a === active));
+      moveBar(active);
+    };
+    spyLinks.forEach(({ a }) =>
+      a.addEventListener('click', () => {
+        picked = a;
+        mark(a);
+        holdUntilStill();
+      }),
+    );
     const update = () => {
       ticking = false;
       const line = window.innerHeight * 0.35;
@@ -115,9 +191,12 @@ const nav = [
       let active: HTMLAnchorElement | undefined;
       for (const { a, el } of spyLinks) if (el.getBoundingClientRect().top <= line) active = a;
       if (spyLinks[spyLinks.length - 1].el.getBoundingClientRect().bottom <= line) active = undefined;
-      spyLinks.forEach(({ a }) => a.classList.toggle('is-active', a === active));
+      if (picked && active !== picked) return;
+      picked = undefined;
+      mark(active);
     };
     const onScroll = () => {
+      if (picked) holdUntilStill();
       if (!ticking) {
         ticking = true;
         requestAnimationFrame(update);
@@ -240,28 +319,53 @@ const nav = [
       display: none;
     }
   }
-  /* Underline grows out from the centre; a pseudo-element, so the text never shifts. */
-  .header__nav a:not(.btn) {
+  /* The travelling underline (see the script): edges animate on their own, the leading
+     one first. Text never shifts, since the bar is absolutely positioned. */
+  .header__nav {
     position: relative;
   }
-  .header__nav a:not(.btn)::after {
-    content: '';
+  .header__bar {
+    --move: 0.32s cubic-bezier(0.65, 0, 0.25, 1);
+    --lag: 0.07s;
     position: absolute;
     left: 0;
-    right: 0;
-    bottom: -4px;
+    right: 100%;
     height: 2px;
+    border-radius: 2px;
     background: var(--accent);
-    transform: scaleX(0);
-    transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      left var(--move),
+      right var(--move),
+      opacity 0.2s ease;
   }
-  .header__nav a[aria-current='page']::after,
-  .header__nav a.is-active::after {
-    transform: scaleX(1);
+  .header__bar.is-on {
+    opacity: 1;
+  }
+  .header__bar[data-lead='right'] {
+    transition:
+      left var(--move) var(--lag),
+      right var(--move),
+      opacity 0.2s ease;
+  }
+  .header__bar[data-lead='left'] {
+    transition:
+      left var(--move),
+      right var(--move) var(--lag),
+      opacity 0.2s ease;
+  }
+  .header__bar[data-lead='none'] {
+    transition: none;
+  }
+  /* Leaving: shrink first, then fade. */
+  .header__bar:not(.is-on) {
+    transition-property: left, right, opacity;
+    transition-delay: 0s, 0s, 0.18s;
   }
   @media (prefers-reduced-motion: reduce) {
-    .header__nav a:not(.btn)::after {
-      transition: none;
+    .header__bar {
+      transition: opacity 0.2s ease !important;
     }
   }
   .header__toggle {
@@ -344,7 +448,7 @@ const nav = [
       padding: 14px 0;
       border-bottom: 1px solid var(--line);
     }
-    .header__nav a:not(.btn)::after {
+    .header__bar {
       display: none;
     }
     .header__nav a[aria-current='page'],
