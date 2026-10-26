@@ -101,9 +101,9 @@ const items = isDev ? motion : motion.filter((m) => m.video);
     document.addEventListener('close', (e) => (e.target as Element).classList?.contains('lb') && pick(), true);
   }
 
-  // Phones: the tiles form a swipeable row (scroll-snap, the neighbours peek in). The centred
-  // tile is the active one; a tap on a neighbour brings it to the centre, a tap on the active
-  // tile opens the full-screen viewer.
+  // The tiles form a scrollable row (scroll-snap) with arrows under it. On desktop two whole
+  // tiles show, the active one is the first of them and the arrows move the row a tile at a time. On phones the centred tile is the active one; a tap on a neighbour brings it to the
+  // centre, a tap on the active tile opens the full-screen viewer.
   const track = document.querySelector<HTMLElement>('.lab__grid');
   const slides = [...document.querySelectorAll<HTMLElement>('.lab .tile')];
   const prev = document.querySelector<HTMLButtonElement>('.lab__btn[data-dir="-1"]');
@@ -114,35 +114,39 @@ const items = isDev ? motion : motion.filter((m) => m.video);
   if (track && prev && next && count && slides.length > 1) {
     let active = 0;
 
+    /** Where a tile sits when it is the active one: centred on phones, at the row's start on desktop. */
+    const anchor = (s: HTMLElement) =>
+      phone.matches
+        ? s.offsetLeft + s.offsetWidth / 2 - track.clientWidth / 2
+        : s.offsetLeft - parseFloat(getComputedStyle(track).paddingLeft);
+
     const goTo = (i: number, smooth = true) => {
       const s = slides[Math.max(0, Math.min(slides.length - 1, i))];
-      track.scrollTo({
-        left: s.offsetLeft + s.offsetWidth / 2 - track.clientWidth / 2,
-        behavior: smooth && !reduced.matches ? 'smooth' : 'auto',
-      });
+      track.scrollTo({ left: anchor(s), behavior: smooth && !reduced.matches ? 'smooth' : 'auto' });
     };
 
-    /** The tile nearest the row's centre (the first and last win at the ends of the row). */
+    const atEnd = () => track.scrollLeft >= track.scrollWidth - track.clientWidth - 2;
+
+    /** The tile whose place is nearest the scroll position. On phones the first and last win at the
+        ends of the row; on desktop the last tiles share the end, so it stays the first one in view. */
     const nearest = () => {
-      const max = track.scrollWidth - track.clientWidth;
       if (track.scrollLeft <= 2) return 0;
-      if (track.scrollLeft >= max - 2) return slides.length - 1;
-      const mid = track.scrollLeft + track.clientWidth / 2;
+      if (phone.matches && atEnd()) return slides.length - 1;
       let best = 0;
       let dist = Infinity;
       slides.forEach((s, i) => {
-        const d = Math.abs(s.offsetLeft + s.offsetWidth / 2 - mid);
+        const d = Math.abs(anchor(s) - track.scrollLeft);
         if (d < dist) [best, dist] = [i, d];
       });
       return best;
     };
 
     const update = () => {
-      active = phone.matches ? nearest() : 0;
+      active = nearest();
       slides.forEach((s, i) => s.classList.toggle('is-active', phone.matches && i === active));
       count.textContent = `${active + 1} / ${slides.length}`;
       prev.disabled = active === 0;
-      next.disabled = active === slides.length - 1;
+      next.disabled = active === slides.length - 1 || atEnd();
     };
 
     let frame = 0;
@@ -200,12 +204,28 @@ const items = isDev ? motion : motion.filter((m) => m.video);
   .lab__eyebrow {
     color: var(--night-muted);
   }
+  /* A scrollable row at every width. Desktop: two whole tiles across the column, snapping to its
+     start, and the row runs on to the right edge of the window, so the next tiles show there; on
+     the left it stops at the column, so no cut tile shows on that side. The right padding equals
+     the run-on, so tile sizes still come from the column and the last tile can reach its start. */
   .lab__grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    --run-on: calc((100vw - 100%) / 2);
+    position: relative;
+    display: flex;
     gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    margin-right: calc(-1 * var(--run-on));
+    padding-right: var(--run-on);
+    scrollbar-width: none;
+  }
+  .lab__grid::-webkit-scrollbar {
+    display: none;
   }
   .tile {
+    flex: 0 0 calc((100% - 16px) / 2);
+    scroll-snap-align: start;
     display: flex;
     flex-direction: column;
     gap: 14px;
@@ -251,7 +271,12 @@ const items = isDev ? motion : motion.filter((m) => m.video);
     color: var(--night-muted);
   }
   .lab__bar {
-    display: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    /* Closer to the row than the section's usual gap. */
+    margin-top: -24px;
   }
   .lab__btn {
     width: 44px;
@@ -287,22 +312,13 @@ const items = isDev ? motion : motion.filter((m) => m.video);
     color: var(--night-muted);
     font-variant-numeric: tabular-nums;
   }
-  /* Phones: a swipeable row. Tiles snap to the centre, so the first one sits at the column's left
-     edge (the row cannot scroll further) and the next one peeks in from the right. */
+  /* Phones: tiles snap to the centre, so the first one sits at the column's left edge (the row
+     cannot scroll further) and the next one peeks in from the right. */
   @media (max-width: 640px) {
     .lab__grid {
-      position: relative;
-      display: flex;
       gap: 12px;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      overscroll-behavior-x: contain;
       margin-inline: calc(-1 * var(--gutter));
       padding-inline: var(--gutter);
-      scrollbar-width: none;
-    }
-    .lab__grid::-webkit-scrollbar {
-      display: none;
     }
     .tile {
       flex: 0 0 min(calc(100% - 56px), 320px);
@@ -313,14 +329,6 @@ const items = isDev ? motion : motion.filter((m) => m.video);
     }
     .tile:not(.is-active) .tile__media {
       filter: brightness(0.7);
-    }
-    .lab__bar {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      /* Closer to the row than the section's usual gap. */
-      margin-top: -24px;
     }
   }
   @media (prefers-reduced-motion: reduce) {

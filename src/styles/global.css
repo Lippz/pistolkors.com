@@ -1138,3 +1138,7 @@ a:hover .frame img {
   border-radius: var(--radius);
   background: var(--surface);
 }
+/* A loop that brings its own backdrop (a device mockup) goes without the frame. */
+.case-motion--bare video {
+  border: 0;
+}

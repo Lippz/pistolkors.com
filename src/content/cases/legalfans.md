@@ -39,7 +39,8 @@ motion:
   poster: /motion/legalfans-uploads.jpg
   width: 2324
   height: 1520
-  alt: "An admin's Uploads page on an iMac: the help next to Search explains that the switch takes a photo out of search while it stays stored; one photo is switched off, the list turns into a grid of cards where the same photo's switch is off, it is switched back on, and the grid turns back into the list"
+  frame: false
+  alt: "An admin's Uploads page on an iMac: in the grid of photos one card is taken out of search; the list view shows the same photo with its switch off, the help next to Search explains that the switch takes a photo out of search while it stays stored, the photo is switched back on, and the list turns back into the grid"
   caption: Every upload in one place, in or out of search
 ---
 ## Problem

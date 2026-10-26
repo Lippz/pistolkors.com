@@ -83,10 +83,10 @@ export const motion: { title: string; kind: string; video?: string; poster?: str
     poster: '/motion/legalfans-setup.jpg',
   },
   {
-    title: 'LegalFans Magic Vault: all her content in one place, each item with its leaks',
+    title: 'LegalFans uploads: every photo in one place, in or out of search',
     kind: 'Product · B2B SaaS',
-    video: '/motion/legalfans-vault.mp4',
-    poster: '/motion/legalfans-vault.jpg',
+    video: '/motion/legalfans-uploads-screen.mp4',
+    poster: '/motion/legalfans-uploads-screen.jpg',
   },
 ];
 

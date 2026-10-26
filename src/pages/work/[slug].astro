@@ -77,7 +77,7 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
 
       {
         d.motion && (
-          <figure class="case-motion" data-lightbox-group>
+          <figure class:list={['case-motion', { 'case-motion--bare': !d.motion.frame }]} data-lightbox-group>
             <video
               src={url(d.motion.video)}
               poster={url(d.motion.poster)}

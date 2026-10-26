@@ -149,18 +149,18 @@
 <script src="../../_lib/motion.js"></script>
 <script src="../../_lib/player.js"></script>
 <script>
-// Story: Uploads as a list → the cursor rests on Search's help: the tooltip says what the switch does → one photo is
-// taken out of search → the grid view: the same photo's card has its switch off → it goes back into search → the list
-// again, as at the start.
+// Story: Uploads as a grid of photos → the third card is taken out of search → the list view: the same photo's switch is
+// off → the cursor rests on Search's help: the tooltip says what the switch does → the photo goes back into search →
+// the grid again, as at the start.
 const T = {
-  tip: 1.3,        // the cursor reaches the help icon
-  off: 4.1,        // click the third photo's switch: out of search
-  grid: 5.6,       // click the grid view
-  on: 8.3,         // click the same card's switch: back in search
-  list: 9.8,       // click the list view
-  end: 11.8,
+  off: 1.6,        // click the third card's switch: out of search
+  list: 3.1,       // click the list view
+  tip: 5.0,        // the cursor reaches the help icon
+  on: 7.3,         // click the same photo's switch in the list: back in search
+  grid: 8.8,       // click the grid view
+  end: 10.8,
 };
-const CLICKS = [T.off, T.grid, T.on, T.list];
+const CLICKS = [T.off, T.list, T.on, T.grid];
 const START = [1640, 760];
 const $ = (id) => document.getElementById(id);
 const FIGMA = new URLSearchParams(location.search).get('figma');
@@ -227,12 +227,12 @@ const R = { help: rectOf($('help').firstElementChild), view: rectOf($('viewBtn')
 R.help = [R.help[0], R.help[1] - 4, R.help[2], R.help[3] + 8];
 const at = ([x, y, w, h], dx = 0, dy = 0) => [x + w / 2 + dx, y + h / 2 + dy];
 const cursorAt = cursorPath(START, [
-  [.3, T.tip, ...at(R.help, 2, 3)],
-  [T.tip + 1.9, T.off - .15, ...at(R.tgL, 4, 3)],
-  [T.off + .5, T.grid - .15, ...at(R.view, 2, 3)],
-  [T.grid + 1.1, T.on - .15, ...at(R.tgG, 4, 3)],
-  [T.on + .5, T.list - .15, ...at(R.view, 2, 3)],
-  [T.list + .5, T.end - .15, ...START],
+  [.3, T.off - .15, ...at(R.tgG, 4, 3)],
+  [T.off + .5, T.list - .15, ...at(R.view, 2, 3)],
+  [T.list + .9, T.tip, ...at(R.help, 2, 3)],
+  [T.tip + 1.6, T.on - .15, ...at(R.tgL, 4, 3)],
+  [T.on + .5, T.grid - .15, ...at(R.view, 2, 3)],
+  [T.grid + .5, T.end - .15, ...START],
 ]);
 const inside = (r, [x, y]) => x >= r[0] && x <= r[0] + r[2] && y >= r[1] && y <= r[1] + r[3];
 const hoverOf = (r, t) => { let n = 0; for (let i = 0; i < 5; i++) if (inside(r, cursorAt(t - .035 * i))) n++; return n / 5; };
@@ -249,36 +249,35 @@ function setToggle(el, k, halo) {
 }
 
 function render(t) {
-  // Views: the list's rows go up and out one after another, then the cards rise in; back the same way.
-  const toGrid = (a) => [p(t, a + .05, a + .45), p(t, a + .35, a + 1.0)];
-  const [lo1, gi1] = toGrid(T.grid), [go2, li2] = toGrid(T.list);
-  const inGrid = t >= T.grid && t < T.list;
+  // Views: the outgoing view goes up and out item by item, then the other one rises in; the grid is out between the
+  // list click and the grid click.
+  const inList = t >= T.list && t < T.grid;
+  const going = (a, d) => io(p(t, a + .05 + d, a + .3 + d));
+  const coming = (a, d) => outC(p(t, a + .4 + d, a + .85 + d));
   rows.forEach((el, i) => {
     const d = .025 * i;
-    const out = inGrid ? io(p(t, T.grid + .05 + d, T.grid + .3 + d)) : 0;
-    const back = t >= T.list ? outC(p(t, T.list + .4 + d, T.list + .8 + d)) : 1;
-    el.style.opacity = t >= T.list ? back : 1 - out;
-    el.style.transform = `translateY(${t >= T.list ? 10 * (1 - back) : -8 * out}px)`;
+    const k = t < T.list ? 0 : inList ? coming(T.list, d) : 1 - going(T.grid, d);
+    el.style.opacity = k;
+    el.style.transform = `translateY(${inList ? 10 * (1 - k) : -8 * (1 - k)}px)`;
   });
-  const listShown = t < T.grid ? 1 : t < T.list ? 1 - lo1 : li2;
+  const listShown = t < T.list ? 0 : inList ? p(t, T.list + .35, T.list + 1.0) : 1 - p(t, T.grid + .05, T.grid + .45);
   $('list').querySelector('.th').style.opacity = listShown;
   $('pag').style.opacity = listShown;
+  $('list').style.visibility = $('pag').style.visibility = t > T.list && t < T.grid + .7 ? 'visible' : 'hidden';
   cards.forEach((el, i) => {
-    const d = .05 * i;
-    const k = inGrid ? outC(p(t, T.grid + .4 + d, T.grid + .85 + d)) : 0;
-    const out = t >= T.list ? io(p(t, T.list + .05 + .02 * i, T.list + .3 + .02 * i)) : 0;
-    el.style.opacity = t >= T.list ? (1 - out) : k;
-    el.style.transform = `translateY(${t >= T.list ? -8 * out : 16 * (1 - k)}px)`;
+    const k = t < T.list ? 1 : inList ? 1 - going(T.list, .02 * i) : coming(T.grid, .05 * i);
+    el.style.opacity = t < T.list ? 1 : k;
+    el.style.transform = `translateY(${t < T.list ? 0 : inList ? -8 * (1 - k) : 16 * (1 - k)}px)`;
   });
-  $('gpag').style.opacity = t < T.grid ? 0 : t < T.list ? gi1 : 1 - go2;
-  $('grid').style.visibility = $('gpag').style.visibility = t > T.grid && t < T.list + .6 ? 'visible' : 'hidden';
-  $('icGrid').style.opacity = t < T.grid + .2 ? 1 : t < T.list + .2 ? 0 : 1;
-  $('icList').style.opacity = 1 - $('icGrid').style.opacity;
+  $('gpag').style.opacity = t < T.list ? 1 : inList ? 1 - p(t, T.list + .05, T.list + .45) : p(t, T.grid + .35, T.grid + 1.0);
+  $('grid').style.visibility = $('gpag').style.visibility = inList && t > T.list + .7 ? 'hidden' : 'visible';
+  $('icList').style.opacity = t < T.list + .2 || t >= T.grid + .2 ? 1 : 0;
+  $('icGrid').style.opacity = 1 - $('icList').style.opacity;
 
   // The third photo: out of search from the click in the list until the click on its card.
   const sel = FIGMA !== null ? 1 : 1 - io(p(t, T.off, T.off + .25)) + io(p(t, T.on, T.on + .25));
-  listTg.forEach((el, i) => setToggle(el, i === SEL ? sel : 1, i === SEL ? hoverOf(R.tgL, t) * (inGrid ? 0 : 1) : 0));
-  gridTg.forEach((el, i) => setToggle(el, i === SEL ? sel : 1, i === SEL ? hoverOf(R.tgG, t) * (inGrid ? 1 : 0) : 0));
+  listTg.forEach((el, i) => setToggle(el, i === SEL ? sel : 1, i === SEL ? hoverOf(R.tgL, t) * (inList ? 1 : 0) : 0));
+  gridTg.forEach((el, i) => setToggle(el, i === SEL ? sel : 1, i === SEL ? hoverOf(R.tgG, t) * (inList ? 0 : 1) : 0));
 
   // The tooltip shows while the cursor is on the help icon.
   const tip = outC(hoverOf(R.help, t));
@@ -293,14 +292,14 @@ function render(t) {
 
 // ?figma lays out the list with the tooltip (Figma draws its own cursor there), ?figma=2 the grid, with Figma's data.
 const figmaRender = () => {
-  render(FIGMA === '2' ? T.grid + 2 : T.tip + 1);
+  render(FIGMA === '2' ? 0 : T.tip + .6);
   $('cursor').style.opacity = 0;
   $('viewHov').style.opacity = 0;
   document.querySelectorAll('.halo').forEach((el) => { el.style.opacity = 0; });
 };
 MotionPlayer.mount({
   stage: $('stage'), width: 1816, height: 1024, duration: T.end, render: FIGMA !== null ? figmaRender : render,
-  markers: [['tooltip', T.tip], ['off', T.off], ['grid', T.grid], ['on', T.on], ['list', T.list]],
+  markers: [['off', T.off], ['list', T.list], ['tooltip', T.tip], ['on', T.on], ['grid', T.grid]],
   refs: [['Uploads (List) (242:8917)', 'src/1-list.png'], ['Uploads (Grid) (242:8952)', 'src/2-grid.png']],
   poster: 0,
 });

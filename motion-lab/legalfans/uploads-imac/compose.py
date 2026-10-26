@@ -4,7 +4,7 @@
 #   python3 motion-lab/legalfans/uploads-imac/compose.py            → build/imac.mp4 to review
 #   python3 motion-lab/legalfans/uploads-imac/compose.py publish    → public/motion/legalfans-uploads.mp4 and .jpg (frame 0)
 #
-# Figma: the frame's background is #f9fcfd under a vertical gradient, white 50 % at 40.385 % → #01aff1 50 % at 100 %;
+# Figma: the frame's background is #f9fcfd under a vertical gradient, white 10 % at 40.385 % → #01aff1 10 % at 100 %;
 # "image 69" (the iMac, a transparent PNG, 1600 px here) is drawn at 2200×2200 from (62, -339.5); "REPLACE" (the screen)
 # is 1438×811 at (443, 116.5) with a 2 px black stroke inside and 4 px corners, so the picture is 1434×807 at (445, 118.5).
 # The loop is 1816×1024, the same proportions within 0.2 %.
@@ -24,10 +24,10 @@ grad = Image.new('RGBA', (1, 1521))
 for y in range(1521):
     k = y / 1520
     if k <= .40385:
-        c = (255, 255, 255, 128)
+        c = (255, 255, 255, 26)
     else:
         m = (k - .40385) / (1 - .40385)
-        c = tuple(round(a + (b - a) * m) for a, b in zip((255, 255, 255, 128), (1, 175, 241, 128)))
+        c = tuple(round(a + (b - a) * m) for a, b in zip((255, 255, 255, 26), (1, 175, 241, 26)))
     grad.putpixel((0, y), c)
 bg.alpha_composite(grad.resize((W, 1521)).crop((0, 0, W, H)))
 imac = Image.open(HERE / 'assets/image69.png').convert('RGBA').resize((2200, 2200), Image.LANCZOS)

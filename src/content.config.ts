@@ -74,6 +74,8 @@ const cases = defineCollection({
           /** The video's size, so the page keeps its proportions before it loads. */
           width: z.number().default(1920),
           height: z.number().default(1080),
+          /** false drops the frame around the video, for a loop with its own backdrop (a device mockup). */
+          frame: z.boolean().default(true),
         })
         .optional(),
       /** "story": written case with sections. "slides": intro + presentation slides. */
