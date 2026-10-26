@@ -302,6 +302,10 @@ const mess = [
     const middle = top + (innerHeight - top) / 2;
     return !!box && box.top <= middle && box.bottom >= middle;
   };
+  // A heading holds the bar while the page is this close to its section's start.
+  // "obvious" is the page's opening line: it keeps the bar a touch longer.
+  const nearRest = (bar: HTMLElement, y: number) =>
+    Math.abs(y - restFor(bar)) < innerHeight * (bar === heroBar ? 0.05 : 0.04);
   let barQueued = false;
   const pickBar = () => {
     barQueued = false;
@@ -314,8 +318,7 @@ const mess = [
             return inFocus(bar) || (atBottom && !!footer?.contains(bar));
           }
           if (bar === workBar) return inFocus(bar);
-          // "obvious" is the page's opening line: it keeps the bar a touch longer.
-          return Math.abs(scrollY - restFor(bar)) < innerHeight * (bar === heroBar ? 0.05 : 0.04);
+          return nearRest(bar, scrollY);
         })
         .at(-1),
     );
@@ -367,18 +370,23 @@ const mess = [
   let glide = 0;
   function moveTo(stop: Stop, short = false) {
     // The section's heading takes the bar as the move begins, so it lands with the page;
-    // a stop away from a heading sends the last bar away.
+    // a stop away from a heading sends the last bar away. A section only a little taller
+    // than the screen is reached at its end going up, which still counts as its start.
     if (bars.length && !short) {
       showBar(
-        bars.find((bar) => Math.abs(restFor(bar) - stop.y) < 2) ??
-          (workBar && stop.el.contains(workBar) ? workBar : undefined),
+        (workBar && stop.el.contains(workBar) ? workBar : undefined) ??
+          bars.filter((bar) => nearRest(bar, stop.y)).at(-1),
       );
       barLanding = true;
     }
     const land = () => {
       glide = 0;
-      barLanding = false;
       lastY = scrollY;
+      // The last frame of a move may not scroll at all, so check the bar once more here.
+      if (barLanding) {
+        barLanding = false;
+        pickBar();
+      }
     };
     cancelAnimationFrame(glide);
     if (calm.matches) {
