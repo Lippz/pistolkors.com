@@ -283,6 +283,19 @@ const mess = [
   // not only at its start.
   const workBar = bars.find((bar) => bar.closest('#work'));
   const restFor = (bar: HTMLElement) => sectionsNow().find((s) => s.el.contains(bar))?.start ?? 0;
+  // A section is in focus while it runs through the middle of the screen under the header.
+  const inFocus = (bar: HTMLElement) => {
+    const box = sectionsNow()
+      .find((s) => s.el.contains(bar))
+      ?.el.getBoundingClientRect();
+    const top = header?.offsetHeight ?? 0;
+    const middle = top + (innerHeight - top) / 2;
+    return !!box && box.top <= middle && box.bottom >= middle;
+  };
+  // A finger scrolls natively and rarely stops exactly at a section's start, so on touch
+  // screens every heading holds the bar the way "Recent works" does, while its section is
+  // in focus. The footer is too short to reach the middle; it takes the bar at the bottom.
+  const touch = matchMedia('(hover: none)');
   let barQueued = false;
   const pickBar = () => {
     barQueued = false;
@@ -290,12 +303,11 @@ const mess = [
     showBar(
       bars
         .filter((bar) => {
-          if (bar === workBar) {
-            const work = bar.closest<HTMLElement>('section')?.getBoundingClientRect();
-            const top = header?.offsetHeight ?? 0;
-            const middle = top + (innerHeight - top) / 2;
-            return !!work && work.top <= middle && work.bottom >= middle;
+          if (touch.matches) {
+            if (footer?.contains(bar)) return scrollY >= document.documentElement.scrollHeight - innerHeight - 2;
+            return inFocus(bar);
           }
+          if (bar === workBar) return inFocus(bar);
           // "obvious" is the page's opening line: it keeps the bar a touch longer.
           return Math.abs(scrollY - restFor(bar)) < innerHeight * (bar === heroBar ? 0.05 : 0.04);
         })
