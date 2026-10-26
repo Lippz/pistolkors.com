@@ -1,11 +1,6 @@
 ---
-/** "How I work": one card per discipline, each ending in a link to the work that proves it. */
-import ArrowCircle from './ArrowCircle.astro';
-import { capabilities, motion } from '../data/site';
-import { url } from '../lib/url';
-
-// The Interactions link only makes sense while the section is on the page (see MotionLab.astro).
-const showLab = import.meta.env.DEV || motion.some((m) => m.video);
+/** "How I work": one card per discipline, with what it delivers. */
+import { capabilities } from '../data/site';
 ---
 
 <section id="how" class="how container">
@@ -21,28 +16,16 @@ const showLab = import.meta.env.DEV || motion.some((m) => m.video);
 
   <ol class="how__grid" role="list">
     {
-      capabilities.map((c, i) => {
-        const proof = c.proof.href !== '/#lab' || showLab;
-        return (
-          <li class="cap reveal">
-            <p class="eyebrow cap__idx">{String(i + 1).padStart(2, '0')}</p>
-            <h3 class="cap__title">{c.title}</h3>
-            <p class="cap__text">{c.text}</p>
+      capabilities.map((c, i) => (
+        <li class="cap reveal">
+          <p class="eyebrow cap__idx">{String(i + 1).padStart(2, '0')}</p>
+          <h3 class="cap__title">{c.title}</h3>
+          <p class="cap__text">{c.text}</p>
 
-            <p class="eyebrow cap__label">Deliverables</p>
-            <p class="cap__deliverables">{c.deliverables.join(' · ')}</p>
-
-            {proof && (
-              <a href={url(c.proof.href)} class="cap__proof arrow-trigger">
-                <span>
-                  <span class="cap__proof-pre">See it in</span> {c.proof.label}
-                </span>
-                <ArrowCircle />
-              </a>
-            )}
-          </li>
-        );
-      })
+          <p class="eyebrow cap__label">Deliverables</p>
+          <p class="cap__deliverables">{c.deliverables.join(' · ')}</p>
+        </li>
+      ))
     }
   </ol>
 </section>
@@ -71,10 +54,10 @@ const showLab = import.meta.env.DEV || motion.some((m) => m.video);
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0 16px;
   }
-  /* Subgrid: titles, lists and links line up across the three cards even when a title wraps. */
+  /* Subgrid: titles and lists line up across the three cards even when a title wraps. */
   .cap {
     display: grid;
-    grid-row: span 7;
+    grid-row: span 5;
     grid-template-rows: subgrid;
     align-content: start;
     padding: clamp(24px, 2.5vw, 32px);
@@ -111,28 +94,6 @@ const showLab = import.meta.env.DEV || motion.some((m) => m.video);
     font-size: 15px;
     line-height: 1.6;
     color: var(--ink-3);
-  }
-  /* Pinned to the bottom, so the links line up across cards of different length. */
-  .cap__proof {
-    align-self: end;
-    padding-top: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    min-height: 44px;
-    font-weight: 500;
-  }
-  .cap__proof-pre {
-    color: var(--muted);
-    font-weight: 400;
-  }
-  .cap__proof:focus-visible {
-    outline: none;
-  }
-  .cap:has(.cap__proof:focus-visible) {
-    outline: 2px solid var(--accent);
-    outline-offset: 4px;
   }
 
   @media (max-width: 1023px) {

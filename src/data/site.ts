@@ -141,25 +141,21 @@ export const capabilities: {
   title: string;
   text: string;
   deliverables: string[];
-  proof: { label: string; href: string };
 }[] = [
   {
     title: 'Discovery & research',
     text: 'I start with the people who will use the product, not with screens.',
     deliverables: ['Research summary', 'Personas', 'User flows', 'Wireframes'],
-    proof: { label: 'LinkHMS', href: '/work/linkhms/' },
   },
   {
     title: 'Product UI & systems',
     text: 'Complex, multi-role workflows made clear, on a system that scales.',
     deliverables: ['High-fidelity UI', 'Design system', 'Clickable prototypes', 'Dev-ready Figma'],
-    proof: { label: 'LegalFans', href: '/work/legalfans/' },
   },
   {
     title: 'Motion & prototyping',
     text: 'Twenty years of animation, so interactions are shown, not described.',
     deliverables: ['Interaction prototypes', 'Motion loops', 'Coded demos'],
-    proof: { label: 'Interactions', href: '/#lab' },
   },
 ];
 
