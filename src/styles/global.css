@@ -276,8 +276,16 @@ dd {
   transition-duration: 0.45s;
   transition-timing-function: cubic-bezier(0.3, 0, 0.8, 0.4);
 }
-.bars-live :is(.bar-left, .bar-right)::before {
-  transform: translateX(var(--bar-shift));
+/* The bar reaches exactly to its edge of the screen (--to-edge, set by the script) and
+   moves by being cut, not shifted: Safari stops painting a moving section whose layer
+   holds a bar a whole screen wide beyond the edge. */
+.bars-live .bar-left::before {
+  left: calc(-1 * var(--to-edge, 100vw));
+  clip-path: inset(0 calc(-1 * var(--bar-shift)) 0 0);
+}
+.bars-live .bar-right::before {
+  right: calc(-1 * var(--to-edge, 100vw));
+  clip-path: inset(0 0 0 var(--bar-shift));
 }
 .bars-live .bar-left {
   --bar-paint: linear-gradient(

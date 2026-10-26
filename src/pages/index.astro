@@ -269,9 +269,19 @@ const mess = [
   const bars = calm.matches
     ? []
     : [...document.querySelectorAll<HTMLElement>(':is(main, .footer) :is(.bar-left, .bar-right)')];
+  // A finger scrolls natively and rarely stops exactly at a section's start, so on touch
+  // screens every heading holds the bar the way "Recent works" does, while its section is
+  // in focus. A footer too short to reach the middle still takes the bar at the bottom.
+  // Where scroll-driven animations work, iOS doesn't draw a transition that starts while a
+  // finger moves the page, so there the styles below tie every bar to scrolling instead,
+  // and the script only keeps "obvious" switched on for its opening draw.
+  const touch = matchMedia('(hover: none)');
+  const scrollBars = CSS.supports('animation-timeline', 'view()');
+  const scrollDriven = () => touch.matches && scrollBars;
   let barOn: HTMLElement | undefined;
   let barLanding = false; // the bar was handed over by a move that is still running
   const showBar = (bar: HTMLElement | undefined) => {
+    if (scrollDriven()) bar = heroBar;
     if (bar === barOn) return;
     barOn?.classList.remove('is-on');
     bar?.classList.add('is-on');
@@ -292,14 +302,6 @@ const mess = [
     const middle = top + (innerHeight - top) / 2;
     return !!box && box.top <= middle && box.bottom >= middle;
   };
-  // A finger scrolls natively and rarely stops exactly at a section's start, so on touch
-  // screens every heading holds the bar the way "Recent works" does, while its section is
-  // in focus. A footer too short to reach the middle still takes the bar at the bottom.
-  // Where scroll-driven animations work, iOS doesn't draw a transition that starts while a
-  // finger moves the page, so there the styles below tie those bars to scrolling instead
-  // and the script keeps only "obvious", which has its own entrance.
-  const touch = matchMedia('(hover: none)');
-  const scrollBars = CSS.supports('animation-timeline', 'view()');
   let barQueued = false;
   const pickBar = () => {
     barQueued = false;
@@ -308,7 +310,6 @@ const mess = [
       bars
         .filter((bar) => {
           if (touch.matches) {
-            if (scrollBars && bar !== heroBar) return false;
             const atBottom = scrollY >= document.documentElement.scrollHeight - innerHeight - 2;
             return inFocus(bar) || (atBottom && !!footer?.contains(bar));
           }
@@ -319,7 +320,18 @@ const mess = [
         .at(-1),
     );
   };
+  // Each bar reaches exactly to its edge of the screen, no further (see global.css).
+  const measureEdges = () => {
+    for (const bar of bars) {
+      const box = bar.getBoundingClientRect();
+      const edge = bar.classList.contains('bar-left') ? box.left : innerWidth - box.right;
+      bar.style.setProperty('--to-edge', `${Math.ceil(edge) + 1}px`);
+    }
+  };
   if (bars.length) {
+    measureEdges();
+    document.fonts?.ready.then(measureEdges);
+    window.addEventListener('resize', measureEdges);
     pickBar();
     document.documentElement.classList.add('bars-live');
     const queue = () => {
@@ -576,16 +588,18 @@ const mess = [
     --bar-from: 0.08em; /* the padding less a hair, so the bar starts at the word, not in the space */
     font-weight: 700;
   }
-  .hero__accent::before {
+  /* Cut, not shifted, like every bar (see global.css): --bar-grow cuts it from the right
+     while it draws, --bar-shift from the left as it leaves. */
+  .hero .hero__accent::before {
     content: '';
     position: absolute;
     z-index: -1;
     top: 0.04em;
     bottom: -0.02em;
     left: var(--bar-from);
-    right: -100vw;
+    right: calc(-1 * var(--to-edge, 100vw));
     background: var(--accent);
-    clip-path: inset(0 max(0px, calc(100% - var(--bar-grow))) 0 0);
+    clip-path: inset(0 max(0px, calc(100% - var(--bar-grow))) 0 var(--bar-shift, 0px));
   }
   /* Once "complex" has shown off, the bar draws itself under "obvious": from the left of
      the o out to the edge of the screen, the letters darkening as it passes. --bar-grow is
@@ -958,6 +972,25 @@ const mess = [
         animation-range:
           cover 15svh cover 40svh,
           exit calc((100svh - var(--header-h)) * 0.5) exit calc((100svh - var(--header-h)) * 0.8);
+      }
+      /* "obvious" is already on the screen when the page opens and draws itself in; it
+         leaves with the first stretch of scrolling, before the hero fades, and comes back
+         the same way. While it draws, the draw runs alongside. */
+      :global(.bars-live) .hero .hero__accent {
+        animation: bar-out-right linear forwards;
+      }
+      :global(.bars-live) .hero .hero__accent.is-drawing {
+        animation:
+          hero-bar-draw 1s cubic-bezier(0.65, 0, 0.35, 1) both,
+          bar-out-right linear forwards;
+      }
+      :global(html.bars-live) .hero .hero__accent {
+        animation-timeline: --scene;
+        animation-range: exit 3% exit 28%;
+      }
+      :global(html.bars-live) .hero .hero__accent.is-drawing {
+        animation-timeline: auto, --scene;
+        animation-range: normal, exit 3% exit 28%;
       }
     }
   }
