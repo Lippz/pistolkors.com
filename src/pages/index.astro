@@ -71,7 +71,7 @@ const mess = [
     <p class="intro__text">
       <span class="intro__role">Senior Product Designer</span> at Existek, with{' '}
       <span data-since={PRODUCT_SINCE} data-as="word">{inWords(yearsSince(PRODUCT_SINCE))}</span> years in product design
-      across healthcare, legal-tech, e-commerce and construction. I run discovery, build the system and sweat the
+      across healthcare, <span class="nobreak">legal-tech</span>, <span class="nobreak">e-commerce</span> and construction. I run discovery, build the system and sweat the
       interaction details.
     </p>
     <ul class="facts" role="list">
@@ -873,6 +873,10 @@ const mess = [
      24px, where the plain brand red is too faint. */
   .intro__role {
     color: var(--accent-ink);
+  }
+  /* Hyphenated terms stay on one line instead of breaking after the hyphen. */
+  .nobreak {
+    white-space: nowrap;
   }
   .facts {
     margin: clamp(40px, 5vw, 64px) 0 0;

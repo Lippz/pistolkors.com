@@ -5,13 +5,12 @@
  *
  * With `layers` the cover is two pieces instead: a darkened background that settles from
  * 1.05 to 1 while blurring a little more, and a logo that grows from 1 to 1.05. Moving the
- * pointer away plays it back. With `themed` the cover also follows the site theme: a translucent
- * veil over the background (white in the light theme, black in the dark one) and a black or
- * white logo.
+ * pointer away plays it back. With `themed` the cover also follows the site theme: in the dark
+ * theme a translucent black veil over the background, in the light one none, and a white logo.
  *
- * `still` turns the hover motion off, for a cover that is not a link (the one at the top of a
- * case page, which sits inside an <article> and would otherwise react to the whole page). `alt`
- * describes the cover; without it the cover is decorative.
+ * Only a link or an `.arrow-trigger` row around the cover sets the motion off, not the case
+ * page's <article> that the "next case" link sits in. `still` turns the hover motion off, for a
+ * cover that is not a link. `alt` describes the cover; without it the cover is decorative.
  */
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
@@ -63,7 +62,7 @@ const loading = eager ? 'eager' : 'lazy';
     transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
   @media (hover: hover) {
-    :global(:is(a, article):is(:hover, :has(:focus-visible))) .cover:not(.cover--still) :global(.cover__img) {
+    :global(:is(a, .arrow-trigger):is(:hover, :has(:focus-visible))) .cover:not(.cover--still) :global(.cover__img) {
       transform: scale(1.04);
     }
   }
@@ -101,9 +100,10 @@ const loading = eager ? 'eager' : 'lazy';
    * --bg-adjust gives the picture some contrast and colour back, so the veil does not wash it out.
    */
   .cover--themed {
-    --veil: rgb(255 255 255 / var(--veil-light, 0.7));
-    --bg-adjust: contrast(1.3) saturate(1.35);
-    --logo-filter: brightness(0);
+    --veil: transparent;
+    --bg-adjust: contrast(1) saturate(1);
+    /* no veil here, so a soft shadow keeps the white logo readable over light patches */
+    --logo-filter: brightness(0) invert(1) drop-shadow(0 1px 12px rgb(0 0 0 / 0.3));
   }
   .cover--themed .cover__veil {
     position: absolute;
@@ -128,11 +128,11 @@ const loading = eager ? 'eager' : 'lazy';
   }
 
   @media (hover: hover) {
-    :global(:is(a, article):is(:hover, :has(:focus-visible))) .cover--layers:not(.cover--still) :global(.cover__bg) {
+    :global(:is(a, .arrow-trigger):is(:hover, :has(:focus-visible))) .cover--layers:not(.cover--still) :global(.cover__bg) {
       transform: scale(1);
       filter: blur(6px) var(--bg-adjust, brightness(1));
     }
-    :global(:is(a, article):is(:hover, :has(:focus-visible))) .cover--layers:not(.cover--still) :global(.cover__logo) {
+    :global(:is(a, .arrow-trigger):is(:hover, :has(:focus-visible))) .cover--layers:not(.cover--still) :global(.cover__logo) {
       transform: scale(1.05);
     }
   }
