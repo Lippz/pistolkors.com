@@ -261,8 +261,8 @@ const mess = [
   };
 
   // The red bar is handed from heading to heading, one at a time. A heading holds it while
-  // the page rests at the start of its section: the bar arrives as the page moves there and
-  // leaves the moment you scroll on, a few percent of the screen either way. When the next
+  // the page is in its section and the heading is on screen: the bar arrives as the page
+  // moves there and leaves once the heading scrolls under the header. When the next
   // heading takes it the bar slides off one word and in under the other. Bars that are off
   // wait beyond their edge of the screen — out to the right, in from the left, and so on.
   // Without the script, or with reduced motion, every bar simply stays in place.
@@ -306,6 +306,16 @@ const mess = [
   // "obvious" is the page's opening line: it keeps the bar a touch longer.
   const nearRest = (bar: HTMLElement, y: number) =>
     Math.abs(y - restFor(bar)) < innerHeight * (bar === heroBar ? 0.05 : 0.04);
+  // Further in, it keeps the bar for as long as it is wholly on screen under the header, so
+  // a section reached at its end, the footer at the bottom of the page above all, still
+  // shows it. Not "obvious": the hero fades away as soon as the page leaves it.
+  const holdsBar = (bar: HTMLElement, y: number) => {
+    if (nearRest(bar, y)) return true;
+    const { sections, i } = sectionAt(y);
+    if (bar === heroBar || !sections[i].el.contains(bar)) return false;
+    const top = docTop(bar) - y;
+    return top >= (header?.offsetHeight ?? 0) && top + bar.offsetHeight <= innerHeight;
+  };
   let barQueued = false;
   const pickBar = () => {
     barQueued = false;
@@ -318,7 +328,7 @@ const mess = [
             return inFocus(bar) || (atBottom && !!footer?.contains(bar));
           }
           if (bar === workBar) return inFocus(bar);
-          return nearRest(bar, scrollY);
+          return holdsBar(bar, scrollY);
         })
         .at(-1),
     );
@@ -370,12 +380,12 @@ const mess = [
   let glide = 0;
   function moveTo(stop: Stop, short = false) {
     // The section's heading takes the bar as the move begins, so it lands with the page;
-    // a stop away from a heading sends the last bar away. A section only a little taller
-    // than the screen is reached at its end going up, which still counts as its start.
+    // a stop away from a heading sends the last bar away. Going up, a section is reached at
+    // its end, where its heading may still be on screen.
     if (bars.length && !short) {
       showBar(
         (workBar && stop.el.contains(workBar) ? workBar : undefined) ??
-          bars.filter((bar) => nearRest(bar, stop.y)).at(-1),
+          bars.filter((bar) => holdsBar(bar, stop.y)).at(-1),
       );
       barLanding = true;
     }
@@ -389,6 +399,7 @@ const mess = [
       }
     };
     cancelAnimationFrame(glide);
+    stopWheel();
     if (calm.matches) {
       window.scrollTo({ top: stop.y, behavior: 'instant' });
       land();
@@ -409,15 +420,42 @@ const mess = [
     glide = requestAnimationFrame(tick);
   }
 
-  // Where a move of `delta` pixels from here should go. Inside a section it is ordinary
+  // Wheel scrolling inside a section. The page eases toward where the wheel has sent it,
+  // quickly enough that a trackpad feels direct while a mouse notch still glides.
+  const wheelLag = 35; // ms, the time constant of the ease
+  let wheelTarget: number | undefined;
+  let wheelPos = 0; // kept apart from scrollY, which the browser rounds
+  let wheelFrame = 0;
+  function wheelTo(y: number) {
+    if (wheelTarget === undefined) wheelPos = scrollY;
+    wheelTarget = y;
+    if (wheelFrame) return;
+    let last = performance.now();
+    const step = (now: number) => {
+      if (wheelTarget === undefined) return;
+      wheelPos += (wheelTarget - wheelPos) * (1 - Math.exp(-Math.max(0, now - last) / wheelLag));
+      last = now;
+      const done = Math.abs(wheelTarget - wheelPos) < 0.5;
+      window.scrollTo({ top: done ? wheelTarget : wheelPos, behavior: 'instant' });
+      if (done) stopWheel();
+      else wheelFrame = requestAnimationFrame(step);
+    };
+    wheelFrame = requestAnimationFrame(step);
+  }
+  function stopWheel() {
+    cancelAnimationFrame(wheelFrame);
+    wheelFrame = 0;
+    wheelTarget = undefined;
+  }
+
+  // Where a move of `delta` pixels from `y` should go. Inside a section it is ordinary
   // scrolling (undefined), cut short at the section's edge; at an edge it is the
   // neighbouring section — if `leave` allows leaving.
   type Plan = { to: Stop; short: boolean } | 'stay' | undefined;
-  function plan(delta: number, leave: boolean): Plan {
+  function plan(delta: number, leave: boolean, y = scrollY): Plan {
     const dir = Math.sign(delta);
-    const { sections, i } = sectionAt(scrollY);
+    const { sections, i } = sectionAt(y);
     const here = sections[i];
-    const y = scrollY;
     if (dir > 0) {
       if (y < here.end - 2) return y + delta <= here.end ? undefined : { to: { y: here.end, el: here.el }, short: true };
       const next = sections[i + 1];
@@ -441,6 +479,10 @@ const mess = [
   // once; one that starts inside scrolls normally and stops at the edge, even if its
   // momentum would carry on. Sideways scrolling (the Interactions carousel) is left alone,
   // as are pinch-zoom and the image viewer.
+  // All the page's wheel scrolling is the script's, inside a section too: once a browser
+  // lets a gesture's first event through, it scrolls the rest of it, momentum included,
+  // and no longer lets the script stop it, so at a section's edge the two pulled the page
+  // against each other.
   const notThePage = (e: Event) => (e as WheelEvent).ctrlKey || document.querySelector('dialog[open]') !== null;
   let lastWheelAt = -Infinity;
   let gestureSpent = false; // this gesture has already moved the page by itself
@@ -456,21 +498,24 @@ const mess = [
   function onWheel(e: WheelEvent) {
     if (notThePage(e)) return;
     if (Math.abs(e.deltaX) > Math.abs(e.deltaY) && scrollsSideways(e.target)) return;
+    if (!e.deltaY) return; // a purely sideways swipe stays the browser's: back and forward
+    e.preventDefault();
     const now = performance.now();
     const fresh = now - lastWheelAt > 200;
     lastWheelAt = now;
     if (fresh) gestureSpent = false;
-    if (glide || gestureSpent) return e.preventDefault();
+    if (glide || gestureSpent) return;
     const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? innerHeight : 1;
     const delta = e.deltaY * unit;
-    if (!delta) return;
-    // Only a gesture's first event may leave the section.
-    const next = plan(delta, fresh);
-    if (next === undefined) return; // ordinary scrolling inside the section
-    e.preventDefault();
+    // Counted from where the wheel is already taking the page, so quick notches add up
+    // exactly to the section's edge. Only a gesture's first event may leave the section.
+    const y = wheelTarget ?? scrollY;
+    const next = plan(delta, fresh, y);
+    if (next === undefined) return wheelTo(y + delta);
     if (next === 'stay') return;
     gestureSpent = true;
-    moveTo(next.to, next.short);
+    if (next.short) wheelTo(next.to.y);
+    else moveTo(next.to);
   }
 
   // Page keys work the same way: inside a section they scroll as usual, at its edge they
