@@ -552,10 +552,13 @@ const mess = [
 
   // Touch scrolls natively. If a swipe leaves the page between two sections — the end of
   // one and the start of the next both partly on screen — it moves on to the section in
-  // the swipe's direction.
+  // the swipe's direction. A swipe moves on by one section at most: a fling that came from
+  // the section before and ran past this one's end lands back on its start, so a section
+  // only a little taller than the screen (AI pipeline on a phone) isn't flown past.
   let lastY = scrollY;
   let swipeDir = 0;
   let touchedAt = -Infinity;
+  let touchFrom = scrollY; // where the finger last took hold of the page
   function onScroll() {
     if (glide) return;
     if (scrollY !== lastY) swipeDir = Math.sign(scrollY - lastY);
@@ -567,7 +570,9 @@ const mess = [
     const here = sections[i];
     const next = sections[i + 1];
     if (!next || scrollY <= here.end + 2) return;
-    moveTo(swipeDir > 0 ? { y: next.start, el: next.el } : { y: here.end, el: here.el });
+    const from = sectionAt(touchFrom).i;
+    if (swipeDir > 0) moveTo(from < i ? { y: here.start, el: here.el } : { y: next.start, el: next.el });
+    else moveTo(from > i + 1 ? { y: next.end, el: next.el } : { y: here.end, el: here.el });
   }
 
   // Links to a section of this page — the menu, the logo, the buttons — move the page like
@@ -591,6 +596,7 @@ const mess = [
     window.addEventListener('wheel', onWheel, { passive: false });
     window.addEventListener('keydown', onKey);
     window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('touchstart', () => (touchFrom = scrollY), { passive: true });
     window.addEventListener('touchmove', () => (touchedAt = performance.now()), { passive: true });
     window.addEventListener('touchend', () => (touchedAt = performance.now()), { passive: true });
     // scrollend where supported; elsewhere, a short pause after the last scroll event.
