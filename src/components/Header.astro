@@ -1,4 +1,5 @@
 ---
+import { getCollection } from 'astro:content';
 import Wordmark from './Wordmark.astro';
 import { motion, testimonials } from '../data/site';
 import { url } from '../lib/url';
@@ -13,6 +14,16 @@ const { current, progress = false } = Astro.props;
 const showLab = import.meta.env.DEV || motion.some((m) => m.video);
 // Mirrors Testimonials.astro: the section is hidden live until it has a real quote.
 const showWords = import.meta.env.DEV || testimonials.some((t) => !t.placeholder);
+
+// The cases under "Recent works", in home page order.
+const cases = (await getCollection('cases', (c) => !c.data.hidden && !c.data.draft))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((c) => ({ href: url(`/work/${c.id}/`), client: c.data.client, industry: c.data.industry }));
+// Draft cases follow as "In development": a link in dev, where their page exists, plain text live.
+const upcoming = (await getCollection('cases', (c) => !c.data.hidden && c.data.draft))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((c) => ({ href: import.meta.env.DEV ? url(`/work/${c.id}/`) : undefined, client: c.data.client, note: 'In development' }));
+const here = Astro.url.pathname.replace(/\/?$/, '/');
 
 const nav = [
   { label: 'Recent works', href: url('/#work'), key: 'work' },
@@ -39,11 +50,47 @@ const nav = [
 
     <nav id="site-nav" class="header__nav" aria-label="Main">
       {
-        nav.map((item) => (
-          <a href={item.href} aria-current={current === item.key ? 'page' : undefined}>
-            {item.label}
-          </a>
-        ))
+        nav.map((item) =>
+          item.key === 'work' && cases.length ? (
+            <div class="nav-drop">
+              <a href={item.href} aria-current={current === item.key ? 'page' : undefined}>
+                {item.label}
+              </a>
+              <svg class="nav-drop__chevron" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M2 3.75 5 6.75l3-3"></path>
+              </svg>
+              <ul class="nav-drop__panel" aria-label="Case studies">
+                {cases.map((c) => (
+                  <li>
+                    <a href={c.href} aria-current={here === c.href ? 'page' : undefined}>
+                      <span class="nav-drop__client">{c.client}</span>
+                      <span class="nav-drop__industry">{c.industry}</span>
+                    </a>
+                  </li>
+                ))}
+                {upcoming.map((c) => (
+                  <li>
+                    {c.href ? (
+                      <a href={c.href} class="nav-drop__soon" aria-current={here === c.href ? 'page' : undefined}>
+                        <span class="nav-drop__client">{c.client}</span>
+                        <span class="nav-drop__industry">{c.note}</span>
+                      </a>
+                    ) : (
+                      <span class="nav-drop__soon">
+                        <span class="nav-drop__client">{c.client}</span>
+                        <span class="nav-drop__industry">{c.note}</span>
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <a href={item.href} aria-current={current === item.key ? 'page' : undefined}>
+              {item.label}
+            </a>
+          ),
+        )
       }
       <a href={url('/#contact')} class="btn btn--ink">Get in touch</a>
       <span class="header__bar" aria-hidden="true"></span>
@@ -95,11 +142,26 @@ const nav = [
     const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
     window.scrollTo({ top: 0, behavior: calm ? 'instant' : 'smooth' });
   });
+  // Escape closes the case dropdown too: it stays open only while hovered or focused.
   document.addEventListener('keydown', (e) => {
+    const drop = (document.activeElement as Element | null)?.closest('.nav-drop');
+    if (e.key === 'Escape' && drop && !nav?.classList.contains('is-open')) {
+      drop.querySelector<HTMLAnchorElement>('a')?.focus();
+      drop.classList.add('is-shut');
+      return;
+    }
     if (e.key === 'Escape' && nav?.classList.contains('is-open')) {
       setOpen(false);
       toggle?.focus();
     }
+  });
+
+  // A shut dropdown (Escape) opens again once the pointer or focus leaves and comes back.
+  nav?.querySelectorAll('.nav-drop').forEach((drop) => {
+    drop.addEventListener('mouseleave', () => drop.classList.remove('is-shut'));
+    drop.addEventListener('focusout', (e) => {
+      if (!drop.contains((e as FocusEvent).relatedTarget as Node)) drop.classList.remove('is-shut');
+    });
   });
 
   // One underline that travels between menu items. Its edges move separately: the leading
@@ -372,6 +434,95 @@ const nav = [
     display: none;
   }
 
+  /* "Recent works" with its cases: opens on hover or keyboard focus. */
+  .nav-drop {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .nav-drop__chevron {
+    color: var(--muted);
+    transition: transform 0.2s ease;
+  }
+  .nav-drop__panel {
+    position: absolute;
+    top: calc(100% + 16px);
+    left: -12px;
+    z-index: 1;
+    min-width: 260px;
+    margin: 0;
+    padding: 6px;
+    list-style: none;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: 0 12px 32px -12px rgb(0 0 0 / 0.18);
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition:
+      opacity 0.18s ease,
+      transform 0.18s ease,
+      visibility 0s linear 0.18s;
+  }
+  /* Bridges the gap to the link, so the pointer can travel down without closing it. */
+  .nav-drop__panel::before {
+    content: '';
+    position: absolute;
+    inset: -17px 0 100% 0;
+  }
+  .nav-drop:is(:hover, :focus-within):not(.is-shut) .nav-drop__panel {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.18s ease,
+      transform 0.18s ease;
+  }
+  .nav-drop:is(:hover, :focus-within):not(.is-shut) .nav-drop__chevron {
+    transform: rotate(180deg);
+  }
+  .nav-drop__panel a {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: var(--ink);
+  }
+  .nav-drop__panel a:hover,
+  .nav-drop__panel a:focus-visible {
+    background: var(--surface);
+    color: var(--ink);
+  }
+  span.nav-drop__soon {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 12px;
+    cursor: default;
+  }
+  .nav-drop__soon .nav-drop__client {
+    color: var(--muted);
+  }
+  .nav-drop__panel a[aria-current='page'] .nav-drop__client {
+    color: var(--accent-ink);
+  }
+  .nav-drop__client {
+    font-weight: 500;
+  }
+  .nav-drop__industry {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .nav-drop__panel,
+    .nav-drop__chevron {
+      transition: none !important;
+    }
+  }
+
   /* Six menu items: tighten the spacing before the bar runs out of room. */
   @media (max-width: 1280px) {
     .header__nav {
@@ -450,6 +601,50 @@ const nav = [
     }
     .header__bar {
       display: none;
+    }
+    /* The cases sit under "Recent works" as a plain indented list. */
+    .header__nav {
+      overflow-y: auto;
+    }
+    .nav-drop {
+      display: block;
+    }
+    .header__nav .nav-drop > a,
+    .header__nav .nav-drop > a.is-active {
+      display: block;
+      border-bottom: 0;
+    }
+    .nav-drop__chevron {
+      display: none;
+    }
+    .nav-drop__panel {
+      position: static;
+      min-width: 0;
+      padding: 4px 0 12px;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      border-radius: 0;
+      background: none;
+      box-shadow: none;
+      visibility: inherit;
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+    .nav-drop__panel::before {
+      display: none;
+    }
+    .header__nav .nav-drop__panel a,
+    .nav-drop__soon {
+      flex-direction: row;
+      align-items: baseline;
+      gap: 10px;
+      padding: 8px 0 8px 16px;
+      border: 0;
+      border-radius: 0;
+      font-size: 17px;
+      letter-spacing: 0;
+      background: none;
     }
     .header__nav a[aria-current='page'],
     .header__nav a.is-active {
