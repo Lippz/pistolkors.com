@@ -1,0 +1,14 @@
+---
+/**
+ * Text from case front matter where `{year}` stands for the current year, e.g.
+ * `timeline: 2010 – {year}`. The year is set at build time and kept current in the
+ * browser by the inline script in Base.astro (`data-year`).
+ */
+interface Props {
+  text: string;
+}
+const parts = Astro.props.text.split('{year}');
+const year = new Date().getFullYear();
+---
+
+{parts.map((part, i) => (i ? <Fragment><span data-year>{year}</span>{part}</Fragment> : part))}

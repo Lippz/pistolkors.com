@@ -3,6 +3,7 @@
 import type { CollectionEntry } from 'astro:content';
 import CaseCover from './CaseCover.astro';
 import ArrowCircle from './ArrowCircle.astro';
+import WithYear from './WithYear.astro';
 import { url } from '../lib/url';
 
 interface Props {
@@ -29,7 +30,7 @@ const href = url(`/work/${entry.id}/`);
     <div class="feature__meta">
       <dl>
         <div><dt>Role</dt><dd>{d.role}</dd></div>
-        <div><dt>Timeline</dt><dd>{d.timeline}</dd></div>
+        <div><dt>Timeline</dt><dd><WithYear text={d.timeline} /></dd></div>
       </dl>
       <span class="feature__cta" aria-hidden="true">Read case <ArrowCircle /></span>
     </div>
