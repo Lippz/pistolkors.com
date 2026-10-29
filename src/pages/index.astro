@@ -32,7 +32,6 @@ const mess = [
 
 <Base>
   <section class="hero container">
-    <p class="eyebrow hero__status"><span class="dot" aria-hidden="true"></span>{site.availability}</p>
     <div class="hero__main">
       <h1 class="h-hero hero__title">
         <span class="sr-only">I help complex products feel obvious</span>
@@ -633,8 +632,8 @@ const mess = [
   /* The title grows with the screen width from 72px on phones up to 156px, one and a half
      times the site's hero size, which it reaches at 1440 as the container stops growing
      (10.8vw). The screen height
-     caps it: what is left of the hero after the gutters and about 160px for the status,
-     buttons and gaps, shared by three lines at 0.95 — so even a title broken into three
+     caps it: what is left of the hero after the gutters and about 160px for the buttons
+     and gaps, shared by three lines at 0.95 — so even a title broken into three
      lines fits. Set a little tighter. */
   .hero__title {
     font-size: min(
@@ -847,32 +846,6 @@ const mess = [
     }
     to {
       background-position: 0% 0;
-    }
-  }
-  .hero__status {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    line-height: 1.5;
-  }
-  .dot {
-    flex-shrink: 0;
-    width: 8px;
-    height: 8px;
-    margin-top: 0.45em;
-    border-radius: 50%;
-    background: var(--ok);
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok) 50%, transparent);
-    animation: pulse 2.4s ease-out infinite;
-  }
-  @keyframes pulse {
-    to {
-      box-shadow: 0 0 0 10px transparent;
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .dot {
-      animation: none;
     }
   }
   .hero__ctas {

@@ -9,7 +9,6 @@ export const site = {
   role: 'Senior Product Designer',
   location: 'Poznań, PL · Remote',
   description: `Senior Product Designer with ${inWords(yearsSince(PRODUCT_SINCE))} years in product design, coming from motion design: healthcare, legal-tech, e-commerce and construction.`,
-  availability: 'Open to senior product design roles — Remote / Poznań, PL',
   email: 'ppistolkors@gmail.com',
   cv: url('/CV-Pylyp_Pistolkors-Senior_Product_Designer.pdf'),
   /** Practical details recruiters ask first. */
