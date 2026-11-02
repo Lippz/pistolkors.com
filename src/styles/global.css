@@ -363,16 +363,14 @@ dd {
 .btn:active {
   transform: scale(0.98);
 }
+/* The fill stays the same red on hover: a lighter red weakens the white label. */
 .btn--accent,
 .btn--accent:hover {
-  color: var(--on-accent);
+  color: #ffffff;
+  background: var(--accent);
 }
 .btn--accent {
-  background: var(--accent);
   font-weight: 600;
-}
-.btn--accent:hover {
-  background: color-mix(in srgb, var(--accent) 80%, #ffffff);
 }
 .btn--outline,
 .btn--outline:hover {

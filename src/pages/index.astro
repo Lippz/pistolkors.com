@@ -1248,8 +1248,9 @@ const mess = [
       max-width: 520px;
     }
   }
-  /* Hero buttons react clearly to hover: lift, a shadow and a stronger fill. The label colour
-     never changes (it would blink mid-transition), so only fills and borders move. */
+  /* Hero buttons react clearly to hover: lift and a shadow, and the outline one gets a fill.
+     The label colour never changes (it would blink mid-transition), and the red keeps its
+     fill so the white label stays readable. */
   @media (hover: hover) {
     .hero__ctas .btn,
     .about__cv {
@@ -1260,7 +1261,6 @@ const mess = [
         box-shadow 0.25s ease;
     }
     .hero__ctas .btn--accent:hover {
-      background: color-mix(in srgb, var(--accent) 62%, #ffffff);
       transform: translateY(-3px);
       box-shadow: 0 12px 28px color-mix(in srgb, var(--accent) 42%, transparent);
     }
