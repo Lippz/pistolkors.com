@@ -1,4 +1,5 @@
 ---
+hidden: true
 order: 2
 featured: true
 client: LegalFans
