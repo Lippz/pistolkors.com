@@ -1027,8 +1027,35 @@ a:hover .frame img {
   position: relative;
   isolation: isolate;
 }
-.prose .cards--glow .glow-edge {
+.prose .cards--glow .glow-edge,
+.prose .cards--glow > .glow-gl {
   display: none;
+}
+/* The shader glow (lib/glow-gl.ts adds .is-gl and a canvas behind the cards' content): the
+ * canvas draws the borders and the light, so the cards drop theirs and their CSS glow, and
+ * they don't rise in on scroll, which would pull them off the borders drawn for them. */
+@media (hover: hover) and (pointer: fine) and (min-width: 721px) {
+  .prose .cards--glow.is-gl {
+    position: relative;
+    isolation: isolate;
+  }
+  .prose .cards--glow.is-gl > .glow-gl {
+    display: block;
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+  }
+  .prose .cards--glow.is-gl > div {
+    border-color: transparent;
+    background: none;
+  }
+  .prose .cards--glow.is-gl > div::after,
+  .prose .cards--glow.is-gl .glow-edge {
+    display: none;
+  }
+  body .prose .cards--glow.is-gl > div {
+    animation: none;
+  }
 }
 @media (hover: hover) and (pointer: fine) and (min-width: 721px) {
   .prose .cards--glow > div {

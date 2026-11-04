@@ -192,6 +192,8 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
 </Base>
 
 <script>
+  import { initGlowCards } from '../../lib/glow-gl';
+
   // A collapsed block gets a second "hide" pill at its end, so a reader who has scrolled
   // through the opened items can close them without going back up. Closing brings the
   // top pill back into view and gives it focus.
@@ -243,8 +245,14 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
   // along the nearest edge as the glow comes close to it. The glow is two blobs, one darker,
   // swaying round each other on a squashed, breathing orbit: they speed up, slow down and
   // now and then turn back, along smooth curves that are different on every card.
+  // With a mouse, WebGL2 and motion allowed, the cards get the shader glow (lib/glow-gl.ts)
+  // instead; the CSS glow below is the fallback.
+  const shaderGlow =
+    window.matchMedia('(hover: hover) and (pointer: fine)').matches &&
+    !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.querySelectorAll<HTMLElement>('.prose .cards--glow').forEach((list) => {
-    const cards = [...list.children] as HTMLElement[];
+    const cards = ([...list.children] as HTMLElement[]).filter((el) => el.tagName === 'DIV');
+    if (shaderGlow && initGlowCards(list)) cards.length = 0; // the shader handles the glow
     const NEAR = 64; // px from the border where the light starts to smear
     const BASE = 100; // px, the border light's radius away from the edges
     const TURN = 48; // px over which the border light turns from one edge to the next
