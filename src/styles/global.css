@@ -391,8 +391,10 @@ dd {
   padding: 0 20px;
   background: var(--ink);
 }
+/* Hover turns the fill brand red. The label keeps --paper: white on red in the light
+   theme (as .btn--accent), dark on red in the dark theme (as --on-accent). */
 .btn--ink:hover {
-  background: color-mix(in srgb, var(--ink) 80%, var(--paper));
+  background: var(--accent);
 }
 
 .link-underline {

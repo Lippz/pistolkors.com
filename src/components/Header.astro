@@ -496,6 +496,18 @@ const nav = [
     background: var(--surface);
     color: var(--ink);
   }
+  /* Menu items ease into their hover colour (and the case rows into their fill)
+     instead of switching at once. The button keeps its own transition. */
+  .header__nav a:not(.btn) {
+    transition:
+      color 0.25s ease,
+      background-color 0.25s ease;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .header__nav a:not(.btn) {
+      transition: none;
+    }
+  }
   span.nav-drop__soon {
     display: flex;
     flex-direction: column;
