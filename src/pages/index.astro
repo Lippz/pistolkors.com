@@ -157,6 +157,17 @@ const mess = [
 </Base>
 
 <script>
+  import { initGlowButton } from '../lib/glow-gl';
+
+  // The hero's buttons, "View recent works" and both halves of the CV one, get the shader
+  // glow of the case cards (lib/glow-gl.ts) where there is a mouse and motion is welcome;
+  // elsewhere they stay as they are.
+  if (matchMedia('(hover: hover) and (pointer: fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document
+      .querySelectorAll<HTMLElement>('.hero__ctas .btn, .hero__ctas .btn-split__part')
+      .forEach((button) => initGlowButton(button));
+  }
+
   // "obvious" glint: start on pointer enter, let it finish on its own, and ignore new
   // hovers until it has. The CSS only runs it where hover and motion are welcome.
   // Not while the bar is still to be drawn: the glint is a light band over it.
@@ -1283,6 +1294,14 @@ const mess = [
     }
     .btn-split__part:active {
       transform: translateY(0) scale(0.98);
+    }
+    /* With the shader glow on (lib/glow-gl.ts adds .is-gl) the light is the hover: the pale
+       red fill and the red shadow go, as on a light page they only add up to pink. */
+    .hero__ctas .is-gl:hover {
+      box-shadow: none;
+    }
+    .hero__ctas .btn-split__part.is-gl:hover {
+      background: transparent;
     }
   }
   @media (prefers-reduced-motion: reduce) {

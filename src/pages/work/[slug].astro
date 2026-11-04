@@ -365,7 +365,9 @@ const og = await getImage({ src: d.cover, width: 1200, format: 'jpg' });
     list.after(bar);
     const track = () => {
       const { scrollLeft, scrollWidth, clientWidth } = list;
-      bar.hidden = scrollWidth <= clientWidth + 1;
+      // Only a row that scrolls has a bar: on a desktop the grid doesn't, and the shader
+      // glow's canvas, which spills past the grid, would otherwise count as overflow.
+      bar.hidden = getComputedStyle(list).overflowX === 'visible' || scrollWidth <= clientWidth + 1;
       if (bar.hidden) return;
       thumb.style.width = `${(clientWidth / scrollWidth) * 100}%`;
       thumb.style.translate = `${(scrollLeft / clientWidth) * 100}% 0`;
