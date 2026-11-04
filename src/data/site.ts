@@ -15,7 +15,7 @@ export const site = {
   details: [
     { label: 'English', value: 'Professional working proficiency', short: 'Professional English' },
     { label: 'Time zone', value: 'Warsaw (CET/CEST)', short: 'Warsaw time' },
-    { label: 'Work authorisation', value: 'EU, no sponsorship needed', short: 'EU work authorisation' },
+    { label: 'Work authorisation', value: 'Visa sponsorship required, open to relocation', short: 'Open to relocation with visa sponsorship' },
     { label: 'Contract', value: 'B2B or employment contract', short: 'B2B or employment' },
   ],
   links: [
