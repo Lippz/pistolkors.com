@@ -1008,44 +1008,154 @@ a:hover .frame img {
 .prose .cards--answer.cards--compare > div:last-child .cards__metric strong {
   color: var(--accent-ink);
 }
-/* Cards that hold their description back (<div class="cards cards--reveal">, the text
- * after the title in a <span>). On a desktop the icon and title sit at the bottom of the
- * card and the description fades in under them on hover; the card keeps its full height.
- * The page script measures how far the title has to drop (--drop) and adds .is-ready.
- * On a phone the cards are a swipeable row instead, with the description always shown. */
-.prose .cards--reveal > div {
+/* Icon cards with a glow under the cursor (<div class="cards cards--glow">, the text after
+ * the title in a <span>). On hover the card lights up a little and a red glow — two blobs,
+ * one darker, circling each other in a wide halo — trails the cursor inside it. The border
+ * catches the same light: brighter and smeared along the edge the cursor comes close to,
+ * with a blurred copy (.glow-edge, added by the page script) that bleeds past the border.
+ * The script eases --mx/--my towards the cursor, moves the blobs (--ax/--ay, --bx/--by)
+ * round it and sets --rx/--ry (the border light's size), --edge (0 far from the border,
+ * 1 on it) and --prox (0 inside a blurred rectangle covering 60% of the card, 1 at its
+ * edge — the glow inside follows it). On a phone the cards are a swipeable row, without
+ * the glow. */
+@property --glow {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+.prose .cards--glow > div {
   position: relative;
-  justify-content: flex-end;
+  isolation: isolate;
 }
-@media (hover: hover) and (min-width: 721px) {
-  .prose .cards--reveal > div {
-    transition: border-color 0.3s ease, background-color 0.3s ease;
-  }
-  .prose .cards--reveal.is-ready > div > :is(b, span),
-  .prose .cards--reveal.is-ready > [data-icon]::before {
-    transition: translate 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.3s ease;
-  }
-  .prose .cards--reveal.is-ready > div:not(:hover) > b,
-  .prose .cards--reveal.is-ready > [data-icon]:not(:hover)::before {
-    translate: 0 var(--drop, 0px);
-  }
-  .prose .cards--reveal.is-ready > div:not(:hover) > span {
-    opacity: 0;
-    translate: 0 12px;
-  }
-  .prose .cards--reveal > div:hover {
-    border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
-    background: color-mix(in srgb, var(--accent) 6%, transparent);
-  }
+.prose .cards--glow .glow-edge {
+  display: none;
 }
-@media (hover: hover) and (min-width: 721px) and (prefers-reduced-motion: reduce) {
-  .prose .cards--reveal.is-ready > div > :is(b, span),
-  .prose .cards--reveal.is-ready > [data-icon]::before {
-    transition: opacity 0.2s ease;
+@media (hover: hover) and (pointer: fine) and (min-width: 721px) {
+  .prose .cards--glow > div {
+    --glow: 0;
+    /* The accent as RGB channels, for the eased gradients below (keep in step with --accent).
+     * Each glow fades along a bell-like curve instead of a straight line, so no ring shows. */
+    --g: 255 47 0;
+    --g2: 150 12 0; /* the darker of the two blobs, a deep red */
+    --k: calc(var(--glow) * (0.6 + var(--edge, 0) * 0.4));
+    border-color: transparent;
+    background:
+      linear-gradient(var(--paper), var(--paper)) padding-box,
+      radial-gradient(
+          ellipse var(--rx, 90px) var(--ry, 90px) at var(--mx, 50%) var(--my, 50%),
+          rgb(var(--g) / calc(var(--k) * 1)) 0%,
+          rgb(var(--g) / calc(var(--k) * 0.92)) 10%,
+          rgb(var(--g) / calc(var(--k) * 0.77)) 20%,
+          rgb(var(--g) / calc(var(--k) * 0.58)) 30%,
+          rgb(var(--g) / calc(var(--k) * 0.4)) 40%,
+          rgb(var(--g) / calc(var(--k) * 0.25)) 50%,
+          rgb(var(--g) / calc(var(--k) * 0.14)) 60%,
+          rgb(var(--g) / calc(var(--k) * 0.07)) 70%,
+          rgb(var(--g) / calc(var(--k) * 0.03)) 80%,
+          rgb(var(--g) / calc(var(--k) * 0.01)) 90%,
+          rgb(var(--g) / calc(var(--k) * 0)) 100%
+        )
+        border-box,
+      linear-gradient(
+          color-mix(in srgb, var(--accent) calc(var(--glow) * 30%), var(--line)),
+          color-mix(in srgb, var(--accent) calc(var(--glow) * 30%), var(--line))
+        )
+        border-box;
+    transition: --glow 0.4s ease;
+  }
+  .prose .cards--glow > div::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background:
+      radial-gradient(
+          circle 130px at var(--ax, 50%) var(--ay, 50%),
+          rgb(var(--g) / 0.32) 0%,
+          rgb(var(--g) / 0.2944) 10%,
+          rgb(var(--g) / 0.2464) 20%,
+          rgb(var(--g) / 0.1856) 30%,
+          rgb(var(--g) / 0.128) 40%,
+          rgb(var(--g) / 0.08) 50%,
+          rgb(var(--g) / 0.0448) 60%,
+          rgb(var(--g) / 0.0224) 70%,
+          rgb(var(--g) / 0.0096) 80%,
+          rgb(var(--g) / 0.0032) 90%,
+          rgb(var(--g) / 0) 100%
+        ),
+      radial-gradient(
+          circle 125px at var(--bx, 50%) var(--by, 50%),
+          rgb(var(--g2) / 0.4) 0%,
+          rgb(var(--g2) / 0.368) 10%,
+          rgb(var(--g2) / 0.308) 20%,
+          rgb(var(--g2) / 0.232) 30%,
+          rgb(var(--g2) / 0.16) 40%,
+          rgb(var(--g2) / 0.1) 50%,
+          rgb(var(--g2) / 0.056) 60%,
+          rgb(var(--g2) / 0.028) 70%,
+          rgb(var(--g2) / 0.012) 80%,
+          rgb(var(--g2) / 0.004) 90%,
+          rgb(var(--g2) / 0) 100%
+        ),
+      radial-gradient(
+          circle 420px at var(--mx, 50%) var(--my, 50%),
+          rgb(var(--g) / 0.13) 0%,
+          rgb(var(--g) / 0.1196) 10%,
+          rgb(var(--g) / 0.1001) 20%,
+          rgb(var(--g) / 0.0754) 30%,
+          rgb(var(--g) / 0.052) 40%,
+          rgb(var(--g) / 0.0325) 50%,
+          rgb(var(--g) / 0.0182) 60%,
+          rgb(var(--g) / 0.0091) 70%,
+          rgb(var(--g) / 0.0039) 80%,
+          rgb(var(--g) / 0.0013) 90%,
+          rgb(var(--g) / 0) 100%
+        ),
+      rgb(var(--g) / 0.04);
+    /* Faint in the middle of the card, full near its edges (--prox). */
+    opacity: calc(var(--glow) * (0.3 + var(--prox, 0) * 0.7));
+  }
+  /* The border light again, blurred so it bleeds past the edge; strongest on the border. */
+  .prose .cards--glow .glow-edge {
+    display: block;
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    pointer-events: none;
+    filter: blur(6px);
+    opacity: calc(var(--glow) * (0.25 + var(--edge, 0) * 0.75));
+  }
+  .prose .cards--glow .glow-edge > i {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 3px;
+    background: radial-gradient(
+      ellipse var(--rx, 90px) var(--ry, 90px) at var(--mx, 50%) var(--my, 50%),
+          rgb(var(--g) / 1) 0%,
+          rgb(var(--g) / 0.92) 10%,
+          rgb(var(--g) / 0.77) 20%,
+          rgb(var(--g) / 0.58) 30%,
+          rgb(var(--g) / 0.4) 40%,
+          rgb(var(--g) / 0.25) 50%,
+          rgb(var(--g) / 0.14) 60%,
+          rgb(var(--g) / 0.07) 70%,
+          rgb(var(--g) / 0.03) 80%,
+          rgb(var(--g) / 0.01) 90%,
+          rgb(var(--g) / 0) 100%
+    );
+    mask:
+      linear-gradient(#000 0 0) content-box exclude,
+      linear-gradient(#000 0 0);
+  }
+  .prose .cards--glow > div:hover {
+    --glow: 1;
   }
 }
 @media (max-width: 720px) {
-  .prose .cards--reveal {
+  .prose .cards--glow {
     display: flex;
     gap: 12px;
     margin-inline: calc(-1 * var(--gutter));
@@ -1056,15 +1166,14 @@ a:hover .frame img {
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
   }
-  .prose .cards--reveal::-webkit-scrollbar {
+  .prose .cards--glow::-webkit-scrollbar {
     display: none;
   }
-  .prose .cards--reveal > div {
+  .prose .cards--glow > div {
     flex: 0 0 min(80%, 320px);
-    justify-content: flex-start;
     scroll-snap-align: start;
   }
-  body .prose .cards--reveal > div {
+  body .prose .cards--glow > div {
     animation: none;
   }
 }

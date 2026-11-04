@@ -94,7 +94,7 @@ A mid-level designer worked on LinkHMS with me, and I trained them on the projec
 
 LinkHMS covers a clinic’s whole day in nine areas, from the first booking at the front desk to the month’s numbers in the finance office. In the 30 days behind the results, the patient list was opened 1,381 times, the schedule 1,353, lab orders 559 and invoices 394.
 
-<div class="cards cards--reveal">
+<div class="cards cards--glow">
 <div data-icon="calendar"><b>Schedule and queue</b><span>Doctors’ appointments on a timeslot grid and a daily live queue by status: book, edit, cancel, start and complete visits.</span></div>
 <div data-icon="record"><b>Patients and records</b><span>A searchable patient registry and an electronic record for every patient to view and add clinical entries, with photo upload.</span></div>
 <div data-icon="stethoscope"><b>Visits and admissions</b><span>Document a visit — vitals, diagnoses, prescriptions, analyses, services — convert it to an admission and follow it through discharge.</span></div>
@@ -214,7 +214,7 @@ AI tools became part of the process as the project went on. Agents did not repla
 
 The heaviest sections were prototyped in code with AI agents (Cursor, Claude Code and Codex) instead of linked Figma frames, so the team could try them as working interfaces before development started.
 
-<div class="cards cards--reveal">
+<div class="cards cards--glow">
 <div data-icon="chart"><b>Reports</b><span>Operational reports on admissions, diagnoses, lab tests, patient flow and antenatal care.</span></div>
 <div data-icon="wallet"><b>Finance reports</b><span>Billed, collected and outstanding, with charts that filter the invoices that need attention.</span></div>
 <div data-icon="syringe"><b>Vaccinations</b><span>A schedule grid by age with a status for every vaccine.</span></div>
