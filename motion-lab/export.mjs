@@ -52,13 +52,19 @@ async function launch() {
     return await chromium.launch();
   } catch {
     const cache = join(homedir(), 'Library/Caches/ms-playwright');
-    for (const dir of readdirSync(cache).filter((d) => /^chromium-\d+$/.test(d)).sort().reverse()) {
+    const dirs = existsSync(cache) ? readdirSync(cache) : [];
+    for (const dir of dirs.filter((d) => /^chromium-\d+$/.test(d)).sort().reverse()) {
       for (const app of ['chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing', 'chrome-mac/Chromium.app/Contents/MacOS/Chromium']) {
         const exe = join(cache, dir, app);
         if (existsSync(exe)) return chromium.launch({ executablePath: exe });
       }
     }
-    throw new Error('No Chromium found. Run: npx playwright install chromium');
+    // Last resort: the installed Google Chrome.
+    try {
+      return await chromium.launch({ channel: 'chrome' });
+    } catch {
+      throw new Error('No Chromium found. Run: npx playwright install chromium');
+    }
   }
 }
 
