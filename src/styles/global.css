@@ -930,6 +930,47 @@ a:hover .frame img {
 .prose .cards--answer > div:last-child b {
   color: var(--accent-ink);
 }
+/* Before and after, side by side (<div class="cards cards--answer cards--compare">): each
+ * card holds a UI crop, a big number with its unit (<p class="cards__metric"><strong>3</strong>
+ * clicks …</p>) and a line on how it's counted. Always two columns until a phone. */
+.prose .cards--compare {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (max-width: 560px) {
+  .prose .cards--compare {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.prose .cards--compare > div {
+  gap: 16px;
+}
+.prose .cards--compare p {
+  margin: 0;
+}
+.prose .cards--compare img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.prose .cards--compare .cards__metric {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 4px;
+  font-size: 1rem;
+  color: var(--ink-3);
+}
+.prose .cards--compare .cards__metric strong {
+  font-size: clamp(2.75rem, 2rem + 2vw, 3.5rem);
+  line-height: 1;
+  letter-spacing: -0.05em;
+  font-weight: 500;
+}
+.prose .cards--answer.cards--compare > div:last-child .cards__metric strong {
+  color: var(--accent-ink);
+}
 /* Cards that hold their description back (<div class="cards cards--reveal">, the text
  * after the title in a <span>). On a desktop the icon and title sit at the bottom of the
  * card and the description fades in under them on hover; the card keeps its full height.

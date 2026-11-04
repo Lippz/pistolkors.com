@@ -137,6 +137,27 @@ Receptionists create an appointment for a specific doctor in just a few clicks, 
 <figcaption class="eyebrow">Walk-ins in their own queue, next to the schedule</figcaption>
 </figure>
 
+The schedule and the Live Queue first had only a date field, and its calendar asked for confirmation: open it, pick the day, press Choose. Its Today button jumped to today at once, but that didn’t help with what reception does most — the day before or after. A receptionist switches the date once or several times per patient, and a clinic sees dozens of patients a day. Microsoft Clarity recordings and heatmaps, and feedback from our local partners, pointed at the same field. In one release we put previous day, Today and next day in the header next to the date, and the calendar now applies a day as soon as it’s picked.
+
+<div class="cards cards--answer cards--compare">
+<div>
+<b>Before</b>
+
+![The date field with its calendar open under it: June 2026, the 18th picked, Today and Choose buttons at the bottom](../../assets/cases/linkhms/date-before.webp)
+
+<p class="cards__metric"><strong>3</strong> clicks to the next day</p>
+<span>Open the calendar, pick the day, press Choose. Back to today: 2 clicks.</span>
+</div>
+<div>
+<b>After</b>
+
+![The date field with previous day, Today and next day buttons beside it, and the calendar open under it without a footer](../../assets/cases/linkhms/date-after.webp)
+
+<p class="cards__metric"><strong>1</strong> click to the next day</p>
+<span>The arrow in the header, and Today is one click too. Any other date: 2 clicks, no Choose.</span>
+</div>
+</div>
+
 #### A medical record you can scan in seconds
 
 The electronic medical record is split into sections and subsections, so a doctor jumps straight to what matters in an emergency.
