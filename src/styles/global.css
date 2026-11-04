@@ -935,7 +935,6 @@ a:hover .frame img {
 /* A row of usage numbers inside the text, like the Results block but smaller:
  * <div class="metrics"><p class="eyebrow">source</p><div><b>41%</b><span>label</span></div>…</div> */
 .prose .metrics {
-  max-width: none;
   padding: 24px clamp(20px, 3vw, 32px);
   border-radius: 14px;
   background: var(--surface);
@@ -1306,7 +1305,6 @@ a:hover .frame img {
 
 /* User persona card: <div class="persona"> with dl.persona__id, p.persona__bio and .persona__cols. */
 .prose .persona {
-  max-width: none;
   padding: clamp(24px, 4vw, 40px);
   border-radius: var(--radius);
   background: var(--surface);
@@ -1316,10 +1314,20 @@ a:hover .frame img {
   font-size: 1rem;
   line-height: 1.55;
 }
+/* The name gets its own line on top, the other facts sit in one row of three
+   (stacked in one column on a phone). */
 .prose .persona__id {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 20px 24px;
+}
+.prose .persona__id > :first-child {
+  grid-column: 1 / -1;
+}
+@media (max-width: 560px) {
+  .prose .persona__id {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 .prose .persona__id dt {
   font-family: var(--mono);
