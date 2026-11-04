@@ -92,7 +92,7 @@ A mid-level designer worked on LinkHMS with me, and I trained them on the projec
 
 ### From the front desk to the finance office
 
-LinkHMS covers a clinic’s whole day in nine areas, from the first booking at the front desk to the month’s numbers in the finance office.
+LinkHMS covers a clinic’s whole day in nine areas, from the first booking at the front desk to the month’s numbers in the finance office. In the 30 days behind the results, the patient list was opened 1,381 times, the schedule 1,353, lab orders 559 and invoices 394.
 
 <div class="cards cards--reveal">
 <div data-icon="calendar"><b>Schedule and queue</b><span>Doctors’ appointments on a timeslot grid and a daily live queue by status: book, edit, cancel, start and complete visits.</span></div>
@@ -132,6 +132,14 @@ After sign-up, a short guided tour sets up the first department, service and use
 
 Receptionists create an appointment for a specific doctor in just a few clicks, straight from the schedule. Not every patient books ahead, though: the Live Queue shows the day’s visits by status — waiting, ongoing, completed or cancelled — with urgent cases marked in red, and every row can start or complete a visit, convert it to an admission or open the patient’s profile. A walk-in is added in the same New Visit dialog, which finds the patient by name or phone number.
 
+<div class="metrics">
+<p class="eyebrow">Microsoft Clarity · the same 30 days as the results, Nigeria and Ghana</p>
+<div><b>41%</b><span>of sessions open the schedule — 1,901 of 4,609</span></div>
+<div><b>425</b><span>sessions with New Visit pressed</span></div>
+<div><b>303</b><span>sessions where a visit is started</span></div>
+<div><b>21%</b><span>of sessions use search — 952</span></div>
+</div>
+
 <figure class="case-motion" data-lightbox-group>
 <video src="../../motion/linkhms-live-queue.mp4" poster="../../motion/linkhms-live-queue.jpg" width="1920" height="1080" muted loop playsinline preload="metadata" aria-label="From the schedule to the Live Queue of walk-ins: a doctor’s ongoing visit is completed from its row menu, her next waiting patient’s visit is started, and the schedule stays as it was" data-label="From the schedule to the Live Queue of walk-ins: a doctor’s ongoing visit is completed from its row menu, her next waiting patient’s visit is started, and the schedule stays as it was"></video>
 <figcaption class="eyebrow">Walk-ins in their own queue, next to the schedule</figcaption>
@@ -160,7 +168,7 @@ The schedule and the Live Queue first had only a date field, and its calendar as
 
 #### A medical record you can scan in seconds
 
-The electronic medical record is split into sections and subsections, so a doctor jumps straight to what matters in an emergency.
+The electronic medical record is split into sections and subsections, so a doctor jumps straight to what matters in an emergency. It is opened constantly: a patient’s summary comes up in a third of all sessions, 1,487 of 4,609.
 
 <figure class="case-motion" data-lightbox-group>
 <video src="../../motion/linkhms-medical-record.mp4" poster="../../motion/linkhms-medical-record.jpg" width="1920" height="1080" muted loop playsinline preload="metadata" aria-label="A patient’s record: from the summary to the full history, then through the section menu to the drug administration chart and the vaccination grid, where an overdue dose is given, and back to the summary" data-label="A patient’s record: from the summary to the full history, then through the section menu to the drug administration chart and the vaccination grid, where an overdue dose is given, and back to the summary"></video>
@@ -224,7 +232,7 @@ I first built the design system by hand in Figma, and later reworked it there to
 
 <ol class="rows">
 <li>Watch clinics at work, not only ask them. Surveys and interviews never showed that in a small clinic two or three people share one computer — production did, and it cost a whole account type. A few days on site would have got the account model right the first time.</li>
-<li>Measure the key flows from day one. Clarity was in place, but no funnels: there is still no number for how many clinics finish the onboarding tour, or where booking is dropped.</li>
+<li>Measure the key flows from day one. Clarity was in place, but no funnels: there is still no number for how many clinics finish the onboarding tour, or where booking is dropped. Icon-only buttons go uncounted too: Clarity records a click by its text, so the previous and next day arrows in the schedule header have no number at all.</li>
 <li>Build the design system in step with the code from the start. It lived in Figma first and later had to be reworked and carried into the code base by AI agents — a second pass that shared tokens and components would have saved.</li>
 </ol>
 
@@ -232,7 +240,7 @@ I first built the design system by hand in Figma, and later reworked it there to
 
 ### There is no limit to perfection
 
-What started with registration, scheduling, patients and the medical record grew over two and a half years into a full clinic system, in production since 2025 and used by more than 30 clinics. Clinic staff keep coming back to it — 95% of sessions are from returning users — and 86% of sessions are on desktop, as the research predicted. It now covers a live queue, admissions with beds and discharge, billing and insurance claims, a pharmacy, a laboratory, reports and a patient portal. The product can grow in several directions:
+What started with registration, scheduling, patients and the medical record grew over two and a half years into a full clinic system, in production since 2025 and used by more than 30 clinics. Clinic staff keep coming back to it — 95% of sessions are from returning users — and 86% of sessions are on desktop, as the research predicted. An average session goes through 11 pages. It now covers a live queue, admissions with beds and discharge, billing and insurance claims, a pharmacy, a laboratory, reports and a patient portal. The product can grow in several directions:
 
 - **Reminders and online payments** — appointment reminders for patients, and invoices paid from the portal instead of at the front desk.
 - **Insurers connected directly** — claims sent to the insurer and decisions received inside LinkHMS, without retyping them by hand.
